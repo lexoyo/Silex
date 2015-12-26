@@ -155,19 +155,13 @@ silex.view.Stage.prototype.buildUi = function() {
       this);
 
   // listen on body too because user can release the mouse over the tool boxes
-  goog.events.listen(document.body,
-      'mouseup',
-      this.onMouseUpOverUi,
-      false,
-      this);
+  document.body.addEventListener('mouseup', (event) => this.onMouseUpOverUi(event));
+  document.body.addEventListener('touchend', (event) => this.onMouseUpOverUi(event));
 
   // listen on body too because user can release
   // on the tool boxes
-  goog.events.listen(document.body,
-      'mousemove',
-      this.onMouseMoveOverUi,
-      false,
-      this);
+  document.body.addEventListener('mousemove', (event) => this.onMouseMoveOverUi(event));
+  document.body.addEventListener('touchmove', (event) => this.onMouseMoveOverUi(event));
 
   // keyboard
   let keyHandler = new goog.events.KeyHandler(document);
@@ -178,22 +172,24 @@ silex.view.Stage.prototype.buildUi = function() {
 /**
  * Forward mouse release from the tool boxes to the stage
  * Because user can drag something and move the mouse over the tool boxes
- * @param {Event} event
+ * @param {Event} initialEvent
  */
-silex.view.Stage.prototype.onMouseMoveOverUi = function(event) {
+silex.view.Stage.prototype.onMouseMoveOverUi = function(initialEvent) {
+  let event = initialEvent.changedTouches ? initialEvent.changedTouches[0] : initialEvent;
   let pos = goog.style.getRelativePosition(event, this.element);
   this.onMouseMove(/** @type {Element} */ (event.target), pos.x, pos.y, event.shiftKey);
-  event.preventDefault();
+  initialEvent.preventDefault();
 };
 
 
 /**
  * Forward mouse release from the tool boxes to the stage
  * Because user can drag something and release the mouse over the tool boxes
- * @param {Event} event
+ * @param {Event} initialEvent
  */
-silex.view.Stage.prototype.onMouseUpOverUi = function(event) {
-  if (this.bodyElement !== null) {
+silex.view.Stage.prototype.onMouseUpOverUi = function(initialEvent) {
+  let event = initialEvent.changedTouches ? initialEvent.changedTouches[0] : initialEvent;
+  if (this.bodyElement !== null && this.isDown) {
     // if out of stage, release from drag of the plugin
     // simulate the mouse up on the iframe body
     var pos = goog.style.getRelativePosition(event, this.element);
@@ -205,6 +201,53 @@ silex.view.Stage.prototype.onMouseUpOverUi = function(event) {
     this.bodyElement.dispatchEvent(newEvObj);
     this.iAmClicking = false;
   }
+};
+
+
+/**
+ * mouse or touch event in the iframe
+ * @param {Event} initialEvent
+ */
+silex.view.Stage.prototype.onMouseDownInIFrame = function(initialEvent) {
+  let event = initialEvent.changedTouches ? initialEvent.changedTouches[0] : initialEvent;
+  this.lastClickWasResize = goog.dom.classlist.contains(
+      event.target,
+      'ui-resizable-handle');
+  this.resizeDirection = this.getResizeDirection(event.target);
+  let x = event.clientX;
+  let y = event.clientY;
+  // get the first parent node which is editable (silex-editable css class)
+  let editableElement = goog.dom.getAncestorByClass(
+      event.target,
+      silex.model.Body.EDITABLE_CLASS_NAME) || this.bodyElement;
+  this.handleMouseDown(editableElement, x, y, event.shiftKey);
+  // necessary in firefox to prevent default image drag
+  initialEvent.preventDefault();
+};
+
+
+/**
+ * mouse or touch event in the iframe
+ * @param {Event} initialEvent
+ */
+silex.view.Stage.prototype.onMouseMoveInIFrame = function(initialEvent) {
+  let event = initialEvent.changedTouches ? initialEvent.changedTouches[0] : initialEvent;
+  let x = event.clientX;
+  let y = event.clientY;
+  this.onMouseMove(/** @type {Element} */ (event.target), x, y, event.shiftKey);
+  initialEvent.preventDefault();
+};
+
+
+/**
+ * mouse or touch event in the iframe
+ * @param {Event} initialEvent
+ */
+silex.view.Stage.prototype.onMouseUpInIFrame = function(initialEvent) {
+  let event = initialEvent.changedTouches ? initialEvent.changedTouches[0] : initialEvent;
+  let x = event.clientX;
+  let y = event.clientY;
+  this.handleMouseUp(event.target, x, y, event.shiftKey);
 };
 
 
@@ -307,36 +350,16 @@ silex.view.Stage.prototype.initEvents = function(contentWindow) {
 
   // listen on body instead of element because user can release
   // on the tool boxes
-  goog.events.listen(this.bodyElement, 'mouseup', function(event) {
-    let x = event.clientX;
-    let y = event.clientY;
-    this.handleMouseUp(event.target, x, y, event.shiftKey);
-  }, false, this);
+  this.bodyElement.addEventListener('mouseup', (event) => this.onMouseUpInIFrame(event));
+  this.bodyElement.addEventListener('touchend', (event) => this.onMouseUpInIFrame(event)); // not used in firefox
 
   // move in the iframe
-  goog.events.listen(this.bodyElement, 'mousemove', function(event) {
-    let x = event.clientX;
-    let y = event.clientY;
-    this.onMouseMove(/** @type {Element} */ (event.target), x, y, event.shiftKey);
-    event.preventDefault();
-  }, false, this);
+  this.bodyElement.addEventListener('mousemove', (event) => this.onMouseMoveInIFrame(event));
+  this.bodyElement.addEventListener('touchmove', (event) => this.onMouseMoveInIFrame(event));
 
   // detect mouse down
-  goog.events.listen(this.bodyElement, 'mousedown', function(event) {
-    this.lastClickWasResize = goog.dom.classlist.contains(
-        event.target,
-        'ui-resizable-handle');
-    this.resizeDirection = this.getResizeDirection(event.target);
-    let x = event.clientX;
-    let y = event.clientY;
-    // get the first parent node which is editable (silex-editable css class)
-    let editableElement = goog.dom.getAncestorByClass(
-        event.target,
-        silex.model.Body.EDITABLE_CLASS_NAME) || this.bodyElement;
-    this.handleMouseDown(editableElement, x, y, event.shiftKey);
-    // necessary in firefox to prevent default image drag
-    event.preventDefault();
-  }, false, this);
+  this.bodyElement.addEventListener('mousedown', (event) => this.onMouseDownInIFrame(event));
+  this.bodyElement.addEventListener('touchstart', (event) => this.onMouseDownInIFrame(event)); // not used in firefox
 
   // detect double click
   goog.events.listen(
@@ -345,6 +368,17 @@ silex.view.Stage.prototype.initEvents = function(contentWindow) {
     function(event) {
       this.controller.editMenuController.editElement();
     }, false, this);
+
+  // detect tap
+  // FIXME: do not work in firefox
+  this.bodyElement.addEventListener('touchstart', (event) => {
+    this.downTime = Date.now()
+  });
+  this.bodyElement.addEventListener('touchend', (event) => {
+    if(Date.now() - this.downTime < 100 && !this.isDragging && !this.isResizing) {
+      this.controller.editMenuController.editElement();
+    }
+  });
 };
 
 
@@ -766,7 +800,7 @@ silex.view.Stage.prototype.followElementPosition =
         let finalX = Math.round(pos.x + offsetX);
         this.controller.stageController.styleChanged('top', finalY + 'px', [follower], false);
         this.controller.stageController.styleChanged('left', finalX + 'px', [follower], false);
-        // in case the element is in the flow, 
+        // in case the element is in the flow,
         // the css class .dragging-pending will set position:relative
         // and we temporarily move the element with its attributes instead of css style tag in head
         let style;
