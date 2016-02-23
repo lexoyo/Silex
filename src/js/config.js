@@ -346,6 +346,12 @@ silex.Config.menu = {
       },
       null,
       {
+        label: 'Collaborate',
+        id: 'tools.collaborate',
+        className: 'menu-item-tools-collaborate',
+        checkable: true
+      },
+      {
         label: 'Apollo mode',
         id: 'tools.advanced.activate',
         className: 'menu-item-tools-advanced-activate',

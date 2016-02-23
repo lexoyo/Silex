@@ -190,3 +190,11 @@ silex.controller.ToolMenuController.prototype.dockPanel = function(dock) {
   }
 };
 
+
+/**
+ * toggle collaboration mode
+ */
+silex.controller.ToolMenuController.prototype.toggleCollaborate = function() {
+  window['TogetherJS'](this);
+};
+

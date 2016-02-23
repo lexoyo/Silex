@@ -253,6 +253,9 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
     case 'view.open.editor':
       this.controller.editMenuController.editElement();
       break;
+    case 'tools.collaborate':
+      this.controller.toolMenuController.toggleCollaborate();
+      break;
     case 'tools.advanced.activate':
       this.controller.toolMenuController.toggleAdvanced();
       break;
