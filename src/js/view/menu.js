@@ -259,6 +259,10 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
     case 'tools.mobile.mode':
       this.controller.toolMenuController.toggleMobileMode();
       break;
+    case 'tools.codepen':
+      console.log('menu editInCodepen');
+      this.controller.toolMenuController.editInCodepen();
+      break;
    case 'insert.page':
       this.controller.insertMenuController.createPage();
       break;

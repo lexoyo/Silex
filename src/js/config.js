@@ -343,6 +343,11 @@ silex.Config.menu = {
         mnemonic: goog.events.KeyCodes.M,
         accelerator: 'm'
       },
+      {
+        label: 'Edit in codepen.io',
+        id: 'tools.codepen',
+        className: 'menu-item-tools-codepen'
+      },
       null,
       {
         label: 'HTML <head> editor',

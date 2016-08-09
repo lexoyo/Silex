@@ -172,6 +172,49 @@ goog.inherits(silex.controller.ToolMenuController, silex.controller.ControllerBa
 
 
 /**
+ * edit in codepen
+ * code ported from the docs https://blog.codepen.io/documentation/api/prefill/
+ */
+silex.controller.ToolMenuController.prototype.editInCodepen = function() {
+  console.log('editInCodepen');
+
+  let winId = 'codepenWindowId';
+  let win = window.open('', winId);
+  try {
+    // this will throw an error when the window was already opened
+    win.document.write('Loading... Please wait...');
+  } catch(e) {};
+  if(win.focus) win.focus();
+
+  this.model.file.getHtmlAsync((html) => {
+
+    let form = document.createElement('form');
+    form.action = 'http://codepen.io/pen/define';
+    form.method = 'POST';
+    form.target = winId;
+    document.body.appendChild(form);
+
+    let options = JSON.stringify({
+      'html': html,
+      'css': this.model.head.getHeadStyle(),
+      'js': this.model.head.getHeadScript(),
+    })
+    // Quotes will screw up the JSON
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
+    console.log('editInCodepen2', form, options);
+    let input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'data';
+    input.value = options;
+    form.appendChild(input);
+    form.submit();
+  });
+};
+
+
+/**
  * dock panels
  * @param {boolean} dock or undock
  */
