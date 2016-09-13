@@ -28,6 +28,7 @@ goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.menuBar');
 goog.require('silex.Config');
+goog.require('silex.utils.InvalidationManager');
 
 
 
@@ -60,6 +61,12 @@ silex.view.Menu = function(element, model, controller) {
  * reference to the menu class of the closure library
  */
 silex.view.Menu.prototype.menu = null;
+
+
+/**
+ * prevent too many calls to unsplash api
+ */
+silex.view.Menu.prototype.invalidationManager = new InvalidationManager(1500);
 
 
 /**
@@ -131,12 +138,54 @@ silex.view.Menu.prototype.buildUi = function() {
   // event handling
   this.element.onclick = e => {
     const action = e.target.getAttribute('data-menu-action') || e.target.parentNode.getAttribute('data-menu-action');
-    this.onMenuEvent(action);
-    if(e.target.parentNode && !e.target.parentNode.classList.contains('menu-container')) {
+    const wantToClose = this.onMenuEvent(action);
+    if(wantToClose) {
       // not a first level menu => close sub menus
       this.closeAllSubMenu();
     }
   };
+
+  // image search
+  this.imageSearchInput = this.element.querySelector('input.image-search');
+  this.imageSearchInput.onkeyup = (e) => {
+    this.searchImages(this.imageSearchInput.value);
+  }
+};
+
+
+/**
+ * add image
+ */
+silex.view.Menu.prototype.searchImages = function(search) {
+  if(this.lastSearch && this.lastSearch === search) return;
+  this.lastSearch = search;
+
+  this.invalidationManager.callWhenReady(() => {
+    const container = this.element.querySelector('.add-menu-container');
+    const oReq = new XMLHttpRequest();
+    // remove previous images
+    let images = container.querySelectorAll('.dyn-images');
+    for(let idx=0; idx<images.length; idx++) container.removeChild(images[idx]);
+    oReq.addEventListener('load', () => {
+      // remove previous images
+      let images = container.querySelectorAll('.dyn-images');
+      for(let idx=0; idx<images.length; idx++) container.removeChild(images[idx]);
+      // add new images
+      const data = JSON.parse(oReq.responseText);
+      data.forEach(imgData => {
+        console.log('searchImages', search, imgData);
+        const img = document.createElement('img');
+        img.src = imgData['urls']['small'];
+        img.setAttribute('data-url-full', imgData['urls']['full']);
+        img.setAttribute('data-url-regular', imgData['urls']['regular']);
+        img.setAttribute('data-url-small', imgData['urls']['small']);
+        img.classList.add('dyn-images');
+        container.appendChild(img);
+      });
+    });
+    oReq.open('GET', 'https://api.unsplash.com/photos/search?page=1&client_id=4bce6009ffa07149e179d7928bbf28cd15760e5393d17b172624945f935fef58&query=' + encodeURI(search));
+    oReq.send();
+  });
 };
 
 
@@ -147,6 +196,7 @@ silex.view.Menu.prototype.buildUi = function() {
  * @param {goog.ui.KeyboardShortcutHandler} shortcutHandler
  * @param {Array.<Object>} globalKeys
  * TODO: clean up and remove the old google closure menu, implement a mechanism for keyboard shortcuts
+ * @return true to close the sub menus
  */
 silex.view.Menu.prototype.addToMenu = function(itemData, menu, shortcutHandler, globalKeys) {
   var item;
@@ -239,18 +289,23 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
   switch (type) {
     case 'show.pages':
       this.toggleSubMenu('page-tool-visible');
+      return false;
       break;
     case 'show.about.menu':
       this.toggleSubMenu('about-menu-visible');
+      return false;
       break;
     case 'show.file.menu':
       this.toggleSubMenu('file-menu-visible');
+      return false;
       break;
     case 'show.code.menu':
       this.toggleSubMenu('code-menu-visible');
+      return false;
       break;
     case 'show.add.menu':
       this.toggleSubMenu('add-menu-visible');
+      return false;
       break;
     case 'file.new':
       this.controller.fileMenuController.newFile();
@@ -398,5 +453,8 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
     //   break;
     default:
       console.warn('menu type not found', type);
+      return false;
   }
+  return true;
+
 };

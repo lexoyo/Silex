@@ -84,7 +84,7 @@
     color: @silexlightergrey;
     text-align: center;
   }
-  & > div, & > a {
+  & > div, & > a, & > img {
     min-height: 32px;
     padding-top: 2px;
     padding-right: 11px;
@@ -102,9 +102,11 @@
   padding: 10px;
   min-width: 180px;
   top: @contextMenuHeight;
+  .sub-menu-item {
+    cursor: pointer;
+  }
   .sub-menu-item:hover {
     background-color: @silexmediumdarkgrey;
-    cursor: pointer;
   }
   & > *:last-child {
     border-bottom: 1px solid @silexdarkgrey;
@@ -116,6 +118,11 @@
 .add-menu-container {
   .silex-sub-menu();
   .silex-sub-menu-text();
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 10px;
+  bottom: @breadCrumbsHeight;
 }
 .file-menu-container {
   .icon.svg {
@@ -142,6 +149,19 @@
   .text {background-image: url(../assets/context-menu/glyphicons-108-text-resize.png);}
   .image {background-image: url(../assets/context-menu/glyphicons-139-picture.png);}
   .container {background-image: url(../assets/context-menu/glyphicons-95-vector-path-square.png);}
+  input {
+    line-height: 2;
+    width: 100%;
+  }
+  .dyn-images {
+    padding: 5px;
+    cursor: pointer;
+    max-width: 190px;
+    display: block;
+  }
+  .dyn-images:hover {
+    background-color: @silexmediumdarkgrey;
+  }
 }
 /* sub menus visibility */
 .sub-menu-hidden(@width) {
