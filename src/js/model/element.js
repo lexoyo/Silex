@@ -655,6 +655,13 @@ silex.model.Element.prototype.addElement = function(container, element) {
 
 silex.model.Element.INITIAL_ELEMENT_SIZE = 100;
 
+
+/**
+ * add an element at the center of the stage
+ * and move it into the container beneeth it
+ * @param {Element} element    the element to add
+ * @param {?number=} opt_offset an offset to apply to its position (x and y)
+ */
 silex.model.Element.prototype.addElementDefaultPosition = function(element, opt_offset) {
   opt_offset = opt_offset || 0;
   // find the container (main background container or the stage)
@@ -677,6 +684,12 @@ silex.model.Element.prototype.addElementDefaultPosition = function(element, opt_
 };
 
 
+/**
+ * find the best drop zone at a given position
+ * @param  {number} x position in px
+ * @param  {number} y position in px
+ * @return {Element} the container element under (x, y)
+ */
 silex.model.Element.prototype.getBestContainerForNewElement = function(x, y) {
   let dropZone = this.view.stage.getDropZone(x, y) || {'element': this.view.stage.bodyElement, 'zIndex': 0};
   return dropZone.element;
