@@ -113,8 +113,8 @@ silex.view.Splitter.prototype.remove = function(element) {
  * redraw the components
  */
 silex.view.Splitter.prototype.redraw = function() {
-  var pos = goog.style.getClientPosition(this.element);
-  var parentSize = goog.style.getContentBoxSize(/** @type {Element} */ (this.element.parentNode));
+  var pos = this.element.getBoundingClientRect();
+  var parentSize = (/** @type {Element} */ (this.element.parentNode)).getBoundingClientRect();
   // apply the position to the elements
   goog.array.forEach(this.onTheLeft, function(element) {
     element.style.right = (parentSize.width - pos.x) + 'px';
@@ -122,6 +122,7 @@ silex.view.Splitter.prototype.redraw = function() {
   goog.array.forEach(this.onTheRight, function(element) {
     element.style.left = silex.view.Splitter.WIDTH + pos.x + 'px';
   }, this);
+  console.log(pos, parentSize, this.onTheRight);
   if (this.onRedraw) {
     this.onRedraw();
   }
@@ -196,9 +197,9 @@ silex.view.Splitter.prototype.onMouseUp = function(e) {
  */
 silex.view.Splitter.prototype.onMouseMoveFrame = function(e) {
   if (this.isDown) {
-    var parentSize = goog.style.getContentBoxSize(/** @type {Element} */ (this.element.parentNode));
+    var parentSize = (/** @type {Element} */ (this.element.parentNode)).getBoundingClientRect();
     var pos = goog.style.getClientPosition(e);
-    var posIFrame = goog.style.getClientPosition(this.model.file.getIFrameElement());
+    var posIFrame = (this.model.file.getIFrameElement()).getBoundingClientRect();
     this.element.style.right = (parentSize.width - pos.x - posIFrame.x) + 'px';
     this.redraw();
   }
@@ -211,7 +212,8 @@ silex.view.Splitter.prototype.onMouseMoveFrame = function(e) {
  */
 silex.view.Splitter.prototype.onMouseMove = function(e) {
   if (this.isDown) {
-    var parentSize = goog.style.getContentBoxSize(/** @type {Element} */ (this.element.parentNode));
+    var parentSize = (/** @type {Element} */ (this.element.parentNode)).getBoundingClientRect();
+    console.log('onMouseMove', e);
     var pos = goog.style.getClientPosition(e);
     this.element.style.right = (parentSize.width - pos.x) + 'px';
     this.redraw();
