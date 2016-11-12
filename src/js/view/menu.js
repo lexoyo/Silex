@@ -256,7 +256,6 @@ silex.view.Menu.prototype.toggleSubMenu = function(classNameToToggle) {
  * @param {?string=} opt_componentName the component type if it is a component
  */
 silex.view.Menu.prototype.onMenuEvent = function(type, opt_componentName) {
-  // console.log('onMenuEvent', type);
   switch (type) {
     case 'show.pages':
       this.toggleSubMenu('page-tool-visible');

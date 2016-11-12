@@ -188,5 +188,11 @@ silex.view.PropertyTool.prototype.redraw = function(selectedElements, pageNames,
     this.generalStylePane.redraw(selectedElements, pageNames, currentPageName);
     this.stylePane.redraw(selectedElements, pageNames, currentPageName);
     this.bgPane.redraw(selectedElements, pageNames, currentPageName);
+    if(selectedElements.length === 1) {
+      this.model.component.edit(selectedElements[0]);
+    }
+    else {
+      this.model.component.resetSelection();
+    }
   });
 };

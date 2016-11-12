@@ -44,7 +44,6 @@ goog.inherits(silex.controller.InsertMenuController, silex.controller.Controller
  * @return {Element} the new element
  */
 silex.controller.InsertMenuController.prototype.addElement = function(type, opt_componentName) {
-  console.log('addElement', type, opt_componentName);
   this.tracker.trackAction('controller-events', 'request', 'insert.' + type, 0);
   // undo checkpoint
   this.undoCheckPoint();

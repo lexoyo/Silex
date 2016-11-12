@@ -161,12 +161,12 @@ silex.model.Component.prototype.resetSelection = function() {
 };
 /**
  * @param {Element} element, the component to edit
- * @param {Object.<function()>} events
  */
-silex.model.Component.prototype.edit = function(element, events) {
-  if(element && this.prodotype) {
+silex.model.Component.prototype.edit = function(element) {
+  const componentData = this.model.property.getComponentData(element);
+  if(element && this.prodotype && componentData) {
     this.prodotype.edit(
-      this.model.property.getComponentData(element),
+      componentData,
       this.getAllComponents().map(el => {
         const name = this.model.property.getComponentData(el)['name'];
         const templateName = this.model.property.getComponentData(el)['templateName'];
@@ -176,8 +176,29 @@ silex.model.Component.prototype.edit = function(element, events) {
           'displayName': `${name} (${templateName})`,
         };
       }),
-      this.model.property.getComponentData(element)['templateName'],
-      events
-    );
+      componentData['templateName'],
+      {
+        'onChange': (newData, html) => {
+          this.model.property.setComponentData(element, newData);
+          this.model.element.setInnerHtml(element, html);
+        },
+        'onBrowse': (e, cbk) => {
+          console.error('TODO: call cloud explorer');
+          e.preventDefault();
+            this.browse(
+              'publish.browse',
+              '', // TODO: tracking
+              (url, blob) => {
+                cbk([{
+                  'url': blob.url,
+                  'lastModified': blob.lastModified, // not in blob?
+                  'lastModifiedDate': blob.lastModifiedDate, // not in blob?
+                  'name': blob.filename,
+                  'size': blob.size,
+                  'type': blob.type, // not in blob?
+                }]);
+              });
+          }
+      });
   }
 };

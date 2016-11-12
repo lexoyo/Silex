@@ -203,14 +203,14 @@ silex.model.Property.prototype.loadProperties = function(doc) {
       this.componentDataObj = styles['componentData'] || {};
     }
     else {
-      console.error('Error: could not retreve desktop and mobile styles from .' + silex.model.Property.JSON_STYLE_TAG_CLASS_NAME);
+      console.error('Error: could not retrieve desktop and mobile styles from the dom (.' + silex.model.Property.JSON_STYLE_TAG_CLASS_NAME + ')');
     }
   }
   else {
     this.stylesObj = {};
     this.mobileStylesObj = {};
     this.componentDataObj = {};
-    console.error('Error: no JSON styles array found in the dom');
+    console.info('Warning: no JSON styles array found in the dom');
   }
 };
 
