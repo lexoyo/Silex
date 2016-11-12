@@ -128,10 +128,30 @@ silex.view.Menu.prototype.buildUi = function() {
       }
     }
   }, this));
+  // components
+  this.model.component.ready(() => {
+    const list = this.element.querySelector('.add-menu-container');
+    const componentsDef = this.model.component.getComponentsDef();
+    for(let id in componentsDef) {
+      const iconClassName = componentsDef[id].faIconClass || 'prodotype-icon';
+      const baseElementType = componentsDef[id].baseElement || 'html';
+      const cell = document.createElement('div');
+      cell.classList.add('sub-menu-item');
+      cell.title = `${componentsDef[id].name}`;
+      cell.setAttribute('data-menu-action', 'insert.' + baseElementType);
+      cell.setAttribute('data-comp-id', id);
+      cell.innerHTML = `
+        <span class="icon fa-fw ${iconClassName}"></span>
+        Add ${id}
+      `;
+      list.appendChild(cell);
+    }
+  });
   // event handling
   this.element.onclick = e => {
     const action = e.target.getAttribute('data-menu-action') || e.target.parentNode.getAttribute('data-menu-action');
-    this.onMenuEvent(action);
+    const componentId = e.target.getAttribute('data-comp-id') || e.target.parentNode.getAttribute('data-comp-id');
+    this.onMenuEvent(action, componentId);
     if(e.target.parentNode && !e.target.parentNode.classList.contains('menu-container')) {
       // not a first level menu => close sub menus
       this.closeAllSubMenu();
@@ -233,8 +253,9 @@ silex.view.Menu.prototype.toggleSubMenu = function(classNameToToggle) {
  * handles click events
  * calls onStatus to notify the controller
  * @param {string} type
+ * @param {?string=} opt_componentName the component type if it is a component
  */
-silex.view.Menu.prototype.onMenuEvent = function(type) {
+silex.view.Menu.prototype.onMenuEvent = function(type, opt_componentName) {
   // console.log('onMenuEvent', type);
   switch (type) {
     case 'show.pages':
@@ -308,19 +329,20 @@ silex.view.Menu.prototype.onMenuEvent = function(type) {
       this.controller.insertMenuController.createPage();
       break;
     case 'insert.text':
-      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_TEXT);
+      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_TEXT, opt_componentName);
       break;
     case 'insert.section':
-      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_SECTION);
+      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_SECTION, opt_componentName);
       break;
     case 'insert.html':
-      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_HTML);
+      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_HTML, opt_componentName);
       break;
     case 'insert.image':
+      // FIXME: add opt_componentName param to browseAndAddImage
       this.controller.insertMenuController.browseAndAddImage();
       break;
     case 'insert.container':
-      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_CONTAINER);
+      this.controller.insertMenuController.addElement(silex.model.Element.TYPE_CONTAINER, opt_componentName);
       break;
     case 'edit.delete.selection':
       // delete component

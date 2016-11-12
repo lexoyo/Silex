@@ -104,6 +104,13 @@ silex.model.Property.prototype.mobileStylesObj = {};
 
 
 /**
+ * arbitrary data for elements and components
+ * @type {Object}
+ */
+silex.model.Property.prototype.componentDataObj = {};
+
+
+/**
  * get/set Silex ID
  * @param {Element} element
  * @return {?string} uniqueId
@@ -167,7 +174,7 @@ silex.model.Property.prototype.initSilexId = function(element, doc) {
 /**
  * Convert the styles to json and save it in a script tag
  */
-silex.model.Property.prototype.saveStyles = function(doc) {
+silex.model.Property.prototype.saveProperties = function(doc) {
   var styleTag = doc.querySelector('.' + silex.model.Property.JSON_STYLE_TAG_CLASS_NAME);
   if (!styleTag) {
     styleTag = doc.createElement('script');
@@ -176,7 +183,8 @@ silex.model.Property.prototype.saveStyles = function(doc) {
   }
   let obj = {
     'desktop': this.stylesObj,
-    'mobile': this.mobileStylesObj
+    'mobile': this.mobileStylesObj,
+    'componentData': this.componentDataObj,
   };
   styleTag.innerHTML = '[' + JSON.stringify(obj) + ']';
 };
@@ -185,13 +193,14 @@ silex.model.Property.prototype.saveStyles = function(doc) {
 /**
  * Load the styles from the json saved in a script tag
  */
-silex.model.Property.prototype.loadStyles = function(doc) {
+silex.model.Property.prototype.loadProperties = function(doc) {
   var styleTag = doc.querySelector('.' + silex.model.Property.JSON_STYLE_TAG_CLASS_NAME);
   if (styleTag != null) {
     let styles = /** @type {Object} */ (JSON.parse(styleTag.innerHTML)[0]);
     if (styles && styles['desktop'] && styles['mobile']) {
-      this.stylesObj = styles['desktop'];
-      this.mobileStylesObj = styles['mobile'];
+      this.stylesObj = styles['desktop'] || {};
+      this.mobileStylesObj = styles['mobile'] || {};
+      this.componentDataObj = styles['componentData'] || {};
     }
     else {
       console.error('Error: could not retreve desktop and mobile styles from .' + silex.model.Property.JSON_STYLE_TAG_CLASS_NAME);
@@ -200,6 +209,7 @@ silex.model.Property.prototype.loadStyles = function(doc) {
   else {
     this.stylesObj = {};
     this.mobileStylesObj = {};
+    this.componentDataObj = {};
     console.error('Error: no JSON styles array found in the dom');
   }
 };
@@ -230,6 +240,37 @@ silex.model.Property.prototype.initStyles = function(doc) {
   }
   return styleTag;
 };
+
+
+/**
+ * get / set the data associated with an element
+ * if componentData is null this will remove the rule
+ * @param {Element} element
+ * @param {?Object} componentData
+ */
+silex.model.Property.prototype.setComponentData = function(element, componentData) {
+  // get the internal ID
+  var elementId =  /** @type {string} */ (this.getSilexId(element));
+  // store in object
+  this.componentDataObj[elementId] = componentData;
+  // update the component
+  // if(opt_redraw !== false) {
+  //   this.model.component.changed(element, componentData);
+  // }
+}
+
+
+/**
+ * get / set the data associated with an element
+ * @param {Element} element
+ * @return {?Object} a clone of the data object
+ */
+silex.model.Property.prototype.getComponentData = function(element) {
+  // get the internal ID
+  var elementId =  /** @type {string} */ (this.getSilexId(element));
+  // returns value of object
+  return this.componentDataObj[elementId];
+}
 
 
 /**

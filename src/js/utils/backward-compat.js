@@ -226,7 +226,7 @@ silex.utils.BackwardCompat.to2_2_6 = function(version, doc, model, cbk) {
     }
   }
   jsonStyleTag.innerHTML = JSON.stringify(arr);
-  model.property.loadStyles(doc);
+  model.property.loadProperties(doc);
 
   cbk();
 };

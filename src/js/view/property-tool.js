@@ -153,6 +153,10 @@ silex.view.PropertyTool.prototype.buildUi = function() {
   this.stylePane = new silex.view.pane.StylePane(
       goog.dom.getElementByClass('style-editor', this.element),
       this.model, this.controller);
+
+  // component editor
+  this.model.component.initComponents(this.element.querySelector('.component-editor'));
+
   // expandables
   const expandables = this.element.querySelectorAll('.expandable legend');
   for(let idx=0; idx<expandables.length; idx++) {
