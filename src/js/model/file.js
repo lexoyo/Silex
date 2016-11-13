@@ -125,7 +125,7 @@ silex.model.File.prototype.getContentWindow = function() {
  * @return {boolean} true if a website is being edited
  */
 silex.model.File.prototype.hasContent = function() {
-  return this.contentDocument_.body && this.contentDocument_.body.childNodes.length > 0;
+  return !!this.contentDocument_.body && this.contentDocument_.body.childNodes.length > 0;
 };
 
 
@@ -519,7 +519,7 @@ silex.model.File.prototype.clearLatestFiles = function() {
  */
 silex.model.File.prototype.getLatestFiles = function() {
   const str = window.localStorage.getItem('silex:recent-files');
-  if(str) return JSON.parse(str);
+  if(str) return /** @type {Array.<{name:string, path:string, cloudIcon:string}>} */ (JSON.parse(str));
   else return [];
 };
 
@@ -537,7 +537,7 @@ silex.model.File.prototype.addToLatestFiles = function(url) {
     const path = url.substr(versionIdx);
     // remove if it is already in the array
     // so that it goes back to the top of the list
-    const foundIndex = -1;
+    let foundIndex = -1;
     latestFiles.forEach((item, idx) => item.path === path ? foundIndex = idx : null);
     if(foundIndex > -1) {
       latestFiles.splice(foundIndex, 1);
