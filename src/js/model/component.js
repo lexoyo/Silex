@@ -71,10 +71,10 @@ silex.model.Component.prototype.ready = function(cbk) {
 
 /**
  * get Prodotype descriptor of the components
- * @return {Array} array of components descriptors
+ * @return {ProdotypeCompDef} component descriptors
  */
 silex.model.Component.prototype.getComponentsDef = function() {
-  return this.prodotype ? this.prodotype.componentsDef : [];
+  return this.prodotype ? this.prodotype.componentsDef : /** @type {ProdotypeCompDef} */ ({});
 }
 
 
@@ -185,20 +185,8 @@ silex.model.Component.prototype.edit = function(element) {
         'onBrowse': (e, cbk) => {
           console.error('TODO: call cloud explorer');
           e.preventDefault();
-            this.browse(
-              'publish.browse',
-              '', // TODO: tracking
-              (url, blob) => {
-                cbk([{
-                  'url': blob.url,
-                  'lastModified': blob.lastModified, // not in blob?
-                  'lastModifiedDate': blob.lastModifiedDate, // not in blob?
-                  'name': blob.filename,
-                  'size': blob.size,
-                  'type': blob.type, // not in blob?
-                }]);
-              });
-          }
+          // FIXME: browse with CE
+        },
       });
   }
 };

@@ -128,23 +128,43 @@ silex.view.Menu.prototype.buildUi = function() {
       }
     }
   }, this));
+
+  function elFromCompDef(comp, id) {
+    // build the dom elements for each comp by category
+    const iconClassName = comp.faIconClass || 'prodotype-icon';
+    const baseElementType = comp.baseElement || 'html';
+    const el = document.createElement('div');
+    el.classList.add('sub-menu-item');
+    el.title = `${comp.name}`;
+    el.setAttribute('data-menu-action', 'insert.' + baseElementType);
+    el.setAttribute('data-comp-id', id);
+    el.innerHTML = `
+      <span class="icon fa-fw ${iconClassName}"></span>
+      Add ${id}
+    `;
+    return el;
+  }
   // components
   this.model.component.ready(() => {
     const list = this.element.querySelector('.add-menu-container');
     const componentsDef = this.model.component.getComponentsDef();
+    // build a list of component categories
+    const elements = {};
     for(let id in componentsDef) {
-      const iconClassName = componentsDef[id].faIconClass || 'prodotype-icon';
-      const baseElementType = componentsDef[id].baseElement || 'html';
-      const cell = document.createElement('div');
-      cell.classList.add('sub-menu-item');
-      cell.title = `${componentsDef[id].name}`;
-      cell.setAttribute('data-menu-action', 'insert.' + baseElementType);
-      cell.setAttribute('data-comp-id', id);
-      cell.innerHTML = `
-        <span class="icon fa-fw ${iconClassName}"></span>
-        Add ${id}
-      `;
-      list.appendChild(cell);
+      const comp = componentsDef[id];
+      if(comp.isPrivate !== true) {
+        if(!elements[comp.category]) elements[comp.category] = [elFromCompDef(comp, id)];
+        else elements[comp.category].push(elFromCompDef(comp, id));
+      }
+    }
+    for(let id in elements) {
+      // create a label for the category
+      const label = document.createElement('div');
+      label.classList.add('label');
+      label.innerHTML = id;
+      list.appendChild(label);
+      // attach each comp's element
+      elements[id].forEach(el => list.appendChild(el));
     }
   });
   // event handling

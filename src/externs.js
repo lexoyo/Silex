@@ -32,8 +32,15 @@ function Prodotype(container, rootPath) {}
 
 
 /**
+ * @typedef {{faIconClass:?string, baseElement:?string, name:?string, category:?string, isPrivate:?boolean}}
  */
-Prodotype.prototype.componentsDef = {};
+var ProdotypeCompDef;
+
+
+/**
+ * @type {ProdotypeCompDef}
+ */
+Prodotype.prototype.componentsDef;
 
 
 /**
