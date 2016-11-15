@@ -445,7 +445,7 @@ silex.view.Stage.prototype.handleMouseUp = function(target, x, y, shiftKey) {
     goog.array.forEach(this.selectedElements, function(element) {
       if (!goog.dom.getAncestorByClass(element.parentNode, silex.model.Element.SELECTED_CLASS_NAME) &&
          !goog.dom.classlist.contains(element, silex.model.Body.PREVENT_DRAGGABLE_CLASS_NAME)) {
-        this.controller.stageController.newContainer(dropZone.element, element);
+        this.controller.stageController.newContainer(this.model.element.getContentNode(dropZone.element), element);
       }
       this.cleanupElement(element);
     }, this);
