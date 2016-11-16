@@ -89,7 +89,7 @@ silex.model.Component.prototype.initComponent = function(element, templateName) 
       'name': this.model.property.getComponentData(el)['name'],
     };
   }));
-  console.log('initComponent', element, templateName, name);
+  element.classList.add(silex.model.Component.COMPONENT_CLASS_NAME);
   this.model.property.setComponentData(element, {
     'name': name,
     'templateName': templateName,
@@ -138,7 +138,6 @@ silex.model.Component.prototype.updateDepenedencies = function() {
   for(let idx=0; idx < unused.length; idx++) {
     const el = unused[idx];
     head.removeChild(el);
-    console.log('removed', el);
   };
   // add missing dependencies (scripts and style sheets)
   let missing = this.prodotype.getMissingDependencies(head, components);
@@ -146,7 +145,6 @@ silex.model.Component.prototype.updateDepenedencies = function() {
     const el = missing[idx];
     el.setAttribute('data-dependency', '');
     head.appendChild(el);
-    console.log('added', el);
   };
 };
 
@@ -183,9 +181,21 @@ silex.model.Component.prototype.edit = function(element) {
           this.model.element.setInnerHtml(element, html);
         },
         'onBrowse': (e, cbk) => {
-          console.error('TODO: call cloud explorer');
           e.preventDefault();
-          // FIXME: browse with CE
+          // browse with CE
+          this.view.settingsDialog.controller.settingsDialogController.browse(
+            'prodotype.browse',
+            { },
+            (url, blob) => {
+              cbk([{
+                'url': blob.url,
+                'lastModified': blob.lastModified, // not in blob?
+                'lastModifiedDate': blob.lastModifiedDate, // not in blob?
+                'name': blob.filename,
+                'size': blob.size,
+                'type': blob.type, // not in blob?
+              }]);
+            });
         },
       });
   }
