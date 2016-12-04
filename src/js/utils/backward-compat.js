@@ -144,8 +144,7 @@ silex.utils.BackwardCompat.hasToUpdate = function(initialVersion, targetVersion)
  */
 silex.utils.BackwardCompat.to2_2_6 = function(version, doc, model, cbk) {
 
-//  if (silex.utils.BackwardCompat.hasToUpdate(version, [2, 2, 6]))
-  {
+  if (silex.utils.BackwardCompat.hasToUpdate(version, [2, 2, 6])) {
     // pass w3c validation => Error: Using the meta element to specify the document-wide default language is obsolete. Consider specifying the language on the root element instead.
     let metaToRemove = doc.querySelector('meta[http-equiv=content-language]');
     if(metaToRemove) metaToRemove.parentNode.removeChild(metaToRemove);
@@ -173,6 +172,17 @@ silex.utils.BackwardCompat.to2_2_6 = function(version, doc, model, cbk) {
     // move all page anchors to the new container
     var pages = doc.querySelectorAll('.' + silex.model.Page.PAGE_CLASS_NAME);
     goog.array.forEach(pages, (page) => pagesContainer.appendChild(page));
+    // convert all css style `height` to `min-height`
+    let arr = /** @type {!Array.<Object.<*>>} */ (JSON.parse(jsonStyleTag.innerHTML));
+    for(let modeName in arr[0]) for(let id in arr[0][modeName]) {
+      let style = arr[0][modeName][id];
+      if(style && style['height']) {
+        style['min-height'] = style['height'];
+        delete style['height'];
+      }
+    }
+    jsonStyleTag.innerHTML = JSON.stringify(arr);
+    model.property.loadProperties(doc);
   }
   // create the JSON array of styles when needed (will check even if not upgrading)
   let jsonStyleTag = doc.querySelector('.' + silex.model.Property.JSON_STYLE_TAG_CLASS_NAME);
@@ -215,18 +225,6 @@ silex.utils.BackwardCompat.to2_2_6 = function(version, doc, model, cbk) {
       }) + ']';
     }
   }
-  // convert all css style `height` to `min-height`
-  // FIXME: should be done only when updating, but due to a fix after release of 2.2.6 this will be run for all templates
-  let arr = /** @type {!Array.<Object.<*>>} */ (JSON.parse(jsonStyleTag.innerHTML));
-  for(let modeName in arr[0]) for(let id in arr[0][modeName]) {
-    let style = arr[0][modeName][id];
-    if(style['height']) {
-      style['min-height'] = style['height'];
-      style['height'] = undefined;
-    }
-  }
-  jsonStyleTag.innerHTML = JSON.stringify(arr);
-  model.property.loadProperties(doc);
 
   cbk();
 };

@@ -633,7 +633,6 @@ silex.model.Element.prototype.removeElement = function(element) {
     this.model.property.setComponentData(element)
     this.model.property.setStyle(element, null, true);
     this.model.property.setStyle(element, null, false);
-    // useless? Should remove its style? this.model.property.setStyle(element);
     // remove the element
     goog.dom.removeNode(element);
   }

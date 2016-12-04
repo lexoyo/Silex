@@ -89,7 +89,10 @@ silex.model.Component.prototype.initComponent = function(element, templateName) 
       'name': this.model.property.getComponentData(el)['name'],
     };
   }));
+  // for selection (select all components)
   element.classList.add(silex.model.Component.COMPONENT_CLASS_NAME);
+  // for styles (select buttons and apply a style)
+  element.classList.add(silex.model.Component.COMPONENT_CLASS_NAME + '-'  + templateName);
   this.model.property.setComponentData(element, {
     'name': name,
     'templateName': templateName,

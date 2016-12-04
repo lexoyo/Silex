@@ -252,11 +252,12 @@ silex.model.Property.prototype.setComponentData = function(element, componentDat
   // get the internal ID
   var elementId =  /** @type {string} */ (this.getSilexId(element));
   // store in object
-  this.componentDataObj[elementId] = componentData;
-  // update the component
-  // if(opt_redraw !== false) {
-  //   this.model.component.changed(element, componentData);
-  // }
+  if(componentData) {
+    this.componentDataObj[elementId] = componentData;
+  }
+  else {
+    delete this.componentDataObj[elementId];
+  }
 }
 
 
@@ -276,48 +277,60 @@ silex.model.Property.prototype.getComponentData = function(element) {
 /**
  * get / set the css style of an element
  * this creates or update a rule in the style tag with id INLINE_STYLE_TAG_CLASS_NAME
- * if opt_style is null this will remove the rule
+ * if style is null this will remove the rule
  * @param {Element} element
  * @param {?Object} style
  * @param {?boolean=} opt_isMobile
  */
 silex.model.Property.prototype.setStyle = function(element, style, opt_isMobile) {
   // do not apply width to sections
-  if(this.model.element.isSection(element)) {
-    style['width'] = undefined;
+  if(style && this.model.element.isSection(element)) {
+    delete style['width'];
   }
   var elementId =  /** @type {string} */ (this.getSilexId(element));
   var isMobile = opt_isMobile != null ? opt_isMobile : this.view.workspace.getMobileEditor()
   // to selector case
-  for(let key in style) {
-    let cssName = goog.string.toSelectorCase(key);
-    if(cssName !== key && style[key] !== null && style[key] !== '') {
-      let val = style[key];
-      style[key] = undefined;
-      style[cssName] = val;
+  if(style) {
+    for(let key in style) {
+      let cssName = goog.string.toSelectorCase(key);
+      if(cssName !== key && style[key] !== null && style[key] !== '') {
+        let val = style[key];
+        delete style[key];
+        style[cssName] = val;
+      }
     }
   }
   // store in JSON
   if (isMobile) {
-    this.mobileStylesObj[elementId] = style;
+    if(style) {
+      this.mobileStylesObj[elementId] = style;
+    }
+    else {
+      delete this.mobileStylesObj[elementId];
+    }
   }
   else {
-    this.stylesObj[elementId] = style;
-  }
-  // convert style to string
-  var styleStr = silex.utils.Style.styleToString(style || '');
-  // we use the class name because elements have their ID as a css class too
-  styleStr = '.' + elementId + '{' + styleStr + '} ';
-  if (isMobile) {
-    styleStr = '@media ' + silex.model.Property.MOBILE_MEDIA_QUERY + '{' + styleStr + '}';
+    if(style) {
+      this.stylesObj[elementId] = style;
+    }
+    else {
+      delete this.stylesObj[elementId];
+    }
   }
   // find the index of the rule for the given element
-  var cssRuleObject = this.findCssRule(elementId, isMobile);
+  const cssRuleObject = this.findCssRule(elementId, isMobile);
   // update or create the rule
   if (cssRuleObject) {
     this.styleSheet.deleteRule(cssRuleObject.index);
   }
-  if (style) {
+  // convert style to string
+  if(style) {
+    let styleStr = silex.utils.Style.styleToString(style);
+    // we use the class name because elements have their ID as a css class too
+    styleStr = '.' + elementId + '{' + styleStr + '} ';
+    if (isMobile) {
+      styleStr = '@media ' + silex.model.Property.MOBILE_MEDIA_QUERY + '{' + styleStr + '}';
+    }
     // add the rule to the dom to see the changes, mobile rules after desktop ones
     if(isMobile) {
       this.styleSheet.insertRule(styleStr, this.styleSheet.cssRules.length);
