@@ -104,6 +104,17 @@ silex.model.Component.prototype.initComponent = function(element, templateName) 
     this.model.element.setInnerHtml(element, html);
     this.updateDepenedencies();
   });
+  // static resource for components styles
+  if(!this.model.file.getContentDocument().querySelector('link[data-components-css]')) {
+    const head = this.model.head.getHeadElement();
+    const tag = this.model.file.getContentDocument().createElement('link');
+    tag.setAttribute('data-silex-static', '');
+    tag.setAttribute('data-component-css', '');
+    tag.rel = 'stylesheet';
+    tag.href = silex.utils.BackwardCompat.getStaticResourceUrl('components.css');
+    // insert on top so that styles applyed with Silex UI are strongger thant the predefined styles
+    head.insertBefore(tag, head.childNodes[0]);
+  }
 };
 
 
