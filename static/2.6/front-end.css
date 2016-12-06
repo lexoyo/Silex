@@ -35,6 +35,12 @@ body.compute-body-size-pending {
   width: 100%;
   height: 100%;
 }
+.html-element .silex-element-content {
+  pointer-events: none;
+}
+body.silex-runtime .html-element .silex-element-content {
+  pointer-events: auto;
+}
 /*  needed to have the content 100% height but mess up with UI
 .html-element .silex-element-content{
   position: absolute;
