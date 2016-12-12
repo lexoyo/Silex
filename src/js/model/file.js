@@ -135,6 +135,7 @@ silex.model.File.prototype.hasContent = function() {
  * @param {string} rawHtml
  * @param {?function()=} opt_cbk
  * @param {?boolean=} opt_showLoader
+ * @expose
  */
 silex.model.File.prototype.setHtml = function(rawHtml, opt_cbk, opt_showLoader) {
   // loading
@@ -414,6 +415,10 @@ silex.model.File.prototype.getHtmlGenerator = function* () {
 /**
  * load an arbitrary url as a silex html file
  * will not be able to save
+ * @param {string} url
+ * @param {function(string)=} cbk
+ * @param {?function()=} opt_onError
+ * @expose
  */
 silex.model.File.prototype.openFromUrl = function(url, cbk, opt_errCbk) {
   silex.service.CloudStorage.getInstance().loadLocal(url,
@@ -428,6 +433,7 @@ silex.model.File.prototype.openFromUrl = function(url, cbk, opt_errCbk) {
 
 /**
  * save a file with a new name
+ * @expose
  */
 silex.model.File.prototype.saveAs = function(url, rawHtml, cbk, opt_errCbk) {
   // save the data
@@ -438,6 +444,7 @@ silex.model.File.prototype.saveAs = function(url, rawHtml, cbk, opt_errCbk) {
 
 /**
  * write content to the file
+ * @expose
  */
 silex.model.File.prototype.save = function(rawHtml, cbk, opt_errCbk) {
   silex.service.CloudStorage.getInstance().save(
@@ -480,7 +487,6 @@ silex.model.File.prototype.close = function() {
 /**
  * get the url of the file
  */
-
 silex.model.File.prototype.getUrl = function() {
   // revert to relative URL
   if (this.url){

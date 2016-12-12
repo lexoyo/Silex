@@ -155,9 +155,18 @@ class App {
 
     // application start, open a new empty file
     this.controller.fileMenuController.newFile(
-      () => this.view.workspace.loadingDone(),
-      () => this.view.workspace.loadingDone()
+      () => {
+        this.view.workspace.loadingDone();
+        this.initDebug();
+      },
+      () => {
+        this.view.workspace.loadingDone();
+        this.initDebug();
+      }
     );
+  }
+
+  initDebug() {
     if (goog.DEBUG) {
       window['model'] = this.model;
       window['view'] = this.view;
