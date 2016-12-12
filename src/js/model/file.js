@@ -416,16 +416,16 @@ silex.model.File.prototype.getHtmlGenerator = function* () {
  * load an arbitrary url as a silex html file
  * will not be able to save
  * @param {string} url
- * @param {function(string)=} cbk
- * @param {?function()=} opt_onError
+ * @param {?function(string)=} opt_cbk
+ * @param {?function(Object)=} opt_errCbk
  * @expose
  */
-silex.model.File.prototype.openFromUrl = function(url, cbk, opt_errCbk) {
+silex.model.File.prototype.openFromUrl = function(url, opt_cbk, opt_errCbk) {
   silex.service.CloudStorage.getInstance().loadLocal(url,
       goog.bind(function(rawHtml) {
         this.setUrl(url);
-        if (cbk) {
-          cbk(rawHtml);
+        if (opt_cbk) {
+          opt_cbk(rawHtml);
         }
       }, this), opt_errCbk);
 };

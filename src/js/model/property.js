@@ -244,16 +244,16 @@ silex.model.Property.prototype.initStyles = function(doc) {
 
 /**
  * get / set the data associated with an element
- * if componentData is null this will remove the rule
+ * if opt_componentData is null this will remove the rule
  * @param {Element} element
- * @param {?Object} componentData
+ * @param {?Object=} opt_componentData
  */
-silex.model.Property.prototype.setComponentData = function(element, componentData) {
+silex.model.Property.prototype.setComponentData = function(element, opt_componentData) {
   // get the internal ID
   var elementId =  /** @type {string} */ (this.getSilexId(element));
   // store in object
-  if(componentData) {
-    this.componentDataObj[elementId] = componentData;
+  if(opt_componentData) {
+    this.componentDataObj[elementId] = opt_componentData;
   }
   else {
     delete this.componentDataObj[elementId];
