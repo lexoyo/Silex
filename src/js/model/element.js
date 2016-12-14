@@ -422,20 +422,9 @@ silex.model.Element.prototype.setInnerHtml = function(element, innerHTML) {
  * @return  {Element}  the element which holds the content, i.e. a div, an image, ...
  */
 silex.model.Element.prototype.getContentNode = function(element) {
-  var content;
-  // find the content elements
-  var contentElements = goog.dom.getElementsByClass(
-      silex.model.Element.ELEMENT_CONTENT_CLASS_NAME,
-      element);
-  if (contentElements && contentElements.length === 1) {
-    // image or html box case
-    content = contentElements[0];
-  }
-  else {
-    // text box or container case
-    content = element;
-  }
-  return content;
+  return element.querySelector(
+    ':scope > .' + silex.model.Element.ELEMENT_CONTENT_CLASS_NAME) ||
+    element;
 };
 
 

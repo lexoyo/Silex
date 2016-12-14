@@ -70,6 +70,15 @@ silex.model.Component.prototype.ready = function(cbk) {
 
 
 /**
+ * @param {Element} el
+ * @return {boolean} true if el is a component (not only an element)
+ */
+silex.model.Component.prototype.isComponent = function(el) {
+  return el.classList.has(silex.model.Component.COMPONENT_CLASS_NAME);
+};
+
+
+/**
  * get Prodotype descriptor of the components
  * @return {ProdotypeCompDef} component descriptors
  */
@@ -82,7 +91,6 @@ silex.model.Component.prototype.getComponentsDef = function() {
  * @param {Element} element component just added
  * @param {string} templateName type of component
  */
-// silex.model.Component.prototype.onComponentAdded = function(element, type) {
 silex.model.Component.prototype.initComponent = function(element, templateName) {
   const name = this.prodotype.createName(templateName, this.getAllComponents().map(el => {
     return {
