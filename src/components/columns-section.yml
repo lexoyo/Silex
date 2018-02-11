@@ -1,15 +1,15 @@
 ---
-name: Hero Section
-description: 'This is a hero section component, which takes the whole screen. You can add elements to the section and use the css classes "hero-center", "hero-bottom", "hero-scroll"'
-doc: https://en.wikipedia.org/wiki/Hero_image
-category: Hero Section
+name: Columns Section
+description: 'This component is a section with multiple containers to create columns. You can add elements to the section to add more columns'
+doc: https://github.com/silexlabs/Silex/issues/603
+category: Smart Containers
 tags:
 - ui
 - ux
 - website
-isPrivate: true
+isPrivate: false
 baseElement: section
-faIconClass: fa-header
+faIconClass: fa-columns
 initialCss:
   min-height: 400px
 initialCssContentContainer:
