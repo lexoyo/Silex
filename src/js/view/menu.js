@@ -144,7 +144,7 @@ silex.view.Menu.prototype.buildUi = function() {
     el.setAttribute('data-menu-action', 'insert.' + baseElementType);
     el.setAttribute('data-comp-id', id);
     el.innerHTML = `
-      <span class="icon fa-inverse ${iconClassName}"></span>
+      <span class="icon fa fa-inverse ${iconClassName}"></span>
       ${comp.name}
     `;
     return el;

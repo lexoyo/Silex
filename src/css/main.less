@@ -1,10 +1,12 @@
 /* imports custom fonts */
-@import url(../libs/font-awesome/css/font-awesome.min.css);
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: lighter;
   src: local('Roboto'), url('../roboto.woff2') format('woff2');
+}
+.svg-inline--fa > * {
+  pointer-events: none; /* prevent click on the icon (svg path), only the container (svg) */
 }
 
 ::-webkit-scrollbar {
