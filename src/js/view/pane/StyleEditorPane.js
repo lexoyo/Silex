@@ -26,6 +26,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
 
     // Build the UI
     this.styleCombo = this.element.querySelector('.class-name-style-combo-box');
+    this.styleInput = this.element.querySelector('.class-name-style-input');
     this.pseudoClassCombo = this.element.querySelector('.pseudoclass-style-combo-box');
     this.visibilityCombo = this.element.querySelector('.visibility-style-combo-box');
     this.pseudoClassCombo.onchange = e => {
@@ -36,38 +37,14 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
       this.populatePseudoClassCombo();
     };
     this.styleCombo.onchange = e => {
-      // named style can be applyed
-      // not named style change selection
-      const newStyledElement = this.model.property.getElementBySilexId(this.styleCombo.value);
-      if(newStyledElement) {
-        // TODO: this is probably bad UX, unless we scroll to the element and open a page where it is visible
-        this.model.body.setSelection([newStyledElement]);
-      }
-      else {
-        // here the user is trying to apply a named style to the selection
-        // remove the old style
-        const oldStyledElement = this.model.property.getElementBySilexId(this.styleComboPrevValue);
-        if(oldStyledElement) {
-          // this was a style for only the selected element
-          this.deleteStyle(this.styleComboPrevValue);
-        }
-        else {
-          // this was a named style
-          this.selectedElements.forEach(element => {
-            element.classList.remove(this.styleComboPrevValue);
-          });
-        }
-        // add the new style
-        this.selectedElements.forEach(element => {
-          element.classList.add(this.styleCombo.value);
-        });
-        // store for next change
-        this.styleComboPrevValue = this.styleCombo.value;
-        // edit the selected style
-        this.model.component.editStyle(this.styleCombo.value, this.getPseudoClass(), this.visibilityCombo.value);
-        // refresh the view
-        this.controller.propertyToolController.refreshView();
-      }
+      this.styleInput.value = this.styleCombo.options[this.styleCombo.selectedIndex].innerHTML;
+      this.styleNameChanged();
+    };
+    this.styleInput.onchange = e => {
+      const data = this.model.property.getProdotypeData(this.styleComboPrevValue, Component.STYLE_TYPE);
+      this.doCreateStyle(this.styleInput.value, data);
+      this.deleteStyle(this.styleComboPrevValue);
+      this.styleNameChanged();
     };
     /*
     this.element.querySelector('.add-style').onclick = e => {
@@ -91,6 +68,42 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
       });
     };
     */
+  }
+
+
+  styleNameChanged() {
+    // named style can be applyed
+    // not named style change selection
+    const newStyledElement = this.model.property.getElementBySilexId(this.styleInput.value);
+    if(newStyledElement) {
+      // TODO: this is probably bad UX, unless we scroll to the element and open a page where it is visible
+      this.model.body.setSelection([newStyledElement]);
+    }
+    else {
+      // here the user is trying to apply a named style to the selection
+      // remove the old style
+      const oldStyledElement = this.model.property.getElementBySilexId(this.styleComboPrevValue);
+      if(oldStyledElement) {
+        // this was a style for only the selected element
+        this.deleteStyle(this.styleComboPrevValue);
+      }
+      else {
+        // this was a named style
+        this.selectedElements.forEach(element => {
+          element.classList.remove(this.styleComboPrevValue);
+        });
+      }
+      // add the new style
+      this.selectedElements.forEach(element => {
+        element.classList.add(this.styleInput.value);
+      });
+      // store for next change
+      this.styleComboPrevValue = this.styleInput.value;
+      // edit the selected style
+      this.model.component.editStyle(this.styleInput.value, this.getPseudoClass(), this.visibilityCombo.value);
+      // refresh the view
+      this.controller.propertyToolController.refreshView();
+    }
   }
 
 
@@ -153,7 +166,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
         }
       })()
       // keep the current selected style in the combo box
-      const currentSelection = this.styleCombo.value;
+      const currentSelection = this.styleInput.value;
       let currentSelectionFound = false;
       // reset the combo box
       this.styleCombo.innerHTML = '';
@@ -184,12 +197,16 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
       .forEach(option => this.styleCombo.appendChild(option));
       // set the new selection
       if(currentSelectionFound) {
-        if(selectionStyle)
+        if(selectionStyle) {
           this.styleCombo.value = selectionStyle.name;
-        else
+          this.styleInput.value = this.styleCombo.options[this.styleCombo.selectedIndex].innerHTML;
+        }
+        else {
           this.styleCombo.value = currentSelection;
+          this.styleInput.value = this.styleCombo.options[this.styleCombo.selectedIndex].innerHTML;
+        }
       }
-      if(this.styleComboPrevValue !== this.styleCombo.value) {
+      if(this.styleComboPrevValue !== this.styleInput.value) {
         // reset state
         this.visibilityCombo.selectedIndex = 0;
         this.pseudoClassCombo.selectedIndex = 0;
@@ -198,9 +215,9 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
       this.populatePseudoClassCombo();
       this.populateVisibilityCombo();
       // store prev value
-      this.styleComboPrevValue = this.styleCombo.value;
+      this.styleComboPrevValue = this.styleInput.value;
       // start editing the style with prodotype
-      this.model.component.editStyle(this.styleCombo.value, this.getPseudoClass(), this.visibilityCombo.value);
+      this.model.component.editStyle(this.styleInput.value, this.getPseudoClass(), this.visibilityCombo.value);
     }
   }
 
@@ -210,7 +227,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
    */
   populateVisibilityCombo() {
     // get selection data
-    const className = this.styleCombo.value;
+    const className = this.styleInput.value;
     const styleData = this.model.property.getProdotypeData(className, Component.STYLE_TYPE) || {};
     // populate visibility class combo
     const selectedIndex = this.visibilityCombo.selectedIndex;
@@ -235,7 +252,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
    */
   populatePseudoClassCombo() {
     // get selection data
-    const className = this.styleCombo.value;
+    const className = this.styleInput.value;
     const styleData = this.model.property.getProdotypeData(className, Component.STYLE_TYPE) || {};
     const visibilityData = styleData[this.visibilityCombo.value];
     // populate pseudo class combo
@@ -299,15 +316,8 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
     silex.utils.Notification.prompt('Enter a name for your style!', 'My Style',
       (accept, name) => {
         if(accept && name && name !== '') {
-          const option = document.createElement('option');
-          option.value = name.replace(/ /g, '-').toLowerCase();
-          option.innerHTML = name;
-          this.styleCombo.appendChild(option);
-          this.styleCombo.value = option.value;
-          this.styleComboPrevValue = this.styleCombo.value;
-          this.model.component.initStyle(this.styleCombo.value, this.getPseudoClass(), this.visibilityCombo.value, opt_data);
-          this.model.component.editStyle(this.styleCombo.value, this.getPseudoClass(), this.visibilityCombo.value);
-          silex.utils.Notification.alert(`I have created your new style, please add ${ option.value } to <a href="${ silex.Config.WIKI_SILEX_CUSTOM_CSS_CLASS }" target="_blank">your elements' css class name, click here for help</a>.`, () => {
+          this.doCreateStyle(name, opt_data);
+          silex.utils.Notification.alert(`I have created your new style, please add ${ this.cleanupStyleName(name) } to <a href="${ silex.Config.WIKI_SILEX_CUSTOM_CSS_CLASS }" target="_blank">your elements' css class name, click here for help</a>.`, () => {
             if(opt_cbk) opt_cbk(name);
           });
         }
@@ -316,6 +326,22 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
         }
       }
     );
+  }
+
+  cleanupStyleName(name) {
+    return name.replace(/ /g, '-').toLowerCase();
+  }
+
+  doCreateStyle(name, opt_data) {
+    const option = document.createElement('option');
+    option.value = this.cleanupStyleName(name);
+    option.innerHTML = name;
+    this.styleCombo.appendChild(option);
+    this.styleCombo.value = option.value;
+    this.styleInput.value = this.styleCombo.options[this.styleCombo.selectedIndex].innerHTML;
+    this.styleComboPrevValue = this.styleCombo.value;
+    this.model.component.initStyle(this.styleInput.value, this.getPseudoClass(), this.visibilityCombo.value, opt_data);
+    this.model.component.editStyle(this.styleInput.value, this.getPseudoClass(), this.visibilityCombo.value);
   }
 
 
@@ -327,6 +353,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
     if(option && option.value !== silex.view.PropertyTool.GLOBAL_STYLE_CLASS_NAME) {
       this.model.component.removeStyle(option.value);
       this.styleCombo.removeChild(option);
+      this.styleInput.value = this.styleCombo.options[this.styleCombo.selectedIndex].innerHTML;
     }
   }
 }

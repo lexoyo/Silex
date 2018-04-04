@@ -88,8 +88,9 @@
   /* */
 
   .main-container {
-    padding: 0;
-    width: 97%;
+    right: 0px;
+    left: 0px;
+    padding: 5px;
     border-bottom: 1px solid @silexdarkgrey;
     flex: 1 0 auto;
     overflow-x: hidden;
@@ -156,6 +157,15 @@
       }
     }
 
+    .prodotype-style-editor {
+      .class-name-style-input {
+        margin-right: -25px;
+      }
+      .class-name-style-combo-box {
+        width: 25px;
+        height: 22px; /* in chrome, same height as the text input */
+      }
+    }
   }
 
   fieldset {
