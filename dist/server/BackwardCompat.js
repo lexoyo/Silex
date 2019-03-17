@@ -95,6 +95,7 @@ module.exports = class BackwardCompat {
     else {
       // update the static scripts to match the current server URL
       this.updateStatic(doc);
+      this.cleanupComponents(doc);
       return Promise.resolve();
     }
   }
@@ -116,6 +117,16 @@ module.exports = class BackwardCompat {
         element.setAttribute(propName, newUrl);
       }
     }
+  }
+
+  cleanupComponents(doc) {
+    console.log('components', components);
+    Object.keys(components).forEach(key => {
+      Array.from(doc.querySelectorAll(`.silex-component.silex-component-${ key }`))
+      .forEach(el => {
+        console.log('found', el, key);
+      });
+    });
   }
 
 
