@@ -33,8 +33,7 @@ silex.controller.SettingsDialogController = function(model, view) {
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.SettingsDialogController,
-    silex.controller.ControllerBase);
+goog.inherits(silex.controller.SettingsDialogController, silex.controller.ControllerBase);
 
 
 /**

@@ -62,6 +62,8 @@ goog.require('silex.utils.InvalidationManager');
 goog.require('silex.utils.Polyfills');
 goog.require('silex.utils.Style');
 goog.require('silex.utils.Notification');
+goog.require('silex.types.ClipboardItem');
+goog.require('silex.types.UndoItem');
 goog.require('silex.view.ContextMenu');
 goog.require('silex.view.BreadCrumbs');
 goog.require('silex.view.Menu');

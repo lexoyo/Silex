@@ -19,9 +19,6 @@
  */
 goog.provide('silex.controller.ControllerBase');
 
-goog.require('silex.utils.Notification');
-
-
 
 /**
  * base class for all UI controllers of the controller package

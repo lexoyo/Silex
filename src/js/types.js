@@ -20,6 +20,9 @@ goog.provide('silex.types.Controller');
 goog.provide('silex.types.Model');
 goog.provide('silex.types.View');
 
+goog.provide('silex.types.ClipboardItem');
+goog.provide('silex.types.UndoItem');
+
 goog.provide('Font');
 goog.provide('Hosting');
 goog.provide('Provider');

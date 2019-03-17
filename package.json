@@ -29,7 +29,8 @@
     "build:css": "lessc src/css/_styles.less dist/client/css/admin.css --source-map",
     "build:html": "jade src/html/index.jade --out dist/client/ --no-debug",
     "build:js:release": "java -jar `node_modules google-closure-compiler`/google-closure-compiler/compiler.jar --js `node_modules google-closure-library`/google-closure-library/closure/goog/ --js src/js/ --externs src/externs.js --js_output_file dist/client/js/admin.js --compilation_level ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --language_in ECMASCRIPT6_STRICT --language_out ECMASCRIPT5 --create_source_map dist/client/js/admin.js.map --closure_entry_point silex.App --only_closure_dependencies --define=\"goog.DEBUG=false\"",
-    "build:js:debug": "java -jar `node_modules google-closure-compiler`/google-closure-compiler/compiler.jar --debug --js `node_modules google-closure-library`/google-closure-library/closure/goog/ --js src/js/ --externs src/externs.js --js_output_file dist/client/js/admin.js --compilation_level ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --language_in ECMASCRIPT6_STRICT --language_out ECMASCRIPT5 --create_source_map dist/client/js/admin.js.map --closure_entry_point silex.App --only_closure_dependencies --define=\"goog.DEBUG=true\" && echo \"//# sourceMappingURL=/js/admin.js.map\" >> dist/client/js/admin.js ",
+    "build:js:debug": "java -jar `node_modules google-closure-compiler`/google-closure-compiler/compiler.jar --debug --output_manifest manifest --js `node_modules google-closure-library`/google-closure-library/closure/goog/ --js src/js/ --externs src/externs.js --js_output_file dist/client/js/admin.js --compilation_level ADVANCED_OPTIMIZATIONS --warning_level=VERBOSE --language_in ECMASCRIPT6_STRICT --language_out ECMASCRIPT5 --create_source_map dist/client/js/admin.js.map --closure_entry_point silex.App --only_closure_dependencies --define=\"goog.DEBUG=true\" && echo \"//# sourceMappingURL=/js/admin.js.map\" >> dist/client/js/admin.js ",
+    "build:ts": "tsc converted/src/js/app.ts",
     "watch:server": "watch 'npm run lint:server' dist/server/",
     "watch:client": "watch 'npm run build:css && npm run build:html && npm run build:prodotype && npm run build:js:debug && npm run lint:js' src/",
     "lint:js": "eslint src/js/",
@@ -38,8 +39,10 @@
     "start:electron": "SILEX_ELECTRON=true electron ."
   },
   "dependencies": {
+    "@teppeis/clutz": "^1.0.27-7f561f9.v20190315T001354",
     "bluebird": "3.5.1",
     "body-parser": "^1.18.2",
+    "clang-format": "^1.2.4",
     "cloud-explorer": "github:silexlabs/CloudExplorer2#master",
     "compression": "1.7.2",
     "cookie-parser": "1.4.3",
@@ -59,6 +62,7 @@
     "serve-static": "1.13.2",
     "silex-blank-templates": "github:silexlabs/silex-blank-templates#39a9f21e18dedd3e38cf09daea873f1e3789ab48",
     "silex-templates": "github:silexlabs/silex-templates#6566dde0f6b3f00dcefc84379a8f90710def57ed",
+    "typescript": "^3.3.3333",
     "wysihtml": "^0.6.0-beta1"
   },
   "devDependencies": {
