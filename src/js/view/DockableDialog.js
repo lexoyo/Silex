@@ -22,7 +22,7 @@ const DOCK_DIALOG_CLASS_NAME = 'dock-dialog';
 
 /**
  * implement a "dockable" behavior
- * @type {silex.view.DockableDialog}
+ * @class {silex.view.DockableDialog}
  */
 silex.view.DockableDialog = class {
   /**

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outFile": "tsc.js",
+        "sourceMap": true,
+        "module": "amd",
+    },
+    "include": [
+        "converted/src/js/**/*.ts"
+    ],
+    "exclude": [
+    ],
+    "paths": {
+      // "goog:*": ["./node_modules/closure-library.ts/closure-library.d.ts/all.d.ts"]
+    },
+}
