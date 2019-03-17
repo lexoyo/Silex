@@ -165,8 +165,10 @@ class App {
 
 
     // warning when not ff or chrome
-    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-    const isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    var isIE = !!document['documentMode'];
+    var isEdge = !isIE && !!window['StyleMedia'];
+    const isFirefox = !isEdge && !isIE && navigator.userAgent.toLowerCase().indexOf('firefox/') > -1;
+    const isChrome = !isIE && navigator.userAgent.toLowerCase().indexOf('chrome/') > -1;
     if (!isFirefox && !isChrome) {
       silex.utils.Notification.alert(
         'Your browser is not supported yet.<br><br>Considere using <a href="https://www.mozilla.org/firefox/" target="_blank">Firefox</a> or <a href="https://www.google.com/chrome/" target="_blank">chrome</a>.',
