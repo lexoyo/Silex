@@ -16,10 +16,11 @@
  */
 goog.provide('silex.controller.EditMenuController');
 
-goog.require('silex.controller.ControllerBase');
 goog.require('silex.service.SilexTasks');
 
-
+const ControllerBase = goog.require('silex.controller.ControllerBase');
+const InvalidationManager = goog.require('silex.utils.InvalidationManager');
+const FileExplorer = goog.require('silex.view.dialog.FileExplorer');
 
 /**
  * @constructor
@@ -30,7 +31,7 @@ goog.require('silex.service.SilexTasks');
  */
 silex.controller.EditMenuController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 
 
   /**
@@ -41,7 +42,7 @@ silex.controller.EditMenuController = function(model, view) {
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.EditMenuController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.EditMenuController/**/, ControllerBase);
 
 
 /**
@@ -50,11 +51,11 @@ goog.inherits(silex.controller.EditMenuController, silex.controller.ControllerBa
 silex.controller.EditMenuController.prototype.undo = function() {
   this.model.body.setSelection([]);
   this.undoredoInvalidationManager.callWhenReady(() => {
-    if (silex.controller.ControllerBase.getStatePending === 0 &&
-      silex.controller.ControllerBase.undoHistory.length > 0) {
+    if (/**/ControllerBase.getStatePending === 0 &&
+      /**/ControllerBase.undoHistory.length > 0) {
       const state = this.getState();
-      silex.controller.ControllerBase.redoHistory.push(state);
-      const prevState = silex.controller.ControllerBase.undoHistory.pop();
+      /**/ControllerBase.redoHistory.push(state);
+      const prevState = /**/ControllerBase.undoHistory.pop();
       this.restoreState(prevState);
     }
     else {
@@ -70,10 +71,10 @@ silex.controller.EditMenuController.prototype.undo = function() {
 silex.controller.EditMenuController.prototype.redo = function() {
   this.model.body.setSelection([]);
   this.undoredoInvalidationManager.callWhenReady(() => {
-    if (silex.controller.ControllerBase.redoHistory.length > 0) {
+    if (/**/ControllerBase.redoHistory.length > 0) {
       const state = this.getState();
-      silex.controller.ControllerBase.undoHistory.push(state);
-      const prevState = silex.controller.ControllerBase.redoHistory.pop();
+      /**/ControllerBase.undoHistory.push(state);
+      const prevState = /**/ControllerBase.redoHistory.pop();
       this.restoreState(prevState);
     }
   });
@@ -110,11 +111,11 @@ silex.controller.EditMenuController.prototype.copySelection = function() {
     });
   if (elements.length > 0) {
     // reset clipboard
-    silex.controller.ControllerBase.clipboard = [];
+    /**/ControllerBase.clipboard = [];
     // add each selected element to the clipboard
     goog.array.forEach(elements, function(element) {
       // copy the element and its children
-      silex.controller.ControllerBase.clipboard.push(this.recursiveCopy(element));
+      /**/ControllerBase.clipboard.push(this.recursiveCopy(element));
     }, this);
     // update the views
     this.model.body.setSelection(this.model.body.getSelection());
@@ -126,7 +127,7 @@ silex.controller.EditMenuController.prototype.copySelection = function() {
  * make a recursive copy of an element styles/mobileStyle/componentData
  * the element and its children are already clones of the selection
  * this is needed to "freez" elements properties
- * @param {Element} element
+ * @param {silex.types.Element} element
  * return {silex.types.ClipboardItem}
  */
 silex.controller.EditMenuController.prototype.recursiveCopy = function(element) {
@@ -142,7 +143,7 @@ silex.controller.EditMenuController.prototype.recursiveCopy = function(element) 
   if (this.model.element.getType(res.element) === silex.model.Element.TYPE_CONTAINER) {
     const len = res.element.childNodes.length;
     for (let idx = 0; idx < len; idx++) {
-      const el = /** @type {Element} */ (res.element.childNodes[idx]);
+      const el = /** @type {silex.types.Element} */ (res.element.childNodes[idx]);
       if (el.nodeType === 1 && this.model.element.getType(el) !== null) {
         res.children.push(this.recursiveCopy(el));
       }
@@ -158,14 +159,14 @@ silex.controller.EditMenuController.prototype.recursiveCopy = function(element) 
 silex.controller.EditMenuController.prototype.pasteSelection = function() {
   this.tracker.trackAction('controller-events', 'info', 'paste', 0);
   // default is selected element
-  if (silex.controller.ControllerBase.clipboard && silex.controller.ControllerBase.clipboard.length > 0) {
+  if (/**/ControllerBase.clipboard && /**/ControllerBase.clipboard.length > 0) {
     // undo checkpoint
     this.undoCheckPoint();
     // take the scroll into account (drop at (100, 100) from top left corner of the window, not the stage)
     const doc = this.model.file.getContentDocument();
     let offset = 0;
     // add to the container
-    const selection = silex.controller.ControllerBase.clipboard.map(clipboardItem => {
+    const selection = /**/ControllerBase.clipboard.map(clipboardItem => {
       var element = this.recursivePaste(clipboardItem);
       // reset editable option
       this.doAddElement(element);
@@ -188,7 +189,7 @@ silex.controller.EditMenuController.prototype.pasteSelection = function() {
  * also reset the ID of the element and its children
  * the elements have already been added to stage
  * @param {silex.types.ClipboardItem} clipboardItem
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.controller.EditMenuController.prototype.recursivePaste = function(clipboardItem) {
   var element = clipboardItem.element;
@@ -233,7 +234,7 @@ silex.controller.EditMenuController.prototype.removeSelectedElements = function(
 
 
 /**
- * edit an {Element} element
+ * edit an {silex.types.Element} element
  * take its type into account and open the corresponding editor
  * @param {?HTMLElement=} opt_element
  */
@@ -280,7 +281,7 @@ silex.controller.EditMenuController.prototype.editElement = function(opt_element
 
 /**
  * get the index of the element in the DOM
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {number}
  */
 silex.controller.EditMenuController.prototype.indexOfElement = function(element) {

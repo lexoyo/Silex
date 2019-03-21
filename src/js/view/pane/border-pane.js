@@ -29,7 +29,7 @@ goog.require('silex.view.pane.PaneBase');
  * let user edit style of components
  * @constructor
  * @extends {silex.view.pane.PaneBase}
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller structure which holds
@@ -184,11 +184,11 @@ silex.view.pane.BorderPane.prototype.redraw =
   // FIXME: should not build a string which is then split in redrawBorderWidth
   var borderWidth = this.getCommonProperty(
     selectedElements,
-    goog.bind(function(element) {
+    element => {
       var w = this.model.element.getStyle(element, 'borderWidth');
       if (w && w != '') return w;
       else return null;
-    }, this));
+    });
 
 
   // display width or reset borders if width is null
@@ -202,12 +202,12 @@ silex.view.pane.BorderPane.prototype.redraw =
   // border style
   var borderStyle = this.getCommonProperty(
     selectedElements,
-    goog.bind(function(element) {
+    element => {
       var style;
       style = this.model.element.getStyle(element, 'borderStyle');
       if (style) return style;
       return null;
-    }, this)
+    }
   );
   if (borderStyle) {
     this.borderStyleComboBox.value = borderStyle;
@@ -235,10 +235,10 @@ silex.view.pane.BorderPane.prototype.redrawBorderColor = function(selectedElemen
     this.colorPicker.setDisabled(false);
     var color = this.getCommonProperty(
       selectedElements,
-      goog.bind(function(element) {
+      element => {
         var w = this.model.element.getStyle(element, 'borderColor');
         return w || 'rgba(0,0,0,1)';
-      }, this));
+      });
     // indeterminate state
     this.colorPicker.setIndeterminate(color == null);
     // display color

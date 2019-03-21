@@ -15,7 +15,7 @@
  */
 
 
-goog.provide('silex.view.ModalDialog');
+goog.module('silex.view.ModalDialog');
 
 
 const HIDE_DIALOG_CLASS_NAME = 'silex-hide-dialog';
@@ -26,7 +26,7 @@ const MODAL_DIALOG_CLASS_NAME = 'silex-modal-dialog';
  * there is a static method to open dialogs by name
  * @class {silex.view.ModalDialog}
  */
-class ModalDialog {
+exports = class ModalDialog {
   /**
    * open a dialog by name
    * @param  {string} name

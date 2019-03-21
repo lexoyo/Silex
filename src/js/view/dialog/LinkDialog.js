@@ -15,10 +15,10 @@
  */
 
 
-goog.provide('silex.view.dialog.LinkDialog');
+goog.module('silex.view.dialog.LinkDialog');
 goog.require('silex.utils.Notification');
 
-const LINK_ATTRIBUTES =  ['href', 'rel', 'target', 'type', 'title', 'download'];
+exports.LINK_ATTRIBUTES =  ['href', 'rel', 'target', 'type', 'title', 'download'];
 const DEFAULT_LINK_DATA = {
   href: '',
   target: '',
@@ -31,7 +31,7 @@ const DEFAULT_LINK_DATA = {
 /**
  * the LinkDialog class
  */
-silex.view.dialog.LinkDialog = class {
+exports.LinkDialog = class LinkDialog {
 
   constructor(model) {
     this.model = model;
@@ -53,7 +53,7 @@ silex.view.dialog.LinkDialog = class {
     silex.utils.Notification.prompt('Link editor <a class="link-editor-help-button fa fa-question-circle" target="_blank" href="https://github.com/silexlabs/Silex/wiki/Editor-UI#link-editor">       Help</a>', 'unused', (accept, unused) => {
       if(accept) {
         // get new values
-        const newData = LINK_ATTRIBUTES
+        const newData = exports.LINK_ATTRIBUTES
           .reduce((acc, attr) => {
             const el = dialogBody.querySelector('.' + attr);
             if(!el) {

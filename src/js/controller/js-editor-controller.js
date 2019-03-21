@@ -16,7 +16,7 @@
  */
 goog.provide('silex.controller.JsEditorController');
 
-goog.require('silex.controller.ControllerBase');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 
 
@@ -29,12 +29,12 @@ goog.require('silex.controller.ControllerBase');
  */
 silex.controller.JsEditorController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.JsEditorController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.JsEditorController/**/, ControllerBase);
 
 
 /**

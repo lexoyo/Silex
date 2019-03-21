@@ -15,13 +15,13 @@
  *
  */
 
-goog.provide('silex.view.pane.StyleEditorPane');
+goog.module('silex.view.pane.StyleEditorPane');
 
-class StyleEditorPane extends silex.view.pane.PaneBase {
+exports = class StyleEditorPane extends silex.view.pane.PaneBase {
 
   /**
    *
-   * @param {Element} element   container to render the UI
+   * @param {silex.types.Element} element   container to render the UI
    * @param  {!silex.types.Model} model  model class which holds
    *                                  the model instances - views use it for read operation only
    * @param  {!silex.types.Controller} controller  structure which holds
@@ -37,7 +37,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
     this.element = element;
     this.model = model;
     this.controller = controller;
-    /** @type {?Array.<Element>} */
+    /** @type {?Array.<silex.types.Element>} */
     this.selectedElements = null;
     /** @type {silex.model.data.StyleName} */
     this.styleComboPrevValue = '';
@@ -139,7 +139,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
    * Get all the elements which have a given style
    * @param  {silex.model.data.StyleName} styleName
    * @param  {boolean} includeOffPage, if false it excludes the elements which are not visible in the current page
-   * @return {Array<Element>}
+   * @return {Array<silex.types.Element>}
    */
   getElementsWithStyle(styleName, includeOffPage) {
     const newSelection = silex.utils.Dom.getElementsAsArray(this.model.file.getContentDocument(), '.' + styleName)
@@ -170,7 +170,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
 
   /**
    * apply a style to a set of elements, remove old styles
-   * @param {Array<Element>} elements
+   * @param {Array<silex.types.Element>} elements
    * @param  {silex.model.data.StyleName} newStyle
    */
   applyStyle(elements, newStyle) {
@@ -192,7 +192,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
   }
 
   /**
-   * @param {Element} el
+   * @param {silex.types.Element} el
    */
   isTextBox(el) {
     return this.model.element.getType(el) === 'text';
@@ -200,7 +200,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
 
 
   /**
-   * @param {Element} el
+   * @param {silex.types.Element} el
    */
   removeAllStyles(el) {
     this.getStyles([el]).forEach(styleName => el.classList.remove(styleName));
@@ -209,7 +209,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
 
   /**
    * retrieve the styles applyed to the set of elements
-   * @param  {Array<Element>} elements
+   * @param  {Array<silex.types.Element>} elements
    * @return {Array<silex.model.data.StyleName>}
    */
   getStyles(elements) {
@@ -228,7 +228,7 @@ class StyleEditorPane extends silex.view.pane.PaneBase {
 
   /**
    * redraw the properties
-   * @param   {Array.<Element>} selectedElements the elements currently selected
+   * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
    * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
    * @param   {string}  currentPageName   the name of the current page
    */

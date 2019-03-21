@@ -22,12 +22,14 @@ goog.provide('silex.types.View');
 
 goog.provide('silex.types.ClipboardItem');
 goog.provide('silex.types.UndoItem');
+goog.provide('silex.types.Element');
 
 goog.provide('Font');
 goog.provide('Hosting');
 goog.provide('Provider');
 goog.provide('VHost');
 goog.provide('PublicationOptions');
+goog.provide('silex.types.FileInfo');
 
 
 goog.require('silex.controller.ContextMenuController');
@@ -44,6 +46,11 @@ goog.require('silex.controller.StageController');
 goog.require('silex.controller.TextEditorController');
 goog.require('silex.controller.ToolMenuController');
 goog.require('silex.controller.ViewMenuController');
+
+/**
+ * @typedef {silex.types.Element}
+ */
+silex.types.Element;
 
 /**
  * @typedef {{
@@ -119,15 +126,15 @@ var Provider;
  *   name: string,
  *   domainUrl: string,
  *   skipDomainSelection: boolean,
- *   publicationPath: FileInfo,
+ *   publicationPath: silex.types.FileInfo,
  * }}
  */
 var VHost;
 
 /**
  * @typedef {{
- *   file:FileInfo,
- *   publicationPath:FileInfo,
+ *   file:silex.types.FileInfo,
+ *   publicationPath:silex.types.FileInfo,
  *   provider:Provider,
  * }}
  */
@@ -409,3 +416,23 @@ silex.types.View.prototype.init = function(
    */
   this.workspace = workspace;
 };
+
+
+/////////////////////////////
+// from externs
+
+/**
+ * @typedef {{
+ *   url: string,
+ *   path: string,
+ *   folder: string,
+ *   service: string,
+ *   size: number,
+ *   modified: string,
+ *   name: string,
+ *   isDir: boolean,
+ *   mime: string,
+ *   absPath: string
+ * }}
+ */
+silex.types.FileInfo;

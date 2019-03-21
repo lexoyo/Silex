@@ -16,7 +16,7 @@
  */
 goog.provide('silex.controller.PropertyToolController');
 
-goog.require('silex.controller.ControllerBase');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 
 
@@ -29,16 +29,16 @@ goog.require('silex.controller.ControllerBase');
  */
 silex.controller.PropertyToolController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.PropertyToolController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.PropertyToolController/**/, ControllerBase);
 
 
 /**
  * add the provided elements to a given page
- * @param {Array.<Element>} elements
+ * @param {Array.<silex.types.Element>} elements
  * @param {string} name
  */
 silex.controller.PropertyToolController.prototype.addToPage = function(elements, name) {
@@ -52,7 +52,7 @@ silex.controller.PropertyToolController.prototype.addToPage = function(elements,
 
 /**
  * remove the provided elements from a given page
- * @param {Array.<Element>} elements
+ * @param {Array.<silex.types.Element>} elements
  * @param {string} name
  */
 silex.controller.PropertyToolController.prototype.removeFromPage = function(elements, name) {
@@ -66,7 +66,7 @@ silex.controller.PropertyToolController.prototype.removeFromPage = function(elem
 
 /**
  * add link to the provided elements
- * @param {Array.<Element>} elements
+ * @param {Array.<silex.types.Element>} elements
  * @param {string} name
  */
 silex.controller.PropertyToolController.prototype.addLink = function(elements, name) {
@@ -80,7 +80,7 @@ silex.controller.PropertyToolController.prototype.addLink = function(elements, n
 
 /**
  * remove link from the provided elements
- * @param {Array.<Element>} elements
+ * @param {Array.<silex.types.Element>} elements
  */
 silex.controller.PropertyToolController.prototype.removeLink = function(elements) {
   // undo checkpoint

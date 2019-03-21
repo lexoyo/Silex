@@ -15,14 +15,15 @@
  *
  */
 
-goog.provide('silex.view.dialog.HtmlEditor');
+goog.module('silex.view.dialog.HtmlEditor');
+
 goog.require('silex.view.dialog.AceEditorBase');
 
 
 /**
- * @class {silex.view.dialog.CssEditor}
+ * @class {silex.view.dialog.HtmlEditor}
  */
-class HtmlEditor extends AceEditorBase {
+exports = class HtmlEditor extends AceEditorBase {
   /**
    * @param {!Element} element   container to render the UI
    * @param  {!silex.types.Model} model  model class which holds
@@ -94,4 +95,3 @@ class HtmlEditor extends AceEditorBase {
     }
   }
 }
-

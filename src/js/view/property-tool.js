@@ -39,7 +39,7 @@ goog.require('silex.view.pane.StyleEditorPane');
  * the Silex PropertyTool class handles the panes actually displaying the properties
  * @constructor
  *
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -48,7 +48,7 @@ goog.require('silex.view.pane.StyleEditorPane');
 silex.view.PropertyTool = function(element, model, controller) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
   /**

@@ -88,15 +88,15 @@ Prodotype.prototype.createName = function(type, list) {};
 
 
 /**
- * @param {Element} container the element containing the dependencies (scripts and style sheets)
+ * @param {silex.types.Element} container the element containing the dependencies (scripts and style sheets)
  * @param {Array.<{templateName:string}>} componentNames the list of all the component names
- * @return {Array.<Element>} the elements to be added to the site
+ * @return {Array.<silex.types.Element>} the elements to be added to the site
  */
 Prodotype.prototype.getMissingDependencies = function(container, componentNames) {};
 
 
 /**
- * @param {Array.<Element>} dependencyElements depencies, i.e. scripts and style sheets
+ * @param {Array.<silex.types.Element>} dependencyElements depencies, i.e. scripts and style sheets
  * @param {Array.<{templateName:string}>} componentNames the list of all the component names
  */
 Prodotype.prototype.getUnusedDependencies = function(dependencyElements, componentNames) {};
@@ -226,21 +226,21 @@ CloudExplorer.prototype.read = function(blob) {};
 CloudExplorer.prototype.saveAs = function(defaultFileName, extensions) {};
 
 
-/**
- * @typedef {{
- *   url: string,
- *   path: string,
- *   folder: string,
- *   service: string,
- *   size: number,
- *   modified: string,
- *   name: string,
- *   isDir: boolean,
- *   mime: string,
- *   absPath: string
- * }}
- */
-var FileInfo;
+// /**
+//  * @typedef {{
+//  *   url: string,
+//  *   path: string,
+//  *   folder: string,
+//  *   service: string,
+//  *   size: number,
+//  *   modified: string,
+//  *   name: string,
+//  *   isDir: boolean,
+//  *   mime: string,
+//  *   absPath: string
+//  * }}
+//  */
+// var FileInfo;
 
 
 /**
@@ -264,7 +264,7 @@ var wysihtml;
 
 /**
  * @constructor
- * @param {Element} el
+ * @param {silex.types.Element} el
  * @param {Object} options
  */
 wysihtml.Editor = function(el, options) {};

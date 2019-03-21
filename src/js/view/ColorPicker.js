@@ -16,13 +16,14 @@
  * It uses the browser'scolor picker for the color
  */
 
+goog.module('silex.view.utils.ColorPicker');
+
 goog.require('silex.utils.Style');
-goog.provide('silex.view.utils.ColorPicker');
 
 
-class ColorPicker {
+exports = class ColorPicker {
   /**
-   * @param  {Element} element the container of the component, it is supposed to have this structure:
+   * @param  {silex.types.Element} element the container of the component, it is supposed to have this structure:
    *    .color-edit-container
    *      input.color-edit-text-input(type='number', min='0', max='100')
    *      input.color-edit-color-input(type='color')

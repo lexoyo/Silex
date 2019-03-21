@@ -25,6 +25,9 @@ goog.require('silex.model.Page');
 goog.require('silex.model.Head');
 goog.require('silex.view.BreadCrumbs');
 
+const {Component} = goog.require('silex.model.Component');
+const {DragSystem} = goog.require('silex.model.DragSystem');
+
 
 /**
  * constant for the class names which are of internal use in Silex
@@ -124,7 +127,7 @@ silex.utils.Style.stringToStyle = function(styleStr) {
  * Compute background color
  * Takes the opacity of the backgrounds into account
  * Recursively compute parents background colors
- * @param {Element} element the element which bg color we want
+ * @param {silex.types.Element} element the element which bg color we want
  * @param {Window} contentWindow of the iframe containing the website
  * @return {?goog.color.Rgb} the element bg color
  */
@@ -132,7 +135,7 @@ silex.utils.Style.computeBgColor = function(element, contentWindow) {
   var parentColorArray;
   // retrieve the parents blended colors
   if (element.parentNode && element.parentNode.nodeType === 1) {
-    parentColorArray = silex.utils.Style.computeBgColor(/** @type {Element} */ (element.parentNode), contentWindow);
+    parentColorArray = silex.utils.Style.computeBgColor(/** @type {silex.types.Element} */ (element.parentNode), contentWindow);
   }
   else {
     parentColorArray = null;

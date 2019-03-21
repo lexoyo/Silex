@@ -15,7 +15,7 @@
  */
 
 
-goog.provide('silex.view.dialog.SettingsDialog');
+goog.module('silex.view.dialog.SettingsDialog');
 
 goog.require('goog.events.KeyCodes');
 goog.require('goog.ui.KeyboardShortcutHandler');
@@ -36,7 +36,7 @@ const PANE_CSS_CLASSES = [
 /**
  * the Silex SettingsDialog class
  */
-class SettingsDialog {
+exports = class SettingsDialog {
   /**
    * @param {!Element} element   container to render the UI
    * @param  {!silex.types.Model} model  model class which holds
@@ -59,7 +59,7 @@ class SettingsDialog {
 
     /**
      * store the current publication path
-     * @type {?FileInfo}
+     * @type {?silex.types.FileInfo}
      */
     this.publicationPath = null;
 
@@ -271,24 +271,24 @@ class SettingsDialog {
   /**
    * set the pubication path to display
    * @see silex.model.Head
-   * @param {?FileInfo=} opt_fileInfo   the publication path
+   * @param {?silex.types.FileInfo=} fileInfo   the publication path
    */
-  setPublicationPath(opt_fileInfo) {
-    if(opt_fileInfo != null) {
+  setPublicationPath(fileInfo) {
+    if(fileInfo != null) {
       // set input tags the values
-      this.setInputValue('.publish-pane .input-publication-service', opt_fileInfo.service);
-      this.setInputValue('.publish-pane .input-publication-path', opt_fileInfo.path);
+      this.setInputValue('.publish-pane .input-publication-service', fileInfo.service);
+      this.setInputValue('.publish-pane .input-publication-path', fileInfo.path);
       // display the UI with publication path set
       this.element.classList.remove('publication-path-not-set');
-      // store fileInfo value, clone fileInfo for safety
-      this.publicationPath = /** @type {FileInfo} */ (Object.assign({}, opt_fileInfo));
+      // store FileInfo value, clone FileInfo for safety
+      this.publicationPath = /** @type {silex.types.FileInfo} */ (Object.assign({}, fileInfo));
     }
     else {
       this.setInputValue('.publish-pane .input-publication-service', '');
       this.setInputValue('.publish-pane .input-publication-path', '');
       // display the "not set" UI
       this.element.classList.add('publication-path-not-set');
-      // store fileInfo value
+      // store FileInfo value
       this.publicationPath = null;
     }
   };
@@ -296,7 +296,7 @@ class SettingsDialog {
 
   /**
    * get the pubication path from text fields
-   * @return {?FileInfo} the publication path
+   * @return {?silex.types.FileInfo} the publication path
    */
   getPublicationPath() {
     const service = this.element.querySelector('.publish-pane .input-publication-service').value;

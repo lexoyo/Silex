@@ -22,7 +22,7 @@ goog.provide('silex.view.Splitter');
 
 /**
  * @constructor
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -32,7 +32,7 @@ goog.provide('silex.view.Splitter');
 silex.view.Splitter = function(element, model, controller, opt_onRedraw) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
   /**
@@ -53,11 +53,11 @@ silex.view.Splitter = function(element, model, controller, opt_onRedraw) {
    */
   silex.view.Splitter.WIDTH = 5;
   /**
-   * @type {Array.<Element>}
+   * @type {Array.<silex.types.Element>}
    */
   this.onTheLeft = [];
   /**
-   * @type {Array.<Element>}
+   * @type {Array.<silex.types.Element>}
    */
   this.onTheRight = [];
   /**
@@ -79,7 +79,7 @@ silex.view.Splitter = function(element, model, controller, opt_onRedraw) {
 
 /**
  * add a component to split
- * @param {Element} element
+ * @param {silex.types.Element} element
  */
 silex.view.Splitter.prototype.addLeft = function(element) {
   this.onTheLeft.push(element);
@@ -89,7 +89,7 @@ silex.view.Splitter.prototype.addLeft = function(element) {
 
 /**
  * add a component to split
- * @param {Element} element
+ * @param {silex.types.Element} element
  */
 silex.view.Splitter.prototype.addRight = function(element) {
   this.onTheRight.push(element);
@@ -99,7 +99,7 @@ silex.view.Splitter.prototype.addRight = function(element) {
 
 /**
  * remove a component to split
- * @param {Element} element
+ * @param {silex.types.Element} element
  */
 silex.view.Splitter.prototype.remove = function(element) {
   goog.array.remove(this.onTheRight, element);
@@ -114,7 +114,7 @@ silex.view.Splitter.prototype.remove = function(element) {
  */
 silex.view.Splitter.prototype.redraw = function() {
   var pos = goog.style.getClientPosition(this.element);
-  var parentSize = goog.style.getContentBoxSize(/** @type {Element} */ (this.element.parentNode));
+  var parentSize = goog.style.getContentBoxSize(/** @type {silex.types.Element} */ (this.element.parentNode));
   // apply the position to the elements
   goog.array.forEach(this.onTheLeft, function(element) {
     element.style.right = (parentSize.width - pos.x) + 'px';
@@ -196,7 +196,7 @@ silex.view.Splitter.prototype.onMouseUp = function(e) {
  */
 silex.view.Splitter.prototype.onMouseMoveFrame = function(e) {
   if (this.isDown) {
-    var parentSize = goog.style.getContentBoxSize(/** @type {Element} */ (this.element.parentNode));
+    var parentSize = goog.style.getContentBoxSize(/** @type {silex.types.Element} */ (this.element.parentNode));
     var pos = goog.style.getClientPosition(e);
     var posIFrame = goog.style.getClientPosition(this.model.file.getIFrameElement());
     this.element.style.right = (parentSize.width - pos.x - posIFrame.x) + 'px';
@@ -211,7 +211,7 @@ silex.view.Splitter.prototype.onMouseMoveFrame = function(e) {
  */
 silex.view.Splitter.prototype.onMouseMove = function(e) {
   if (this.isDown) {
-    var parentSize = goog.style.getContentBoxSize(/** @type {Element} */ (this.element.parentNode));
+    var parentSize = goog.style.getContentBoxSize(/** @type {silex.types.Element} */ (this.element.parentNode));
     var pos = goog.style.getClientPosition(e);
     this.element.style.right = (parentSize.width - pos.x) + 'px';
     this.redraw();

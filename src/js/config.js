@@ -15,8 +15,8 @@
 
 
 goog.provide('silex.Config');
-goog.require('silex.utils.Shortcut');
 
+goog.require('silex.utils.Keyboard');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.ui.KeyboardShortcutHandler');
 

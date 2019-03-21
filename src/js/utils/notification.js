@@ -261,7 +261,7 @@ silex.utils.Notification.setText = function(message) {
 
 
 /**
- * @return {Element} element which holds the text of the current notification
+ * @return {silex.types.Element} element which holds the text of the current notification
  */
 silex.utils.Notification.getTextElement = function() {
   return document.querySelector('.alertify-message');
@@ -269,7 +269,7 @@ silex.utils.Notification.getTextElement = function() {
 
 
 /**
- * @return {Element} element which holds the text field of the current notification
+ * @return {silex.types.Element} element which holds the text field of the current notification
  */
 silex.utils.Notification.getFormBody = function() {
   return document.querySelector('.alertify-text-wrapper');
@@ -277,7 +277,7 @@ silex.utils.Notification.getFormBody = function() {
 
 
 /**
- * @return {Element} element which holds the buttons of the current notification
+ * @return {silex.types.Element} element which holds the buttons of the current notification
  */
 silex.utils.Notification.getFormButtons = function() {
   return document.querySelector('.alertify-buttons');
@@ -286,7 +286,7 @@ silex.utils.Notification.getFormButtons = function() {
 
 /**
  * add an HTML panel with info of type "while you wait, here is an info"
- * @param {Element} element
+ * @param {silex.types.Element} element
  */
 silex.utils.Notification.setInfoPanel = function(element) {
   var container = document.querySelector('.alertify-inner');

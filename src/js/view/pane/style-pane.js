@@ -25,7 +25,7 @@ goog.provide('silex.view.pane.StylePane');
  * let user edit style of components
  * @constructor
  * @extends {silex.view.pane.PaneBase}
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -74,19 +74,19 @@ silex.view.pane.StylePane.prototype.buildUi = function() {
   });
   // for some reason, this.ace.getSession().on is undefined,
   //    closure renames it despite the fact that that it is declared in the externs.js file
-  this.ace.getSession()['on']('change', goog.bind(function() {
+  this.ace.getSession()['on']('change', () => {
     if (this.iAmSettingValue === false) {
-      setTimeout(goog.bind(function() {
+      setTimeout(() => {
         this.contentChanged();
-      }, this), 100);
+      }, 100);
     }
-  }, this));
+  });
 };
 
 
 /**
  * redraw the properties
- * @param   {Array.<Element>} selectedElements the elements currently selected
+ * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
  * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
  * @param   {string}  currentPageName   the name of the current page
  */
@@ -99,9 +99,9 @@ silex.view.pane.StylePane.prototype.redraw = function(selectedElements, pageName
   goog.base(this, 'redraw', selectedElements, pageNames, currentPageName);
 
   // css classes
-  var cssClasses = this.getCommonProperty(selectedElements, goog.bind(function(element) {
+  var cssClasses = this.getCommonProperty(selectedElements, element => {
     return this.model.element.getClassName(element);
-  }, this));
+  });
   if (cssClasses) {
     this.cssClassesInput.value = cssClasses;
   }
@@ -110,9 +110,9 @@ silex.view.pane.StylePane.prototype.redraw = function(selectedElements, pageName
   }
 
   // css inline style
-  var cssInlineStyle = this.getCommonProperty(selectedElements, goog.bind(function(element) {
+  var cssInlineStyle = this.getCommonProperty(selectedElements, element => {
     return this.model.element.getAllStyles(element);
-  }, this));
+  });
   if (cssInlineStyle) {
     this.iAmSettingValue = true;
     var str = '.element{\n' + cssInlineStyle.replace(/; /gi, ';\n') + '\n}';

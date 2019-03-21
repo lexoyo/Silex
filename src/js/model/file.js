@@ -95,9 +95,9 @@ silex.model.File.LOADING_LIGHT_CSS_CLASS = 'loading-website-light';
 
 /**
  * current file url and path and info returned by CE
- * if the current file is a new file, it has no fileInfo
+ * if the current file is a new file, it has no FileInfo
  * if set, this is an absolute URL, use silex.model.File::getFileInfo to get the relatvie URL
- * @type {?FileInfo}
+ * @type {?silex.types.FileInfo}
  */
 silex.model.File.prototype.fileInfo = null;
 
@@ -297,7 +297,7 @@ silex.model.File.prototype.openFromUrl = function(url, opt_cbk = null, opt_errCb
   this.isTemplate = true;
   silex.service.CloudStorage.getInstance()
     .loadLocal(url, (rawHtml, userHead) => {
-    this.fileInfo = /** @type {FileInfo} */ ({
+    this.fileInfo = /** @type {silex.types.FileInfo} */ ({
       isDir: false,
       mime: 'text/html',
       url: url
@@ -312,7 +312,7 @@ silex.model.File.prototype.openFromUrl = function(url, opt_cbk = null, opt_errCb
 
 /**
  * save a file with a new name
- * @param {FileInfo} fileInfo
+ * @param {silex.types.FileInfo} fileInfo
  * @param {string} rawHtml
  * @param {function()} cbk receives the raw HTML
  * @param  {?function(Object, string)=} opt_errCbk
@@ -336,7 +336,7 @@ silex.model.File.prototype.saveAs = function(fileInfo, rawHtml, cbk, opt_errCbk)
 silex.model.File.prototype.save = function(rawHtml, cbk, opt_errCbk) {
   if(this.fileInfo == null) throw new Error('Can not save, fileInfo is null');
   silex.service.CloudStorage.getInstance().write(
-      /** @type {FileInfo} */ (this.fileInfo),
+      /** @type {silex.types.FileInfo} */ (this.fileInfo),
       rawHtml,
       this.model.head.getUserHeadTag(),
       () => {
@@ -351,7 +351,7 @@ silex.model.File.prototype.save = function(rawHtml, cbk, opt_errCbk) {
 
 /**
  * load a new file
- * @param {FileInfo} fileInfo
+ * @param {silex.types.FileInfo} fileInfo
  * @param {function(string)} cbk receives the raw HTML
  * @param  {?function(Object, string)=} opt_errCbk
  */
@@ -382,7 +382,7 @@ silex.model.File.prototype.close = function() {
 
 /**
  * get the url of the file
- * @return {?FileInfo}
+ * @return {?silex.types.FileInfo}
  */
 silex.model.File.prototype.getFileInfo = function() {
   return this.fileInfo;
@@ -399,12 +399,12 @@ silex.model.File.prototype.clearLatestFiles = function() {
 
 /**
  * get the latest opened files
- * @return {Array.<FileInfo>}
+ * @return {Array.<silex.types.FileInfo>}
  */
 silex.model.File.prototype.getLatestFiles = function() {
   const str = window.localStorage.getItem('silex:recent-files');
   if(str) {
-    return (/** @type {Array.<FileInfo>} */ (JSON.parse(str)));
+    return (/** @type {Array.<silex.types.FileInfo>} */ (JSON.parse(str)));
   }
   else return [];
 };
@@ -412,7 +412,7 @@ silex.model.File.prototype.getLatestFiles = function() {
 
 /**
  * store this file in the latest opened files
- * @param {?FileInfo} fileInfo
+ * @param {?silex.types.FileInfo} fileInfo
  */
 silex.model.File.prototype.addToLatestFiles = function(fileInfo) {
   const latestFiles = [fileInfo].concat(

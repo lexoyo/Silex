@@ -63,7 +63,7 @@ silex.service.CloudStorage.prototype.ready = function(cbk) {
 
 /**
  * save a file
- * @param  {FileInfo} fileInfo
+ * @param  {silex.types.FileInfo} fileInfo
  * @param  {string} rawData
  * @param  {string} userHead
  * @param  {function()} cbk
@@ -102,7 +102,7 @@ silex.service.CloudStorage.prototype.write = function(fileInfo, rawData, userHea
 
 /**
  * load text blob from unifile
- * @param  {FileInfo} fileInfo
+ * @param  {silex.types.FileInfo} fileInfo
  * @param  {function(string, string)} cbk
  * @param  {?function(Object, string)=} opt_errCbk
  */

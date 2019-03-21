@@ -16,7 +16,7 @@
  */
 goog.provide('silex.controller.PageToolController');
 
-goog.require('silex.controller.ControllerBase');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 
 
@@ -28,23 +28,11 @@ goog.require('silex.controller.ControllerBase');
  */
 silex.controller.PageToolController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.PageToolController, silex.controller.ControllerBase);
-
-
-/**
- * open a page
- * @param {string} pageName
- */
-silex.controller.PageToolController.prototype.openPage = function(pageName) {
-  // undo checkpoint
-  this.undoCheckPoint();
-  // do the action
-  this.model.page.setCurrentPage(pageName);
-};
+goog.inherits(silex.controller.PageToolController/**/, ControllerBase);
 
 
 /**

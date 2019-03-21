@@ -21,7 +21,7 @@ goog.provide('silex.view.ContextMenu');
 
 /**
  * @constructor
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -30,7 +30,7 @@ goog.provide('silex.view.ContextMenu');
 silex.view.ContextMenu = function(element, model, controller) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
   /**
@@ -45,7 +45,7 @@ silex.view.ContextMenu = function(element, model, controller) {
 
   /**
    * hold the element in the context menu which has the current page name
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.currentPageElement = element.querySelector('.current-page');
   this.currentPageElement.onclick = e => this.controller.viewMenuController.showPages();
@@ -117,7 +117,7 @@ silex.view.ContextMenu.prototype.redraw = function(opt_selectedElements, opt_pag
       this.element.querySelector('.down').classList.remove('off');
       this.element.querySelector('.bottom').classList.remove('off');
     }
-    if (silex.controller.ControllerBase.clipboard && silex.controller.ControllerBase.clipboard.length > 0) {
+    if (/**/ControllerBase.clipboard && /**/ControllerBase.clipboard.length > 0) {
       this.element.querySelector('.paste').classList.remove('off');
     }
     else {

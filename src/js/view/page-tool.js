@@ -27,7 +27,7 @@ goog.require('silex.model.PageData');
 /**
  * @constructor
  *
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -36,7 +36,7 @@ goog.require('silex.model.PageData');
 silex.view.PageTool = function(element, model, controller) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
 
@@ -110,7 +110,7 @@ silex.view.PageTool.prototype.buildUi = function() {
 /**
  * refresh the pages
  * find all pages in the dom
- * @param   {Array.<Element>} selectedElements the elements currently selected
+ * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
  * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
  * @param   {string}  currentPageName   the name of the current page
  */
@@ -119,7 +119,7 @@ silex.view.PageTool.prototype.redraw = function(selectedElements, pageNames, cur
     // prepare the data for the template
     // make an array with name, displayName, linkName and className
     var idx = 0;
-    this.pages = pageNames.map(goog.bind(function(pageName) {
+    this.pages = pageNames.map(pageName => {
       const pageElement = this.model.file.getContentDocument().getElementById(pageName);
       if(!pageElement) {
         // this happens while undoing or redoing
@@ -138,7 +138,7 @@ silex.view.PageTool.prototype.redraw = function(selectedElements, pageNames, cur
         res.className = '';
       }
       return res;
-    }, this));
+    });
 
     // refresh the list with new pages
     var container = goog.dom.getElementByClass('page-tool-container', this.element);
@@ -181,7 +181,7 @@ silex.view.PageTool.prototype.setSelectedIndex = function(idx, opt_notify) {
 
 /**
  * get the index of the given cell
- * @param    {Element} element which represents the cell in the dom
+ * @param    {silex.types.Element} element which represents the cell in the dom
  * @return {number}
  */
 silex.view.PageTool.prototype.getCellIndex = function(element) {

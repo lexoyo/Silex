@@ -16,8 +16,10 @@
  */
 goog.provide('silex.controller.FileMenuController');
 
-goog.require('silex.controller.ControllerBase');
-goog.require('silex.view.dialog.PublishDialog');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
+
+const {PublishDialog} = goog.require('silex.view.dialog.PublishDialog');
+const FileExplorer = goog.require('silex.view.dialog.FileExplorer');
 
 
 
@@ -30,11 +32,11 @@ goog.require('silex.view.dialog.PublishDialog');
  */
 silex.controller.FileMenuController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.FileMenuController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.FileMenuController/**/, ControllerBase);
 
 
 /**
@@ -59,7 +61,7 @@ silex.controller.FileMenuController.prototype.loadBlank = function(opt_cbk, opt_
 
 silex.controller.FileMenuController.prototype.openRecent = function(fileInfo, opt_cbk) {
   // a recent file was selected
-  this.model.file.open(/** @type {FileInfo} */ (fileInfo), rawHtml => this.onOpened(opt_cbk, rawHtml), err => {
+  this.model.file.open(/** @type {silex.types.FileInfo} */ (fileInfo), rawHtml => this.onOpened(opt_cbk, rawHtml), err => {
     silex.utils.Notification.confirm(`Could not open this recent file, you probably need to connect to ${ fileInfo.service } again.`, ok => {
       const ce = silex.service.CloudStorage.getInstance().ce;
       console.log('before auth', ce);
@@ -85,7 +87,7 @@ silex.controller.FileMenuController.prototype.newFile = function(opt_cbk, opt_er
   this.tracker.trackAction('controller-events', 'request', 'file.new', 0);
   this.view.dashboard.openDialog({
     openFileInfo: (fileInfo) => {
-      if(!fileInfo && !this.model.file.hasContent()) {
+      if(!silex.types.FileInfo && !this.model.file.hasContent()) {
         // if the user closes the dialog and no website is being edited then load default blank website
         this.loadBlank(opt_cbk, opt_errorCbk);
       }
@@ -151,7 +153,7 @@ silex.controller.FileMenuController.prototype.onOpenError = function(err, msg, o
 
 /**
  * open a file
- * @param {?function(!FileInfo)=} opt_cbk
+ * @param {?function(!silex.types.FileInfo)=} opt_cbk
  * @param {?function(*)=} opt_errorCbk
  * @param {?function()=} opt_cancelCbk
  */
@@ -171,7 +173,7 @@ silex.controller.FileMenuController.prototype.openFile = function(opt_cbk, opt_e
             // QOS, track success
             this.tracker.trackAction('controller-events', 'success', 'file.open', 1);
             if (opt_cbk) {
-              opt_cbk(/** @type {FileInfo} */ (fileInfo));
+              opt_cbk(/** @type {silex.types.FileInfo} */ (fileInfo));
             }
           }, true); // with loader
         },
@@ -214,7 +216,7 @@ silex.controller.FileMenuController.prototype.publish = function() {
   }
   this.tracker.trackAction('controller-events', 'request', 'file.publish', 0);
   /** @type {silex.view.dialog.PublishDialog} */
-  const dialog = new silex.view.dialog.PublishDialog(this.model, this.view);
+  const dialog = new PublishDialog(this.model, this.view);
   dialog.open().then(publishOptions => {
     if(publishOptions) {
       this.doPublish(publishOptions, (errMsg, warningMsg, finalPublicationOptions) => {

@@ -16,7 +16,7 @@
  */
 goog.provide('silex.controller.StageController');
 
-goog.require('silex.controller.ControllerBase');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 
 
@@ -29,11 +29,11 @@ goog.require('silex.controller.ControllerBase');
  */
 silex.controller.StageController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.StageController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.StageController/**/, ControllerBase);
 
 
 /**
@@ -46,7 +46,7 @@ silex.controller.StageController.prototype.selectNone = function() {
 
 /**
  * the user has selected an element
- * @param {Element} target selected element
+ * @param {silex.types.Element} target selected element
  */
 silex.controller.StageController.prototype.select = function(target) {
   this.model.body.setSelection([target]);
@@ -55,7 +55,7 @@ silex.controller.StageController.prototype.select = function(target) {
 
 /**
  * the user has selected an element with shift
- * @param {Element} target selected element
+ * @param {silex.types.Element} target selected element
  */
 silex.controller.StageController.prototype.selectMultiple = function(target) {
   var selection = this.model.body.getSelection();
@@ -68,7 +68,7 @@ silex.controller.StageController.prototype.selectMultiple = function(target) {
  * the user has clicked on an element
  * which was already selected,
  * with the shift key down
- * @param {Element} target selected element
+ * @param {silex.types.Element} target selected element
  */
 silex.controller.StageController.prototype.deselect = function(target) {
   var selection = this.model.body.getSelection();
@@ -90,8 +90,8 @@ silex.controller.StageController.prototype.markAsUndoable = function() {
  * an element is dropped in a new container
  * this will always occure when the user drops elements,
  * even in the same container as before since we move the elements to the body while dragging (stage.js)
- * @param {Element} container the container
- * @param {Element} element the dropped element
+ * @param {silex.types.Element} container the container
+ * @param {silex.types.Element} element the dropped element
  */
 silex.controller.StageController.prototype.newContainer = function(container, element) {
   // initial positions

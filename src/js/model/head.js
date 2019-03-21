@@ -235,7 +235,7 @@ silex.model.Head.prototype.setMeta = function(name, opt_value) {
 /**
  * get/set the publication path
  * publication path is always absolute url
- * @param {?FileInfo=} opt_fileInfo
+ * @param {?silex.types.FileInfo=} opt_fileInfo
  */
 silex.model.Head.prototype.setPublicationPath = function(opt_fileInfo) {
   // TODO: remove meta and store this value in the JSON like components params (see model/property.js)
@@ -247,12 +247,12 @@ silex.model.Head.prototype.setPublicationPath = function(opt_fileInfo) {
 /**
  * get/set the publication path
  * publication path is always absolute url
- * @return {?FileInfo}
+ * @return {?silex.types.FileInfo}
  */
 silex.model.Head.prototype.getPublicationPath = function() {
   var fileInfo = this.getMeta('publicationPath');
   try {
-    return fileInfo == null ? null : /** @type {FileInfo} */ (JSON.parse(fileInfo));
+    return fileInfo == null ? null : /** @type {silex.types.FileInfo} */ (JSON.parse(fileInfo));
   } catch(e) {
     // this happens with old publication path (just a string)
     return null;
@@ -579,7 +579,7 @@ silex.model.Head.prototype.getTwitterSocial = function() {
 
 
 /**
- * @return  {Element}   head element of the loaded site
+ * @return  {silex.types.Element}   head element of the loaded site
  */
 silex.model.Head.prototype.getHeadElement = function() {
   // returns the head of the document in the iframe

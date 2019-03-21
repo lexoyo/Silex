@@ -15,14 +15,16 @@
  *   Components are based on Silex elements, use Prodotype to render a templates
  */
 
-goog.provide('silex.model.Component');
+goog.module('silex.model.Component');
+
+const LinkDialog = goog.require('silex.view.dialog.LinkDialog');
 
 /**
  * Manage Prodotype components and styles
  *
  * @class {silex.model.Component}
  */
-class Component {
+exports.Component = class Component {
 
   /**
    * @param  {silex.types.Model} model  model class which holds the other models
@@ -73,11 +75,11 @@ class Component {
      */
     this.prodotypeStyle = null;
     /**
-     * @type {Element}
+     * @type {silex.types.Element}
      */
     this.componentEditorElement = null;
     /**
-     * @type {Element}
+     * @type {silex.types.Element}
      */
     this.styleEditorElement = null;
 
@@ -89,7 +91,7 @@ class Component {
     /**
      * @type {silex.view.dialog.LinkDialog}
      */
-    this.linkDialog = new silex.view.dialog.LinkDialog(this.model);
+    this.linkDialog = new LinkDialog(this.model);
   }
 
 
@@ -136,7 +138,7 @@ class Component {
 
   /**
    * not needed? we sometimes use !!this.model.property.getElementData(element, Component.COMPONENT_TYPE)
-   * @param {Element} el
+   * @param {silex.types.Element} el
    * @return {boolean} true if el is a component (not only an element)
    */
   isComponent(el) {
@@ -156,7 +158,7 @@ class Component {
 
 
   /**
-   * @param {Element} element component just added
+   * @param {silex.types.Element} element component just added
    * @param {string} templateName type of component
    */
   initComponent(element, templateName) {
@@ -203,7 +205,7 @@ class Component {
    * this is made using prodotype
    * the template is expanded with the data we have for this component
    * used when the component is created, or duplicated (paste)
-   * @param {Element} element component to render
+   * @param {silex.types.Element} element component to render
    * @param {?function()=} opt_cbk
    */
   render (element, opt_cbk) {
@@ -223,7 +225,7 @@ class Component {
 
   /**
    * render a component or style
-   * @param  {Element} element
+   * @param  {silex.types.Element} element
    * @param  {silex.model.data.SilexId|silex.model.data.StyleName} type
    * @param {?function()=} opt_cbk
    */
@@ -276,7 +278,7 @@ class Component {
   /**
    * eval the scripts found in an element
    * this is useful when we render a template, since the scripts are executed only when the page loads
-   * @param  {Element} element
+   * @param  {silex.types.Element} element
    */
   executeScripts (element) {
     // execute the scripts
@@ -289,7 +291,7 @@ class Component {
 
   /**
    * apply a style to an element
-   * @param  {Element} element
+   * @param  {silex.types.Element} element
    * @param  {!Object} styleObj
    */
   applyStyleTo (element, styleObj) {
@@ -369,7 +371,7 @@ class Component {
 
   /**
    * remove the editable elements from an HTML element and store them in an HTML fragment
-   * @param {Element} parentElement, the element whose children we want to save
+   * @param {silex.types.Element} parentElement, the element whose children we want to save
    * @return {DocumentFragment} an HTML fragment with the editable children in it
    */
   saveEditableChildren(parentElement) {
@@ -384,7 +386,7 @@ class Component {
 
 
   /**
-   * @param {Element} element, the component to edit
+   * @param {silex.types.Element} element, the component to edit
    */
   editComponent(element) {
     if(this.isComponent(element)) {
@@ -437,7 +439,7 @@ class Component {
   /**
    * @param {Event} e
    * @param {string} url
-   * @param {function(Array.<FileInfo>)} cbk
+   * @param {function(Array.<silex.types.FileInfo>)} cbk
    */
   onBrowse(e, url, cbk) {
     e.preventDefault();

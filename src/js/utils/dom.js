@@ -37,7 +37,7 @@ silex.utils.Dom.CACHE_CONTROL_PARAM_NAME = 'silex-cache-control';
 
 /**
  * refresh an image with its latest version on the server
- * @param  {Element} img
+ * @param  {silex.types.Element} img
  * @param  {function()} cbk
  */
 silex.utils.Dom.refreshImage = function(img, cbk) {
@@ -160,7 +160,7 @@ silex.utils.Dom.renderList = function(itemTemplateString, data) {
    * retrieve all dom elements containing the components or styles
    * @param {Element|Document} parentNode the element into which we query, defaults to the contentDocument of the website
    * @param {string} selector, CSS selector of the elements containing the components or styles
-   * @return {Array.<Element>}
+   * @return {Array.<silex.types.Element>}
    */
 silex.utils.Dom.getElementsAsArray = function(parentNode, selector) {
   // get all elements which are components

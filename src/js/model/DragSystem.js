@@ -18,7 +18,7 @@
  *   The process of creation of sticky lines on startDrag is asynchronous through the use of generators and continuation
  */
 
-goog.provide('silex.model.DragSystem');
+goog.module('silex.model.DragSystem');
 
 goog.require('goog.style');
 
@@ -85,7 +85,7 @@ function * buildStickyLinesFromElements(win, allWebsiteElements, dragSystem) {
  *
  * @class {silex.model.DragSystem}
  */
-class DragSystem {
+exports.DragSystem = class DragSystem {
   // static constants
   static get STICKY_DISTANCE() { return 5 };
   static get STUCK_CSS_CLASS() {return 'stuck'};
@@ -471,7 +471,7 @@ class DragSystem {
   }
 
   /**
-   * @param {Element} element
+   * @param {silex.types.Element} element
    * @return {{left:number, right:number, top:number, bottom:number}}
    */
   getBoundingBox(win, element) {

@@ -150,7 +150,7 @@ silex.model.Property.prototype.getFonts = function() {
 
 /**
  * get/set Silex ID
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {?silex.model.data.SilexId} uniqueId
  */
 silex.model.Property.prototype.getSilexId = function(element) {
@@ -160,7 +160,7 @@ silex.model.Property.prototype.getSilexId = function(element) {
 
 /**
  * get/set Silex ID
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {silex.model.data.SilexId} uniqueId
  */
 silex.model.Property.prototype.setSilexId = function(element, uniqueId) {
@@ -176,7 +176,7 @@ silex.model.Property.prototype.setSilexId = function(element, uniqueId) {
 /**
  * @param {silex.model.data.SilexId} uniqueId
  * @param {?Document=} opt_doc docment of the iframe containing the website
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Property.prototype.getElementBySilexId = function(uniqueId, opt_doc) {
   opt_doc = opt_doc || this.model.file.getContentDocument();
@@ -198,7 +198,7 @@ silex.model.Property.prototype.generateSilexId = function(opt_doc) {
 
 
 /**
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {?Document=} doc docment of the iframe containing the website
  */
 silex.model.Property.prototype.initSilexId = function(element, doc) {
@@ -263,18 +263,20 @@ silex.model.Property.prototype.loadProperties = function(doc) {
   }
 
   // make it easy to inspect the properties in debug mode
-  if(goog.DEBUG) {
-    window['silexFonts'] = this.fonts;
-    window['silexStylesObj'] = this.stylesObj;
-    window['silexMobileStylesObj'] = this.mobileStylesObj;
-    window['silexProdotypeDataObj'] = this.prodotypeDataObj;
-  }
+  // FIXME: do this in app.js and use config
+  console.warn('FIXME: do this in app.js and use config');
+  // if(DEBUG) {
+  //   window['silexFonts'] = this.fonts;
+  //   window['silexStylesObj'] = this.stylesObj;
+  //   window['silexMobileStylesObj'] = this.mobileStylesObj;
+  //   window['silexProdotypeDataObj'] = this.prodotypeDataObj;
+  // }
 };
 
 /**
  * check existance and possibly create a style tag holding Silex elements styles
  * @param {Document} doc docment of the iframe containing the website
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Property.prototype.initStyles = function(doc) {
   // make sure of the existance of the style tag with Silex definitions
@@ -377,7 +379,7 @@ silex.model.Property.prototype.getStyleData = function(id) {
 /**
  * get / set the data associated with an element
  * if opt_componentData is null this will remove the rule
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {silex.model.data.ProdotypeTypes} type
  * @param {?silex.model.data.ComponentData|?silex.model.data.StyleData=} opt_componentData
  * @private
@@ -385,7 +387,7 @@ silex.model.Property.prototype.getStyleData = function(id) {
 silex.model.Property.prototype.setElementData = function(element, type, opt_componentData) {
   // a section's container content can not be a component, but the section itself may be
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   // get the internal ID
   var elementId =  /** @type {silex.model.data.SilexId} */ (this.getSilexId(element));
@@ -397,7 +399,7 @@ silex.model.Property.prototype.setElementData = function(element, type, opt_comp
 /**
  * get / set the data associated with an element
  * if opt_componentData is null this will remove the rule
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {?silex.model.data.ComponentData=} opt_componentData
  */
 silex.model.Property.prototype.setElementComponentData = function(element, opt_componentData) {
@@ -409,7 +411,7 @@ silex.model.Property.prototype.setElementComponentData = function(element, opt_c
 /**
  * get / set the data associated with an element
  * if opt_componentData is null this will remove the rule
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {?silex.model.data.StyleData=} opt_componentData
  */
 silex.model.Property.prototype.setElementStyleData = function(element, opt_componentData) {
@@ -420,7 +422,7 @@ silex.model.Property.prototype.setElementStyleData = function(element, opt_compo
 
 /**
  * get / set the data associated with an element
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {silex.model.data.ProdotypeTypes} type
  * @return {?silex.model.data.ComponentData|?silex.model.data.StyleData} a clone of the data object
  * @private
@@ -428,7 +430,7 @@ silex.model.Property.prototype.setElementStyleData = function(element, opt_compo
 silex.model.Property.prototype.getElementData = function(element, type) {
   // a section's container content can not be a component, but the section itself may be
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   // get the internal ID
   var elementId =  /** @type {silex.model.data.SilexId} */ (this.getSilexId(element));
@@ -439,7 +441,7 @@ silex.model.Property.prototype.getElementData = function(element, type) {
 
 /**
  * get / set the data associated with an element
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {?silex.model.data.ComponentData} a clone of the data object
  */
 silex.model.Property.prototype.getElementComponentData = function(element) {
@@ -450,7 +452,7 @@ silex.model.Property.prototype.getElementComponentData = function(element) {
 
 /**
  * get / set the data associated with an element
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {?silex.model.data.StyleData} a clone of the data object
  */
 silex.model.Property.prototype.getElementStyleData = function(element) {
@@ -463,7 +465,7 @@ silex.model.Property.prototype.getElementStyleData = function(element) {
  * get / set the css style of an element
  * this creates or update a rule in the style tag with id INLINE_STYLE_TAG_CLASS_NAME
  * if style is null this will remove the rule
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {?Object} styleObj
  * @param {?boolean=} opt_isMobile
  */
@@ -481,7 +483,7 @@ silex.model.Property.prototype.setStyle = function(element, styleObj, opt_isMobi
       delete style['width'];
 
       // apply height to section content and not section itself
-      const contentElement = /** @type {Element} */ (this.model.element.getContentNode(element));
+      const contentElement = /** @type {silex.types.Element} */ (this.model.element.getContentNode(element));
       const contentStyle = this.getStyle(contentElement, isMobile) || {};
       if(style['min-height'] && style['min-height'] !== contentStyle['min-height']) {
         contentStyle['min-height'] = style['min-height'];
@@ -492,7 +494,7 @@ silex.model.Property.prototype.setStyle = function(element, styleObj, opt_isMobi
     }
     if(this.model.element.isSectionContent(element) && !this.view.workspace.getMobileEditor()) {
       // set a min-width style to sections so that they are always larger than their content container
-      const parentElement = /** @type {Element} */ (element.parentNode);
+      const parentElement = /** @type {silex.types.Element} */ (element.parentNode);
       const parentStyle = this.getStyle(parentElement, isMobile) || {};
       if(style['width'] && style['width'] !== parentStyle['min-width']) {
         parentStyle['min-width'] = style['width'];
@@ -540,7 +542,7 @@ silex.model.Property.prototype.setStyle = function(element, styleObj, opt_isMobi
 
 /**
  * get / set the css style of an element
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {?boolean=} opt_isMobile defaults to the global setting of silex.view.Workspace
  * @return {?silex.model.data.CssRule} a clone of the style object
  */
@@ -556,7 +558,7 @@ silex.model.Property.prototype.getStyle = function(element, opt_isMobile) {
     // the min-height of the section is stored on its content container
     if(this.model.element.isSection(element)) {
       // min-height of sections is the min-height of section content
-      const contentElement = /** @type {Element} */ (this.model.element.getContentNode(element));
+      const contentElement = /** @type {silex.types.Element} */ (this.model.element.getContentNode(element));
       const contentStyle = this.getStyle(contentElement, isMobile);
       if(contentStyle) {
         clone['min-height'] = contentStyle['min-height'];
@@ -635,7 +637,7 @@ silex.model.Property.prototype.addMediaQuery = function(styleStr) {
 /**
  * compute the bounding box of the given elements
  * it takes into account only the elements which have top, left, width and height set in px
- * @param {Array.<Element>|{length:number}} elements
+ * @param {Array.<silex.types.Element>|{length:number}} elements
  * @return {{top:?number, left:?number, width:?number, height:?number}} the bounding box containing all the elements
  */
 silex.model.Property.prototype.getBoundingBox = function(elements) {

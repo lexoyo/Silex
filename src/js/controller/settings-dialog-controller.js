@@ -16,7 +16,7 @@
  */
 goog.provide('silex.controller.SettingsDialogController');
 
-goog.require('silex.controller.ControllerBase');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 
 
@@ -29,16 +29,16 @@ goog.require('silex.controller.ControllerBase');
  */
 silex.controller.SettingsDialogController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.SettingsDialogController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.SettingsDialogController/**/, ControllerBase);
 
 
 /**
  * track actions
- * @param  {Promise.<FileInfo>} promise
+ * @param  {Promise.<silex.types.FileInfo>} promise
  * @param  {string} trackActionName
  */
 silex.controller.SettingsDialogController.prototype.track = function(promise, trackActionName) {
@@ -58,7 +58,7 @@ silex.controller.SettingsDialogController.prototype.track = function(promise, tr
 
 /**
  * enable undo/redo
- * @param  {Promise.<FileInfo>} promise
+ * @param  {Promise.<silex.types.FileInfo>} promise
  */
 silex.controller.SettingsDialogController.prototype.undoredo = function(promise) {
   promise.then(fileInfo => {
@@ -172,7 +172,7 @@ silex.controller.SettingsDialogController.prototype.setWebsiteWidth = function(o
 
 /**
  * callback for the publication path text input
- * @param {?FileInfo=} opt_data
+ * @param {?silex.types.FileInfo=} opt_data
  */
 silex.controller.SettingsDialogController.prototype.setPublicationPath = function(opt_data) {
   // undo checkpoint
@@ -183,7 +183,7 @@ silex.controller.SettingsDialogController.prototype.setPublicationPath = functio
 
 /**
  * callback for the publication path text input
- * @return {?FileInfo}
+ * @return {?silex.types.FileInfo}
  */
 silex.controller.SettingsDialogController.prototype.getPublicationPath = function() {
   return this.model.head.getPublicationPath();

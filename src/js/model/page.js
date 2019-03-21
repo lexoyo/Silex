@@ -132,12 +132,12 @@ silex.model.Page.PAGE_LINK_ACTIVE_CLASS_NAME = 'page-link-active';
 
 /**
  * retrieve the first parent which is visible only on some pages
- * @param {Element} element
- * @return {Element} null or the element or one of its parents which has the css class silex.model.Page.PAGED_CLASS_NAME
+ * @param {silex.types.Element} element
+ * @return {silex.types.Element} null or the element or one of its parents which has the css class silex.model.Page.PAGED_CLASS_NAME
  */
 silex.model.Page.prototype.getParentPage = function(element) {
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   var parent = element.parentNode;
   while (parent && !goog.dom.classlist.contains(/** @type {?Element} */ (parent), silex.model.Page.PAGED_CLASS_NAME)) {
@@ -282,7 +282,7 @@ silex.model.Page.prototype.removePage = function(pageName) {
         ' elements were only visible on this page (' +
         pageDisplayName +
         '). <br /><ul><li>Do you want me to <strong>delete these elements?</strong><br /></li><li>or keep them and <strong>make them visible on all pages?</strong></li></ul>',
-        goog.bind(function(accept) {
+        accept => {
           goog.array.forEach(elementsOnlyOnThisPage, function(element) {
             if (accept) {
               // remove these elements
@@ -293,7 +293,7 @@ silex.model.Page.prototype.removePage = function(pageName) {
               this.model.page.removeFromAllPages(element);
             }
           }, this);
-        }, this), 'delete', 'keep');
+        }, 'delete', 'keep');
     }
   }
 
@@ -375,22 +375,22 @@ silex.model.Page.prototype.renamePage = function(oldName, newName, newDisplayNam
     goog.dom.classlist.swap(element, oldName, newName);
   }, this);
   // wait until the dom reflects the changes
-  setTimeout(goog.bind(function() {
+  setTimeout(() => {
     // select this page
     this.setCurrentPage(newName);
-  }, this), 100);
+  }, 100);
 };
 
 
 /**
  * set/get a the visibility of an element in the given page
  * remove from all pages if visible in all pages
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {string} pageName
  */
 silex.model.Page.prototype.addToPage = function(element, pageName) {
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   const pages = this.getPagesForElement(element);
   if (pages.length + 1 === this.getPages().length) {
@@ -407,12 +407,12 @@ silex.model.Page.prototype.addToPage = function(element, pageName) {
 
 /**
  * set/get a "silex style link" on an element
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {string} pageName
  */
 silex.model.Page.prototype.removeFromPage = function(element, pageName) {
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   goog.dom.classlist.remove(element, pageName);
   if (this.getPagesForElement(element).length <= 0) {
@@ -424,11 +424,11 @@ silex.model.Page.prototype.removeFromPage = function(element, pageName) {
 
 /**
  * set/get a "silex style link" on an element
- * @param {Element} element
+ * @param {silex.types.Element} element
  */
 silex.model.Page.prototype.removeFromAllPages = function(element) {
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   var pages = this.getPagesForElement(element);
   goog.array.forEach(pages, function(pageName) {
@@ -443,12 +443,12 @@ silex.model.Page.prototype.removeFromAllPages = function(element) {
 
 /**
  * set/get a "silex style link" on an element
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {Array.<string>}
  */
 silex.model.Page.prototype.getPagesForElement = function(element) {
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   return this.getPages()
     .filter(pageName => element.classList.contains(pageName));
@@ -457,13 +457,13 @@ silex.model.Page.prototype.getPagesForElement = function(element) {
 
 /**
  * check if an element is in the given page (current page by default)
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {?string=} opt_pageName
  * @return {boolean}
  */
 silex.model.Page.prototype.isInPage = function(element, opt_pageName) {
   if(this.model.element.isSectionContent(element)) {
-    element = /** @type {Element} */ (element.parentNode);
+    element = /** @type {silex.types.Element} */ (element.parentNode);
   }
   if (!opt_pageName) {
     opt_pageName = this.getCurrentPage();

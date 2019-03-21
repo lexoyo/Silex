@@ -23,11 +23,11 @@ goog.provide('silex.view.TipOfTheDay');
 
 /**
  * @constructor
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  */
 silex.view.TipOfTheDay = function(element) {
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
 

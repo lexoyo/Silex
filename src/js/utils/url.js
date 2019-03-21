@@ -24,14 +24,14 @@ goog.require('goog.net.XhrIo');
 
 /**
  * set a field in a FileInfo object, and update the `url` attribute accordingly
- * @param {?FileInfo} fileInfo
+ * @param {?silex.types.FileInfo} fileInfo
  * @param {Object} attributes a partial FileInfo object
- * @return {?FileInfo}
+ * @return {?silex.types.FileInfo}
  */
 silex.utils.Url.updateFileInfo = function(fileInfo, attributes) {
   if(!fileInfo) return null;
   const fileInfoNew = Object.assign({}, fileInfo, attributes);
-  return /** @type {FileInfo} */ (Object.assign({}, fileInfoNew, {
+  return /** @type {silex.types.FileInfo} */ (Object.assign({}, fileInfoNew, {
     'url': silex.utils.Url.getBaseUrl() + fileInfoNew.service + '/get/' + fileInfoNew.path,
   }));
 }

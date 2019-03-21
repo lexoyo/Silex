@@ -17,21 +17,16 @@
  *
  */
 
-goog.provide('silex.view.dialog.AceEditorBase');
+goog.module('silex.view.dialog.AceEditorBase');
+
 goog.require('silex.view.ModalDialog');
 
 
 /**
- * flag set to true when editors are docked
- * @type {?boolean}
+ * @class {silex.view.dialog.AceEditorBase}
+ *
  */
-silex.view.dialog.AceEditorBase.isDocked = null;
-
-
-/**
-  * @class {silex.view.dialog.AceEditorBase}
- */
-class AceEditorBase {
+exports = class AceEditorBase {
   /**
    * @param {!Element} element   container to render the UI
    * @param  {!silex.types.Model} model  model class which holds
@@ -72,20 +67,20 @@ class AceEditorBase {
     //this.ace.getSession().setMode('ace/mode/css');
     // for some reason, this.ace.getSession().on is undefined,
     //    closure renames it despite the fact that that it is declared in the externs.js file
-    this.ace.getSession()['on']('change', goog.bind(function(event) {
+    this.ace.getSession()['on']('change', event => {
       if (this.iAmSettingValue === false && this.modalDialog.isOpen) {
-        setTimeout(goog.bind(function() {
+        setTimeout(() => {
           this.contentChanged();
-        }, this), 100);
+        }, 100);
       }
-    }, this));
+    });
 
     // dock mode
     var dockBtn = goog.dom.getElementByClass('dock-btn', element);
     if (dockBtn) {
       goog.events.listen(dockBtn, goog.events.EventType.CLICK, function() {
-        silex.view.dialog.AceEditorBase.isDocked = !silex.view.dialog.AceEditorBase.isDocked;
-        this.controller.toolMenuController.dockPanel(silex.view.dialog.AceEditorBase.isDocked);
+        AceEditorBase.isDocked = !AceEditorBase.isDocked;
+        this.controller.toolMenuController.dockPanel(AceEditorBase.isDocked);
         this.ace.resize();
       }, false, this);
     }

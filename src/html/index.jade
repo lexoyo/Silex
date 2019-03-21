@@ -12,6 +12,8 @@ head
 
   // Silex styles and code
   script(type='text/javascript', src='js/admin.js')
+  //- script(type='text/javascript', src='js/system.min.js')
+  //- script(type='text/javascript', src='js/system.js')
 
   // all the css in the head with _styles.less imports
   link(rel='stylesheet', type='text/css', href='css/admin.css')
@@ -20,9 +22,43 @@ body.loading-pending.advanced-mode-off
   include ./templates/body.jade
 
   // google closure js patches, to be included after the other includes
-  script(type='text/javascript', src='js/closure-patches.js')
+  //- script(type='text/javascript', src='js/closure-patches.js')
 
   // start Silex
   script(type='text/javascript').
-    // boot silex app
+    console.log('starting Silex...', silex.App);
     window.silexApp = new silex.App();
+    // boot silex app
+    //- require(['src/ts/app'], function(silex) {
+    //-   console.log('starting application...', silex.App);
+    //-   window.silexApp = new silex.App();
+    //- });
+
+
+    //- System.import('/js/admin.js');
+
+    //- System.config({
+    //-   //- transpiler: 'typescript',
+    //-   bundles: {
+    //-     "admin.js": ["App"],
+    //-   },
+    //- });
+    //- System
+    //-   .import('js/admin.js')
+    //-   //- .then(function, console.error.bind(console));
+    //-   .then(function(Mod) {
+    //-     console.log('xxxxx', Mod, Mod.App, Mod.Module)
+    //-   }, function(err) {
+    //-     console.log('yyyy', err)
+    //-   });
+
+
+    //- System.config({
+    //-     packages: {
+    //-         "components": {
+    //-             defaultExtension: "js"
+    //-         }
+    //-     }
+    //- });
+    //- System.import('/js/admin.js');
+

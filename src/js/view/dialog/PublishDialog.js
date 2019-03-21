@@ -14,13 +14,12 @@
  *
  */
 
-
-goog.provide('silex.view.dialog.PublishDialog');
+goog.module('silex.view.dialog.PublishDialog');
 
 /**
  * the PublishDialog class
  */
-silex.view.dialog.PublishDialog = class {
+exports.PublishDialog = class PublishDialog {
 
   /**
    * @param  {silex.types.Model} model

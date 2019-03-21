@@ -21,7 +21,7 @@ goog.provide('silex.view.BreadCrumbs');
 
 /**
  * @constructor
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -30,7 +30,7 @@ goog.provide('silex.view.BreadCrumbs');
 silex.view.BreadCrumbs = function(element, model, controller) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
   /**
@@ -99,7 +99,7 @@ silex.view.BreadCrumbs.prototype.redraw = function(opt_selectedElements, opt_pag
       ancestors = newAncestors;
     });
     // empty current bread crumbs
-    while(this.element.childNodes.length) this.removeCrumb(/** @type {HTMLElement} */ (this.element.childNodes[0]));
+    while(this.element.childNodes.length) this.removeCrumb(/** @type {silex.types.Element} */ (this.element.childNodes[0]));
     // create a button for each ancester
     ancestors.forEach((ancestor) => this.addCrumb(ancestor));
   });
@@ -108,7 +108,7 @@ silex.view.BreadCrumbs.prototype.redraw = function(opt_selectedElements, opt_pag
 
 /**
  * add a button in the bread crumb container
- * @param {HTMLElement} ancestor
+ * @param {silex.types.Element} ancestor
  */
 silex.view.BreadCrumbs.prototype.addCrumb = function(ancestor) {
   let crumb = document.createElement('DIV');
@@ -133,7 +133,7 @@ silex.view.BreadCrumbs.prototype.addCrumb = function(ancestor) {
 
 /**
  * remove events and deletes a bread crumb
- * @param {HTMLElement} crumb
+ * @param {silex.types.Element} crumb
  */
 silex.view.BreadCrumbs.prototype.removeCrumb = function(crumb) {
   this.element.removeChild(crumb);

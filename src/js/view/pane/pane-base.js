@@ -25,7 +25,7 @@ goog.provide('silex.view.pane.PaneBase');
  * base class for all UI panes of the view.pane package
  * @constructor
  *
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -34,7 +34,7 @@ goog.provide('silex.view.pane.PaneBase');
 silex.view.pane.PaneBase = function(element, model, controller) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
   /**
@@ -75,7 +75,7 @@ silex.view.pane.PaneBase.prototype.iAmRedrawing = null;
  * notify the controller that the style changed
  * @param {string} styleName   not css style but camel case
  * @param {?string=} opt_styleValue
- * @param {?Array.<Element>=} opt_elements
+ * @param {?Array.<silex.types.Element>=} opt_elements
  */
 silex.view.pane.PaneBase.prototype.styleChanged = function(styleName, opt_styleValue, opt_elements) {
   //  if (this.iAmRedrawing) return;
@@ -90,7 +90,7 @@ silex.view.pane.PaneBase.prototype.styleChanged = function(styleName, opt_styleV
  * notify the controller that a property has changed
  * @param {string} propertyName   property name, e.g. 'src'
  * @param {?string=} opt_propertyValue
- * @param {?Array.<Element>=} opt_elements
+ * @param {?Array.<silex.types.Element>=} opt_elements
  * @param {?boolean=} opt_applyToContent
  */
 silex.view.pane.PaneBase.prototype.propertyChanged = function(propertyName, opt_propertyValue, opt_elements, opt_applyToContent) {
@@ -106,7 +106,7 @@ silex.view.pane.PaneBase.prototype.propertyChanged = function(propertyName, opt_
 
 /**
  * refresh the displayed data
- * @param   {Array.<Element>} selectedElements the elements currently selected
+ * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
  * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
  * @param   {string}  currentPageName   the name of the current page
  */
@@ -127,7 +127,7 @@ silex.view.pane.PaneBase.prototype.redraw = function(selectedElements, pageNames
 
 /**
  * get the common property of a group of elements
- * @param {Array.<Element>} elements
+ * @param {Array.<silex.types.Element>} elements
  * @param {function(Element): ?(string|number|boolean)} getPropertyFunction the callback which returns the value for one element
  * @return ? {string|number|boolean} the value or null if the value is not the same for all elements
  * FIXME: we should use Array::reduce

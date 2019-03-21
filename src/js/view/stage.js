@@ -29,7 +29,7 @@ goog.require('goog.events.MouseWheelHandler');
  * the Silex stage class
  * @constructor
  * load the template and render to the given html element
- * @param  {Element}  element  DOM element to which I render the UI
+ * @param  {silex.types.Element}  element  DOM element to which I render the UI
  *  has been changed by the user
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
@@ -39,7 +39,7 @@ goog.require('goog.events.MouseWheelHandler');
 silex.view.Stage = function(element, model, controller) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
   /**
@@ -150,7 +150,7 @@ silex.view.Stage.prototype.bodyElement = null;
 
 /**
  * current selection
- * @type {Array.<Element>}
+ * @type {Array.<silex.types.Element>}
  */
 silex.view.Stage.prototype.selectedElements = null;
 
@@ -219,7 +219,7 @@ silex.view.Stage.prototype.buildUi = function() {
       this);
 
   // action keys
-  const keyboard = new silex.utils.Keyboard(document);
+  const keyboard = new Keyboard(document);
   silex.view.Stage.ACTION_KEYS.forEach(({key, input, modifiers}) => {
     keyboard.addShortcut({
       key: key,
@@ -238,7 +238,7 @@ silex.view.Stage.prototype.buildUi = function() {
  */
 silex.view.Stage.prototype.onMouseMoveOverUi = function(event) {
   var pos = goog.style.getRelativePosition(event, this.iframeElement);
-  this.onMouseMove(/** @type {Element} */ (event.target), pos.x, pos.y, event.shiftKey);
+  this.onMouseMove(/** @type {silex.types.Element} */ (event.target), pos.x, pos.y, event.shiftKey);
   event.preventDefault();
 };
 
@@ -311,7 +311,7 @@ silex.view.Stage.prototype.onPreventBackSwipe = function(event) {
 
 /**
  * remove stage event listeners
- * @param {Element} bodyElement the element which contains the body of the site
+ * @param {silex.types.Element} bodyElement the element which contains the body of the site
  */
 silex.view.Stage.prototype.removeEvents = function(bodyElement) {
   goog.events.removeAll(bodyElement);
@@ -355,7 +355,7 @@ silex.view.Stage.prototype.initEvents = function(contentWindow) {
   goog.events.listen(this.bodyElement, 'mousemove', function(event) {
     let x = event.clientX;
     let y = event.clientY;
-    this.onMouseMove(/** @type {Element} */ (event.target), x, y, event.shiftKey);
+    this.onMouseMove(/** @type {silex.types.Element} */ (event.target), x, y, event.shiftKey);
     event.preventDefault();
   }, false, this);
 
@@ -517,7 +517,7 @@ silex.view.Stage.prototype.handleKeyDown = function(event) {
  * - mouse position
  * - scroll position
  * - isDown
- * @param   {Element} target a DOM element clicked by the user
+ * @param   {silex.types.Element} target a DOM element clicked by the user
  * @param   {number} x position of the mouse, relatively to the screen
  * @param   {number} y position of the mouse, relatively to the screen
  * @param   {boolean} shiftKey state of the shift key
@@ -617,7 +617,7 @@ silex.view.Stage.prototype.bringSelectionForward = function() {
  * - handle the scroll position changes
  *       (while dragging an element near the border of the stage, it may scroll)
  * - apply the ofset to the dragged or resized element(s)
- * @param   {Element} target a DOM element clicked by the user
+ * @param   {silex.types.Element} target a DOM element clicked by the user
  * @param   {number} x position of the mouse, relatively to the screen
  * @param   {number} y position of the mouse, relatively to the screen
  * @param   {boolean} shiftKey true if shift is down
@@ -703,9 +703,9 @@ silex.view.Stage.prototype.onMouseMove = function(target, x, y, shiftKey) {
  */
 silex.view.Stage.prototype.markAsDropZone = function(opt_element) {
   let els = goog.dom.getElementsByClass(silex.model.Body.DROP_CANDIDATE_CLASS_NAME, /** @type {Element|null} */ (this.bodyElement.parentNode));
-  goog.array.forEach(els, (event) => goog.dom.classlist.remove(/** @type {Element} */ (event), silex.model.Body.DROP_CANDIDATE_CLASS_NAME));
+  goog.array.forEach(els, (event) => goog.dom.classlist.remove(/** @type {silex.types.Element} */ (event), silex.model.Body.DROP_CANDIDATE_CLASS_NAME));
   if (opt_element) {
-    goog.dom.classlist.add(/** @type {Element} */ (opt_element), silex.model.Body.DROP_CANDIDATE_CLASS_NAME);
+    goog.dom.classlist.add(/** @type {silex.types.Element} */ (opt_element), silex.model.Body.DROP_CANDIDATE_CLASS_NAME);
   }
 };
 
@@ -769,15 +769,15 @@ silex.view.Stage.prototype.getDropZone = function(x, y, opt_preventSelected, opt
 
 /**
  * compute the page visibility of the element
- * @param {Element} element     the element to check
+ * @param {silex.types.Element} element     the element to check
  * @return {boolean} true if the element is in the current page or not in any page
  */
 silex.view.Stage.prototype.getVisibility = function(element) {
   /** @type {?Element} */
   let parent = /** @type {?Element} */ (element);
   while (parent &&
-         (!goog.dom.classlist.contains(/** @type {Element} */ (parent), silex.model.Page.PAGED_CLASS_NAME) ||
-          goog.dom.classlist.contains(/** @type {Element} */ (parent), this.currentPageName)) &&
+         (!goog.dom.classlist.contains(/** @type {silex.types.Element} */ (parent), silex.model.Page.PAGED_CLASS_NAME) ||
+          goog.dom.classlist.contains(/** @type {silex.types.Element} */ (parent), this.currentPageName)) &&
          !(this.controller.stageController.getMobileMode() && this.model.element.getHideOnMobile(parent))
    ) {
     parent = /** @type {?Element} */ (parent.parentNode);
@@ -895,7 +895,7 @@ silex.view.Stage.prototype.multipleDragged = function(x, y, shiftKey) {
  * - mouse position
  * - scroll position
  * - isDown
- * @param   {Element} element Silex element currently selected (text, image...)
+ * @param   {silex.types.Element} element Silex element currently selected (text, image...)
  * @param   {number} x position of the mouse, relatively to the screen
  * @param   {number} y position of the mouse, relatively to the screen
  * @param   {boolean} shiftKey state of the shift key
@@ -931,7 +931,7 @@ silex.view.Stage.prototype.handleMouseDown = function(element, x, y, shiftKey) {
 
 /**
  * check if the target is a UI handle to resize or move -draggable jquery plugin
- * @param   {Element} target a DOM element clicked by the user,
+ * @param   {silex.types.Element} target a DOM element clicked by the user,
  *                    which may be a handle to resize or move
  * @return {?string}
  */
@@ -1021,7 +1021,7 @@ silex.view.Stage.prototype.getScrollMaxY = function() {
 
 
 /**
- * @param  {Element}  element in the DOM to which I am scrolling
+ * @param  {silex.types.Element}  element in the DOM to which I am scrolling
  */
 silex.view.Stage.prototype.setScrollTarget = function(element) {
   if(element !== this.bodyElement) {

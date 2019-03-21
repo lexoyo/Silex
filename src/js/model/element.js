@@ -21,6 +21,7 @@ goog.provide('silex.model.Element');
 goog.require('goog.net.EventType');
 goog.require('goog.net.ImageLoader');
 goog.require('silex.types.Model');
+goog.require('silex.types.Element');
 goog.require('silex.utils.Url');
 
 
@@ -214,7 +215,7 @@ silex.model.Element.prototype.getTabs = function(num) {
  */
 silex.model.Element.prototype.noSectionContent = function(element) {
   if(this.isSectionContent(element)) {
-    return /** @type {Element} */ (element.parentNode);
+    return /** @type {silex.types.Element} */ (element.parentNode);
   }
   return element;
 }
@@ -222,7 +223,7 @@ silex.model.Element.prototype.noSectionContent = function(element) {
 
 /**
  * get/set type of the element
- * @param  {Element} element   created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element   created by silex, either a text box, image, ...
  * @return  {?string}           the type of element
  * example: for a container this will return "container"
  */
@@ -232,7 +233,7 @@ silex.model.Element.prototype.getType = function(element) {
 
 
 /**
- * @param  {Element} element   created by silex
+ * @param  {silex.types.Element} element   created by silex
  * @return true if `element` is a an element's content (the element in an image, html box, section...)
  */
 silex.model.Element.prototype.isElementContent = function(element) {
@@ -241,7 +242,7 @@ silex.model.Element.prototype.isElementContent = function(element) {
 
 
 /**
- * @param  {Element} element   created by silex
+ * @param  {silex.types.Element} element   created by silex
  * @return {boolean} true if `element` is a section
  */
 silex.model.Element.prototype.isSection = function(element) {
@@ -251,7 +252,7 @@ silex.model.Element.prototype.isSection = function(element) {
 
 
 /**
- * @param  {Element} element   created by silex
+ * @param  {silex.types.Element} element   created by silex
  * @return {boolean} true if `element` is the content container of a section
  */
 silex.model.Element.prototype.isSectionContent = function(element) {
@@ -262,7 +263,7 @@ silex.model.Element.prototype.isSectionContent = function(element) {
 
 /**
  * get/set the "hide on mobile" property
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {boolean} true if the element is hidden on mobile
  */
 silex.model.Element.prototype.getHideOnMobile = function(element) {
@@ -273,7 +274,7 @@ silex.model.Element.prototype.getHideOnMobile = function(element) {
 
 /**
  * get/set the "hide on mobile" property
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {boolean} hide, true if the element has to be hidden on mobile
  */
 silex.model.Element.prototype.setHideOnMobile = function(element, hide) {
@@ -288,7 +289,7 @@ silex.model.Element.prototype.setHideOnMobile = function(element, hide) {
 
 /**
  * get/set the "hide on desktop" property
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {boolean} true if the element is hidden on desktop
  */
 silex.model.Element.prototype.getHideOnDesktop = function(element) {
@@ -299,7 +300,7 @@ silex.model.Element.prototype.getHideOnDesktop = function(element) {
 
 /**
  * get/set the "hide on desktop" property
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {boolean} hide, true if the element has to be hidden on desktop
  */
 silex.model.Element.prototype.setHideOnDesktop = function(element, hide) {
@@ -314,7 +315,7 @@ silex.model.Element.prototype.setHideOnDesktop = function(element, hide) {
 
 /**
  * get all the element's styles
- * @param  {Element} element   created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element   created by silex, either a text box, image, ...
  * @return  {string}           the styles of the element
  */
 silex.model.Element.prototype.getAllStyles = function(element) {
@@ -326,7 +327,7 @@ silex.model.Element.prototype.getAllStyles = function(element) {
 
 /**
  * get/set style of the element
- * @param  {Element} element   created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element   created by silex, either a text box, image, ...
  * @param  {string} styleName  the style name
  * @return  {?string}           the style of the element
  */
@@ -350,7 +351,7 @@ silex.model.Element.prototype.getStyle = function(element, styleName) {
 
 /**
  * get/set style of element from a container created by silex
- * @param  {Element} element            created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element            created by silex, either a text box, image, ...
  * @param  {string}  styleName          the style name, camel case, not css with dashes
  * @param  {?string=}  opt_styleValue     the value for this styleName
  * @param  {?boolean=}  opt_preserveJustAdded     if true, do not remove the "just added" css class, default is false
@@ -380,7 +381,7 @@ silex.model.Element.prototype.setStyle = function(element, styleName, opt_styleV
 
 /**
  * get/set a property of an element from a container created by silex
- * @param  {Element} element            created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element            created by silex, either a text box, image, ...
  * @param  {string}  propertyName          the property name
  * @param  {?string=}  opt_propertyValue     the value for this propertyName
  * @param  {?boolean=}  opt_applyToContent    apply to the element or to its ".silex-element-content" element
@@ -400,7 +401,7 @@ silex.model.Element.prototype.setProperty = function(element, propertyName, opt_
 
 
 /**
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {string} url    URL of the image chosen by the user
  */
 silex.model.Element.prototype.setBgImage = function(element, url) {
@@ -417,7 +418,7 @@ silex.model.Element.prototype.setBgImage = function(element, url) {
 
 /**
  * get/set html from a container created by silex
- * @param  {Element} element  created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element  created by silex, either a text box, image, ...
  * @return  {string}  the html content
  */
 silex.model.Element.prototype.getInnerHtml = function(element) {
@@ -430,7 +431,7 @@ silex.model.Element.prototype.getInnerHtml = function(element) {
 
 /**
  * get/set element from a container created by silex
- * @param  {Element} element  created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element  created by silex, either a text box, image, ...
  * @param  {string} innerHTML the html content
  */
 silex.model.Element.prototype.setInnerHtml = function(element, innerHTML) {
@@ -445,8 +446,8 @@ silex.model.Element.prototype.setInnerHtml = function(element, innerHTML) {
 
 /**
  * get/set element from a container created by silex
- * @param  {Element} element  created by silex, either a text box, image, ...
- * @return  {Element}  the element which holds the content, i.e. a div, an image, ...
+ * @param  {silex.types.Element} element  created by silex, either a text box, image, ...
+ * @return  {silex.types.Element}  the element which holds the content, i.e. a div, an image, ...
  */
 silex.model.Element.prototype.getContentNode = function(element) {
   return element.querySelector(
@@ -457,7 +458,7 @@ silex.model.Element.prototype.getContentNode = function(element) {
 
 /**
  * move the element up/down the DOM
- * @param  {Element} element
+ * @param  {silex.types.Element} element
  * @param  {silex.model.DomDirection} direction
  */
 silex.model.Element.prototype.move = function(element, direction) {
@@ -493,15 +494,15 @@ silex.model.Element.prototype.move = function(element, direction) {
 
 /**
  * get the previous or next element in the DOM, which is a Silex element
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @param {boolean} forward if true look for the next element, if false for the previous
- * @return {?Element}
+ * @return {?silex.types.Element}
  */
 silex.model.Element.prototype.getNextElement = function(element, forward) {
   let node = /** @type {Node} */ (element);
   while(node = forward ? node.nextSibling : node.previousSibling) {
     if (node.nodeType === 1) {
-      const el = /** @type {Element} */ (node);
+      const el = /** @type {silex.types.Element} */ (node);
       // candidates are the elements which are visible in the current page, or visible everywhere (not paged)
       if(this.getType(el) !== null &&
         (this.model.page.isInPage(el) ||
@@ -516,7 +517,7 @@ silex.model.Element.prototype.getNextElement = function(element, forward) {
 
 /**
  * set/get the image URL of an image element
- * @param  {Element} element  container created by silex which contains an image
+ * @param  {silex.types.Element} element  container created by silex which contains an image
  * @return  {string}  the url of the image
  */
 silex.model.Element.prototype.getImageUrl = function(element) {
@@ -540,7 +541,7 @@ silex.model.Element.prototype.getImageUrl = function(element) {
 
 /**
  * set/get the image URL of an image element
- * @param  {Element} element  container created by silex which contains an image
+ * @param  {silex.types.Element} element  container created by silex which contains an image
  * @param  {string} url  the url of the image
  * @param  {?function(Element, Element)=} opt_callback the callback to be notified when the image is loaded
  * @param  {?function(Element, string)=} opt_errorCallback the callback to be notified of errors
@@ -612,7 +613,7 @@ silex.model.Element.prototype.setImageUrl = function(element, url, opt_callback,
 
 /**
  * remove a DOM element
- * @param  {Element} element   the element to remove
+ * @param  {silex.types.Element} element   the element to remove
  */
 silex.model.Element.prototype.removeElement = function(element) {
   // never delete sections container content, but the section itself
@@ -637,8 +638,8 @@ silex.model.Element.prototype.removeElement = function(element) {
 /**
  * append an element to the stage
  * handles undo/redo
- * @param {Element} container
- * @param {Element} element
+ * @param {silex.types.Element} container
+ * @param {silex.types.Element} element
  */
 silex.model.Element.prototype.addElement = function(container, element) {
   // for sections, force body
@@ -661,7 +662,7 @@ silex.model.Element.INITIAL_ELEMENT_SIZE = 100;
 /**
  * add an element at the center of the stage
  * and move it into the container beneeth it
- * @param {Element} element    the element to add
+ * @param {silex.types.Element} element    the element to add
  * @param {?number=} opt_offset an offset to apply to its position (x and y)
  */
 silex.model.Element.prototype.addElementDefaultPosition = function(element, opt_offset) {
@@ -692,7 +693,7 @@ silex.model.Element.prototype.addElementDefaultPosition = function(element, opt_
  *      and the element is partly hidden sometimes if we drop it in a container
  * @param  {number} x position in px
  * @param  {number} y position in px
- * @return {Element} the container element under (x, y)
+ * @return {silex.types.Element} the container element under (x, y)
  */
 silex.model.Element.prototype.getBestContainerForNewElement = function(x, y) {
   // let dropZone = this.view.stage.getDropZone(x, y) || {'element': this.model.body.getBodyElement(), 'zIndex': 0};
@@ -703,7 +704,7 @@ silex.model.Element.prototype.getBestContainerForNewElement = function(x, y) {
 
 /**
  * init the element depending on its type
- * @param {Element} element
+ * @param {silex.types.Element} element
  */
 silex.model.Element.prototype.initElement = function(element) {
   // default style
@@ -759,7 +760,7 @@ silex.model.Element.prototype.initElement = function(element) {
 
 /**
  * Add UI to resize elements. This is usually done on the server side but when the client side adds an element it does add UIs itself.
- * @param  {Element} element
+ * @param  {silex.types.Element} element
  */
 silex.model.Element.prototype.initUiHandles = function(element) {
   goog.array.forEach([
@@ -786,7 +787,7 @@ silex.model.Element.prototype.initUiHandles = function(element) {
  * and returns a new component for the element
  * @param  {string} type  the type of the element to create,
  *    see TYPE_* constants of the class @see silex.model.Element
- * @return  {Element}   the newly created element
+ * @return  {silex.types.Element}   the newly created element
  */
 silex.model.Element.prototype.createElement = function(type) {
   // create the element
@@ -834,7 +835,7 @@ silex.model.Element.prototype.createElement = function(type) {
 /**
  * element creation method for a given type
  * called from createElement
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Element.prototype.createContainerElement = function() {
   // create the conatiner
@@ -846,7 +847,7 @@ silex.model.Element.prototype.createContainerElement = function() {
 
 /**
  * @param {string} className
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Element.prototype.createElementWithContent = function(className) {
   // create the element
@@ -866,7 +867,7 @@ silex.model.Element.prototype.createElementWithContent = function(className) {
 /**
  * element creation method for a given type
  * called from createElement
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Element.prototype.createSectionElement = function() {
   // create the element
@@ -893,7 +894,7 @@ silex.model.Element.prototype.createSectionElement = function() {
 /**
  * element creation method for a given type
  * called from createElement
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Element.prototype.createTextElement = function() {
   // create the element
@@ -913,7 +914,7 @@ silex.model.Element.prototype.createTextElement = function() {
 /**
  * element creation method for a given type
  * called from createElement
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Element.prototype.createHtmlElement = function() {
   // create the element
@@ -933,7 +934,7 @@ silex.model.Element.prototype.createHtmlElement = function() {
 /**
  * element creation method for a given type
  * called from createElement
- * @return {Element}
+ * @return {silex.types.Element}
  */
 silex.model.Element.prototype.createImageElement = function() {
   // create the element
@@ -945,7 +946,7 @@ silex.model.Element.prototype.createImageElement = function() {
 
 /**
  * set/get a "silex style link" on an element
- * @param  {Element} element
+ * @param  {silex.types.Element} element
  * @param  {?string=} opt_link an URL
  *         or an internal link (beginning with #!)
  *         or null to remove the link
@@ -962,7 +963,7 @@ silex.model.Element.prototype.setLink = function(element, opt_link) {
 
 /**
  * set/get a "silex style link" on an element
- * @param  {Element} element
+ * @param  {silex.types.Element} element
  * @return {string}
  */
 silex.model.Element.prototype.getLink = function(element) {
@@ -973,7 +974,7 @@ silex.model.Element.prototype.getLink = function(element) {
 /**
  * get/set class name of the element of a container created by silex
  * remove all silex internal classes
- * @param  {Element} element   created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element   created by silex, either a text box, image, ...
  * @return  {?string}           the value for this styleName
  */
 silex.model.Element.prototype.getClassName = function(element) {
@@ -999,7 +1000,7 @@ silex.model.Element.prototype.getClassName = function(element) {
 /**
  * get/set class name of the element of a container created by silex
  * remove all silex internal classes
- * @param  {Element} element   created by silex, either a text box, image, ...
+ * @param  {silex.types.Element} element   created by silex, either a text box, image, ...
  * @param  {string=} opt_className  the class names, or null to reset
  */
 silex.model.Element.prototype.setClassName = function(element, opt_className) {
@@ -1031,7 +1032,7 @@ silex.model.Element.prototype.setClassName = function(element, opt_className) {
 /**
  * get the name of the style to be used to set the height of the element
  * returns 'height' or 'minHeight' depending on the element type
- * @param {Element} element
+ * @param {silex.types.Element} element
  * @return {string} 'height' or 'minHeight' depending on the element type
  */
 silex.model.Element.prototype.getHeightStyleName = function(element) {

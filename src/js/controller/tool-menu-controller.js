@@ -16,7 +16,7 @@
  */
 goog.provide('silex.controller.ToolMenuController');
 
-goog.require('silex.controller.ControllerBase');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 goog.require('silex.service.SilexTasks');
 
 
@@ -30,12 +30,12 @@ goog.require('silex.service.SilexTasks');
  */
 silex.controller.ToolMenuController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 //  this.pixlr = new Pixlr(silex.utils.Url.getRootUrl() + '/tasks/sendImage', silex.utils.Url.getRootUrl() + '/libs/pixlr/close.html');
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.ToolMenuController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.ToolMenuController/**/, ControllerBase);
 
 
 /**

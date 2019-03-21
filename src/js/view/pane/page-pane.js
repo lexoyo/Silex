@@ -31,7 +31,7 @@ goog.require('silex.view.pane.PaneBase');
  * let user edit style of components
  * @constructor
  * @extends {silex.view.pane.PaneBase}
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -88,7 +88,7 @@ silex.view.pane.PagePane.prototype.buildUi = function() {
   // link, select page or enter custom link
   // handle the dropdown list from the template
   this.linkDropdown = /** @type {HTMLInputElement} */ (this.element.querySelector('.link-combo-box'));
-  this.linkDropdown.onchange = goog.bind(this.onLinkChanged, this);
+  this.linkDropdown.onchange = () => this.onLinkChanged;
 
   // create a text field for custom link
   this.linkInputTextField = /** @type {HTMLInputElement} */ (this.element.querySelector('.link-input-text'));
@@ -185,7 +185,7 @@ silex.view.pane.PagePane.prototype.setPages = function(pages) {
   }
   // create page checkboxes
   const mainContainer = /** @type {HTMLInputElement} */ (this.element.querySelector('.pages-container'));
-  const items = /** @type {Array.<Element>} */ (Array.from(mainContainer.querySelectorAll('.page-container')));
+  const items = /** @type {Array.<silex.types.Element>} */ (Array.from(mainContainer.querySelectorAll('.page-container')));
   this.pageCheckboxes = items.map((item, idx) => {
     const checkbox = /** @type {HTMLInputElement} */ (item.querySelector('.page-check'));
     const name = this.pages[idx++];
@@ -231,7 +231,7 @@ silex.view.pane.PagePane.prototype.onLinkTextChanged = function() {
 
 /**
  * redraw the properties
- * @param   {Array.<Element>} selectedElements the elements currently selected
+ * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
  * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
  * @param   {string}  currentPageName   the name of the current page
  */

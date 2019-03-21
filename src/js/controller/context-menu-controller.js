@@ -14,24 +14,25 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-goog.provide('silex.controller.ContextMenuController');
 
-goog.require('silex.controller.ControllerBase');
+ goog.module('silex.controller.ContextMenuController');
+
+const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 
 
 /**
- * @constructor
  * @extends {silex.controller.ControllerBase}
- * listen to the view events and call the main controller's methods}
- * @param {silex.types.Model} model
- * @param  {silex.types.View} view  view class which holds the other views
+ * @class ContextMenuController
  */
-silex.controller.ContextMenuController = function(model, view) {
-  // call super
-  silex.controller.ControllerBase.call(this, model, view);
-};
-
-// inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.ContextMenuController, silex.controller.ControllerBase);
-
+exports = class ContextMenuController extends ControllerBase {
+  /**
+   *
+   * listen to the view events and call the main controller's methods}
+   * @param {silex.types.Model} model
+   * @param  {silex.types.View} view  view class which holds the other views
+   */
+  constructor(model, view) {
+    super(model, view);
+  };
+}

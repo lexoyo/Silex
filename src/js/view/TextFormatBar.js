@@ -15,18 +15,18 @@
  *   It uses the wysihtml library to change text format
  */
 
+goog.module('silex.view.TextFormatBar');
 
-goog.provide('silex.view.TextFormatBar');
-goog.require('silex.view.dialog.LinkDialog');
+const {LinkDialog, LINK_ATTRIBUTES} = goog.require('silex.view.dialog.LinkDialog');
 
 
 /**
  * @class {silex.view.TextFormatBar}
  */
-silex.view.TextFormatBar = class {
+exports = class TextFormatBar {
   /**
    *
-   * @param {Element} element   container to render the UI
+   * @param {silex.types.Element} element   container to render the UI
    * @param  {!silex.types.Model} model  model class which holds
    *                                  the model instances - views use it for read operation only
    * @param  {!silex.types.Controller} controller  structure which holds
@@ -40,7 +40,7 @@ silex.view.TextFormatBar = class {
     this.element = element;
     this.model = model;
     this.controller = controller;
-    /** @type {?Array.<Element>} */
+    /** @type {?Array.<silex.types.Element>} */
     this.selectedElements = null;
     /** @type {?Array.<string>} */
     this.pageNames = null;
@@ -49,7 +49,7 @@ silex.view.TextFormatBar = class {
     /** @type {?Element} */
     this.currentTextBox = null;
     this.wysihtmlEditor = null;
-    this.linkDialog = new silex.view.dialog.LinkDialog(this.model);
+    this.linkDialog = new LinkDialog(this.model);
 
     this.toolbar = this.element.querySelector('#wysihtml5-toolbar');
 
@@ -279,7 +279,7 @@ silex.view.TextFormatBar = class {
 
   /**
    * redraw the properties
-   * @param   {Array.<Element>} selectedElements the elements currently selected
+   * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
    * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
    * @param   {string}  currentPageName   the name of the current page
    */

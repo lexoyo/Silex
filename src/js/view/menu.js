@@ -28,13 +28,11 @@ goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.menuBar');
 goog.require('silex.Config');
 goog.require('silex.utils.Keyboard');
-goog.require('silex.utils.MenuShortcut');
-
 
 
 /**
  * @constructor
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -43,7 +41,7 @@ goog.require('silex.utils.MenuShortcut');
 silex.view.Menu = function(element, model, controller) {
   // store references
   /**
-   * @type {Element}
+   * @type {silex.types.Element}
    */
   this.element = element;
   /**
@@ -78,7 +76,7 @@ silex.view.Menu.prototype.buildUi = function() {
   this.menu = goog.ui.menuBar.create();
 
   // shortcut handler
-  const keyboard = new silex.utils.Keyboard(document);
+  const keyboard = new Keyboard(document);
 
   // create the menu items
   silex.Config.menu.names.forEach((itemData, i) => {
@@ -173,7 +171,7 @@ silex.view.Menu.prototype.addToMenu = function(itemData, menu) {
 
 /**
  * redraw the menu
- * @param   {Array.<Element>} selectedElements the elements currently selected
+ * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
  * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
  * @param   {string}  currentPageName   the name of the current page
  */

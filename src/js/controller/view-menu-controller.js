@@ -16,7 +16,7 @@
  */
 goog.provide('silex.controller.ViewMenuController');
 
-goog.require('silex.controller.ControllerBase');
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 goog.require('silex.service.SilexTasks');
 
 
@@ -30,11 +30,11 @@ goog.require('silex.service.SilexTasks');
  */
 silex.controller.ViewMenuController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.ViewMenuController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.ViewMenuController/**/, ControllerBase);
 
 
 /**

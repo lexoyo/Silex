@@ -14,9 +14,10 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-goog.provide('silex.controller.TextEditorController');
 
-goog.require('silex.controller.ControllerBase');
+goog.module('silex.controller.TextEditorController');
+
+/**/const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 const MENU_WIDTH = 35;
 const CONTEXT_MENU_HEIGHT = 35;
@@ -25,7 +26,7 @@ const CONTEXT_MENU_HEIGHT = 35;
  * @class
  * @extends {silex.controller.ControllerBase}
  */
-silex.controller.TextEditorController = class extends silex.controller.ControllerBase {
+exports = class TextEditorController extends /**/ControllerBase {
   /**
    * listen to the view events and call the main controller's methods}
    * @param {silex.types.Model} model

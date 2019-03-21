@@ -63,7 +63,7 @@ silex.model.Body.prototype.iframeElement = null;
 /**
  * input element to get the focus
  * used to blur the UI inputs
- * @type {Element}
+ * @type {silex.types.Element}
  * @static
  */
 silex.model.Body.focusInput = document.createElement('input');
@@ -136,7 +136,7 @@ silex.model.Body.DRAGGING_CLASS_NAME = 'dragging-pending';
 
 
 /**
- * @return  {Element}   body element
+ * @return  {silex.types.Element}   body element
  */
 silex.model.Body.prototype.getBodyElement = function() {
   return this.model.file.getContentDocument().body;
@@ -144,7 +144,7 @@ silex.model.Body.prototype.getBodyElement = function() {
 
 
 /**
- * @return  {Array.<Element>}   array of elements which are currently selected
+ * @return  {Array.<silex.types.Element>}   array of elements which are currently selected
  */
 silex.model.Body.prototype.getSelection = function() {
   var elements = goog.dom.getElementsByClass(silex.model.Element.SELECTED_CLASS_NAME, this.getBodyElement());
@@ -167,7 +167,7 @@ silex.model.Body.prototype.getSelection = function() {
 
 
 /**
- * @param  {Array.<Element>} selectedElements  array of elements which are to select
+ * @param  {Array.<silex.types.Element>} selectedElements  array of elements which are to select
  */
 silex.model.Body.prototype.setSelection = function(selectedElements) {
   if(this.getBodyElement() === null) {

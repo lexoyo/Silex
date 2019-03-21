@@ -14,8 +14,8 @@
  *
  */
 
+goog.module('silex.view.dialog.Dashboard');
 
-goog.provide('silex.view.dialog.Dashboard');
 goog.require('silex.view.ModalDialog');
 goog.require('silex.view.TipOfTheDay');
 
@@ -24,7 +24,7 @@ goog.require('silex.view.TipOfTheDay');
  * Silex Dashboard dialog
  * @class {silex.view.dialog.Dashboard}
  */
-class Dashboard {
+exports = class Dashboard {
   /**
    * @param {!Element} element   container to render the UI
    * @param  {!silex.types.Model} model  model class which holds
@@ -43,7 +43,7 @@ class Dashboard {
      */
     this.errorCbk = null;
     /**
-     * @type {{url:?string, fileInfo:?FileInfo}|null}
+     * @type {{url:?string, fileInfo:?silex.types.FileInfo}|null}
      */
     this.selected = null;
     // store the params
@@ -69,7 +69,7 @@ class Dashboard {
 
   /**
    * render the data loaded from github into a <ul>
-   * @param  {Element} ul
+   * @param  {silex.types.Element} ul
    * @param  {string} className
    * @param  {string} repo
    * @param  {*} data
@@ -174,7 +174,7 @@ class Dashboard {
       const recentFileInfo = a.getAttribute('data-file-info') || a.parentNode.getAttribute('data-file-info');
       if(!!templateUrl || !!recentFileInfo) {
         this.selected = {
-          fileInfo: /** @type {FileInfo} */ (JSON.parse(recentFileInfo)),
+          fileInfo: /** @type {silex.types.FileInfo} */ (JSON.parse(recentFileInfo)),
           url: templateUrl,
         }
         // close the dialog, which will trigger a call the dialog onClose callback
@@ -306,7 +306,7 @@ class Dashboard {
 
   /**
    * open the dialog
-   * @param {{openFileInfo:!function(?FileInfo), openTemplate:!function(?string), ready:?function(), error:?function(?Object=)}} options   options object
+   * @param {{openFileInfo:!function(?silex.types.FileInfo), openTemplate:!function(?string), ready:?function(), error:?function(?Object=)}} options   options object
    */
   openDialog(options) {
     // is ready callback

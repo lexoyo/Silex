@@ -24,6 +24,7 @@ goog.provide('silex.service.Tracker');
 /**
  * the Silex Tracker class logs user actions
  * this is for us to detect problems and improve user experience
+ * @class {silex.service.Tracker}
  * @constructor
  */
 silex.service.Tracker = function() {
@@ -33,8 +34,17 @@ silex.service.Tracker = function() {
    */
   this.sourceMapConsumer = null;
  };
-goog.addSingletonGetter(silex.service.Tracker);
+// goog.addSingletonGetter(silex.service.Tracker);
 
+/**
+ * @return {silex.service.Tracker}
+ */
+silex.service.Tracker.getInstance = function() {
+  silex.service.Tracker.instance = silex.service.Tracker.instance || new silex.service.Tracker();
+  return silex.service.Tracker.instance;
+}
+
+silex.service.Tracker.instance = null;
 
 /**
  * constant

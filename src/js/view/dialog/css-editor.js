@@ -16,14 +16,15 @@
  *
  */
 
-goog.provide('silex.view.dialog.CssEditor');
+goog.module('silex.view.dialog.CssEditor');
+
 goog.require('silex.view.dialog.AceEditorBase');
 
 
 /**
  * @class {silex.view.dialog.CssEditor}
  */
-class CssEditor extends AceEditorBase {
+exports = class CssEditor extends AceEditorBase {
   /**
    * @param {!Element} element   container to render the UI
    * @param  {!silex.types.Model} model  model class which holds

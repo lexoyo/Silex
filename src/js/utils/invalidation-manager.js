@@ -16,7 +16,7 @@
  */
 
 
-goog.provide('silex.utils.InvalidationManager');
+goog.module('silex.utils.InvalidationManager');
 
 
 /**
@@ -27,7 +27,7 @@ goog.provide('silex.utils.InvalidationManager');
  *               im.callWhenReady(function() { console.log(idx); });
  *          ```
  */
-class InvalidationManager {
+exports = class InvalidationManager {
 
   /**
    * @param {number} delay the minimum time between two calls, in seconds

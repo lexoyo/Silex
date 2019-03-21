@@ -17,8 +17,8 @@
  *
  */
 
+goog.module('silex.view.dialog.FileExplorer');
 
-goog.provide('silex.view.dialog.FileExplorer');
 goog.require('silex.service.CloudStorage');
 
 
@@ -27,7 +27,7 @@ goog.require('silex.service.CloudStorage');
  * the Silex FileExplorer class
  * @class {silex.view.dialog.FileExplorer}
  */
-class FileExplorer {
+exports = class FileExplorer {
   static get IMAGE_EXTENSIONS() { return ['.jpg', '.jpeg', '.png', '.gif']; }
   static get HTML_EXTENSIONS() { return ['.html', '.htm']; }
 
@@ -68,12 +68,12 @@ class FileExplorer {
 
   /**
    * method passed to then in order to add the desired path format everywhere in silex
-   * @param {FileInfo} fileInfo
-   * @return {FileInfo}
+   * @param {silex.types.FileInfo} fileInfo
+   * @return {silex.types.FileInfo}
    */
   addAbsPath(fileInfo) {
     if(fileInfo === null) return fileInfo; // case of cancel
-    return /** @type {FileInfo} */ (Object.assign({'absPath': `/ce/${ fileInfo.service }/get/${ fileInfo.path }`}, fileInfo));
+    return /** @type {silex.types.FileInfo} */ (Object.assign({'absPath': `/ce/${ fileInfo.service }/get/${ fileInfo.path }`}, fileInfo));
   }
 
 
@@ -83,7 +83,7 @@ class FileExplorer {
    *                           ['.jpg'] to show *.jpg and *.JPG
    *                           null to show all the files and folders
    *                           [] to show only folders
-   * @return {Promise.<FileInfo>}
+   * @return {Promise.<silex.types.FileInfo>}
    */
   openFile(opt_extensions) {
     this.open();
@@ -102,7 +102,7 @@ class FileExplorer {
    *                           ['.jpg'] to show *.jpg and *.JPG
    *                           null to show all the files and folders
    *                           [] to show only folders
-   * @return {Promise.<FileInfo>}
+   * @return {Promise.<silex.types.FileInfo>}
    */
   openFiles(opt_extensions) {
     this.open();
@@ -117,7 +117,7 @@ class FileExplorer {
 
   /**
    * pick a folder
-   * @return {Promise.<FileInfo>}
+   * @return {Promise.<silex.types.FileInfo>}
    */
   openFolder() {
     this.open();
@@ -137,7 +137,7 @@ class FileExplorer {
    *                           ['.jpg'] to show *.jpg and *.JPG
    *                           null to show all the files and folders
    *                           [] to show only folders
-   * @return {Promise.<FileInfo>}
+   * @return {Promise.<silex.types.FileInfo>}
    */
   saveAs(defaultName, opt_extensions) {
     this.open();

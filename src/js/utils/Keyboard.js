@@ -1,7 +1,7 @@
 
-goog.provide('silex.utils.Keyboard');
-goog.provide('silex.utils.Shortcut');
-goog.provide('silex.utils.MenuShortcut');
+goog.module('silex.utils.Keyboard');
+// goog.module('silex.utils.Shortcut');
+// goog.module('silex.utils.MenuShortcut');
 
 /**
  * @typedef {{
@@ -32,7 +32,7 @@ silex.utils.MenuShortcut = null;
 /**
  * @class Keyboard
  */
-silex.utils.Keyboard = class {
+exports.Keyboard = class Keyboard {
   /**
    * @param {EventTarget|Element} target
    */
@@ -94,7 +94,7 @@ silex.utils.Keyboard = class {
       ) && (
         // not when in an input field
         shortcut.s.input !== false ||
-        !silex.utils.Keyboard.isInput(e.target)
+        !Keyboard.isInput(e.target)
       );
     });
   }

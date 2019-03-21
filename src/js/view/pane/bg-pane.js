@@ -30,7 +30,7 @@ goog.require('silex.view.pane.PaneBase');
  * let user edit style of components
  * @constructor
  * @extends {silex.view.pane.PaneBase}
- * @param {Element} element   container to render the UI
+ * @param {silex.types.Element} element   container to render the UI
  * @param  {!silex.types.Model} model  model class which holds
  *                                  the model instances - views use it for read operation only
  * @param  {!silex.types.Controller} controller  structure which holds
@@ -140,7 +140,7 @@ silex.view.pane.BgPane.prototype.buildBgImageProperties = function() {
 
 /**
  * redraw the properties
- * @param   {Array.<Element>} selectedElements the elements currently selected
+ * @param   {Array.<silex.types.Element>} selectedElements the elements currently selected
  * @param   {Array.<string>} pageNames   the names of the pages which appear in the current HTML file
  * @param   {string}  currentPageName   the name of the current page
  */

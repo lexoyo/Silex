@@ -14,27 +14,26 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
+
 goog.provide('silex.controller.CssEditorController');
 
-goog.require('silex.controller.ControllerBase');
-
+const ControllerBase = goog.require('silex.controller.ControllerBase');
 
 
 /**
  * @constructor
- * @extends {silex.controller.ControllerBase}
+ * @extends {ControllerBase}
  * listen to the view events and call the main controller's methods}
  * @param {silex.types.Model} model
  * @param  {silex.types.View} view  view class which holds the other views
  */
 silex.controller.CssEditorController = function(model, view) {
   // call super
-  silex.controller.ControllerBase.call(this, model, view);
+super(model, view);
 };
 
-
 // inherit from silex.controller.ControllerBase
-goog.inherits(silex.controller.CssEditorController, silex.controller.ControllerBase);
+goog.inherits(silex.controller.CssEditorController, ControllerBase);
 
 
 /**
