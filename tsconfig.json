@@ -1,15 +1,17 @@
 {
-    "compilerOptions": {
-        "outFile": "tsc.js",
-        "sourceMap": true,
-        "module": "amd",
-    },
-    "include": [
-        "converted/src/js/**/*.ts"
-    ],
-    "exclude": [
-    ],
-    "paths": {
-      // "goog:*": ["./node_modules/closure-library.ts/closure-library.d.ts/all.d.ts"]
-    },
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outFile": "dist/client/js/admin.js",
+    "target": "es6",
+    "watch": false,
+    "sourceMap": false,
+    "module": "amd",
+    "removeComments": true,
+  },
+  "include": [
+    "src/ts/app.ts"
+  ],
+  "paths": {
+    // "goog:*": ["./node_modules/closure-library.ts/closure-library.d.ts/all.d.ts"]
+  },
 }
