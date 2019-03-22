@@ -16,18 +16,18 @@
  *
  */
 
-import {Model} from '../types';
-import {Controller} from '../types';
+import {Model} from '../types.js';
+import {Controller} from '../types.js';
 
-import {BgPane} from './pane/bg-pane';
-import {BorderPane} from './pane/border-pane';
-import {GeneralStylePane} from './pane/general-style-pane';
-import {PagePane} from './pane/page-pane';
-import {PropertyPane} from './pane/property-pane';
-import {StylePane} from './pane/style-pane';
-import {StyleEditorPane} from './pane/StyleEditorPane';
-import {InvalidationManager} from '../utils/invalidation-manager';
-import {Component} from '../model/Component';
+import {BgPane} from './pane/bg-pane.js';
+import {BorderPane} from './pane/border-pane.js';
+import {GeneralStylePane} from './pane/general-style-pane.js';
+import {PagePane} from './pane/page-pane.js';
+import {PropertyPane} from './pane/property-pane.js';
+import {StylePane} from './pane/style-pane.js';
+import {StyleEditorPane} from './pane/StyleEditorPane.js';
+import {InvalidationManager} from '../utils/invalidation-manager.js';
+import {Component} from '../model/Component.js';
 
 //////////////////////////////////////////////////////////////////
 // PropertyTool class

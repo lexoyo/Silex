@@ -1,5 +1,5 @@
-import {Controller} from '../types';
-import {Model} from '../types';
+import {Controller} from '../types.js';
+import {Model} from '../types.js';
 
 
 /**
@@ -19,8 +19,8 @@ import {Model} from '../types';
  *
  */
 
- import {InvalidationManager} from '../utils/invalidation-manager';
- import {ControllerBase} from '../controller/controller-base';
+ import {InvalidationManager} from '../utils/invalidation-manager.js';
+ import {ControllerBase} from '../controller/controller-base.js';
 
 /**
  * @param element   container to render the UI

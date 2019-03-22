@@ -15,10 +15,10 @@
  *
  */
 
-import {Model} from '../../types';
-import {Controller} from '../../types';
-import {ColorPicker} from '../ColorPicker';
-import {PaneBase} from './pane-base';
+import {Model} from '../../types.js';
+import {Controller} from '../../types.js';
+import {ColorPicker} from '../ColorPicker.js';
+import {PaneBase} from './pane-base.js';
 
 /**
  * on of Silex Editors class

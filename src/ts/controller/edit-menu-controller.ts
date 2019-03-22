@@ -14,13 +14,13 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-import { DomDirection, SilexElement } from '../model/element';
-import { ClipboardItem, Model, View } from '../types';
-import { InvalidationManager } from '../utils/invalidation-manager';
-import { SilexNotification } from '../utils/notification';
-import { Style } from '../utils/style';
-import { FileExplorer } from '../view/dialog/file-explorer';
-import { ControllerBase } from './controller-base';
+import { DomDirection, SilexElement } from '../model/element.js';
+import { ClipboardItem, Model, View } from '../types.js';
+import { InvalidationManager } from '../utils/invalidation-manager.js';
+import { SilexNotification } from '../utils/notification.js';
+import { Style } from '../utils/style.js';
+import { FileExplorer } from '../view/dialog/file-explorer.js';
+import { ControllerBase } from './controller-base.js';
 /**
  * @param view  view class which holds the other views
  */

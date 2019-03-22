@@ -17,11 +17,11 @@
  */
 
 
-import {Model} from '../../types';
-import {Controller} from '../../types';
-import {Dom} from '../../utils/dom';
-import {PaneBase} from './pane-base';
-import { SilexElement } from "../../model/element";
+import {Model} from '../../types.js';
+import {Controller} from '../../types.js';
+import {Dom} from '../../utils/dom.js';
+import {PaneBase} from './pane-base.js';
+import { SilexElement } from "../../model/element.js";
 
 /**
  * on of Silex Editors class

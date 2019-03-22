@@ -16,7 +16,7 @@
 var {XhrIo} = goog.require("goog:goog.net.XhrIo");
 var {Uri} = goog.require("goog:goog.Uri");
 
-import {FileInfo} from '../types';
+import {FileInfo} from '../types.js';
 
 export class Url {
   /**

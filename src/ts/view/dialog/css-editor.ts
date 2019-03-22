@@ -15,9 +15,9 @@
  *
  *
  */
-import {Model} from '../../types';
-import {Controller} from '../../types';
-import {AceEditorBase} from './ace-editor-base';
+import {Model} from '../../types.js';
+import {Controller} from '../../types.js';
+import {AceEditorBase} from './ace-editor-base.js';
 
 /**
  * @class {silex.view.dialog.CssEditor}

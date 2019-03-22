@@ -92,7 +92,8 @@ sed -i 's/\/\*\*\/super./goog\.base(this, /g' src/js/**/**/*.js
 echo "Patching generated files"
 echo "- add closure lib register in app.ts"
 cat converted/src/js/app.ts > .tmp.txt
-echo "import closure = require('../../../node_modules/closure-library.ts/index');closure.register();" > converted/src/js/app.ts
+# echo "import closure = require('../../../node_modules/closure-library.ts/index');closure.register();" > converted/src/js/app.ts
+echo "import * as closure from '../../node_modules/closure-library.ts/index';closure.register();" > converted/src/js/app.ts
 cat .tmp.txt >> converted/src/js/app.ts
 rm .tmp.txt
 

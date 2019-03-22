@@ -15,12 +15,12 @@
  *   which is rendered by the Stage class
  *   It has methods to manipulate the dom
  */
-import * as Config from '../config';
-import {View} from '../types';
-import {FileInfo} from '../types';
-import {Model} from '../types';
-import {Font} from '../types';
-import {SilexElement} from '../model/element';
+import * as Config from '../config.js';
+import {View} from '../types.js';
+import {FileInfo} from '../types.js';
+import {Model} from '../types.js';
+import {Font} from '../types.js';
+import {SilexElement} from '../model/element.js';
 
 /**
  * @param model  model class which holds the other models

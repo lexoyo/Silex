@@ -15,13 +15,13 @@
  *   Components are based on Silex elements, use Prodotype to render a templates
  */
 
-import { Prodotype, ProdotypeCompDef } from '../externs';
-import { FileInfo, LinkData, Model, View } from '../types';
-import { Dom } from '../utils/dom';
-import { LinkDialog } from '../view/dialog/LinkDialog';
-import { ComponentData, PseudoClass, PseudoClassData, SilexId, StyleData, StyleName, Visibility } from './Data';
-import { Property } from './property';
-import { SilexNotification } from '../utils/notification';
+import { Prodotype, ProdotypeCompDef } from '../externs.js';
+import { FileInfo, LinkData, Model, View } from '../types.js';
+import { Dom } from '../utils/dom.js';
+import { LinkDialog } from '../view/dialog/LinkDialog.js';
+import { ComponentData, PseudoClass, PseudoClassData, SilexId, StyleData, StyleName, Visibility } from './Data.js';
+import { Property } from './property.js';
+import { SilexNotification } from '../utils/notification.js';
 
 /**
  * Manage Prodotype components and styles

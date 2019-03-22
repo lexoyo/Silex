@@ -17,10 +17,10 @@
  */
 
 
-import {View} from '../types';
-import {Model} from '../types';
-import {Stage} from '../view/stage';
-import {SilexElement} from '../model/element';
+import {View} from '../types.js';
+import {Model} from '../types.js';
+import {Stage} from '../view/stage.js';
+import {SilexElement} from '../model/element.js';
 
 /**
  * @param model  model class which holds the other models

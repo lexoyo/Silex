@@ -23,13 +23,13 @@ var menuBar = goog.require("goog:goog.ui.menuBar");
 var {MenuButton} = goog.require("goog:goog.ui.MenuButton");
 var {MenuItem} = goog.require("goog:goog.ui.MenuItem");
 
-import {Config} from '../config';
-import {Model} from '../types';
-import {Controller} from '../types';
-import {Keyboard} from '../utils/Keyboard';
-import {MenuShortcut} from '../utils/Keyboard';
-import {Component} from '../model/Component';
-import {SilexElement} from '../model/element';
+import {Config} from '../config.js';
+import {Model} from '../types.js';
+import {Controller} from '../types.js';
+import {Keyboard} from '../utils/Keyboard.js';
+import {MenuShortcut} from '../utils/Keyboard.js';
+import {Component} from '../model/Component.js';
+import {SilexElement} from '../model/element.js';
 
 type MenuItemData = {
   label: string,

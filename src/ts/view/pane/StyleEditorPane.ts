@@ -9,16 +9,16 @@
  * http://www.silexlabs.org/silex/silex-licensing/
  */
 
-import {Visibility} from '../../model/Data';
-import {StyleData} from '../../model/Data';
-import {StyleName} from '../../model/Data';
-import {Component} from '../../model/Component';
-import {Controller} from '../../types';
-import {Model} from '../../types';
-import {PaneBase} from './pane-base';
-import {Dom} from '../../utils/dom';
-import {Tracker} from '../../service/tracker';
-import {SilexNotification} from '../../utils/notification';
+import {Visibility} from '../../model/Data.js';
+import {StyleData} from '../../model/Data.js';
+import {StyleName} from '../../model/Data.js';
+import {Component} from '../../model/Component.js';
+import {Controller} from '../../types.js';
+import {Model} from '../../types.js';
+import {PaneBase} from './pane-base.js';
+import {Dom} from '../../utils/dom.js';
+import {Tracker} from '../../service/tracker.js';
+import {SilexNotification} from '../../utils/notification.js';
 
 /**
  * @fileoverview The style editor pane is displayed in the property panel on the

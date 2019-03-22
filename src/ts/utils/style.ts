@@ -18,14 +18,14 @@ type GRgb = Array<number>;
 var {GString} = goog.require("goog:goog.string");
 var {GStyle} = goog.require("goog:goog.style");
 
-import {Body} from '../model/body';
-import {Component} from '../model/Component';
-import {DragSystem} from '../model/DragSystem';
-import {SilexElement} from '../model/element';
-import {Head} from '../model/head';
-import {Page} from '../model/page';
+import {Body} from '../model/body.js';
+import {Component} from '../model/Component.js';
+import {DragSystem} from '../model/DragSystem.js';
+import {SilexElement} from '../model/element.js';
+import {Head} from '../model/head.js';
+import {Page} from '../model/page.js';
 
-import {BreadCrumbs} from '../view/bread-crumbs';
+import {BreadCrumbs} from '../view/bread-crumbs.js';
 
 export class Style {
 

@@ -21,11 +21,11 @@
  */
 var GStyle = goog.require("goog:goog.style");
 
-import { Body } from '../model/body';
-import { SilexElement } from '../model/element';
-import { Page } from '../model/page';
-import { Model, StickyLine, StickyPoint, View } from '../types';
-import { Stage } from '../view/stage';
+import { Body } from '../model/body.js';
+import { SilexElement } from '../model/element.js';
+import { Page } from '../model/page.js';
+import { Model, StickyLine, StickyPoint, View } from '../types.js';
+import { Stage } from '../view/stage.js';
 
 
 function* buildStickyLinesFromElements(win, allWebsiteElements, dragSystem) {

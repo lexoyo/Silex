@@ -19,12 +19,12 @@ var {EventType} = goog.require("goog:goog.net.EventType");
 var {ImageLoader} = goog.require("goog:goog.net.ImageLoader");
 var {GString} = goog.require("goog:goog.string");
 
-import { Model, View } from '../types';
-import {Url} from '../utils/url';
-import { TemplateName } from './Data';
-import {Style} from '../utils/style';
-import {Body} from '../model/body';
-import {Dom} from '../utils/dom';
+import { Model, View } from '../types.js';
+import {Url} from '../utils/url.js';
+import { TemplateName } from './Data.js';
+import {Style} from '../utils/style.js';
+import {Body} from '../model/body.js';
+import {Dom} from '../utils/dom.js';
 
 
 /**

@@ -14,10 +14,10 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-import {Model} from '../types';
-import {View} from '../types';
+import {Model} from '../types.js';
+import {View} from '../types.js';
 
-import {ControllerBase} from './controller-base';
+import {ControllerBase} from './controller-base.js';
 
 /**
  * @param view  view class which holds the other views

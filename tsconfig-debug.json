@@ -1,16 +1,17 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "outFile": "dist/client/js/admin.js",
+    "outDir": "dist/client/js/",
     "target": "es6",
     "sourceRoot": "./src/ts",
+    // "rootDir": "./src/ts",
     "watch": true,
     "sourceMap": true,
     "module": "amd",
     "removeComments": false,
   },
   "include": [
-    "src/ts/app.ts",
+    "src/ts/boot.ts",
     "src/ts/index.ts",
   ],
 }

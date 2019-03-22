@@ -13,12 +13,12 @@
  * @fileoverview Silex Dashboard / "new website" dialog which displays templates
  *
  */
-import {FileInfo} from '../../types';
-import {Model} from '../../types';
-import {Controller} from '../../types';
+import {FileInfo} from '../../types.js';
+import {Model} from '../../types.js';
+import {Controller} from '../../types.js';
 
-import {ModalDialog} from '../ModalDialog';
-import {TipOfTheDay} from '../tip-of-the-day';
+import {ModalDialog} from '../ModalDialog.js';
+import {TipOfTheDay} from '../tip-of-the-day.js';
 
 /**
  * Silex Dashboard dialog

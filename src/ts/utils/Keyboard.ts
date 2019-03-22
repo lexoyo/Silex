@@ -1,4 +1,4 @@
-import {SilexNotification} from '../utils/notification';
+import {SilexNotification} from '../utils/notification.js';
 // goog.module('silex.utils.Shortcut');
 // goog.module('silex.utils.MenuShortcut');
 

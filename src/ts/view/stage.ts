@@ -19,13 +19,13 @@ var events = goog.require("goog:goog.events");
 var {MouseWheelHandler} = goog.require("goog:goog.events.MouseWheelHandler");
 
 
-import { Controller, Model } from '../types';
-import { InvalidationManager } from '../utils/invalidation-manager';
-import { Keyboard, Shortcut } from '../utils/Keyboard';
-import { ContextMenu } from '../view/context-menu';
-import { Body } from '../model/body';
-import { SilexElement } from '../model/element';
-import { Page } from '../model/page';
+import { Controller, Model } from '../types.js';
+import { InvalidationManager } from '../utils/invalidation-manager.js';
+import { Keyboard, Shortcut } from '../utils/Keyboard.js';
+import { ContextMenu } from '../view/context-menu.js';
+import { Body } from '../model/body.js';
+import { SilexElement } from '../model/element.js';
+import { Page } from '../model/page.js';
 
 /**
  * the Silex stage class

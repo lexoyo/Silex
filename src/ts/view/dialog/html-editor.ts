@@ -14,10 +14,10 @@
  * the Silex HTML editor
  *
  */
-import {Model} from '../../types';
-import {Controller} from '../../types';
-import {AceEditorBase} from './ace-editor-base';
-import {SilexElement} from '../../model/element';
+import {Model} from '../../types.js';
+import {Controller} from '../../types.js';
+import {AceEditorBase} from './ace-editor-base.js';
+import {SilexElement} from '../../model/element.js';
 
 
 /**

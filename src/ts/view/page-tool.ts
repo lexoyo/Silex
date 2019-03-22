@@ -17,11 +17,11 @@
  */
 var dom = goog.require("goog:goog.dom");
 
-import {PageData} from '../model/page';
-import {Dom} from '../utils/dom';
-import {Model} from '../types';
-import {Controller} from '../types';
-import {InvalidationManager} from '../utils/invalidation-manager';
+import {PageData} from '../model/page.js';
+import {Dom} from '../utils/dom.js';
+import {Model} from '../types.js';
+import {Controller} from '../types.js';
+import {InvalidationManager} from '../utils/invalidation-manager.js';
 
 /**
  *

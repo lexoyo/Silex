@@ -16,14 +16,14 @@
  *   which is rendered by the Stage class
  *   It has methods to manipulate the File
  */
-import * as Config from '../config';
-import {SilexTasks} from '../service/silex-tasks';
-import {FileInfo} from '../types';
-import {Model} from '../types';
-import {View} from '../types';
-import {Stage} from '../view/stage';
-import {Property} from '../model/property';
-import {CloudStorage} from '../service/cloud-storage';
+import * as Config from '../config.js';
+import {SilexTasks} from '../service/silex-tasks.js';
+import {FileInfo} from '../types.js';
+import {Model} from '../types.js';
+import {View} from '../types.js';
+import {Stage} from '../view/stage.js';
+import {Property} from '../model/property.js';
+import {CloudStorage} from '../service/cloud-storage.js';
 
 /**
  * @param model  model class which holds the other models

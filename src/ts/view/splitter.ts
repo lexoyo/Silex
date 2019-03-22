@@ -1,5 +1,5 @@
-import {Controller} from '../types';
-import {Model} from '../types';
+import {Controller} from '../types.js';
+import {Model} from '../types.js';
 
 
 /**

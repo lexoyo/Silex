@@ -15,11 +15,11 @@
  */
 var {KeyCodes} = goog.require("goog:goog.events.KeyCodes");
 var {KeyboardShortcutHandler} = goog.require("goog:goog.ui.KeyboardShortcutHandler");
-import { CloudStorage } from '../../service/cloud-storage';
-import { Controller, FileInfo, Font, Model } from '../../types';
-import { Url } from '../../utils/url';
-import { SilexNotification } from '../../utils/notification';
-import { ModalDialog } from '../ModalDialog';
+import { CloudStorage } from '../../service/cloud-storage.js';
+import { Controller, FileInfo, Font, Model } from '../../types.js';
+import { Url } from '../../utils/url.js';
+import { SilexNotification } from '../../utils/notification.js';
+import { ModalDialog } from '../ModalDialog.js';
 
 /**
  * constant for all pane css classes

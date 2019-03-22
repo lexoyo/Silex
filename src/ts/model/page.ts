@@ -15,9 +15,9 @@
  *   It has methods to manipulate the pages
  *
  */
-import { Model, View } from '../types';
-import { SilexNotification } from '../utils/notification';
-import { Stage } from '../view/stage';
+import { Model, View } from '../types.js';
+import { SilexNotification } from '../utils/notification.js';
+import { Stage } from '../view/stage.js';
 
 /**
  * structure to store all of a page data

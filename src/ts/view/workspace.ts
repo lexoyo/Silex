@@ -1,4 +1,4 @@
-import closure = require('../../../node_modules/closure-library.ts/index');closure.register();
+import * as closure from '../../../node_modules/closure-library.ts/index.js';closure.register();
 
 /**
  * Silex, live web creation
@@ -19,9 +19,9 @@ import closure = require('../../../node_modules/closure-library.ts/index');closu
  *   redraw many times in the same key frame
  *
  */
-import { Controller, Model, View } from '../types';
-import { SilexNotification } from '../utils/notification';
-import { InvalidationManager } from '../utils/invalidation-manager';
+import { Controller, Model, View } from '../types.js';
+import { SilexNotification } from '../utils/notification.js';
+import { InvalidationManager } from '../utils/invalidation-manager.js';
 
 
 /**

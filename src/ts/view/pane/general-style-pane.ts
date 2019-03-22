@@ -14,10 +14,10 @@
  * Controls the general params of the selected component
  *
  */
-import {Model} from '../../types';
-import {Controller} from '../../types';
+import {Model} from '../../types.js';
+import {Controller} from '../../types.js';
 
-import {PaneBase} from './pane-base';
+import {PaneBase} from './pane-base.js';
 
 /**
  * on of Silex Editors class

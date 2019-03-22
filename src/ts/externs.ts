@@ -14,7 +14,7 @@
  * @fileoverview define externs for libs used in Silex
  */
 
-import { ComponentData } from './model/Data';
+import { ComponentData } from './model/Data.js';
 
 /**
  * @typedef {{
@@ -118,10 +118,12 @@ export interface UnifileResponse {
 /**
  * wysihtml library
  */
+export var wysihtml:any;
+
 // export declare var wysihtml:WysiHtml;
-export declare class wysihtml {
-  public static Editor: any;
-}
+// export declare class wysihtml {
+//   public static Editor: any;
+// }
 export interface WysiHtmlEditor {
   constructor(el: Element, options);
   focus(changePosition);

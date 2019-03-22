@@ -14,9 +14,9 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-import {Model} from '../types';
-import {View} from '../types';
-import {ControllerBase} from './controller-base';
+import {Model} from '../types.js';
+import {View} from '../types.js';
+import {ControllerBase} from './controller-base.js';
 const MENU_WIDTH = 35;
 const CONTEXT_MENU_HEIGHT = 35;
 

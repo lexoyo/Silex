@@ -16,7 +16,7 @@
  *
  */
 
-import {_paq} from '../externs';
+import {_paq} from '../externs.js';
 
 /**
  * the Silex Tracker class logs user actions

@@ -8,15 +8,25 @@ head
       background-color: #444;
     }
 
-  include ./templates/head.jade
 
+  script var exports = {};
   // Silex styles and code
-  script(type='text/javascript', src='js/admin.js')
+  script(src="https://requirejs.org/docs/release/2.3.6/minified/require.js")
+  script(src='js/src/ts/boot.js')
+  //- script(src='js/src/ts/index.js')
+  //- script(src="js/node_modules/google-closure-library/closure/goog/base.js")
+  //- script(src="js/node_modules/google-closure-library/closure/goog/ui/keyboardshortcuthandler.js")
+  //- script(src="js/node_modules/google-closure-library/closure/goog/events/eventtarget.js")
+  //- script(type='module', src='js/index.js')
+  //- script(type='module', src='js/src/ts/index.js')
+  //- script(type='text/javascript', src='js/admin.js')
   //- script(type='text/javascript', src='js/system.min.js')
   //- script(type='text/javascript', src='js/system.js')
 
   // all the css in the head with _styles.less imports
   link(rel='stylesheet', type='text/css', href='css/admin.css')
+
+  include ./templates/head.jade
 
 body.loading-pending.advanced-mode-off
   include ./templates/body.jade
@@ -26,8 +36,14 @@ body.loading-pending.advanced-mode-off
 
   // start Silex
   script(type='text/javascript').
-    console.log('starting Silex...', silex.App);
-    window.silexApp = new silex.App();
+    //- require(['js/src/ts/index.js'], function(indexValue) {
+    //-   console.log('boot', indexValue)
+    //- })
+    //- var x = require('./js/src/ts/index.js')
+    //- console.log('in the html', x)
+
+    //- console.log('starting Silex...', silex.App);
+    //- window.silexApp = new silex.App();
     // boot silex app
     //- require(['src/ts/app'], function(silex) {
     //-   console.log('starting application...', silex.App);

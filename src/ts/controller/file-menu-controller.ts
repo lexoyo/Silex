@@ -1,4 +1,4 @@
-import closure = require('../../../node_modules/closure-library.ts/index');closure.register();
+import * as closure from '../../../node_modules/closure-library.ts/index.js';closure.register();
 
 /**
  * Silex, live web creation
@@ -16,14 +16,14 @@ import closure = require('../../../node_modules/closure-library.ts/index');closu
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-import { FileInfo, Model, PublicationOptions, View, Provider } from '../types';
-import { SilexNotification } from '../utils/notification';
-import { FileExplorer } from '../view/dialog/file-explorer';
-import { PublishDialog } from '../view/dialog/PublishDialog';
-import { ControllerBase } from './controller-base';
-import { CloudStorage } from '../service/cloud-storage';
-import { Config } from '../config';
-import { SilexTasks } from '../service/silex-tasks';
+import { FileInfo, Model, PublicationOptions, View, Provider } from '../types.js';
+import { SilexNotification } from '../utils/notification.js';
+import { FileExplorer } from '../view/dialog/file-explorer.js';
+import { PublishDialog } from '../view/dialog/PublishDialog.js';
+import { ControllerBase } from './controller-base.js';
+import { CloudStorage } from '../service/cloud-storage.js';
+import { Config } from '../config.js';
+import { SilexTasks } from '../service/silex-tasks.js';
 
 /**
  * @param view  view class which holds the other views

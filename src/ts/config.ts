@@ -1,3 +1,6 @@
+var closure = require('../../node_modules/closure-library.ts/index');closure.register();
+// import * as closure from '../../node_modules/closure-library.ts/index.js';closure.register();
+
 /**
  * Silex, live web creation
  * http://projects.silexlabs.org/?/silex/
@@ -12,7 +15,9 @@
 /**
  * @fileoverview Silex config
  */
-var {KeyboardShortcutHandler} = goog.require("goog:goog.ui.KeyboardShortcutHandler");
+var {KeyboardShortcutHandler} = goog.require('goog:goog.ui.KeyboardShortcutHandler');
+// import {KeyboardShortcutHandler} from '../../node_modules/closure-library.ts/index.js';
+// import {KeyboardShortcutHandler} from '../../node_modules/closure-library.ts/closure-library/closure/goog/ui/keyboardshortcuthandler.js';
 
 // display an apple on mac and ctrl on windows and linux
 // var ctrlKeyMacDisplay = goog.userAgent.MAC ? '⌘' : '';

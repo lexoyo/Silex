@@ -13,10 +13,10 @@
  * @fileoverview
  *   This class is used to access Silex elements properties
  */
-import { Body } from '../model/body';
-import { Font, Model, View } from '../types';
-import { Style } from '../utils/style';
-import { ComponentData, CssRule, JsonData, ProdotypeData, ProdotypeTypes, SilexData, SilexId, StyleData, StyleName } from './Data';
+import { Body } from '../model/body.js';
+import { Font, Model, View } from '../types.js';
+import { Style } from '../utils/style.js';
+import { ComponentData, CssRule, JsonData, ProdotypeData, ProdotypeTypes, SilexData, SilexId, StyleData, StyleName } from './Data.js';
 
 
 
