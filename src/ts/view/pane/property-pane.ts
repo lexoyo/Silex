@@ -14,10 +14,10 @@
  *
  */
 
-import {Model} from '../../types.js';
-import {Controller} from '../../types.js';
-import {PaneBase} from './pane-base.js';
-import {SilexElement} from '../../model/element.js';
+import { goog } from '../../Goog.js';
+import { SilexElement } from '../../model/element.js';
+import { Controller, Model } from '../../types.js';
+import { PaneBase } from './pane-base.js';
 
 /**
  * on of Silex Editors class
@@ -33,7 +33,7 @@ export class PropertyPane extends PaneBase {
   /**
    * store the last selection
    */
-  selectedElements: Element[] = null;
+  selectedElements: HTMLElement[] = null;
 
   // position and size
   iAmRedrawing: boolean;
@@ -140,7 +140,7 @@ export class PropertyPane extends PaneBase {
 
       // apply the change to all elements
       this.selectedElements.forEach((element) => {
-        if (goog.isNumber(oldValue)) {
+        if (goog.Is.isNumber(oldValue)) {
           // compute the new value relatively to the old value,
           // in order to match the group movement
           let elementStyle = this.model.element.getStyle(element, name);
@@ -199,7 +199,7 @@ export class PropertyPane extends PaneBase {
    * @param  currentPageName   the name of the current page
    */
   redraw(
-      selectedElements: Element[], pageNames: string[],
+      selectedElements: HTMLElement[], pageNames: string[],
       currentPageName: string) {
     if (this.iAmSettingValue) {
       return;

@@ -19,8 +19,8 @@
  * of sticky lines on startDrag is asynchronous through the use of generators
  * and continuation
  */
-var GStyle = goog.require("goog:goog.style");
 
+import { goog } from '../Goog.js';
 import { Body } from '../model/body.js';
 import { SilexElement } from '../model/element.js';
 import { Page } from '../model/page.js';
@@ -315,9 +315,9 @@ export class DragSystem {
       if (follower.tagName.toUpperCase() !== 'BODY' &&
           !follower.classList.contains(
               Body.PREVENT_RESIZABLE_CLASS_NAME)) {
-        let pos = GStyle.getPosition(follower);
-        let offsetPosX = pos.x;
-        let offsetPosY = pos.y;
+        let pos = goog.Style.getBounds(follower);
+        let offsetPosX = pos.left;
+        let offsetPosY = pos.top;
         let offsetSizeX = offsetX;
         let offsetSizeY = offsetY;
 
@@ -357,8 +357,8 @@ export class DragSystem {
             offsetSizeX = -offsetSizeX;
             break;
         }
-        const size = GStyle.getSize(follower);
-        const borderBox = GStyle.getBorderBox(follower);
+        const size = goog.Style.getBounds(follower);
+        const borderBox = goog.Style.getBounds(follower);
         const style = win.getComputedStyle(follower);
         const paddingBox = {
           left: parseInt(style.paddingLeft, 10),
@@ -499,14 +499,14 @@ export class DragSystem {
       if (this.isDraggable(follower)) {
         // do not do this anymore because the element is moved to the body
         // during drag so its position is wrong: update the toolboxes to display
-        // the position during drag let pos = GStyle.getPosition(follower);
-        // let finalY = Math.round(pos.y + offsetY);
-        // let finalX = Math.round(pos.x + offsetX);
+        // the position during drag let pos = goog.Style.getBounds(follower);
+        // let finalY = Math.round(pos.top + offsetY);
+        // let finalX = Math.round(pos.left + offsetX);
         // this.controller.stageController.styleChanged('top', finalY + 'px',
         // [follower], false);
         // this.controller.stageController.styleChanged('left', finalX + 'px',
         // [follower], false); move the element let pos =
-        // GStyle.getPosition(follower);
+        // goog.Style.getBounds(follower);
         let left = parseInt(this.model.element.getStyle(follower, 'left'), 10);
         let top = parseInt(this.model.element.getStyle(follower, 'top'), 10);
         this.model.element.setStyle(
@@ -519,13 +519,13 @@ export class DragSystem {
 
   isDraggable(element) {
     return element.tagName.toUpperCase() !== 'BODY' &&
-        !goog.dom.getAncestorByClass(
-            element.parentNode, SilexElement.SELECTED_CLASS_NAME) &&
+        !goog.Dom.getAncestorByClass(
+            element.parentElement, SilexElement.SELECTED_CLASS_NAME) &&
         !element.classList.contains(
             Body.PREVENT_DRAGGABLE_CLASS_NAME);
   }
 
-  getBoundingBox(win, element: Element):
+  getBoundingBox(win, element: HTMLElement):
       {left: number, right: number, top: number, bottom: number} {
     const box = (() => {
       if (this.view.workspace.getMobileEditor()) {
@@ -543,15 +543,15 @@ export class DragSystem {
       const computedHeight =
           parseInt(win.getComputedStyle(element).height || 0, 10);
       const height = Math.max(computedHeight, parseInt(box['min-height'], 10));
-      const elementPos = GStyle.getPageOffset(element);
+      const elementPos = goog.Style.getBounds(element);
       return {
-        'left': elementPos.x,
+        'left': elementPos.left,
         // parseInt(box.left, 10),
-        'right': elementPos.x + parseInt(box.width, 10),
+        'right': elementPos.left + parseInt(box.width, 10),
         // parseInt(box.left, 10) + parseInt(box.width, 10),
-        'top': elementPos.y,
+        'top': elementPos.top,
         // parseInt(box.top, 10),
-        'bottom': elementPos.y + height
+        'bottom': elementPos.top + height
       };
     } else {
       console.error('could not get bounding box of', element);

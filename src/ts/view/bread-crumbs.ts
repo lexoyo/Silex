@@ -74,7 +74,7 @@ export class BreadCrumbs {
         let parents = [];
         while (elem && elem.tagName !== 'HTML') {
           parents.unshift(elem);
-          elem = elem.parentNode;
+          elem = elem.parentElement;
         }
         return parents;
       }
@@ -101,7 +101,7 @@ export class BreadCrumbs {
 
       // empty current bread crumbs
       while (this.element.childNodes.length) {
-        this.removeCrumb((this.element.childNodes[0] as Element));
+        this.removeCrumb((this.element.childNodes[0] as HTMLElement));
       }
 
       // create a button for each ancester
@@ -141,7 +141,7 @@ export class BreadCrumbs {
   /**
    * remove events and deletes a bread crumb
    */
-  removeCrumb(crumb: Element) {
+  removeCrumb(crumb: HTMLElement) {
     this.element.removeChild(crumb);
   }
 }

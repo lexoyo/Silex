@@ -158,9 +158,9 @@ export class Dom {
    *     contentDocument of the website
    * @param selector, CSS selector of the elements containing the components or
    *     styles
+   * FIXME: use Array.from
    */
-  static getElementsAsArray(parentNode: Element|Document, selector: string):
-      Element[] {
+  static getElementsAsArray(parentNode: HTMLElement|Document, selector: string): HTMLElement[] {
         console.warn('TODO: use Array.from')
     // get all elements which are components
     const components = parentNode.querySelectorAll(selector);

@@ -82,7 +82,7 @@ super(model, view);
         this.model.body.getSelection()
             .map((element) => {
               if (this.model.element.isSectionContent(element)) {
-                return element.parentNode;
+                return element.parentElement;
               } else {
                 return element;
               }
@@ -120,7 +120,7 @@ super(model, view);
    * this is needed to "freez" elements properties
    * return {silex.types.ClipboardItem}
    */
-  recursiveCopy(element: Element) {
+  recursiveCopy(element: HTMLElement) {
     // duplicate the node
     let res = {
       element: element,
@@ -135,7 +135,7 @@ super(model, view);
         SilexElement.TYPE_CONTAINER) {
       const len = res.element.childNodes.length;
       for (let idx = 0; idx < len; idx++) {
-        const el = (res.element.childNodes[idx] as Element);
+        const el = (res.element.childNodes[idx] as HTMLElement);
         if (el.nodeType === 1 && this.model.element.getType(el) !== null) {
           res.children.push(this.recursiveCopy(el));
         }
@@ -189,7 +189,7 @@ super(model, view);
    * also reset the ID of the element and its children
    * the elements have already been added to stage
    */
-  recursivePaste(clipboardItem: ClipboardItem): Element {
+  recursivePaste(clipboardItem: ClipboardItem): HTMLElement {
     let element = clipboardItem.element;
 
     // reset the ID
@@ -292,10 +292,10 @@ super(model, view);
   /**
    * get the index of the element in the DOM
    */
-  indexOfElement(element: Element): number {
-    let len = element.parentNode.childNodes.length;
+  indexOfElement(element: HTMLElement): number {
+    let len = element.parentElement.childNodes.length;
     for (let idx = 0; idx < len; idx++) {
-      if (element.parentNode.childNodes[idx] === element) {
+      if (element.parentElement.childNodes[idx] === element) {
         return idx;
       }
     }

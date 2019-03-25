@@ -28,7 +28,7 @@ export interface MenuShortcut {
 export class Keyboard {
   shortcuts: any;
 
-  static isInput(target: Element) {
+  static isInput(target: HTMLElement) {
     return !target.tagName ||
         // this is in-iframe forwarding case
         target.tagName.toUpperCase() === 'INPUT' ||
@@ -88,7 +88,7 @@ export class Keyboard {
                      !!shortcut.s.ctrlKey === e.ctrlKey) &&
           (
                  // not when in an input field
-                 shortcut.s.input !== false || !Keyboard.isInput((e.target as Element)));
+                 shortcut.s.input !== false || !Keyboard.isInput((e.target as HTMLElement)));
     });
   }
 }

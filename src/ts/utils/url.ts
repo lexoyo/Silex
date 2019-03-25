@@ -13,8 +13,6 @@
  * @fileoverview Helper class for common tasks
  *
  */
-var {XhrIo} = goog.require("goog:goog.net.XhrIo");
-var {Uri} = goog.require("goog:goog.Uri");
 
 import {FileInfo} from '../types.js';
 

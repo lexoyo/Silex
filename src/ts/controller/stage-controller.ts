@@ -14,10 +14,11 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-import {Model} from '../types.js';
-import {View} from '../types.js';
 
-import {ControllerBase} from './controller-base.js';
+import { goog } from '../Goog.js';
+import { Model, View } from '../types.js';
+import { ControllerBase } from './controller-base.js';
+
 
 /**
  * @param view  view class which holds the other views
@@ -61,7 +62,7 @@ export class StageController extends ControllerBase {
    */
   deselect(target: HTMLElement) {
     let selection = this.model.body.getSelection();
-    goog.array.remove(selection, target);
+    selection.splice(selection.indexOf(target), 1);
     this.model.body.setSelection(selection);
   }
 
@@ -81,21 +82,21 @@ export class StageController extends ControllerBase {
    * @param container the container
    * @param element the dropped element
    */
-  newContainer(container: Element, element: Element) {
+  newContainer(container: HTMLElement, element: HTMLElement) {
     // initial positions
-    let elementPos = goog.style.getPageOffset(element);
-    let newContainerPos = goog.style.getPageOffset(container);
+    let elementPos = goog.Style.getBounds(element);
+    let newContainerPos = goog.Style.getBounds(container);
 
     // move to the new container
-    element.parentNode.removeChild(element);
+    element.parentElement.removeChild(element);
     container.appendChild(element);
 
     // restore position
     this.styleChanged(
-        'left', Math.round(elementPos['x'] - newContainerPos['x']) + 'px', [element],
+        'left', Math.round(elementPos.left - newContainerPos.left) + 'px', [element],
         false);
     this.styleChanged(
-        'top', Math.round(elementPos['y'] - newContainerPos['y']) + 'px', [element],
+        'top', Math.round(elementPos.top - newContainerPos.top) + 'px', [element],
         false);
 
     // check if a parent is visible only on some pages,

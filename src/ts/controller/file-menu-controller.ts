@@ -1,5 +1,3 @@
-import * as closure from '../../../node_modules/closure-library.ts/index.js';closure.register();
-
 /**
  * Silex, live web creation
  * http://projects.silexlabs.org/?/silex/

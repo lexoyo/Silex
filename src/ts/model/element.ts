@@ -15,16 +15,14 @@
  *   It has methods to manipulate the DOM elements
  *      created by new silex.model.SilexElement().createElement
  */
-var {EventType} = goog.require("goog:goog.net.EventType");
-var {ImageLoader} = goog.require("goog:goog.net.ImageLoader");
-var {GString} = goog.require("goog:goog.string");
 
+import { goog } from '../Goog.js';
+import { Body } from '../model/body.js';
 import { Model, View } from '../types.js';
-import {Url} from '../utils/url.js';
+import { Dom } from '../utils/dom.js';
+import { Style } from '../utils/style.js';
+import { Url } from '../utils/url.js';
 import { TemplateName } from './Data.js';
-import {Style} from '../utils/style.js';
-import {Body} from '../model/body.js';
-import {Dom} from '../utils/dom.js';
 
 
 /**
@@ -153,7 +151,7 @@ export class SilexElement {
    */
   noSectionContent(element) {
     if (this.isSectionContent(element)) {
-      return (element.parentNode as Element);
+      return (element.parentElement as HTMLElement);
     }
     return element;
   }
@@ -164,7 +162,7 @@ export class SilexElement {
    * @return           the type of element
    * example: for a container this will return "container"
    */
-  getType(element: Element): string {
+  getType(element: HTMLElement): string {
     return element.getAttribute(SilexElement.TYPE_ATTR);
   }
 
@@ -173,7 +171,7 @@ export class SilexElement {
    * @return true if `element` is a an element's content (the element in an
    *     image, html box, section...)
    */
-  isElementContent(element: Element): any {
+  isElementContent(element: HTMLElement): any {
     return element.classList.contains(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
   }
 
@@ -181,7 +179,7 @@ export class SilexElement {
    * @param element   created by silex
    * @return true if `element` is a section
    */
-  isSection(element: Element): boolean {
+  isSection(element: HTMLElement): boolean {
     if (!element || !element.classList) {
       return false;
     }
@@ -192,7 +190,7 @@ export class SilexElement {
    * @param element   created by silex
    * @return true if `element` is the content container of a section
    */
-  isSectionContent(element: Element): boolean {
+  isSectionContent(element: HTMLElement): boolean {
     if (!element || !element.classList) {
       return false;
     }
@@ -206,7 +204,7 @@ export class SilexElement {
    * get/set the "hide on mobile" property
    * @return true if the element is hidden on mobile
    */
-  getHideOnMobile(element: Element): boolean {
+  getHideOnMobile(element: HTMLElement): boolean {
     if (!element || !element.classList) {
       return false;
     }
@@ -221,7 +219,7 @@ export class SilexElement {
    * get/set the "hide on mobile" property
    * @param hide, true if the element has to be hidden on mobile
    */
-  setHideOnMobile(element: Element, hide: boolean) {
+  setHideOnMobile(element: HTMLElement, hide: boolean) {
     if (hide) {
       this.noSectionContent(element).classList.add(SilexElement.HIDE_ON_MOBILE);
     } else {
@@ -233,7 +231,7 @@ export class SilexElement {
    * get/set the "hide on desktop" property
    * @return true if the element is hidden on desktop
    */
-  getHideOnDesktop(element: Element): boolean {
+  getHideOnDesktop(element: HTMLElement): boolean {
     if (!element || !element.classList) {
       return false;
     }
@@ -248,7 +246,7 @@ export class SilexElement {
    * get/set the "hide on desktop" property
    * @param hide, true if the element has to be hidden on desktop
    */
-  setHideOnDesktop(element: Element, hide: boolean) {
+  setHideOnDesktop(element: HTMLElement, hide: boolean) {
     if (hide) {
       this.noSectionContent(element).classList.add(SilexElement.HIDE_ON_DESKTOP);
     } else {
@@ -261,7 +259,7 @@ export class SilexElement {
    * @param element   created by silex, either a text box, image, ...
    * @return           the styles of the element
    */
-  getAllStyles(element: Element): string {
+  getAllStyles(element: HTMLElement): string {
     let styleObject = this.model.property.getStyle(element);
     let styleStr = Style.styleToString(styleObject);
     return styleStr;
@@ -273,8 +271,8 @@ export class SilexElement {
    * @param styleName  the style name
    * @return           the style of the element
    */
-  getStyle(element: Element, styleName: string): string {
-    const cssName = GString.toSelectorCase(styleName);
+  getStyle(element: HTMLElement, styleName: string): string {
+    const cssName = goog.String.toSelectorCase(styleName);
     const isMobile = this.view.workspace.getMobileEditor();
     let styleObject = this.model.property.getStyle(element, isMobile);
     if (styleObject && styleObject[cssName]) {
@@ -300,10 +298,10 @@ export class SilexElement {
    *     css class, default is false
    */
   setStyle(
-      element: Element, styleName: string, opt_styleValue?: string,
+      element: HTMLElement, styleName: string, opt_styleValue?: string,
       opt_preserveJustAdded?: boolean) {
     // convert to css case
-    styleName = GString.toSelectorCase(styleName);
+    styleName = goog.String.toSelectorCase(styleName);
 
     // remove the 'just pasted' class
     if (!opt_preserveJustAdded) {
@@ -318,7 +316,7 @@ export class SilexElement {
 
     // apply the new style
     if (styleObject[styleName] !== opt_styleValue) {
-      if (goog.isDefAndNotNull(opt_styleValue)) {
+      if (goog.Is.isDefAndNotNull(opt_styleValue)) {
         styleObject[styleName] = opt_styleValue;
       } else {
         styleObject[styleName] = '';
@@ -337,12 +335,12 @@ export class SilexElement {
    * example: element.setProperty(imgElement, 'style', 'top: 5px; left: 30px;')
    */
   setProperty(
-      element: Element, propertyName: string,
+      element: HTMLElement, propertyName: string,
       opt_propertyValue?: string, opt_applyToContent?: boolean) {
     if (opt_applyToContent) {
       element = this.getContentNode(element);
     }
-    if (goog.isDefAndNotNull(opt_propertyValue)) {
+    if (goog.Is.isDefAndNotNull(opt_propertyValue)) {
       element.setAttribute(propertyName, (opt_propertyValue as string));
     } else {
       element.removeAttribute(propertyName);
@@ -352,7 +350,7 @@ export class SilexElement {
   /**
    * @param url    URL of the image chosen by the user
    */
-  setBgImage(element: Element, url: string) {
+  setBgImage(element: HTMLElement, url: string) {
     if (url) {
       this.setStyle(element, 'backgroundImage', Url.addUrlKeyword(url));
     } else {
@@ -368,7 +366,7 @@ export class SilexElement {
    * @param element  created by silex, either a text box, image, ...
    * @return  the html content
    */
-  getInnerHtml(element: Element): string {
+  getInnerHtml(element: HTMLElement): string {
     let innerHTML = this.getContentNode(element).innerHTML;
 
     // put back executable scripts
@@ -381,7 +379,7 @@ export class SilexElement {
    * @param element  created by silex, either a text box, image, ...
    * @param innerHTML the html content
    */
-  setInnerHtml(element: Element, innerHTML: string) {
+  setInnerHtml(element: HTMLElement, innerHTML: string) {
     // get the container of the html content of the element
     let contentNode = this.getContentNode(element);
 
@@ -397,7 +395,7 @@ export class SilexElement {
    * @param element  created by silex, either a text box, image, ...
    * @return  the element which holds the content, i.e. a div, an image, ...
    */
-  getContentNode(element: Element): Element {
+  getContentNode(element: HTMLElement): HTMLElement {
     return element.querySelector(
                ':scope > .' + SilexElement.ELEMENT_CONTENT_CLASS_NAME) ||
         element;
@@ -406,7 +404,7 @@ export class SilexElement {
   /**
    * move the element up/down the DOM
    */
-  move(element: Element, direction: DomDirection) {
+  move(element: HTMLElement, direction: DomDirection) {
     // do not move a section's container content, but the section itself
     element = this.noSectionContent(element);
     switch (direction) {
@@ -414,22 +412,22 @@ export class SilexElement {
         let nextSibling = this.getNextElement(element, true);
         if (nextSibling) {
           // insert after
-          element.parentNode.insertBefore(nextSibling, element);
+          element.parentElement.insertBefore(nextSibling, element);
         }
         break;
       case DomDirection.DOWN:
         let prevSibling = this.getNextElement(element, false);
         if (prevSibling) {
           // insert before
-          element.parentNode.insertBefore(prevSibling, element.nextSibling);
+          element.parentElement.insertBefore(prevSibling, element.nextSibling);
         }
         break;
       case DomDirection.TOP:
-        element.parentNode.appendChild(element);
+        element.parentElement.appendChild(element);
         break;
       case DomDirection.BOTTOM:
-        element.parentNode.insertBefore(
-            element, element.parentNode.childNodes[0]);
+        element.parentElement.insertBefore(
+            element, element.parentElement.childNodes[0]);
         break;
     }
 
@@ -441,11 +439,11 @@ export class SilexElement {
    * get the previous or next element in the DOM, which is a Silex element
    * @param forward if true look for the next element, if false for the previous
    */
-  getNextElement(element: Element, forward: boolean): Element {
+  getNextElement(element: HTMLElement, forward: boolean): HTMLElement {
     let node = (element as Node);
     while (node = forward ? node.nextSibling : node.previousSibling) {
       if (node.nodeType === 1) {
-        const el = (node as Element);
+        const el = (node as HTMLElement);
 
         // candidates are the elements which are visible in the current page, or
         // visible everywhere (not paged)
@@ -464,7 +462,7 @@ export class SilexElement {
    * @param element  container created by silex which contains an image
    * @return  the url of the image
    */
-  getImageUrl(element: Element): string {
+  getImageUrl(element: HTMLElement): string {
     let url = '';
     if (element.getAttribute(SilexElement.TYPE_ATTR) === SilexElement.TYPE_IMAGE) {
       // get the image tag
@@ -489,18 +487,18 @@ export class SilexElement {
    * @param opt_errorCallback the callback to be notified of errors
    */
   setImageUrl(
-      element: Element, url: string,
-      opt_callback?: ((p1: Element, p2: Element) => any),
-      opt_errorCallback?: ((p1: Element, p2: string) => any)) {
+      element: HTMLElement, url: string,
+      opt_callback?: ((p1: HTMLElement, p2: HTMLElement) => any),
+      opt_errorCallback?: ((p1: HTMLElement, p2: string) => any)) {
     if (element.getAttribute(SilexElement.TYPE_ATTR) === SilexElement.TYPE_IMAGE) {
       // get the image tag
       const img = this.getContentNode(element) as HTMLImageElement;
       if (img) {
         // img.innerHTML = '';
         // listen to the complete event
-        let imageLoader = new ImageLoader();
-        goog.events.listenOnce(
-            imageLoader, goog.events.EventType.LOAD, function(e: Event) {
+        let imageLoader = new goog.ImageLoader();
+        goog.Event.listenOnce(
+            imageLoader, goog.EventType.LOAD, function(e: Event) {
               // handle the loaded image
               const loadedImg = e.target as HTMLImageElement;
 
@@ -518,7 +516,7 @@ export class SilexElement {
               }
 
               // add the image to the element
-              goog.dom.appendChild(element, loadedImg);
+              element.appendChild(loadedImg);
 
               // add a marker to find the inner content afterwards, with
               // getContent
@@ -534,7 +532,7 @@ export class SilexElement {
               // redraw tools
               this.model.body.setSelection(this.model.body.getSelection());
             }, true, this);
-        goog.events.listenOnce(imageLoader, EventType.ERROR, function(e) {
+        goog.Event.listenOnce(imageLoader, goog.EventType.ERROR, function(e) {
           console.error(
               'An error occured while loading the image.', element, e);
 
@@ -549,10 +547,9 @@ export class SilexElement {
         element.classList.add(SilexElement.LOADING_ELEMENT_CSS_CLASS);
 
         // remove previous img tag
-        let imgTags = goog.dom.getElementsByTagNameAndClass(
-            'img', SilexElement.ELEMENT_CONTENT_CLASS_NAME, element);
-        if (imgTags.length > 0) {
-          goog.dom.removeNode(imgTags[0]);
+        let imgTags = element.querySelectorAll('img.' + SilexElement.ELEMENT_CONTENT_CLASS_NAME);
+        while (imgTags.length > 0) {
+          imgTags[0].parentElement.removeChild(imgTags[0]);
         }
 
         // load the image
@@ -578,20 +575,20 @@ export class SilexElement {
    * remove a DOM element
    * @param element   the element to remove
    */
-  removeElement(element: Element) {
+  removeElement(element: HTMLElement) {
     // never delete sections container content, but the section itself
     element = this.noSectionContent(element);
 
     // check this is allowed, i.e. an element inside the stage container
     if (this.model.body.getBodyElement() !== element &&
-        goog.dom.contains(this.model.body.getBodyElement(), element)) {
+        this.model.body.getBodyElement().contains(element)) {
       // remove style and component data
       this.model.property.setElementComponentData(element);
       this.model.property.setStyle(element, null, true);
       this.model.property.setStyle(element, null, false);
 
       // remove the element
-      goog.dom.removeNode(element);
+      element.parentElement.removeChild(element);
     } else {
       console.error(
           'could not delete', element,
@@ -603,12 +600,12 @@ export class SilexElement {
    * append an element to the stage
    * handles undo/redo
    */
-  addElement(container: Element, element: Element) {
+  addElement(container: HTMLElement, element: HTMLElement) {
     // for sections, force body
     if (this.isSection(element)) {
       container = this.model.body.getBodyElement();
     }
-    goog.dom.appendChild(container, element);
+    container.appendChild(element);
 
     // add the class to keep the element above all others
     element.classList.add(SilexElement.JUST_ADDED_CLASS_NAME);
@@ -626,7 +623,7 @@ export class SilexElement {
    * @param element    the element to add
    * @param opt_offset an offset to apply to its position (x and y)
    */
-  addElementDefaultPosition(element: Element, opt_offset?: number) {
+  addElementDefaultPosition(element: HTMLElement, opt_offset?: number) {
     opt_offset = opt_offset || 0;
 
     // find the container (main background container or the stage)
@@ -638,7 +635,7 @@ export class SilexElement {
 
     // take the scroll into account (drop at (100, 100) from top left corner of
     // the window, not the stage)
-    const bbContainer = goog.style.getBounds(container);
+    const bbContainer = goog.Style.getBounds(container);
     console.warn('TODO: check that this has left and top:', bbContainer);
     const offsetX = posX + this.view.stage.getScrollX() - bbContainer['left'];
     const offsetY = posY + this.view.stage.getScrollY() - bbContainer['top'];
@@ -662,7 +659,7 @@ export class SilexElement {
    * @param y position in px
    * @return the container element under (x, y)
    */
-  getBestContainerForNewElement(x: number, y: number): Element {
+  getBestContainerForNewElement(x: number, y: number): HTMLElement {
     // let dropZone = this.view.stage.getDropZone(x, y) || {'element':
     // this.model.body.getBodyElement(), 'zIndex': 0}; return dropZone.element;
     return this.model.body.getBodyElement();
@@ -671,7 +668,7 @@ export class SilexElement {
   /**
    * init the element depending on its type
    */
-  initElement(element: Element) {
+  initElement(element: HTMLElement) {
     // default style
     let defaultStyle = {};
     defaultStyle['width'] = SilexElement.INITIAL_ELEMENT_SIZE + 'px';
@@ -733,7 +730,7 @@ export class SilexElement {
    * Add UI to resize elements. This is usually done on the server side but when
    * the client side adds an element it does add UIs itself.
    */
-  initUiHandles(element: Element) {
+  initUiHandles(element: HTMLElement) {
       [
         'ui-resizable-n', 'ui-resizable-s', 'ui-resizable-e',
         'ui-resizable-w', 'ui-resizable-ne', 'ui-resizable-nw',
@@ -743,7 +740,7 @@ export class SilexElement {
               this.model.file.getContentDocument().createElement('div');
           handle.classList.add(className);
           handle.classList.add('ui-resizable-handle');
-          goog.dom.appendChild(element, handle);
+          element.appendChild(handle);
         });
   }
 
@@ -755,7 +752,7 @@ export class SilexElement {
    *    see TYPE_* constants of the class @see silex.model.SilexElement
    * @return   the newly created element
    */
-  createElement(type: string): Element {
+  createElement(type: string): HTMLElement {
     // create the element
     let element = null;
     switch (type) {
@@ -801,23 +798,23 @@ export class SilexElement {
    * element creation method for a given type
    * called from createElement
    */
-  createContainerElement(): Element {
+  createContainerElement(): HTMLElement {
     // create the conatiner
-    let element = goog.dom.createElement('div');
+    let element = this.model.file.getContentDocument().createElement('div');
     element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_CONTAINER);
     return element;
   }
 
-  createElementWithContent(className: string): Element {
+  createElementWithContent(className: string): HTMLElement {
     // create the element
-    let element = goog.dom.createElement('div');
+    let element = this.model.file.getContentDocument().createElement('div');
     element.setAttribute(SilexElement.TYPE_ATTR, className);
 
     // create the container for text content
-    let content = goog.dom.createElement('div');
+    let content = this.model.file.getContentDocument().createElement('div');
 
     // add empty content
-    goog.dom.appendChild(element, content);
+    element.appendChild(content);
 
     // add a marker to find the inner content afterwards, with getContent
     content.classList.add(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
@@ -830,9 +827,9 @@ export class SilexElement {
    * element creation method for a given type
    * called from createElement
    */
-  createSectionElement(): Element {
+  createSectionElement(): HTMLElement {
     // create the element
-    let element = goog.dom.createElement('div');
+    let element = this.model.file.getContentDocument().createElement('div');
     element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_CONTAINER);
     element.classList.add(Body.PREVENT_DRAGGABLE_CLASS_NAME);
     element.classList.add(SilexElement.TYPE_CONTAINER + '-element');
@@ -854,7 +851,7 @@ export class SilexElement {
    * element creation method for a given type
    * called from createElement
    */
-  createTextElement(): Element {
+  createTextElement(): HTMLElement {
     // create the element
     let element = this.createElementWithContent(SilexElement.TYPE_TEXT);
 
@@ -875,15 +872,15 @@ export class SilexElement {
    * element creation method for a given type
    * called from createElement
    */
-  createHtmlElement(): Element {
+  createHtmlElement(): HTMLElement {
     // create the element
-    let element = goog.dom.createElement('div');
+    let element = this.model.file.getContentDocument().createElement('div');
     element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_HTML);
 
     // create the container for html content
-    let htmlContent = goog.dom.createElement('div');
+    let htmlContent = this.model.file.getContentDocument().createElement('div');
     htmlContent.innerHTML = '<p>New HTML box</p>';
-    goog.dom.appendChild(element, htmlContent);
+    element.appendChild(htmlContent);
 
     // add a marker to find the inner content afterwards, with getContent
     htmlContent.classList.add(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
@@ -894,9 +891,9 @@ export class SilexElement {
    * element creation method for a given type
    * called from createElement
    */
-  createImageElement(): Element {
+  createImageElement(): HTMLElement {
     // create the element
-    let element = goog.dom.createElement('div');
+    let element = this.model.file.getContentDocument().createElement('div');
     element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_IMAGE);
     return element;
   }
@@ -907,7 +904,7 @@ export class SilexElement {
    *         or an internal link (beginning with #!)
    *         or null to remove the link
    */
-  setLink(element: Element, opt_link?: string) {
+  setLink(element: HTMLElement, opt_link?: string) {
     if (opt_link) {
       element.setAttribute(SilexElement.LINK_ATTR, opt_link);
     } else {
@@ -918,7 +915,7 @@ export class SilexElement {
   /**
    * set/get a "silex style link" on an element
    */
-  getLink(element: Element): string {
+  getLink(element: HTMLElement): string {
     return element.getAttribute(SilexElement.LINK_ATTR);
   }
 
@@ -928,7 +925,7 @@ export class SilexElement {
    * @param element   created by silex, either a text box, image, ...
    * @return           the value for this styleName
    */
-  getClassName(element: Element): string {
+  getClassName(element: HTMLElement): string {
     const pages = this.model.page.getPages();
     let componentCssClasses = [];
     if (this.model.component.isComponent(element)) {
@@ -957,7 +954,7 @@ export class SilexElement {
    * @param element   created by silex, either a text box, image, ...
    * @param opt_className  the class names, or null to reset
    */
-  setClassName(element: Element, opt_className?: string) {
+  setClassName(element: HTMLElement, opt_className?: string) {
     // compute class names to keep, no matter what
     // i.e. the one which are in element.className + in Silex internal classes
     let pages = this.model.page.getPages();
@@ -988,7 +985,7 @@ export class SilexElement {
    * returns 'height' or 'minHeight' depending on the element type
    * @return 'height' or 'minHeight' depending on the element type
    */
-  getHeightStyleName(element: Element): string {
+  getHeightStyleName(element: HTMLElement): string {
     if (element.classList.contains(Body.SILEX_USE_HEIGHT_NOT_MINHEIGHT)) {
       return 'height';
     }

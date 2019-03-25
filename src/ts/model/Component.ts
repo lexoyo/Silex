@@ -31,8 +31,8 @@ import { SilexNotification } from '../utils/notification.js';
 export class Component {
   prodotypeComponent: Prodotype = null;
   prodotypeStyle: Prodotype = null;
-  componentEditorElement: Element = null;
-  styleEditorElement: Element = null;
+  componentEditorElement: HTMLElement = null;
+  styleEditorElement: HTMLElement = null;
   readyCbkArr: ((p1: Object) => any)[] = [];
   linkDialog: LinkDialog;
 
@@ -109,7 +109,7 @@ export class Component {
    * Component.COMPONENT_TYPE)
    * @return true if el is a component (not only an element)
    */
-  isComponent(el: Element): boolean {
+  isComponent(el: HTMLElement): boolean {
     return el.classList.contains(Component.COMPONENT_CLASS_NAME);
   }
 
@@ -127,7 +127,7 @@ export class Component {
    * @param element component just added
    * @param templateName type of component
    */
-  initComponent(element: Element, templateName: string) {
+  initComponent(element: HTMLElement, templateName: string) {
     const name = this.prodotypeComponent.createName(
         templateName, this.getProdotypeComponents(Component.COMPONENT_TYPE));
 
@@ -178,7 +178,7 @@ export class Component {
    * used when the component is created, or duplicated (paste)
    * @param element component to render
    */
-  render(element: Element, opt_cbk?: (() => any)) {
+  render(element: HTMLElement, opt_cbk?: (() => any)) {
     this.renderType(element, Component.COMPONENT_TYPE, () => {
       this.renderType(element, Component.STYLE_TYPE, opt_cbk);
     });
@@ -199,7 +199,7 @@ export class Component {
    * render a component or style
    */
   renderType(
-      element: Element, type: SilexId|StyleName,
+      element: HTMLElement, type: SilexId|StyleName,
       opt_cbk?: (() => any)) {
     const data = type === Component.COMPONENT_TYPE ?
         this.model.property.getElementComponentData(element) :
@@ -261,7 +261,7 @@ export class Component {
    * this is useful when we render a template, since the scripts are executed
    * only when the page loads
    */
-  executeScripts(element: Element) {
+  executeScripts(element: HTMLElement) {
     // execute the scripts
     const scripts = element.querySelectorAll('script');
     for (let idx = 0; idx < scripts.length; idx++) {
@@ -272,7 +272,7 @@ export class Component {
   /**
    * apply a style to an element
    */
-  applyStyleTo(element: Element, styleObj: Object) {
+  applyStyleTo(element: HTMLElement, styleObj: Object) {
     const style = this.model.property.getStyle(element, false) || {};
     for (let name in styleObj) {
       style[name] = styleObj[name];
@@ -356,7 +356,7 @@ export class Component {
    * @param parentElement, the element whose children we want to save
    * @return an HTML fragment with the editable children in it
    */
-  saveEditableChildren(parentElement: Element): DocumentFragment {
+  saveEditableChildren(parentElement: HTMLElement): DocumentFragment {
     const fragment = document.createDocumentFragment();
     for (let i = 0, el; el = parentElement.children[i]; i++) {
       if (el.classList.contains('editable-style')) {
@@ -369,7 +369,7 @@ export class Component {
   /**
    * @param element, the component to edit
    */
-  editComponent(element: Element) {
+  editComponent(element: HTMLElement) {
     if (this.isComponent(element)) {
       const componentData =
           this.model.property.getElementComponentData(element);

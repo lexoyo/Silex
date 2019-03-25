@@ -60,7 +60,7 @@ export class ModalDialog {
 
   constructor(options: {
     name: string,
-    element: Element,
+    element: HTMLElement,
     onOpen: (p1?: any) => any,
     onClose: () => any
   }) {

@@ -15,17 +15,16 @@
  *   and retrieve information about it
  *
  */
-var events = goog.require("goog:goog.events");
-var {MouseWheelHandler} = goog.require("goog:goog.events.MouseWheelHandler");
-
-
+import { goog } from '../Goog.js';
+import { Body } from '../model/body.js';
+import { SilexElement } from '../model/element.js';
+import { Page } from '../model/page.js';
 import { Controller, Model } from '../types.js';
 import { InvalidationManager } from '../utils/invalidation-manager.js';
 import { Keyboard, Shortcut } from '../utils/Keyboard.js';
 import { ContextMenu } from '../view/context-menu.js';
-import { Body } from '../model/body.js';
-import { SilexElement } from '../model/element.js';
-import { Page } from '../model/page.js';
+
+
 
 /**
  * the Silex stage class
@@ -160,30 +159,30 @@ export class Stage {
    */
   buildUi() {
     // Disable horizontal scrolling for Back page on Mac OS, over Silex UI
-    events.listen(
-        new MouseWheelHandler(document.body),
-        MouseWheelHandler.EventType.MOUSEWHEEL, this.onPreventBackSwipe, false,
+    goog.Event.listen(
+        new goog.MouseWheelHandler(document.body),
+        goog.EventType.MOUSEWHEEL, this.onPreventBackSwipe, false,
         this);
 
     // Disable horizontal scrolling for Back page on Mac OS
     // on the iframe
-    events.listen(
-        new MouseWheelHandler(this.element),
-        MouseWheelHandler.EventType.MOUSEWHEEL, this.onPreventBackSwipe, false,
+    goog.Event.listen(
+        new goog.MouseWheelHandler(this.element),
+        goog.EventType.MOUSEWHEEL, this.onPreventBackSwipe, false,
         this);
 
     // listen on body too because user can release the mouse over the tool boxes
-    events.listen(document.body, 'mouseup', this.onMouseUpOverUi, false, this);
+    goog.Event.listen(document.body, 'mouseup', this.onMouseUpOverUi, false, this);
 
     // listen on body too because user can release
     // on the tool boxes
-    events.listen(
+    goog.Event.listen(
         document.body, 'mousemove', this.onMouseMoveOverUi, false, this);
 
     // listen on the element containing the stage too
     // because in mobile editor, it is visible
     // and should let the user reset selection
-    events.listen(
+    goog.Event.listen(
         this.element, 'mousedown', this.onMouseDownOverStageBg, false, this);
 
     // action keys
@@ -200,8 +199,8 @@ export class Stage {
    * Because user can drag something and move the mouse over the tool boxes
    */
   onMouseMoveOverUi(event: MouseEvent) {
-    let pos = goog.style.getRelativePosition(event, this.iframeElement) as any;
-    this.onMouseMove((event.target as any), pos.x, pos.y, event.shiftKey);
+    let pos = goog.Style.getRelativePosition(event, this.iframeElement);
+    this.onMouseMove(event.target as HTMLElement, pos.x, pos.y, event.shiftKey);
     event.preventDefault();
   }
 
@@ -213,7 +212,7 @@ export class Stage {
     if (this.bodyElement !== null) {
       // if out of stage, release from drag of the plugin
       // simulate the mouse up on the iframe body
-      let pos = goog.style.getRelativePosition(event, this.iframeElement) as any;
+      let pos = goog.Style.getRelativePosition(event, this.iframeElement);
       let newEvObj = new MouseEvent('mouseup', {
         bubbles: true,
         cancelable: true,
@@ -263,8 +262,8 @@ export class Stage {
    * remove stage event listeners
    * @param bodyElement the element which contains the body of the site
    */
-  removeEvents(bodyElement: Element) {
-    events.removeAll(bodyElement);
+  removeEvents(bodyElement: HTMLElement) {
+    goog.Event.removeAll(bodyElement);
   }
 
   /**
@@ -282,7 +281,7 @@ export class Stage {
     this.contentWindow = contentWindow;
 
     // detect right click
-    events.listen(contentWindow.document, 'contextmenu', function(event) {
+    goog.Event.listen(contentWindow.document, 'contextmenu', function(event) {
       let x = event.clientX;
       let y = event.clientY;
       this.handleRightClick(x, y);
@@ -297,25 +296,25 @@ export class Stage {
 
     // listen on body instead of element because user can release
     // on the tool boxes
-    events.listen(contentWindow.document, 'mouseup', function(event) {
+    goog.Event.listen(contentWindow.document, 'mouseup', function(event) {
       let x = event.clientX;
       let y = event.clientY;
       this.handleMouseUp(event.target, x, y, event.shiftKey);
     }, false, this);
 
     // move in the iframe
-    events.listen(this.bodyElement, 'mousemove', function(event) {
+    goog.Event.listen(this.bodyElement, 'mousemove', function(event) {
       let x = event.clientX;
       let y = event.clientY;
-      this.onMouseMove((event.target as Element), x, y, event.shiftKey);
+      this.onMouseMove((event.target as HTMLElement), x, y, event.shiftKey);
       event.preventDefault();
     }, false, this);
 
     // detect mouse down
-    events.listen(this.bodyElement, 'mousedown', function(event) {
+    goog.Event.listen(this.bodyElement, 'mousedown', function(event) {
       // get the first parent node which is editable (silex-editable css class)
       const editableElement =
-          goog.dom.getAncestorByClass(
+          goog.Dom.getAncestorByClass(
               event.target, Body.EDITABLE_CLASS_NAME) ||
           this.bodyElement;
 
@@ -343,7 +342,7 @@ export class Stage {
     }, false, this);
 
     // detect double click
-    events.listen(this.bodyElement, events.EventType.DBLCLICK, function(event) {
+    goog.Event.listen(this.bodyElement, goog.EventType.DBLCLICK, function(event) {
       this.controller.editMenuController.editElement();
     }, false, this);
   }
@@ -475,7 +474,7 @@ export class Stage {
    * @param shiftKey state of the shift key
    */
   handleMouseUp(
-      target: Element, x: number, y: number, shiftKey: boolean) {
+      target: HTMLElement, x: number, y: number, shiftKey: boolean) {
     // if click down was not on the UI, do nothing
     // this can happen when the user selects text in the property tool box and
     // releases outside the tool box
@@ -499,8 +498,8 @@ export class Stage {
       // move all selected elements to the new container
       this.selectedElements.filter((element) => element !== this.bodyElement)
           .forEach((element) => {
-            if (!goog.dom.getAncestorByClass(
-                    element.parentNode,
+            if (!goog.Dom.getAncestorByClass(
+                    element.parentElement,
                     SilexElement.SELECTED_CLASS_NAME) &&
                 !element.classList.contains(Body.PREVENT_DRAGGABLE_CLASS_NAME)) {
               this.controller.stageController.newContainer(
@@ -535,7 +534,7 @@ export class Stage {
         // get the first parent node which is editable (silex-editable css
         // class)
         let editableElement =
-            goog.dom.getAncestorByClass(
+            goog.Dom.getAncestorByClass(
                 target, Body.EDITABLE_CLASS_NAME) ||
             this.bodyElement;
 
@@ -568,9 +567,9 @@ export class Stage {
    */
   bringSelectionForward() {
     this.selectedElements.forEach((element) => {
-      let container = element.parentNode;
-      goog.dom.removeNode(element);
-      goog.dom.appendChild(container, element);
+      let container = element.parentElement;
+      element.parentElement.removeChild(element);
+      container.appendChild(element);
     });
   }
 
@@ -587,7 +586,7 @@ export class Stage {
    * @param y position of the mouse, relatively to the screen
    * @param shiftKey true if shift is down
    */
-  onMouseMove(target: Element, x: number, y: number, shiftKey: boolean) {
+  onMouseMove(target: HTMLElement, x: number, y: number, shiftKey: boolean) {
     // update states
     if (this.isDown) {
       // update property tool box
@@ -596,7 +595,7 @@ export class Stage {
       // case of a drag directly after mouse down (select + drag)
       if (this.lastSelected === null) {
         let editableElement =
-            goog.dom.getAncestorByClass(
+            goog.Dom.getAncestorByClass(
                 target, Body.EDITABLE_CLASS_NAME) ||
             this.bodyElement;
         this.lastSelected = editableElement;
@@ -604,7 +603,7 @@ export class Stage {
 
       // update states
       if (!this.isDragging && !this.isResizing) {
-        if (Math.abs(this.initialPos.x - x) + Math.abs(this.initialPos.y - y) <
+        if (Math.abs(this.initialPos.left - x) + Math.abs(this.initialPos.top - y) <
             5) {
           // do nothing while the user has not dragged more than 5 pixels
           return;
@@ -628,11 +627,11 @@ export class Stage {
             // move to the body so that it is above everything
             // move back to the same x, y position
             // var elementPos = element.getBoundingClientRect();
-            let elementPos = goog.style.getPageOffset(element) as any;
+            let elementPos = goog.Style.getBounds(element);
 
             // // apply new position
-            this.model.element.setStyle(element, 'left', elementPos.x + 'px');
-            this.model.element.setStyle(element, 'top', elementPos.y + 'px');
+            this.model.element.setStyle(element, 'left', elementPos.left + 'px');
+            this.model.element.setStyle(element, 'top', elementPos.top + 'px');
 
             // attache to body
             this.bodyElement.appendChild(element);
@@ -675,8 +674,8 @@ export class Stage {
    * and remove from non dropzones
    * @param opt_element to be marked
    */
-  markAsDropZone(opt_element?: Element) {
-    let els = Array.from((this.bodyElement.parentNode as Element | null)
+  markAsDropZone(opt_element?: HTMLElement) {
+    let els = Array.from((this.bodyElement.parentElement as HTMLElement | null)
       .querySelectorAll(Body.DROP_CANDIDATE_CLASS_NAME));
     els.forEach((el) => el.classList.remove(Body.DROP_CANDIDATE_CLASS_NAME));
     if (opt_element) {
@@ -705,10 +704,10 @@ export class Stage {
    */
   getDropZone(
       x: number, y: number, opt_preventSelected?: boolean,
-      opt_container?: Element): {element: Element, zIndex: number} {
+      opt_container?: HTMLElement): {element: HTMLElement, zIndex: number} {
     // default value
     let container = opt_container || this.bodyElement;
-    let children = goog.dom.getChildren(container);
+    let children = goog.Dom.getChildren(container);
     let topMost = null;
     let zTopMost = 0;
 
@@ -720,7 +719,7 @@ export class Stage {
           !(opt_preventSelected === true &&
             element.classList.contains('silex-selected')) &&
           this.getVisibility(element)) {
-        let bb = goog.style.getBounds(element) as any;
+        let bb = goog.Style.getBounds(element);
         let scrollX = this.getScrollX();
         let scrollY = this.getScrollY();
         if (bb.left < x + scrollX && bb.left + bb.width > x + scrollX &&
@@ -730,7 +729,7 @@ export class Stage {
           // if zIndex is 0 then there is no value to css zIndex, considere the
           // DOM order
           if (candidate.element) {
-            const zIndex = goog.style.getComputedZIndex(element);
+            const zIndex = goog.Style.getComputedZIndex(element);
             const zIndexNum = zIndex === 'auto' ? 0 : zIndex as number;
             if (zIndexNum >= zTopMost) {
               topMost = candidate;
@@ -753,14 +752,14 @@ export class Stage {
    * @param element     the element to check
    * @return true if the element is in the current page or not in any page
    */
-  getVisibility(element: Element): boolean {
-    let parent: Element = (element as Element | null);
+  getVisibility(element: HTMLElement): boolean {
+    let parent: HTMLElement = (element as HTMLElement | null);
     while (parent &&
            (!parent.classList.contains(Page.PAGED_CLASS_NAME) ||
             parent.classList.contains(this.currentPageName)) &&
            !(this.controller.stageController.getMobileMode() &&
              this.model.element.getHideOnMobile(parent))) {
-      parent = (parent.parentNode as Element | null);
+      parent = (parent.parentElement as HTMLElement | null);
     }
     return parent === null;
   }
@@ -770,7 +769,7 @@ export class Stage {
    */
   getStageSize(): {width:number, height:number} {
     // FIXME: use document.documentElement.clientWidth
-    return goog.style.getSize(this.element) as any;
+    return goog.Style.getBounds(this.element);
   }
 
   /**
@@ -838,12 +837,12 @@ export class Stage {
 
       // handle shift key to move on one axis or preserve ratio
       if (shiftKey === true) {
-        if (Math.abs(this.initialPos.x + this.initialScroll.x - (x + scrollX)) <
+        if (Math.abs(this.initialPos.left + this.initialScroll.left - (x + scrollX)) <
             Math.abs(
-                this.initialPos.y + this.initialScroll.y - (y + scrollY))) {
-          x = this.initialPos.x + this.initialScroll.x - scrollX;
+                this.initialPos.top + this.initialScroll.top - (y + scrollY))) {
+          x = this.initialPos.left + this.initialScroll.left - scrollX;
         } else {
-          y = this.initialPos.y + this.initialScroll.y - scrollY;
+          y = this.initialPos.top + this.initialScroll.top - scrollY;
         }
       }
       let offsetX = x - this.lastPosX + (scrollX - this.lastScrollLeft);
@@ -856,11 +855,11 @@ export class Stage {
         if (shiftKey === true &&
             (this.resizeDirection === 'sw' || this.resizeDirection === 'se' ||
              this.resizeDirection === 'nw' || this.resizeDirection === 'ne')) {
-          let width = x - this.initialPos.x;
+          let width = x - this.initialPos.left;
           if (this.resizeDirection === 'ne' || this.resizeDirection === 'sw') {
             width = -width;
           }
-          y = this.initialPos.y + width * this.initialRatio;
+          y = this.initialPos.top + width * this.initialRatio;
         }
         let offsetX = x - this.lastPosX + (scrollX - this.lastScrollLeft);
         let offsetY = y - this.lastPosY + (scrollY - this.lastScrollTop);
@@ -909,7 +908,7 @@ export class Stage {
     this.lastPosY = y;
     this.lastScrollLeft = this.getScrollX();
     this.lastScrollTop = this.getScrollY();
-    let initialSize = goog.style.getSize(element) as any;
+    let initialSize = goog.Style.getBounds(element);
     this.initialRatio = initialSize.height / initialSize.width;
     this.initialPos = {x: x, y: y};
     this.initialScroll = {x: this.getScrollX(), y: this.getScrollY()};
@@ -924,7 +923,7 @@ export class Stage {
    * @param target a DOM element clicked by the user,
    *                    which may be a handle to resize or move
    */
-  getResizeDirection(target: Element): string {
+  getResizeDirection(target: HTMLElement): string {
     if (target.classList.contains('ui-resizable-s')) {
       return 's';
     } else {
@@ -966,7 +965,7 @@ export class Stage {
    * @param value to be set
    */
   setScrollX(value: number) {
-    let dh = new goog.dom.DomHelper(this.contentDocument);
+    let dh = new goog.DomHelper(this.contentDocument);
     dh.getDocumentScrollElement().scrollLeft = value;
   }
 
@@ -975,7 +974,7 @@ export class Stage {
    * @param value to be set
    */
   setScrollY(value: number) {
-    let dh = new goog.dom.DomHelper(this.contentDocument);
+    let dh = new goog.DomHelper(this.contentDocument);
     dh.getDocumentScrollElement().scrollTop = value;
   }
 
@@ -986,8 +985,8 @@ export class Stage {
    * @return the value
    */
   getScrollX(): number {
-    let dh = new goog.dom.DomHelper(this.contentDocument);
-    return (dh.getDocumentScroll() as any).x;
+    let dh = new goog.DomHelper(this.contentDocument);
+    return (dh.getDocumentScroll()).x;
   }
 
   /**
@@ -997,8 +996,8 @@ export class Stage {
    * @return the value
    */
   getScrollY(): number {
-    let dh = new goog.dom.DomHelper(this.contentDocument);
-    return (dh.getDocumentScroll() as any).y;
+    let dh = new goog.DomHelper(this.contentDocument);
+    return (dh.getDocumentScroll()).y;
   }
 
   /**
@@ -1006,8 +1005,8 @@ export class Stage {
    * @return the value
    */
   getScrollMaxX(): number {
-    let dh = new goog.dom.DomHelper(this.contentDocument);
-    return (goog.style.getSize(dh.getDocumentScrollElement()) as any).width;
+    let dh = new goog.DomHelper(this.contentDocument);
+    return (goog.Style.getBounds(dh.getDocumentScrollElement())).width;
   }
 
   /**
@@ -1015,20 +1014,20 @@ export class Stage {
    * @return the value
    */
   getScrollMaxY(): number {
-    let dh = new goog.dom.DomHelper(this.contentDocument);
-    return (goog.style.getSize(dh.getDocumentScrollElement()) as any).height;
+    let dh = new goog.DomHelper(this.contentDocument);
+    return (goog.Style.getBounds(dh.getDocumentScrollElement())).height;
   }
 
   /**
    * @param  element in the DOM to which I am scrolling
    */
-  setScrollTarget(element: Element) {
+  setScrollTarget(element: HTMLElement) {
     if (element !== this.bodyElement) {
       // start scrolling
       // not right away because the element may not be attached to the dom yet
       // (case of add element)
       requestAnimationFrame(() => {
-        const scrollTop = (goog.style.getBounds(element) as any).top;
+        const scrollTop = (goog.Style.getBounds(element)).top;
         const iframeSize = this.getStageSize();
         const scrollCentered = scrollTop - Math.round(iframeSize.height / 2);
         this.scrollTo(scrollCentered);

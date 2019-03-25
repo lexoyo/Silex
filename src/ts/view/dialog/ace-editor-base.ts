@@ -59,7 +59,7 @@ export class AceEditorBase {
     this.controller = controller;
 
     // init the menu and UIs
-    this.ace = ace.edit(element.querySelector('.ace-editor'));
+    this.ace = ace.edit(element.querySelector('.ace-editor') as HTMLElement);
     this.ace.setTheme('ace/theme/idle_fingers');
     this.ace.setOptions({
       'enableBasicAutocompletion': true,

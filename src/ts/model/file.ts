@@ -16,14 +16,12 @@
  *   which is rendered by the Stage class
  *   It has methods to manipulate the File
  */
-import * as Config from '../config.js';
-import {SilexTasks} from '../service/silex-tasks.js';
-import {FileInfo} from '../types.js';
-import {Model} from '../types.js';
-import {View} from '../types.js';
-import {Stage} from '../view/stage.js';
-import {Property} from '../model/property.js';
-import {CloudStorage} from '../service/cloud-storage.js';
+
+import { goog } from '../Goog.js';
+import { Property } from '../model/property.js';
+import { CloudStorage } from '../service/cloud-storage.js';
+import { FileInfo, Model, View } from '../types.js';
+import { Stage } from '../view/stage.js';
 
 /**
  * @param model  model class which holds the other models
@@ -77,9 +75,8 @@ export class File {
 
   constructor(public model: Model, public view: View) {
     this.iFrameElement_ = (document.querySelector('.' + Stage.STAGE_CLASS_NAME) as HTMLIFrameElement);
-    this.contentDocument_ =
-        goog.dom.getFrameContentDocument(this.iFrameElement_);
-    this.contentWindow_ = goog.dom.getFrameContentWindow(this.iFrameElement_);
+    this.contentDocument_ = this.iFrameElement_.contentDocument;
+    this.contentWindow_ = this.iFrameElement_.contentWindow;
 
     // reset iframe content
     // this is needed since iframes can keep their content
@@ -155,9 +152,8 @@ export class File {
     // wait for the webste to be loaded
     // can not rely on the load event of the iframe because there may be missing
     // assets
-    this.contentDocument_ =
-        goog.dom.getFrameContentDocument(this.iFrameElement_);
-    this.contentWindow_ = goog.dom.getFrameContentWindow(this.iFrameElement_);
+    this.contentDocument_ = this.iFrameElement_.contentDocument;
+    this.contentWindow_ = this.iFrameElement_.contentWindow;
     if (this.contentDocument_.body === null || this.contentWindow_ === null ||
         this.contentWindow_['$'] === null) {
       setTimeout(() => {

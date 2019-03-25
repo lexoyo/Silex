@@ -50,7 +50,7 @@ export class BgPane extends PaneBase {
   iAmRedrawing: boolean;
 
   // remember selection
-  selectedElements: Element[] = null;
+  selectedElements: HTMLElement[] = null;
   pageNames: any;
   currentPageName: any;
 
@@ -137,7 +137,7 @@ export class BgPane extends PaneBase {
    * @param  currentPageName   the name of the current page
    */
   redraw(
-      selectedElements: Element[], pageNames: string[],
+      selectedElements: HTMLElement[], pageNames: string[],
       currentPageName: string) {
     if (this.iAmSettingValue) {
       return;

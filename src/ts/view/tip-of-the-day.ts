@@ -104,7 +104,7 @@ export class TipOfTheDay {
 
     // attach click event
     this.element.addEventListener('click', e => {
-      if ((e.target as Element).classList.contains('close')) {
+      if ((e.target as HTMLElement).classList.contains('close')) {
         Tracker.getInstance().trackAction(
             'tip-of-the-day', 'close', itemTrackAction, 0);
       } else {

@@ -58,7 +58,7 @@ export interface Prodotype {
   reset();
   createName(type, list):string;
   getMissingDependencies(
-    container: Element,
+    container: HTMLElement,
     componentNames:Array<{templateName:string}>
   ): Array<Element>;
   getUnusedDependencies(dependencyElements:Array<Element>, componentNames: Array<{templateName:string}>);
@@ -125,7 +125,7 @@ export var wysihtml:any;
 //   public static Editor: any;
 // }
 export interface WysiHtmlEditor {
-  constructor(el: Element, options);
+  constructor(el: HTMLElement, options);
   focus(changePosition);
   on(eventName, cbk);
   composer: WysiHtmlComposer;
@@ -148,7 +148,7 @@ export type wysihtmlParserRules = Object;
 //  * @type {Object.<*>}
 //  */
 // interface Ace {
-//   public static edit(el: Element);
+//   public static edit(el: HTMLElement);
 //   renderer;
 //   setKeyboardHandler(keyboardHandler: string);
 //   getKeyboardHandler(): string;

@@ -15,6 +15,8 @@
  *   It has methods to manipulate the pages
  *
  */
+
+import { goog } from '../Goog.js';
 import { Model, View } from '../types.js';
 import { SilexNotification } from '../utils/notification.js';
 import { Stage } from '../view/stage.js';
@@ -85,15 +87,15 @@ export class Page {
    * @return null or the element or one of its parents which has the css class
    *     silex.model.Page.PAGED_CLASS_NAME
    */
-  getParentPage(element: Element): Element {
+  getParentPage(element: HTMLElement): HTMLElement {
     if (this.model.element.isSectionContent(element)) {
-      element = (element.parentNode as Element);
+      element = (element.parentElement as HTMLElement);
     }
-    let parent = element.parentNode as Element;
+    let parent = element.parentElement as HTMLElement;
     while (parent && !parent.classList.contains(Page.PAGED_CLASS_NAME)) {
-      parent = parent.parentNode as Element;
+      parent = parent.parentElement as HTMLElement;
     }
-    return (parent as Element | null);
+    return (parent as HTMLElement | null);
   }
 
   /**
@@ -120,7 +122,7 @@ export class Page {
    * @return name of the page currently opened
    */
   getCurrentPage(): string {
-    if (goog.isNull(this.model.file.getContentWindow()['jQuery'])) {
+    if (goog.Is.isNull(this.model.file.getContentWindow()['jQuery'])) {
       throw new Error('JQuery not loaded in the opened website');
     }
     let bodyElement = this.model.body.getBodyElement();
@@ -177,8 +179,7 @@ export class Page {
    */
   getDisplayName(pageName: string): string {
     let displayName = '';
-    let pageElement =
-        this.model.file.getContentDocument().getElementById(pageName);
+    let pageElement = this.model.file.getContentDocument().getElementById(pageName);
     if (pageElement) {
       displayName = pageElement.innerHTML;
     }
@@ -200,7 +201,7 @@ export class Page {
       const pageElements = Array.from(this.model.body.getBodyElement().querySelectorAll('a[data-silex-type="page"]'));
       pageElements.forEach((element) => {
         if (element.getAttribute('id') === pageName) {
-          goog.dom.removeNode(element);
+          element.parentElement.removeChild(element);
         }
       });
 
@@ -214,7 +215,7 @@ export class Page {
       // and returns them in this case
       let elementsOnlyOnThisPage = [];
       const elementsOfThisPage = Array.from(this.model.body.getBodyElement().getElementsByClassName(pageName));
-      elementsOfThisPage.forEach((element) => {
+      elementsOfThisPage.forEach((element: HTMLElement) => {
         element.remove();
         let pagesOfElement = this.getPagesForElement(element);
         if (pagesOfElement.length <= 0) {
@@ -266,7 +267,7 @@ export class Page {
       if (prevEl &&
           (el.id === pageName && direction === 'up' ||
            prevEl.id === pageName && direction === 'down')) {
-        el.parentNode.insertBefore(el, prevEl);
+        el.parentElement.insertBefore(el, prevEl);
         let pages = this.getPages();
         let currentPage = this.getCurrentPage();
         this.view.pageTool.redraw(
@@ -286,12 +287,12 @@ export class Page {
         '.' + Page.PAGES_CONTAINER_CLASS_NAME);
 
     // create the DOM element
-    let aTag = goog.dom.createElement('a');
+    let aTag = this.model.file.getContentDocument().createElement('a');
     aTag.setAttribute('id', name);
     aTag.setAttribute('href', '#!' + name);
     aTag.setAttribute('data-silex-type', 'page');
     aTag.innerHTML = displayName;
-    goog.dom.appendChild(container, aTag);
+    container.appendChild(aTag);
 
     // for coherence with other silex elements
     aTag.classList.add(Page.PAGE_CLASS_NAME);
@@ -358,9 +359,9 @@ export class Page {
   /**
    * set/get a "silex style link" on an element
    */
-  removeFromPage(element: Element, pageName: string) {
+  removeFromPage(element: HTMLElement, pageName: string) {
     if (this.model.element.isSectionContent(element)) {
-      element = (element.parentNode as Element);
+      element = (element.parentElement as HTMLElement);
     }
     element.classList.remove(pageName);
     if (this.getPagesForElement(element).length <= 0) {
@@ -372,9 +373,9 @@ export class Page {
   /**
    * set/get a "silex style link" on an element
    */
-  removeFromAllPages(element: Element) {
+  removeFromAllPages(element: HTMLElement) {
     if (this.model.element.isSectionContent(element)) {
-      element = (element.parentNode as Element);
+      element = (element.parentElement as HTMLElement);
     }
     let pages = this.getPagesForElement(element);
     pages.forEach((pageName) => {
@@ -389,9 +390,9 @@ export class Page {
   /**
    * set/get a "silex style link" on an element
    */
-  getPagesForElement(element: Element): string[] {
+  getPagesForElement(element: HTMLElement): string[] {
     if (this.model.element.isSectionContent(element)) {
-      element = (element.parentNode as Element);
+      element = (element.parentElement as HTMLElement);
     }
     return this.getPages().filter(
         (pageName) => element.classList.contains(pageName));
@@ -400,9 +401,9 @@ export class Page {
   /**
    * check if an element is in the given page (current page by default)
    */
-  isInPage(element: Element, opt_pageName?: string): boolean {
+  isInPage(element: HTMLElement, opt_pageName?: string): boolean {
     if (this.model.element.isSectionContent(element)) {
-      element = (element.parentNode as Element);
+      element = (element.parentElement as HTMLElement);
     }
     if (!opt_pageName) {
       opt_pageName = this.getCurrentPage();

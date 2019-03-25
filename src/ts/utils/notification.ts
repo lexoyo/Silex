@@ -11,6 +11,8 @@
  * http://www.silexlabs.org/silex/silex-licensing/
  */
 
+import { goog } from '../Goog.js';
+
 /**
  * @fileoverview Helper class for common tasks
  *
@@ -69,8 +71,8 @@ export class SilexNotification {
   static activateNative() {
     if ('Notification' in window && Notification.permission !== 'denied') {
       if (!SilexNotification.useNative()) {
-        goog.events.listenOnce(
-            document, goog.events.EventType.MOUSEMOVE, function(e) {
+        goog.Event.listenOnce(
+            document, goog.EventType.MOUSEMOVE, function(e) {
               Notification.requestPermission();
             });
       }
@@ -108,6 +110,8 @@ export class SilexNotification {
       opt_okLabel?: string, opt_cancelLabel?: string,
       opt_default?: string) {
     SilexNotification.close();
+    // Alertify.dialog.labels.ok = opt_okLabel || 'ok'
+    // Alertify.dialog.labels.cancel = opt_cancelLabel || 'cancel'
     alertify.set({
       'labels':
           {'ok': opt_okLabel || 'ok', 'cancel': opt_cancelLabel || 'cancel'}
@@ -205,28 +209,28 @@ export class SilexNotification {
   /**
    * @return element which holds the text of the current notification
    */
-  static getTextElement(): Element {
+  static getTextElement(): HTMLElement {
     return document.querySelector('.alertify-message');
   }
 
   /**
    * @return element which holds the text field of the current notification
    */
-  static getFormBody(): Element {
+  static getFormBody(): HTMLElement {
     return document.querySelector('.alertify-text-wrapper');
   }
 
   /**
    * @return element which holds the buttons of the current notification
    */
-  static getFormButtons(): Element {
+  static getFormButtons(): HTMLElement {
     return document.querySelector('.alertify-buttons');
   }
 
   /**
    * add an HTML panel with info of type "while you wait, here is an info"
    */
-  static setInfoPanel(element: Element) {
+  static setInfoPanel(element: HTMLElement) {
     let container = document.querySelector('.alertify-inner');
     let infoPanel = container.querySelector('.silex-info-panel') as HTMLElement;
     if (infoPanel === null) {

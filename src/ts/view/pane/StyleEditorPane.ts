@@ -33,7 +33,7 @@ export class StyleEditorPane extends PaneBase {
   element: any;
   model: any;
   controller: any;
-  selectedElements: Element[] = null;
+  selectedElements: HTMLElement[] = null;
   styleComboPrevValue: StyleName = '';
 
   // Build the UI
@@ -211,7 +211,7 @@ export class StyleEditorPane extends PaneBase {
   /**
    * apply a style to a set of elements, remove old styles
    */
-  applyStyle(elements: Element[], newStyle: StyleName) {
+  applyStyle(elements: HTMLElement[], newStyle: StyleName) {
     if (newStyle === Component.BODY_STYLE_CSS_CLASS) {
       SilexNotification.alert(
           `The style '${
@@ -231,18 +231,18 @@ export class StyleEditorPane extends PaneBase {
     }
   }
 
-  isTextBox(el: Element) {
+  isTextBox(el: HTMLElement) {
     return this.model.element.getType(el) === 'text';
   }
 
-  removeAllStyles(el: Element) {
+  removeAllStyles(el: HTMLElement) {
     this.getStyles([el]).forEach((styleName) => el.classList.remove(styleName));
   }
 
   /**
    * retrieve the styles applyed to the set of elements
    */
-  getStyles(elements: Element[]): StyleName[] {
+  getStyles(elements: HTMLElement[]): StyleName[] {
     const allStyles =
         this.model.component.getProdotypeComponents(Component.STYLE_TYPE);
     // no initial value so the first element in the array will be used, it
@@ -271,7 +271,7 @@ export class StyleEditorPane extends PaneBase {
    * @param  currentPageName   the name of the current page
    */
   redraw(
-      selectedElements: Element[], pageNames: string[],
+      selectedElements: HTMLElement[], pageNames: string[],
       currentPageName: string) {
     super.redraw(selectedElements, pageNames, currentPageName);
 

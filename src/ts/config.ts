@@ -1,6 +1,3 @@
-var closure = require('../../node_modules/closure-library.ts/index');closure.register();
-// import * as closure from '../../node_modules/closure-library.ts/index.js';closure.register();
-
 /**
  * Silex, live web creation
  * http://projects.silexlabs.org/?/silex/
@@ -15,36 +12,34 @@ var closure = require('../../node_modules/closure-library.ts/index');closure.reg
 /**
  * @fileoverview Silex config
  */
-var {KeyboardShortcutHandler} = goog.require('goog:goog.ui.KeyboardShortcutHandler');
-// import {KeyboardShortcutHandler} from '../../node_modules/closure-library.ts/index.js';
-// import {KeyboardShortcutHandler} from '../../node_modules/closure-library.ts/closure-library/closure/goog/ui/keyboardshortcuthandler.js';
 
-// display an apple on mac and ctrl on windows and linux
-// var ctrlKeyMacDisplay = goog.userAgent.MAC ? '⌘' : '';
-let altKeyMacDisplay = goog.userAgent.MAC ? '\u2325' : '';
-let ctrlKeyPCDisplay = goog.userAgent.MAC ? '' : 'Ctrl+';
 
-// var altKeyPCDisplay = goog.userAgent.MAC ? '' : 'Alt+';
-let ctrlKeyDisplay = goog.userAgent.MAC ? '\u2318' : 'Ctrl+';
-let altKeyDisplay = goog.userAgent.MAC ? '\u2325' : 'Alt+';
+import { goog } from './Goog.js';
+
+let altKeyMacDisplay = goog.UserAgent.MAC ? '\u2325' : '';
+let ctrlKeyPCDisplay = goog.UserAgent.MAC ? '' : 'Ctrl+';
+
+// var altKeyPCDisplay = goog.UserAgent.MAC ? '' : 'Alt+';
+let ctrlKeyDisplay = goog.UserAgent.MAC ? '\u2318' : 'Ctrl+';
+let altKeyDisplay = goog.UserAgent.MAC ? '\u2325' : 'Alt+';
 
 // for shortcuts, use "apple key" on mac and ctrl on windows and linux
-// var ctrlKeyMac = goog.userAgent.MAC ?
+// var ctrlKeyMac = goog.UserAgent.MAC ?
 // goog.ui.KeyboardShortcutHandler.Modifiers.META : null;
 let altKeyMac =
-    goog.userAgent.MAC ? KeyboardShortcutHandler.Modifiers.ALT : null;
+    goog.UserAgent.MAC ? goog.KeyboardShortcutHandler.Modifiers.ALT : null;
 let ctrlKeyPC =
-    goog.userAgent.MAC ? null : KeyboardShortcutHandler.Modifiers.CTRL;
+    goog.UserAgent.MAC ? null : goog.KeyboardShortcutHandler.Modifiers.CTRL;
 
-// var altKeyPC = goog.userAgent.MAC ? null :
-// goog.ui.KeyboardShortcutHandler.Modifiers.ALT; same shortcuts on mac and
+// var altKeyPC = goog.UserAgent.MAC ? null :
+// goog.ui.goog.KeyboardShortcutHandler.Modifiers.ALT; same shortcuts on mac and
 // other
-let ctrlKeyModifyer = goog.userAgent.MAC ?
-    KeyboardShortcutHandler.Modifiers.META :
-    KeyboardShortcutHandler.Modifiers.CTRL;
-let altKeyModifyer = goog.userAgent.MAC ?
-    KeyboardShortcutHandler.Modifiers.ALT :
-    KeyboardShortcutHandler.Modifiers.ALT;
+let ctrlKeyModifyer = goog.UserAgent.MAC ?
+    goog.KeyboardShortcutHandler.Modifiers.META :
+    goog.KeyboardShortcutHandler.Modifiers.CTRL;
+let altKeyModifyer = goog.UserAgent.MAC ?
+    goog.KeyboardShortcutHandler.Modifiers.ALT :
+    goog.KeyboardShortcutHandler.Modifiers.ALT;
 
 export class Config {
 

@@ -119,7 +119,7 @@ export class TextFormatBar {
       this.element.querySelector('.image-details').style.display = 'none';
       this.wysihtmlEditor.destroy();
       this.wysihtmlEditor = null;
-      const parent = this.toolbar.parentNode;
+      const parent = this.toolbar.parentElement;
       const clone = this.toolbar.cloneNode(true);
       Array.from(clone.querySelectorAll('.wysihtml-command-active'))
           .forEach((el: HTMLElement) => el.classList.remove('wysihtml-command-active'));
@@ -221,7 +221,7 @@ export class TextFormatBar {
         doc.addEventListener('keydown', this.onKeyPressedBinded);
         win.addEventListener('scroll', this.onScrollBinded);
         this.currentTextBox.onclick = (e) => {
-          if ((e.target as Element) === this.currentTextBox) {
+          if ((e.target as HTMLElement) === this.currentTextBox) {
             this.stopEditing();
           }
         };

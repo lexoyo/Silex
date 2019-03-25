@@ -15,13 +15,11 @@
  * @see silex.model.Page
  *
  */
-var dom = goog.require("goog:goog.dom");
 
-import {PageData} from '../model/page.js';
-import {Dom} from '../utils/dom.js';
-import {Model} from '../types.js';
-import {Controller} from '../types.js';
-import {InvalidationManager} from '../utils/invalidation-manager.js';
+import { PageData } from '../model/page.js';
+import { Controller, Model } from '../types.js';
+import { Dom } from '../utils/dom.js';
+import { InvalidationManager } from '../utils/invalidation-manager.js';
 
 /**
  *
@@ -58,18 +56,18 @@ export class PageTool {
   buildUi() {
     // listen for the click on a page
     this.element.addEventListener('click', e => {
-      if (dom.classlist.contains((e.target as Element), 'delete')) {
+      if ((e.target as HTMLElement).classList.contains('delete')) {
         // remove the page
         this.removePageAtIndex(
-            this.getCellIndex((e.target as Element).parentNode.parentNode as Element));
+            this.getCellIndex((e.target as HTMLElement).parentElement.parentElement as HTMLElement));
       } else {
-        if (dom.classlist.contains((e.target as Element), 'label')) {
+        if ((e.target as HTMLElement).classList.contains('label')) {
           // rename the page
           this.renamePageAtIndex(
-              this.getCellIndex((e.target as Element).parentNode.parentNode as Element));
+              this.getCellIndex((e.target as HTMLElement).parentElement.parentElement as HTMLElement));
         } else {
           // select page
-          let cellIndex = this.getCellIndex((e.target as Element).parentNode as Element);
+          let cellIndex = this.getCellIndex((e.target as HTMLElement).parentElement as HTMLElement);
           if (cellIndex >= 0) {
             this.setSelectedIndex(cellIndex, true);
           }
@@ -105,7 +103,7 @@ export class PageTool {
    * @param  currentPageName   the name of the current page
    */
   redraw(
-      selectedElements: Element[], pageNames: string[],
+      selectedElements: HTMLElement[], pageNames: string[],
       currentPageName: string) {
     this.invalidationManager.callWhenReady(() => {
       // prepare the data for the template
@@ -134,12 +132,9 @@ export class PageTool {
       });
 
       // refresh the list with new pages
-      let container =
-          dom.getElementByClass('page-tool-container', this.element);
-      let templateHtml =
-          dom.getElementByClass('page-tool-template', this.element).innerHTML;
-      container.innerHTML =
-          Dom.renderList(templateHtml, this.pages);
+      let container = this.element.getElementsByClassName('page-tool-container')[0];
+      let templateHtml = this.element.getElementsByClassName('page-tool-template')[0].innerHTML;
+      container.innerHTML = Dom.renderList(templateHtml, this.pages);
     });
   }
 
@@ -174,7 +169,7 @@ export class PageTool {
    * get the index of the given cell
    * @param element which represents the cell in the dom
    */
-  getCellIndex(element: Element): number {
+  getCellIndex(element: HTMLElement): number {
     let pageIdx = element.getAttribute('data-page-idx');
     if (pageIdx) {
       return parseInt(pageIdx, 10);

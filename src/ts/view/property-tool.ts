@@ -139,7 +139,7 @@ export class PropertyTool {
       el.onclick = (e) => {
         this.togglePanel(el);
         window.localStorage.setItem(
-            lsKey, (el.parentNode as HTMLElement).classList.contains('expanded').toString());
+            lsKey, (el.parentElement as HTMLElement).classList.contains('expanded').toString());
       };
     }
 
@@ -156,7 +156,7 @@ export class PropertyTool {
    * toggle a property panel
    */
   togglePanel(el: HTMLElement) {
-    (el.parentNode as HTMLElement).classList.toggle('expanded');
+    (el.parentElement as HTMLElement).classList.toggle('expanded');
     const caret = el.querySelector('.fa-inverse');
     if (caret) {
       caret.classList.toggle('fa-caret-right');

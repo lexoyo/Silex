@@ -68,12 +68,12 @@ export class Dashboard {
    * render the data loaded from github into a <ul>
    */
   renderTemplateList(
-      ul: Element, className: string, repo: string, data: any) {
+      ul: HTMLElement, className: string, repo: string, data: any) {
     // // handle previously rendered elements
     // const elements = ul.querySelectorAll('li.rendered-item');
     // for(let idx=0; idx<elements.length; idx++) {
     //   const el = elements[idx];
-    //   el.parentNode.removeChild(el);
+    //   el.parentElement.removeChild(el);
     // }
     if (Array.isArray(data)) {
       // render the data
@@ -169,10 +169,10 @@ export class Dashboard {
     const body = this.element.querySelector('.body');
     body.onclick = (e) => {
       // listen for a click in the list of recent files
-      const a = (e.target as Element);
+      const a = (e.target as HTMLElement);
 
       // get the attribute of the link (<a> tag)
-      // it might be in (e.target as Element).parentNode since there are <strong> tags in the
+      // it might be in (e.target as HTMLElement).parentElement since there are <strong> tags in the
       // <a>
       const templateUrl = a.getAttribute('data-editable') ||
           a.parentElement.getAttribute('data-editable');

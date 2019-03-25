@@ -1,0 +1,15 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outDir": "dist/client/js/",
+    "target": "es6",
+    "sourceRoot": "./src/ts",
+    "watch": true,
+    "sourceMap": true,
+    "module": "es6",
+    "removeComments": false,
+  },
+  "include": [
+    "src/ts/index.ts",
+  ],
+}

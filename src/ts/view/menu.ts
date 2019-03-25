@@ -16,20 +16,13 @@
  * based on closure menu class
  *
  */
-// goog.require('goog.ui.Tooltip');
 
-var {GMenu} = goog.require("goog:goog.ui.Menu");
-var menuBar = goog.require("goog:goog.ui.menuBar");
-var {MenuButton} = goog.require("goog:goog.ui.MenuButton");
-var {MenuItem} = goog.require("goog:goog.ui.MenuItem");
-
-import {Config} from '../config.js';
-import {Model} from '../types.js';
-import {Controller} from '../types.js';
-import {Keyboard} from '../utils/Keyboard.js';
-import {MenuShortcut} from '../utils/Keyboard.js';
-import {Component} from '../model/Component.js';
-import {SilexElement} from '../model/element.js';
+import { Config } from '../config.js';
+import { goog } from '../Goog.js';
+import { Component } from '../model/Component.js';
+import { SilexElement } from '../model/element.js';
+import { Controller, Model } from '../types.js';
+import { Keyboard } from '../utils/Keyboard.js';
 
 type MenuItemData = {
   label: string,
@@ -59,7 +52,7 @@ export class Menu {
   /**
    * reference to the menu class of the closure library
    */
-  menu: any; //GMenu;
+  menu: goog.Menu;
 
 
   static SUB_MENU_CLASSES = [
@@ -77,7 +70,7 @@ export class Menu {
    * called by the app constructor
    */
   buildUi() {
-    this.menu = menuBar.create();
+    this.menu = goog.MenuBar.create();
 
     // shortcut handler
     const keyboard = new Keyboard(document);
@@ -85,7 +78,7 @@ export class Menu {
     // create the menu items
     Config.menu.names.forEach((itemData, i) => {
       // Create the drop down menu with a few suboptions.
-      let menu = new GMenu();
+      let menu = new goog.Menu();
       const option: Array<MenuItemData> = Config.menu.options[i];
       option.forEach((itemOption) => {
         this.addToMenu(itemOption, menu);
@@ -95,10 +88,10 @@ export class Menu {
         }
       });
 
-      // Create a button inside menubar.
-      let btn = new MenuButton(itemData.label, menu);
+      // Create a button inside goog.Menubar.
+      let btn = new goog.MenuButton(itemData.label, menu);
       btn.addClassName(itemData.className);
-      btn.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
+      btn.setDispatchTransitionEvents(goog.EventType.ALL, true);
       this.menu.addChild(btn, true);
     });
 
@@ -151,14 +144,14 @@ export class Menu {
 
     // event handling
     this.element.onclick = (e) => {
-      const action = (e.target as Element).getAttribute('data-menu-action') ||
-          (e.target as Element).parentElement.getAttribute('data-menu-action');
-      const componentId = (e.target as Element).getAttribute('data-comp-id') ||
-          (e.target as Element).parentElement.getAttribute('data-comp-id');
+      const action = (e.target as HTMLElement).getAttribute('data-menu-action') ||
+          (e.target as HTMLElement).parentElement.getAttribute('data-menu-action');
+      const componentId = (e.target as HTMLElement).getAttribute('data-comp-id') ||
+          (e.target as HTMLElement).parentElement.getAttribute('data-comp-id');
       this.onMenuEvent(action, componentId);
-      if ((e.target as Element).parentElement &&
-          !(e.target as Element).parentElement.classList.contains('menu-container') &&
-          !(e.target as Element).parentElement.classList.contains('silex-menu')) {
+      if ((e.target as HTMLElement).parentElement &&
+          !(e.target as HTMLElement).parentElement.classList.contains('menu-container') &&
+          !(e.target as HTMLElement).parentElement.classList.contains('silex-menu')) {
         // not a first level menu => close sub menus
         this.closeAllSubMenu();
       }
@@ -169,16 +162,17 @@ export class Menu {
    * add an item to the menu
    * @param itemData menu item as defined in config.js
    */
-  addToMenu(itemData: MenuItemData, menu: Menu) {
+  addToMenu(itemData: MenuItemData, menu: goog.Menu) {
     let item;
     if (itemData) {
       // create the menu item
       let label = itemData.label;
       let id = itemData.id;
-      item = new MenuItem(label);
+      item = new goog.MenuItem(label);
       item.setId(id);
       item.addClassName(itemData.className);
     }
+    menu.addChild(item, true);
   }
 
   /**
@@ -189,7 +183,7 @@ export class Menu {
    * @param  currentPageName   the name of the current page
    */
   redraw(
-      selectedElements: Element[], pageNames: string[],
+      selectedElements: HTMLElement[], pageNames: string[],
       currentPageName: string) {}
 
   closeAllSubMenu() {

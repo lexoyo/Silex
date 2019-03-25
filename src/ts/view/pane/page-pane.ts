@@ -17,11 +17,11 @@
  */
 
 
-import {Model} from '../../types.js';
-import {Controller} from '../../types.js';
-import {Dom} from '../../utils/dom.js';
-import {PaneBase} from './pane-base.js';
+import { goog } from '../../Goog.js';
 import { SilexElement } from "../../model/element.js";
+import { Controller, Model } from '../../types.js';
+import { Dom } from '../../utils/dom.js';
+import { PaneBase } from './pane-base.js';
 
 /**
  * on of Silex Editors class
@@ -149,17 +149,17 @@ export class PagePane extends PaneBase {
     // reset page checkboxes
     if (this.pageCheckboxes) {
       this.pageCheckboxes.forEach((item) => {
-        if (item.checkbox.parentNode != null) {
-          item.checkbox.parentNode.removeChild(item.checkbox);
+        if (item.checkbox.parentElement != null) {
+          item.checkbox.parentElement.removeChild(item.checkbox);
         }
-        goog.events.removeAll(
-            item.checkbox, goog.ui.Component.EventType.CHANGE);
+        goog.Event.removeAll(
+            item.checkbox, goog.EventType.CHANGE);
       });
     }
 
     // create page checkboxes
     const mainContainer = this.element.querySelector('.pages-container');
-    const items = (Array.from(mainContainer.querySelectorAll('.page-container')) as Element[]);
+    const items = (Array.from(mainContainer.querySelectorAll('.page-container')) as HTMLElement[]);
     this.pageCheckboxes = items.map((item, idx) => {
       const checkbox: HTMLInputElement = item.querySelector('.page-check');
       const name = this.pages[idx++];
@@ -248,7 +248,7 @@ export class PagePane extends PaneBase {
         }
       }
     });
-    if (!goog.isNull(visibility)) {
+    if (!goog.Is.isNull(visibility)) {
       Array.from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
           .forEach((el: HTMLInputElement) => {
             el.checked = visibility === el.value;
@@ -282,7 +282,7 @@ export class PagePane extends PaneBase {
 
         // set visibility
         isInNoPage = isInNoPage && isInPage === false;
-        if (goog.isNull(isInPage)) {
+        if (goog.Is.isNull(isInPage)) {
           // multiple elements selected with different values
           item.checkbox.indeterminate = true;
         } else {

@@ -13,14 +13,14 @@
  * @fileoverview
  *   This class is used to access Silex elements properties
  */
+
+
+import { goog } from '../Goog.js';
 import { Body } from '../model/body.js';
 import { Font, Model, View } from '../types.js';
 import { Style } from '../utils/style.js';
 import { ComponentData, CssRule, JsonData, ProdotypeData, ProdotypeTypes, SilexData, SilexId, StyleData, StyleName } from './Data.js';
 
-
-
-const gString = goog.require("goog:googgString");
 
 export interface CSSRuleInfo {
   rule: CSSRule;
@@ -105,14 +105,14 @@ export class Property {
    * get/set Silex ID
    * @return uniqueId
    */
-  getSilexId(element: Element): SilexId {
+  getSilexId(element: HTMLElement): SilexId {
     return element.getAttribute(Property.ELEMENT_ID_ATTR_NAME);
   }
 
   /**
    * get/set Silex ID
    */
-  setSilexId(element: Element, uniqueId: SilexId) {
+  setSilexId(element: HTMLElement, uniqueId: SilexId) {
     let oldId = this.getSilexId(element);
     if (oldId) {
       element.classList.remove(oldId);
@@ -145,7 +145,7 @@ export class Property {
   /**
    * @param doc docment of the iframe containing the website
    */
-  initSilexId(element: Element, doc?: Document) {
+  initSilexId(element: HTMLElement, doc?: Document) {
     // add the selector for this element
     let idAndClass = Property.ELEMENT_ID_PREFIX + this.generateSilexId(doc);
     this.setSilexId(element, idAndClass);
@@ -160,7 +160,7 @@ export class Property {
       styleTag = doc.createElement('script');
       styleTag.type = 'text/json';
       styleTag.classList.add(Property.JSON_STYLE_TAG_CLASS_NAME);
-      goog.dom.appendChild(doc.head, styleTag);
+      doc.head.appendChild(styleTag);
     }
 
     // always save as json, it used to be javascript and sometimes it tabs mess
@@ -221,10 +221,9 @@ export class Property {
    * styles
    * @param doc docment of the iframe containing the website
    */
-  initStyles(doc: Document): Element {
+  initStyles(doc: Document): HTMLElement {
     // make sure of the existance of the style tag with Silex definitions
-    let styleTag =
-        doc.querySelector('.' + Property.INLINE_STYLE_TAG_CLASS_NAME);
+    let styleTag:HTMLElement = doc.querySelector('.' + Property.INLINE_STYLE_TAG_CLASS_NAME);
     if (!styleTag) {
       styleTag = doc.createElement('style');
       styleTag.classList.add(Property.INLINE_STYLE_TAG_CLASS_NAME);
@@ -321,12 +320,12 @@ export class Property {
    * if opt_componentData is null this will remove the rule
    */
   private setElementData(
-      element: Element, type: ProdotypeTypes,
+      element: HTMLElement, type: ProdotypeTypes,
       opt_componentData?: ComponentData|StyleData) {
     // a section's container content can not be a component, but the section
     // itself may be
     if (this.model.element.isSectionContent(element)) {
-      element = (element.parentNode as Element);
+      element = (element.parentElement as HTMLElement);
     }
 
     // get the internal ID
@@ -341,7 +340,7 @@ export class Property {
    * if opt_componentData is null this will remove the rule
    */
   setElementComponentData(
-      element: Element, opt_componentData?: ComponentData) {
+      element: HTMLElement, opt_componentData?: ComponentData) {
     // call private generic method
     this.setElementData(
         element, ProdotypeTypes.COMPONENT, opt_componentData);
@@ -352,7 +351,7 @@ export class Property {
    * if opt_componentData is null this will remove the rule
    */
   setElementStyleData(
-      element: Element, opt_componentData?: StyleData) {
+      element: HTMLElement, opt_componentData?: StyleData) {
     // call private generic method
     this.setElementData(
         element, ProdotypeTypes.STYLE, opt_componentData);
@@ -362,12 +361,12 @@ export class Property {
    * get / set the data associated with an element
    * @return a clone of the data object
    */
-  private getElementData(element: Element, type: ProdotypeTypes):
+  private getElementData(element: HTMLElement, type: ProdotypeTypes):
       ComponentData|StyleData {
     // a section's container content can not be a component, but the section
     // itself may be
     if (this.model.element.isSectionContent(element)) {
-      element = (element.parentNode as Element);
+      element = (element.parentElement as HTMLElement);
     }
 
     // get the internal ID
@@ -381,7 +380,7 @@ export class Property {
    * get / set the data associated with an element
    * @return a clone of the data object
    */
-  getElementComponentData(element: Element): ComponentData {
+  getElementComponentData(element: HTMLElement): ComponentData {
     // call private generic method
     return (
         this.getElementData(
@@ -394,7 +393,7 @@ export class Property {
    * get / set the data associated with an element
    * @return a clone of the data object
    */
-  getElementStyleData(element: Element): StyleData {
+  getElementStyleData(element: HTMLElement): StyleData {
     // call private generic method
     return (
         this.getElementData(element, ProdotypeTypes.STYLE) as
@@ -408,7 +407,7 @@ export class Property {
    * INLINE_STYLE_TAG_CLASS_NAME if style is null this will remove the rule
    */
   setStyle(
-      element: Element, styleObj: Object,
+      element: HTMLElement, styleObj: Object,
       opt_isMobile?: boolean) {
     const deleteStyle = !styleObj;
     const style = styleObj || {};
@@ -424,7 +423,7 @@ export class Property {
 
         // apply height to section content and not section itself
         const contentElement =
-            (this.model.element.getContentNode(element) as Element);
+            (this.model.element.getContentNode(element) as HTMLElement);
         const contentStyle = this.getStyle(contentElement, isMobile) || {};
         if (style['min-height'] &&
             style['min-height'] !== contentStyle['min-height']) {
@@ -439,7 +438,7 @@ export class Property {
           !this.view.workspace.getMobileEditor()) {
         // set a min-width style to sections so that they are always larger than
         // their content container
-        const parentElement = (element.parentNode as Element);
+        const parentElement = (element.parentElement as HTMLElement);
         const parentStyle = this.getStyle(parentElement, isMobile) || {};
         if (style['width'] && style['width'] !== parentStyle['min-width']) {
           parentStyle['min-width'] = style['width'];
@@ -450,7 +449,7 @@ export class Property {
       // to selector case
       for (let key in style) {
         const value = style[key];
-        let cssName = gString.toSelectorCase(key);
+        let cssName = goog.String.toSelectorCase(key);
         if (cssName !== key && value !== null && value !== '') {
           delete style[key];
           style[cssName] = value;
@@ -495,7 +494,7 @@ export class Property {
    * @param opt_isMobile defaults to the global setting of silex.view.Workspace
    * @return a clone of the style object
    */
-  getStyle(element: Element, opt_isMobile?: boolean): CssRule {
+  getStyle(element: HTMLElement, opt_isMobile?: boolean): CssRule {
     let elementId = (this.getSilexId(element) as SilexId);
     const isMobile = opt_isMobile != null ?
         opt_isMobile :
@@ -512,7 +511,7 @@ export class Property {
       if (this.model.element.isSection(element)) {
         // min-height of sections is the min-height of section content
         const contentElement =
-            (this.model.element.getContentNode(element) as Element);
+            (this.model.element.getContentNode(element) as HTMLElement);
         const contentStyle = this.getStyle(contentElement, isMobile);
         if (contentStyle) {
           clone['min-height'] = contentStyle['min-height'];
@@ -554,12 +553,11 @@ export class Property {
    * @return the string defining all elements styles
    */
   getAllStyles(doc: Document): string {
-    const elements =
-        doc.querySelectorAll('body, .' + Body.EDITABLE_CLASS_NAME);
+    const elements = doc.querySelectorAll('body, .' + Body.EDITABLE_CLASS_NAME);
     let allStyles = '';
     for (let idx = 0; idx < elements.length; idx++) {
       const element = elements[idx];
-      const elementId = (this.getSilexId(element) as SilexId);
+      const elementId = (this.getSilexId(element as HTMLElement) as SilexId);
 
       // desktop
       if (this.stylesObj[elementId]) {
@@ -593,7 +591,7 @@ export class Property {
    * height set in px
    * @return the bounding box containing all the elements
    */
-  getBoundingBox(elements: Element[]): {top?: number, left?: number, width?: number, height?: number} {
+  getBoundingBox(elements: HTMLElement[]): {top?: number, left?: number, width?: number, height?: number} {
     // compute the positions and sizes, which may end up to be NaN or a number
     let top = NaN, left = NaN, right = NaN, bottom = NaN;
 

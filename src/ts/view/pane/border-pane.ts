@@ -15,10 +15,10 @@
  *
  */
 
-import {Model} from '../../types.js';
-import {Controller} from '../../types.js';
-import {ColorPicker} from '../ColorPicker.js';
-import {PaneBase} from './pane-base.js';
+import { goog } from '../../Goog.js';
+import { Controller, Model } from '../../types.js';
+import { ColorPicker } from '../ColorPicker.js';
+import { PaneBase } from './pane-base.js';
 
 /**
  * on of Silex Editors class
@@ -135,7 +135,7 @@ export class BorderPane extends PaneBase {
     this.iAmRedrawing = true;
 
     // call super
-    goog.base(this, 'redraw', selectedElements, pageNames, currentPageName);
+    super.redraw(selectedElements, pageNames, currentPageName);
 
     // border width, this builds a string like "0px 1px 2px 3px"
     // FIXME: should not build a string which is then split in redrawBorderWidth
@@ -214,18 +214,18 @@ export class BorderPane extends PaneBase {
 
     // get corner radius value, get the first non-zero value
     let val = values[0];
-    if (goog.isDef(values[1]) && val === '0' || val === '0px') {
+    if (goog.Is.isDef(values[1]) && val === '0' || val === '0px') {
       val = values[1];
     }
-    if (goog.isDef(values[2]) && val === '0' || val === '0px') {
+    if (goog.Is.isDef(values[2]) && val === '0' || val === '0px') {
       val = values[2];
     }
-    if (goog.isDef(values[3]) && val === '0' || val === '0px') {
+    if (goog.Is.isDef(values[3]) && val === '0' || val === '0px') {
       val = values[3];
     }
 
     // remove unit when needed
-    if (goog.isDef(val) && val !== '0' && val !== '0px') {
+    if (goog.Is.isDef(val) && val !== '0' && val !== '0px') {
       this.borderRadiusInput.value = val.substr(0, val.indexOf('px'));
 
       // corner placement
@@ -253,13 +253,13 @@ export class BorderPane extends PaneBase {
 
     // get the first non-zero value
     let val = values[0];
-    if (goog.isDef(values[1]) && val === '0' || val === '0px') {
+    if (goog.Is.isDef(values[1]) && val === '0' || val === '0px') {
       val = values[1];
     }
-    if (goog.isDef(values[2]) && val === '0' || val === '0px') {
+    if (goog.Is.isDef(values[2]) && val === '0' || val === '0px') {
       val = values[2];
     }
-    if (goog.isDef(values[3]) && val === '0' || val === '0px') {
+    if (goog.Is.isDef(values[3]) && val === '0' || val === '0px') {
       val = values[3];
     }
 
@@ -387,7 +387,7 @@ export class BorderPane extends PaneBase {
    */
   onBorderCornerChanged() {
     // corner radius
-    if (goog.isDef(this.borderRadiusInput.value) &&
+    if (goog.Is.isDef(this.borderRadiusInput.value) &&
         this.borderRadiusInput.value !== '') {
       // corner placement
       let borderWidthStr = '';

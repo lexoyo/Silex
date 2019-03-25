@@ -188,7 +188,7 @@ export class Head {
         metaNode.setAttribute('content', opt_value);
       } else {
         // remove the opt_value
-        goog.dom.removeNode(metaNode);
+        metaNode.parentElement.removeChild(metaNode);
       }
     }
   }
@@ -426,7 +426,7 @@ export class Head {
       }
     } else {
       if (!opt_path) {
-        goog.dom.removeNode(faviconTag);
+        faviconTag.parentElement.removeChild(faviconTag);
       }
     }
     if (opt_path) {
@@ -510,7 +510,7 @@ export class Head {
   /**
    * @return   head element of the loaded site
    */
-  getHeadElement(): Element {
+  getHeadElement(): HTMLElement {
     // returns the head of the document in the iframe
     return this.model.file.getContentDocument().head;
   }

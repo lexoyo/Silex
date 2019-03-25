@@ -15,21 +15,21 @@
  */
 
 type GRgb = Array<number>;
-var {GString} = goog.require("goog:goog.string");
-var {GStyle} = goog.require("goog:goog.style");
 
-import {Body} from '../model/body.js';
-import {Component} from '../model/Component.js';
-import {DragSystem} from '../model/DragSystem.js';
-import {SilexElement} from '../model/element.js';
-import {Head} from '../model/head.js';
-import {Page} from '../model/page.js';
+import { goog } from '../Goog.js';
+import { Body } from '../model/body.js';
+import { Component } from '../model/Component.js';
+import { DragSystem } from '../model/DragSystem.js';
+import { SilexElement } from '../model/element.js';
+import { Head } from '../model/head.js';
+import { Page } from '../model/page.js';
+import { BreadCrumbs } from '../view/bread-crumbs.js';
 
-import {BreadCrumbs} from '../view/bread-crumbs.js';
+
+console.log('xxxxxxxxx', SilexElement);
 
 export class Style {
 
-  // constructor(){}
 
   /**
    * constant for the class names which are of internal use in Silex
@@ -90,7 +90,7 @@ export class Style {
       if (style[idx] && typeof style[idx] === 'string' && style[idx] !== '' &&
           idx.match(/[^0-9]/)) {
         styleStr +=
-            opt_tab + GString.toSelectorCase(idx) + ': ' + style[idx] + '; ';
+            opt_tab + goog.String.toSelectorCase(idx) + ': ' + style[idx] + '; ';
       }
     }
     return styleStr;
@@ -100,7 +100,7 @@ export class Style {
    * convert style string to object
    */
   static stringToStyle(styleStr: string): Object {
-    return GStyle.parseStyleAttribute(styleStr);
+    return goog.Style.parseStyleAttribute(styleStr);
   }
 
   /**
@@ -111,12 +111,12 @@ export class Style {
    * @param contentWindow of the iframe containing the website
    * @return the element bg color
    */
-  static computeBgColor(element: Element, contentWindow: Window): GRgb {
+  static computeBgColor(element: HTMLElement, contentWindow: Window): GRgb {
     let parentColorArray;
 
     // retrieve the parents blended colors
-    if (element.parentNode && element.parentNode.nodeType === 1) {
-      parentColorArray = Style.computeBgColor((element.parentNode as Element), contentWindow);
+    if (element.parentElement && element.parentElement.nodeType === 1) {
+      parentColorArray = Style.computeBgColor((element.parentElement as HTMLElement), contentWindow);
     } else {
       parentColorArray = null;
     }
@@ -136,7 +136,7 @@ export class Style {
         elementColorStr =
             elementColorStr.substring(0, elementColorStr.lastIndexOf(',')) + ')';
         elementColorArray =
-            goog.color.hexToRgb(goog.color.parse(elementColorStr).hex);
+            goog.Color.hexToRgb(goog.Color.parse(elementColorStr).hex);
         elementColorArray.push(alpha);
       } else {
         if (elementColorStr.indexOf('transparent') >= 0) {
@@ -146,20 +146,20 @@ export class Style {
           if (elementColorStr.indexOf('rgb') >= 0) {
             // rgb case
             elementColorArray =
-                goog.color.hexToRgb(goog.color.parse(elementColorStr).hex);
+                goog.Color.hexToRgb(goog.Color.parse(elementColorStr).hex);
             elementColorArray.push(1);
           } else {
             if (elementColorStr.indexOf('#') >= 0) {
               // hex case
-              elementColorArray = goog.color.hexToRgb(elementColorStr);
+              elementColorArray = goog.Color.hexToRgb(elementColorStr);
               elementColorArray.push(1);
             } else {
               // handle all colors, including the named colors
-              elementColorStr = GStyle.getBackgroundColor(element);
+              elementColorStr = goog.Style.getBackgroundColor(element);
 
               // named color case
               elementColorArray =
-                  goog.color.hexToRgb(goog.color.parse(elementColorStr).hex);
+                  goog.Color.hexToRgb(goog.Color.parse(elementColorStr).hex);
               elementColorArray.push(1);
             }
           }

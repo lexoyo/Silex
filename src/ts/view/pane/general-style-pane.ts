@@ -14,10 +14,11 @@
  * Controls the general params of the selected component
  *
  */
-import {Model} from '../../types.js';
-import {Controller} from '../../types.js';
 
-import {PaneBase} from './pane-base.js';
+import { goog } from '../../Goog.js';
+import { Controller, Model } from '../../types.js';
+import { PaneBase } from './pane-base.js';
+
 
 /**
  * on of Silex Editors class
@@ -60,7 +61,7 @@ export class GeneralStylePane extends PaneBase {
    * @param  currentPageName   the name of the current page
    */
   redraw(
-      selectedElements: Element[], pageNames: string[],
+      selectedElements: HTMLElement[], pageNames: string[],
       currentPageName: string) {
     if (this.iAmSettingValue) {
       return;
@@ -85,7 +86,7 @@ export class GeneralStylePane extends PaneBase {
       let opacity = this.getCommonProperty(selectedElements, (element) => {
         return this.model.element.getStyle(element, 'opacity');
       });
-      if (goog.isNull(opacity)) {
+      if (goog.Is.isNull(opacity)) {
         this.opacityInput.value = '';
       } else {
         if (opacity === '') {

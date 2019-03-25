@@ -251,7 +251,7 @@ export class ControllerBase {
    * @param opt_isUndoable default is true
    */
   styleChanged(
-      name: string, value?: string, opt_elements?: Element[],
+      name: string, value?: string, opt_elements?: HTMLElement[],
       opt_isUndoable?: boolean) {
     if (!opt_elements) {
       opt_elements = this.model.body.getSelection();
@@ -275,7 +275,7 @@ export class ControllerBase {
    * set a set of styles to the current selection
    */
   multipleStylesChanged(
-      style: Object, opt_elements?: Element[]) {
+      style: Object, opt_elements?: HTMLElement[]) {
     if (!opt_elements) {
       opt_elements = this.model.body.getSelection();
     }
@@ -297,7 +297,7 @@ export class ControllerBase {
    * set a given property to the current selection
    */
   propertyChanged(
-      name: string, value?: string, opt_elements?: Element[],
+      name: string, value?: string, opt_elements?: HTMLElement[],
       opt_applyToContent?: boolean) {
     if (!opt_elements) {
       opt_elements = this.model.body.getSelection();
@@ -446,7 +446,7 @@ export class ControllerBase {
    * then the element should be visible everywhere, i.e. in the same pages as
    * its parent
    */
-  checkElementVisibility(element: Element) {
+  checkElementVisibility(element: HTMLElement) {
     let parentPage = this.model.page.getParentPage(element);
     if (parentPage !== null) {
       // get all the pages

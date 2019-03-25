@@ -118,7 +118,7 @@ export type UndoItem = {
   scrollY: number
 };
 export interface ClipboardItem {
-  element:Element;
+  element: HTMLElement;
   style: Object;
   mobileStyle: Object;
   componentData: ComponentData;

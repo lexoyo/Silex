@@ -16,8 +16,8 @@
  *
  */
 
-import {Controller} from '../../types.js';
-import {Model} from '../../types.js';
+import { goog } from '../../Goog.js';
+import { Controller, Model } from '../../types.js';
 
 
 /**
@@ -61,7 +61,7 @@ export class PaneBase {
    */
   styleChanged(
       styleName: string, opt_styleValue?: string,
-      opt_elements?: Element[]) {
+      opt_elements?: HTMLElement[]) {
     this.iAmSettingValue = true;
 
     // notify the controller
@@ -76,7 +76,7 @@ export class PaneBase {
    */
   propertyChanged(
       propertyName: string, opt_propertyValue?: string,
-      opt_elements?: Element[], opt_applyToContent?: boolean) {
+      opt_elements?: HTMLElement[], opt_applyToContent?: boolean) {
     if (this.iAmRedrawing) {
       return;
     }
@@ -96,7 +96,7 @@ export class PaneBase {
    * @param  currentPageName   the name of the current page
    */
   redraw(
-      selectedElements: Element[], pageNames: string[],
+      selectedElements: HTMLElement[], pageNames: string[],
       currentPageName: string) {
     if (!selectedElements) {
       throw new Error('selection array is undefined');
@@ -112,8 +112,8 @@ export class PaneBase {
    * FIXME: we should use Array::reduce
    */
   getCommonProperty(
-      elements: Element[],
-      getPropertyFunction: (p1: Element) => string | number | boolean |
+      elements: HTMLElement[],
+      getPropertyFunction: (p1: HTMLElement) => string | number | boolean |
           null): any {
     let value = null;
     let hasCommonValue: boolean = true;
@@ -148,13 +148,13 @@ export class PaneBase {
   setColorPaletteVisibility(hsvPalette: any, isVisible: boolean) {
     if (isVisible) {
       if (!this.getColorPaletteVisibility(hsvPalette)) {
-        goog.style.setStyle(hsvPalette.getElement(), 'visibility', '');
-        goog.style.setStyle(hsvPalette.getElement(), 'position', '');
+        goog.Style.setStyle(hsvPalette.getElement(), 'visibility', '');
+        goog.Style.setStyle(hsvPalette.getElement(), 'position', '');
       }
     } else {
       if (this.getColorPaletteVisibility(hsvPalette)) {
-        goog.style.setStyle(hsvPalette.getElement(), 'visibility', 'hidden');
-        goog.style.setStyle(hsvPalette.getElement(), 'position', 'absolute');
+        goog.Style.setStyle(hsvPalette.getElement(), 'visibility', 'hidden');
+        goog.Style.setStyle(hsvPalette.getElement(), 'position', 'absolute');
       }
     }
   }
@@ -167,7 +167,7 @@ export class PaneBase {
    * @return true if the color palete is visible
    */
   getColorPaletteVisibility(hsvPalette: any): boolean {
-    return goog.style.getStyle(hsvPalette.getElement(), 'visibility') !==
+    return goog.Style.getStyle(hsvPalette.getElement(), 'visibility') !==
         'hidden';
   }
 }

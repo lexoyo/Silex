@@ -13,12 +13,11 @@
  * @fileoverview The settings dialog which handles the file settings
  *
  */
-var {KeyCodes} = goog.require("goog:goog.events.KeyCodes");
-var {KeyboardShortcutHandler} = goog.require("goog:goog.ui.KeyboardShortcutHandler");
+
 import { CloudStorage } from '../../service/cloud-storage.js';
 import { Controller, FileInfo, Font, Model } from '../../types.js';
-import { Url } from '../../utils/url.js';
 import { SilexNotification } from '../../utils/notification.js';
+import { Url } from '../../utils/url.js';
 import { ModalDialog } from '../ModalDialog.js';
 
 /**
@@ -179,7 +178,7 @@ export class SettingsDialog {
         };
     this.list = this.element.querySelector('.fonts-list');
     this.list.onclick = (e) => {
-      const el = (e.target as Element);
+      const el = (e.target as HTMLElement);
       if (el.classList.contains('del-btn')) {
         const idx = parseInt(el.getAttribute('data-idx'), 10);
         const fonts = this.model.head.getFonts();
@@ -205,7 +204,7 @@ export class SettingsDialog {
    * click in the navigation
    */
   onNavClick(e: Event) {
-    this.openPane((e.target as Element).getAttribute('data-pane'));
+    this.openPane((e.target as HTMLElement).getAttribute('data-pane'));
   }
 
   /**

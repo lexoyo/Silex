@@ -31,7 +31,7 @@ super(model, view);
   /**
    * htmlEditor event handler
    */
-  changed(element: Element, content: string) {
+  changed(element: HTMLElement, content: string) {
     if (!element || element.tagName.toLowerCase() === 'body') {
       // edit head tag
       this.model.head.setUserHeadTag(content);

@@ -19,6 +19,9 @@ import {Model} from '../types.js';
  *
  */
 
+
+import { goog } from '../Goog.js';
+
 /**
  * @param element   container to render the UI
  * @param model  model class which holds
@@ -77,7 +80,7 @@ export class Splitter {
    * remove a component to split
    */
   remove(element: HTMLElement) {
-    goog.array.remove(this.onTheRight, element);
+    this.onTheRight.splice(this.onTheRight.indexOf(element), 1);
     element.style.left = '';
     element.style.right = '';
     this.redraw();
@@ -87,15 +90,15 @@ export class Splitter {
    * redraw the components
    */
   redraw() {
-    let pos = goog.style.getClientPosition(this.element) as any;
-    let parentSize = goog.style.getContentBoxSize(this.element.parentNode as Element) as any;
+    let pos = goog.Style.getBounds(this.element);
+    let parentSize = goog.Style.getBounds(this.element.parentElement as HTMLElement);
 
     // apply the position to the elements
     this.onTheLeft.forEach(element => {
-      element.style.right = parentSize.width - pos.x + 'px';
+      element.style.right = parentSize.width - pos.left + 'px';
     });
     this.onTheRight.forEach(element => {
-      element.style.left = Splitter.WIDTH + pos.x + 'px';
+      element.style.left = Splitter.WIDTH + pos.left + 'px';
     });
     if (this.onRedraw) {
       this.onRedraw();
@@ -122,14 +125,14 @@ export class Splitter {
     this.isDown = false;
 
     // stop listening
-    goog.events.unlisten(
+    goog.Event.unlisten(
         this.model.file.getContentWindow(), 'mousemove', this.onMouseMoveFrame,
         false, this);
-    goog.events.unlisten(
+    goog.Event.unlisten(
         this.model.file.getContentWindow(), 'mouseup', this.onMouseUp, true,
         this);
-    goog.events.unlisten(document.body, 'mouseup', this.onMouseUp, false, this);
-    goog.events.unlisten(
+    goog.Event.unlisten(document.body, 'mouseup', this.onMouseUp, false, this);
+    goog.Event.unlisten(
         document.body, 'mousemove', this.onMouseMove, false, this);
   }
 
@@ -138,10 +141,10 @@ export class Splitter {
    */
   onMouseMoveFrame(e: Event) {
     if (this.isDown) {
-      let parentSize = goog.style.getContentBoxSize(this.element.parentNode as HTMLElement) as any;
-      let pos = goog.style.getClientPosition(e) as any;
-      let posIFrame = goog.style.getClientPosition(this.model.file.getIFrameElement()) as any;
-      this.element.style.right = parentSize.width - pos.x - posIFrame.x + 'px';
+      let parentSize = goog.Style.getBounds(this.element.parentElement as HTMLElement);
+      let pos = goog.Style.getBounds(e.target as HTMLElement);
+      let posIFrame = goog.Style.getBounds(this.model.file.getIFrameElement());
+      this.element.style.right = parentSize.width - pos.left - posIFrame.left + 'px';
       this.redraw();
     }
   }
@@ -151,9 +154,9 @@ export class Splitter {
    */
   onMouseMove(e: Event) {
     if (this.isDown) {
-      let parentSize = goog.style.getContentBoxSize(this.element.parentNode as Element) as any;
-      let pos = goog.style.getClientPosition(e) as any;
-      this.element.style.right = parentSize.width - pos.x + 'px';
+      let parentSize = goog.Style.getBounds(this.element.parentElement as HTMLElement);
+      let pos = goog.Style.getBounds(e.target as HTMLElement);
+      this.element.style.right = parentSize.width - pos.left + 'px';
       this.redraw();
     }
   }
