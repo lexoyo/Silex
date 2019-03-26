@@ -17,7 +17,7 @@
  */
 import { goog } from '../Goog.js';
 import { Body } from '../model/body.js';
-import { SilexElement } from '../model/element.js';
+import { Constants } from '../../Constants.js';
 import { Page } from '../model/page.js';
 import { Controller, Model } from '../types.js';
 import { InvalidationManager } from '../utils/invalidation-manager.js';
@@ -315,7 +315,7 @@ export class Stage {
       // get the first parent node which is editable (silex-editable css class)
       const editableElement =
           goog.Dom.getAncestorByClass(
-              event.target, Body.EDITABLE_CLASS_NAME) ||
+              event.target, Constants.EDITABLE_CLASS_NAME) ||
           this.bodyElement;
 
       // if this is a text box being edited inline, do nothing
@@ -500,8 +500,8 @@ export class Stage {
           .forEach((element) => {
             if (!goog.Dom.getAncestorByClass(
                     element.parentElement,
-                    SilexElement.SELECTED_CLASS_NAME) &&
-                !element.classList.contains(Body.PREVENT_DRAGGABLE_CLASS_NAME)) {
+                    Constants.SELECTED_CLASS_NAME) &&
+                !element.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME)) {
               this.controller.stageController.newContainer(
                   dropZone.element, element);
             }
@@ -525,9 +525,9 @@ export class Stage {
 
       // remove dragging style
       const dragged = this.bodyElement.querySelectorAll(
-          '.' + Body.DRAGGING_CLASS_NAME);
+          '.' + Constants.DRAGGING_CLASS_NAME);
       for (let idx = 0, el = null; el = dragged[idx]; ++idx) {
-        el.classList.remove(Body.DRAGGING_CLASS_NAME);
+        el.classList.remove(Constants.DRAGGING_CLASS_NAME);
       }
     } else {
       if (this.iAmClicking !== true) {
@@ -535,7 +535,7 @@ export class Stage {
         // class)
         let editableElement =
             goog.Dom.getAncestorByClass(
-                target, Body.EDITABLE_CLASS_NAME) ||
+                target, Constants.EDITABLE_CLASS_NAME) ||
             this.bodyElement;
 
         // single or multiple selection
@@ -596,7 +596,7 @@ export class Stage {
       if (this.lastSelected === null) {
         let editableElement =
             goog.Dom.getAncestorByClass(
-                target, Body.EDITABLE_CLASS_NAME) ||
+                target, Constants.EDITABLE_CLASS_NAME) ||
             this.bodyElement;
         this.lastSelected = editableElement;
       }
@@ -622,7 +622,7 @@ export class Stage {
           const draggableElements = this.selectedElements.filter(
               (element) => element !== this.bodyElement &&
                   !element.classList.contains(
-                      Body.PREVENT_DRAGGABLE_CLASS_NAME));
+                      Constants.PREVENT_DRAGGABLE_CLASS_NAME));
           draggableElements.forEach((element) => {
             // move to the body so that it is above everything
             // move back to the same x, y position
@@ -637,7 +637,7 @@ export class Stage {
             this.bodyElement.appendChild(element);
 
             // dragging style
-            element.classList.add(Body.DRAGGING_CLASS_NAME);
+            element.classList.add(Constants.DRAGGING_CLASS_NAME);
           });
         }
 
@@ -676,10 +676,10 @@ export class Stage {
    */
   markAsDropZone(opt_element?: HTMLElement) {
     let els = Array.from((this.bodyElement.parentElement as HTMLElement | null)
-      .querySelectorAll(Body.DROP_CANDIDATE_CLASS_NAME));
-    els.forEach((el) => el.classList.remove(Body.DROP_CANDIDATE_CLASS_NAME));
+      .querySelectorAll(Constants.DROP_CANDIDATE_CLASS_NAME));
+    els.forEach((el) => el.classList.remove(Constants.DROP_CANDIDATE_CLASS_NAME));
     if (opt_element) {
-      opt_element.classList.add(Body.DROP_CANDIDATE_CLASS_NAME);
+      opt_element.classList.add(Constants.DROP_CANDIDATE_CLASS_NAME);
     }
   }
 
@@ -715,7 +715,7 @@ export class Stage {
     for (let idx = 0; idx < children.length; idx++) {
       let element = children[idx];
       if (element.classList.contains('container-element') &&
-          !element.classList.contains(Body.PREVENT_DROPPABLE_CLASS_NAME) &&
+          !element.classList.contains(Constants.PREVENT_DROPPABLE_CLASS_NAME) &&
           !(opt_preventSelected === true &&
             element.classList.contains('silex-selected')) &&
           this.getVisibility(element)) {
@@ -755,7 +755,7 @@ export class Stage {
   getVisibility(element: HTMLElement): boolean {
     let parent: HTMLElement = (element as HTMLElement | null);
     while (parent &&
-           (!parent.classList.contains(Page.PAGED_CLASS_NAME) ||
+           (!parent.classList.contains(Constants.PAGED_CLASS_NAME) ||
             parent.classList.contains(this.currentPageName)) &&
            !(this.controller.stageController.getMobileMode() &&
              this.model.element.getHideOnMobile(parent))) {
@@ -892,7 +892,7 @@ export class Stage {
     this.lastSelected = null;
 
     // if the element was not already selected
-    if (!element.classList.contains(SilexElement.SELECTED_CLASS_NAME)) {
+    if (!element.classList.contains(Constants.SELECTED_CLASS_NAME)) {
       this.lastSelected = element;
 
       // notify the controller

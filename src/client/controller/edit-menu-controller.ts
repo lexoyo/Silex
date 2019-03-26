@@ -14,6 +14,7 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
+
 import { DomDirection, SilexElement } from '../model/element.js';
 import { ClipboardItem, Model, View } from '../types.js';
 import { InvalidationManager } from '../utils/invalidation-manager.js';
@@ -21,6 +22,8 @@ import { SilexNotification } from '../utils/notification.js';
 import { Style } from '../utils/style.js';
 import { FileExplorer } from '../view/dialog/file-explorer.js';
 import { ControllerBase } from './controller-base.js';
+import { Constants } from '../../Constants.js';
+
 /**
  * @param view  view class which holds the other views
  */
@@ -94,7 +97,7 @@ super(model, view);
                   // FIXME: closest is not yet defined on Element in google
                   // closure, remove the array access ['closest'] when it is
                   element.parentElement['closest'](
-                      '.' + SilexElement.SELECTED_CLASS_NAME) == null;
+                      '.' + Constants.SELECTED_CLASS_NAME) == null;
             })
             .map((element) => {
               return element.cloneNode(true) as HTMLElement;
@@ -132,7 +135,7 @@ super(model, view);
 
     // case of a container, handle its children
     if (this.model.element.getType(res.element) ===
-        SilexElement.TYPE_CONTAINER) {
+        Constants.TYPE_CONTAINER) {
       const len = res.element.childNodes.length;
       for (let idx = 0; idx < len; idx++) {
         const el = (res.element.childNodes[idx] as HTMLElement);
@@ -254,7 +257,7 @@ super(model, view);
       this.view.propertyTool.openParamsTab();
     } else {
       switch (this.model.element.getType(element)) {
-        case SilexElement.TYPE_TEXT:
+        case Constants.TYPE_TEXT:
           let bgColor = Style.computeBgColor(
               element, this.model.file.getContentWindow());
           if (!bgColor) {
@@ -267,11 +270,11 @@ super(model, view);
 
           // this.view.propertyTool.openStyleTab();
           break;
-        case SilexElement.TYPE_HTML:
+        case Constants.TYPE_HTML:
           this.view.htmlEditor.open();
           this.view.htmlEditor.setSelection([element]);
           break;
-        case SilexElement.TYPE_IMAGE:
+        case Constants.TYPE_IMAGE:
           this.view.fileExplorer.openFile(FileExplorer.IMAGE_EXTENSIONS)
               .then((blob) => {
                 if (blob) {

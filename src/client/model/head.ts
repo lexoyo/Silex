@@ -15,12 +15,13 @@
  *   which is rendered by the Stage class
  *   It has methods to manipulate the dom
  */
-import * as Config from '../config.js';
+
+import { Constants } from '../../Constants.js';
 import {View} from '../types.js';
 import {FileInfo} from '../types.js';
 import {Model} from '../types.js';
 import {Font} from '../types.js';
-import {SilexElement} from '../model/element.js';
+
 
 /**
  * @param model  model class which holds the other models
@@ -28,26 +29,6 @@ import {SilexElement} from '../model/element.js';
  */
 export class Head {
   userHeadTag: string = '';
-
-  /**
-   * id of the style element which holds silex editable css styles
-   */
-  static SILEX_STYLE_ELEMENT_CSS_CLASS = 'silex-style';
-
-  /**
-   * id of the style element which holds silex editable css styles
-   */
-  static SILEX_SCRIPT_ELEMENT_CSS_CLASS = 'silex-script';
-
-  /**
-   * css class which marks the tags added to load a custom font
-   */
-  static CUSTOM_FONTS_CSS_CLASS = 'silex-custom-font';
-
-  /**
-   * css class set to enable mobile version
-   */
-  static ENABLE_MOBILE_CSS_CLASS = 'enable-mobile';
 
   constructor(public model: Model, public view: View) {}
 
@@ -103,7 +84,7 @@ export class Head {
    */
   getHeadScript(): string {
     // get silex scripts from the DOM
-    let scriptTag = this.getHeadElement().querySelector('.' + Head.SILEX_SCRIPT_ELEMENT_CSS_CLASS);
+    let scriptTag = this.getHeadElement().querySelector('.' + Constants.SILEX_SCRIPT_ELEMENT_CSS_CLASS);
     if (!scriptTag) {
       return '';
     }
@@ -115,12 +96,12 @@ export class Head {
    * @param jsString   the string defining Silex script
    */
   setHeadScript(jsString: string) {
-    let scriptTag = this.getHeadElement().querySelector('.' + Head.SILEX_SCRIPT_ELEMENT_CSS_CLASS) as HTMLScriptElement;
+    let scriptTag = this.getHeadElement().querySelector('.' + Constants.SILEX_SCRIPT_ELEMENT_CSS_CLASS) as HTMLScriptElement;
     if (!scriptTag) {
       const doc = this.model.file.getContentDocument();
       scriptTag = doc.createElement('script');
       scriptTag.type = 'text/javascript';
-      scriptTag.className = Head.SILEX_SCRIPT_ELEMENT_CSS_CLASS;
+      scriptTag.className = Constants.SILEX_SCRIPT_ELEMENT_CSS_CLASS;
       this.getHeadElement().appendChild(scriptTag);
     }
     scriptTag.innerHTML = jsString;
@@ -132,7 +113,7 @@ export class Head {
    */
   getHeadStyle(): string {
     // get silex styles from the DOM
-    let silexStyle = this.getHeadElement().querySelector('.' + Head.SILEX_STYLE_ELEMENT_CSS_CLASS);
+    let silexStyle = this.getHeadElement().querySelector('.' + Constants.SILEX_STYLE_ELEMENT_CSS_CLASS);
     if (!silexStyle) {
       console.warn('no silex editable styles defined');
       return '';
@@ -145,12 +126,12 @@ export class Head {
    * @param cssString   the css string defining all Silex styles
    */
   setHeadStyle(cssString: string) {
-    let silexStyle = this.getHeadElement().querySelector('.' + Head.SILEX_STYLE_ELEMENT_CSS_CLASS) as HTMLStyleElement;
+    let silexStyle = this.getHeadElement().querySelector('.' + Constants.SILEX_STYLE_ELEMENT_CSS_CLASS) as HTMLStyleElement;
     if (!silexStyle) {
       const doc = this.model.file.getContentDocument();
       silexStyle = doc.createElement('style');
       silexStyle.type = 'text/css';
-      silexStyle.className = Head.SILEX_STYLE_ELEMENT_CSS_CLASS;
+      silexStyle.className = Constants.SILEX_STYLE_ELEMENT_CSS_CLASS;
       this.getHeadElement().appendChild(silexStyle);
     }
     silexStyle.innerHTML = cssString;
@@ -264,7 +245,7 @@ export class Head {
     }
     let viewport = doc.querySelector('meta[name=viewport]') as HTMLMetaElement;
     if (enable === true) {
-      doc.body.classList.add(Head.ENABLE_MOBILE_CSS_CLASS);
+      doc.body.classList.add(Constants.ENABLE_MOBILE_CSS_CLASS);
       if (!viewport) {
         viewport = doc.createElement('meta') as HTMLMetaElement;
         viewport.name = 'viewport';
@@ -272,7 +253,7 @@ export class Head {
         doc.head.appendChild(viewport);
       }
     } else {
-      doc.body.classList.remove(Head.ENABLE_MOBILE_CSS_CLASS);
+      doc.body.classList.remove(Constants.ENABLE_MOBILE_CSS_CLASS);
       if (viewport) {
         doc.head.removeChild(viewport);
       }
@@ -296,7 +277,7 @@ export class Head {
       // body is null, this happens while undoing or redoing
       return false;
     }
-    return body.classList.contains(Head.ENABLE_MOBILE_CSS_CLASS);
+    return body.classList.contains(Constants.ENABLE_MOBILE_CSS_CLASS);
   }
 
   /**
@@ -315,7 +296,7 @@ export class Head {
         this.getHeadElement().appendChild(silexStyle);
       }
       silexStyle.innerHTML = `
-      .${SilexElement.WEBSITE_WIDTH_CLASS_NAME} {
+      .${Constants.WEBSITE_WIDTH_CLASS_NAME} {
         width: ${opt_value}px;
       }
     `;
@@ -550,7 +531,7 @@ export class Head {
           const link = doc.createElement('link');
           link.href = font.href;
           link.rel = 'stylesheet';
-          link.className = Head.CUSTOM_FONTS_CSS_CLASS;
+          link.className = Constants.CUSTOM_FONTS_CSS_CLASS;
           head.appendChild(link);
         });
 

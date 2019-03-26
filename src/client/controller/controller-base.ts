@@ -17,7 +17,8 @@
  *      {silex.controller.ControllerBase} UiControllerBase class
  *
  */
-import {SilexElement} from '../model/element.js';
+
+import { Constants } from '../../Constants.js';
 import {Tracker} from '../service/tracker.js';
 import {UndoItem} from '../types.js';
 import {ClipboardItem} from '../types.js';
@@ -217,7 +218,7 @@ export class ControllerBase {
             this.undoCheckPoint();
 
             // create the element
-            let img = this.addElement(SilexElement.TYPE_IMAGE);
+            let img = this.addElement(Constants.TYPE_IMAGE);
 
             // load the image
             this.model.element.setImageUrl(

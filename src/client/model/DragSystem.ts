@@ -23,7 +23,7 @@
 import { goog } from '../Goog.js';
 import { Body } from '../model/body.js';
 import { SilexElement } from '../model/element.js';
-import { Page } from '../model/page.js';
+import { Constants } from '../../Constants.js';
 import { Model, StickyLine, StickyPoint, View } from '../types.js';
 import { Stage } from '../view/stage.js';
 
@@ -33,9 +33,9 @@ function* buildStickyLinesFromElements(win, allWebsiteElements, dragSystem) {
   const stickableElements = allWebsiteElements.filter(
       (element) => dragSystem.isDraggable(element) &&
           !element.classList.contains(
-              SilexElement.SELECTED_CLASS_NAME) &&
+              Constants.SELECTED_CLASS_NAME) &&
           (dragSystem.model.page.isInPage(element) ||
-           !element.classList.contains(Page.PAGED_CLASS_NAME)));
+           !element.classList.contains(Constants.PAGED_CLASS_NAME)));
   yield;
   for (let element of stickableElements) {
     const elementId = dragSystem.model.property.getSilexId(element);
@@ -108,27 +108,6 @@ function* buildStickyLinesFromElements(win, allWebsiteElements, dragSystem) {
  * @class {silex.model.DragSystem}
  */
 export class DragSystem {
-  // static constants
-  static get STICKY_DISTANCE() {
-    return 5;
-  }
-  static get STUCK_CSS_CLASS() {
-    return 'stuck';
-  }
-  static get STUCK_LEFT_CSS_CLASS() {
-    return 'stuck-left';
-  }
-  static get STUCK_RIGHT_CSS_CLASS() {
-    return 'stuck-right';
-  }
-  static get STUCK_TOP_CSS_CLASS() {
-    return 'stuck-top';
-  }
-  static get STUCK_BOTTOM_CSS_CLASS() {
-    return 'stuck-bottom';
-  }
-  model: any;
-  view: any;
   stickyLines: Map<string, StickyLine>;
 
   /**
@@ -145,9 +124,7 @@ export class DragSystem {
    * @param model  model class which holds the other models
    * @param view  view class which holds the other views
    */
-  constructor(model: Model, view: View) {
-    this.model = model;
-    this.view = view;
+  constructor(private model: Model, private view: View) {
     this.stickyLines = new Map();
   }
 
@@ -170,7 +147,7 @@ export class DragSystem {
   startDrag(win: Window) {
     if (this.autoStickyElements) {
       const allWebsiteElements = Array.from(win.document.querySelectorAll(
-          '.' + Body.EDITABLE_CLASS_NAME));
+          '.' + Constants.EDITABLE_CLASS_NAME));
       this.stopAutoStickyElements = false;
       this.nextStep(
           buildStickyLinesFromElements(win, allWebsiteElements, this));
@@ -215,13 +192,13 @@ export class DragSystem {
    */
   removeAllStyckyHtmlMarkup(win: Window) {
     // remove the 'stuck' css class
-    Array.from(win.document.getElementsByClassName(DragSystem.STUCK_CSS_CLASS))
+    Array.from(win.document.getElementsByClassName(Constants.STUCK_CSS_CLASS))
         .forEach(
-            (element) => element.classList.remove(DragSystem.STUCK_CSS_CLASS));
+            (element) => element.classList.remove(Constants.STUCK_CSS_CLASS));
 
     // remove the 'stuck-left', 'stuck-top'... css classes
-    [DragSystem.STUCK_LEFT_CSS_CLASS, DragSystem.STUCK_RIGHT_CSS_CLASS,
-     DragSystem.STUCK_TOP_CSS_CLASS, DragSystem.STUCK_BOTTOM_CSS_CLASS]
+    [Constants.STUCK_LEFT_CSS_CLASS, Constants.STUCK_RIGHT_CSS_CLASS,
+     Constants.STUCK_TOP_CSS_CLASS, Constants.STUCK_BOTTOM_CSS_CLASS]
         .forEach((cssClass) => {
           Array.from(win.document.getElementsByClassName(cssClass))
               .forEach((element) => element.classList.remove(cssClass));
@@ -281,7 +258,7 @@ export class DragSystem {
           // left vertical lines when we resize the top left corner
           allowedDirections.indexOf(resizeDirection) > -1 &&
           // and keep only the lines which are near the resized edge
-          Math.abs(delta) < DragSystem.STICKY_DISTANCE) {
+          Math.abs(delta) < Constants.STICKY_DISTANCE) {
         if (!stuck) {
           stuck = true;
           switch (s.stickyPoint) {
@@ -303,7 +280,7 @@ export class DragSystem {
         // mark all elements (the dragged element and the ones to which it
         // sticks) console.log('stick!!!');
         [element, s.metaData.element].forEach((el) => {
-          el.classList.add(DragSystem.STUCK_CSS_CLASS);
+          el.classList.add(Constants.STUCK_CSS_CLASS);
           el.classList.add(`stuck-${s.stickyPoint}`);
         });
       }
@@ -314,7 +291,7 @@ export class DragSystem {
       // do not resize the stage or the un-resizeable elements
       if (follower.tagName.toUpperCase() !== 'BODY' &&
           !follower.classList.contains(
-              Body.PREVENT_RESIZABLE_CLASS_NAME)) {
+              Constants.PREVENT_RESIZABLE_CLASS_NAME)) {
         let pos = goog.Style.getBounds(follower);
         let offsetPosX = pos.left;
         let offsetPosY = pos.top;
@@ -460,7 +437,7 @@ export class DragSystem {
 
       // check if we should stick
       const delta = s.position - pos;
-      if (Math.abs(delta) < DragSystem.STICKY_DISTANCE) {
+      if (Math.abs(delta) < Constants.STICKY_DISTANCE) {
         switch (s.stickyPoint) {
           case StickyPoint.LEFT:
           case StickyPoint.RIGHT:
@@ -485,7 +462,7 @@ export class DragSystem {
         // mark all elements (the dragged element and the ones to which it
         // sticks) console.log('stick!!!');
         [element, s.metaData.element].forEach((el) => {
-          el.classList.add(DragSystem.STUCK_CSS_CLASS);
+          el.classList.add(Constants.STUCK_CSS_CLASS);
           el.classList.add(`stuck-${s.stickyPoint}`);
         });
       }
@@ -520,9 +497,9 @@ export class DragSystem {
   isDraggable(element) {
     return element.tagName.toUpperCase() !== 'BODY' &&
         !goog.Dom.getAncestorByClass(
-            element.parentElement, SilexElement.SELECTED_CLASS_NAME) &&
+            element.parentElement, Constants.SELECTED_CLASS_NAME) &&
         !element.classList.contains(
-            Body.PREVENT_DRAGGABLE_CLASS_NAME);
+            Constants.PREVENT_DRAGGABLE_CLASS_NAME);
   }
 
   getBoundingBox(win, element: HTMLElement):

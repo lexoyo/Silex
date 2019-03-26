@@ -3,12 +3,13 @@
   "compilerOptions": {
     "outDir": "dist/server/",
     "target": "es6",
-    "sourceRoot": "./src/server",
     "watch": true,
-    // "sourceMap": true,
-    "inlineSourceMap": true,
+    "sourceMap": true,
     "module": "commonjs",
     "removeComments": false,
+    "paths": {
+      "@shared/*": ["src/*"],
+    },
   },
   "include": [
     "src/server/silex_electron.ts",

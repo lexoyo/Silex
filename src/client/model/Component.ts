@@ -22,6 +22,7 @@ import { LinkDialog } from '../view/dialog/LinkDialog.js';
 import { ComponentData, PseudoClass, PseudoClassData, SilexId, StyleData, StyleName, Visibility } from './Data.js';
 import { Property } from './property.js';
 import { SilexNotification } from '../utils/notification.js';
+import { Constants } from '../../Constants.js';
 
 /**
  * Manage Prodotype components and styles
@@ -35,19 +36,6 @@ export class Component {
   styleEditorElement: HTMLElement = null;
   readyCbkArr: ((p1: Object) => any)[] = [];
   linkDialog: LinkDialog;
-
-  static COMPONENT_CLASS_NAME = 'silex-component';
-  static STYLE_CLASS_NAME = 'silex-prodotype-style';
-  static BODY_STYLE_NAME = 'All style';
-  static BODY_STYLE_CSS_CLASS = 'all-style';
-  static EMPTY_STYLE_CLASS_NAME = 'empty-style-class-name';
-  static EMPTY_STYLE_DISPLAY_NAME = '';
-  static COMPONENT_TYPE = 'component';
-  static STYLE_TYPE = 'style';
-  /**
-   * possible visibility for the styles
-   */
-  static STYLE_VISIBILITY = ['desktop', 'mobile'];
 
   /**
    * @param model  model class which holds the other models
@@ -94,23 +82,23 @@ export class Component {
 
     // make sure that the style exists
     const styleData =
-        this.model.property.getStyleData(Component.BODY_STYLE_CSS_CLASS);
+        this.model.property.getStyleData(Constants.BODY_STYLE_CSS_CLASS);
     if (!styleData) {
       this.initStyle(
-          Component.BODY_STYLE_NAME, Component.BODY_STYLE_CSS_CLASS, null);
+          Constants.BODY_STYLE_NAME, Constants.BODY_STYLE_CSS_CLASS, null);
     }
 
     // make sure that body has the style
-    element.classList.add(Component.BODY_STYLE_CSS_CLASS);
+    element.classList.add(Constants.BODY_STYLE_CSS_CLASS);
   }
 
   /**
    * not needed? we sometimes use !!this.model.property.getElementData(element,
-   * Component.COMPONENT_TYPE)
+   * Constants.COMPONENT_TYPE)
    * @return true if el is a component (not only an element)
    */
   isComponent(el: HTMLElement): boolean {
-    return el.classList.contains(Component.COMPONENT_CLASS_NAME);
+    return el.classList.contains(Constants.COMPONENT_CLASS_NAME);
   }
 
   /**
@@ -118,7 +106,7 @@ export class Component {
    * @return component descriptors
    */
   getComponentsDef(type: string): ProdotypeCompDef {
-    const obj = type === Component.COMPONENT_TYPE ? this.prodotypeComponent :
+    const obj = type === Constants.COMPONENT_TYPE ? this.prodotypeComponent :
                                                     this.prodotypeStyle;
     return obj ? obj.componentsDef : ({} as ProdotypeCompDef);
   }
@@ -129,10 +117,10 @@ export class Component {
    */
   initComponent(element: HTMLElement, templateName: string) {
     const name = this.prodotypeComponent.createName(
-        templateName, this.getProdotypeComponents(Component.COMPONENT_TYPE));
+        templateName, this.getProdotypeComponents(Constants.COMPONENT_TYPE));
 
     // for selection (select all components)
-    element.classList.add(Component.COMPONENT_CLASS_NAME);
+    element.classList.add(Constants.COMPONENT_CLASS_NAME);
 
     // for styles (select buttons and apply a style)
     this.model.property.setElementComponentData(element, {'name': name, 'templateName': templateName});
@@ -140,11 +128,11 @@ export class Component {
     // first rendering of the component
     this.render(element, () => {
       // update the dependencies once the component is added
-      this.updateDepenedencies(Component.COMPONENT_TYPE);
+      this.updateDepenedencies(Constants.COMPONENT_TYPE);
     });
 
     // css styles
-    const componentsDef = this.getComponentsDef(Component.COMPONENT_TYPE);
+    const componentsDef = this.getComponentsDef(Constants.COMPONENT_TYPE);
     const comp = componentsDef[templateName];
     if (comp) {
       // apply the style found in component definition
@@ -179,16 +167,16 @@ export class Component {
    * @param element component to render
    */
   render(element: HTMLElement, opt_cbk?: (() => any)) {
-    this.renderType(element, Component.COMPONENT_TYPE, () => {
-      this.renderType(element, Component.STYLE_TYPE, opt_cbk);
+    this.renderType(element, Constants.COMPONENT_TYPE, () => {
+      this.renderType(element, Constants.STYLE_TYPE, opt_cbk);
     });
   }
 
   getProdotype(type) {
     switch (type) {
-      case Component.COMPONENT_TYPE:
+      case Constants.COMPONENT_TYPE:
         return this.prodotypeComponent;
-      case Component.STYLE_TYPE:
+      case Constants.STYLE_TYPE:
         return this.prodotypeStyle;
       default:
         throw 'Unknown type in renderType';
@@ -201,7 +189,7 @@ export class Component {
   renderType(
       element: HTMLElement, type: SilexId|StyleName,
       opt_cbk?: (() => any)) {
-    const data = type === Component.COMPONENT_TYPE ?
+    const data = type === Constants.COMPONENT_TYPE ?
         this.model.property.getElementComponentData(element) :
         this.model.property.getElementStyleData(element);
     if (data) {
@@ -233,9 +221,9 @@ export class Component {
    * @return an array of CSS classes
    */
   getCssClasses(templateName: string): string[] {
-    const componentsDef = this.getComponentsDef(Component.COMPONENT_TYPE);
+    const componentsDef = this.getComponentsDef(Constants.COMPONENT_TYPE);
     const comp = componentsDef[templateName];
-    let cssClasses = [Component.COMPONENT_CLASS_NAME + '-' + templateName];
+    let cssClasses = [Constants.COMPONENT_CLASS_NAME + '-' + templateName];
     if (comp) {
       // class name is either an array
       // or a string or null
@@ -281,13 +269,13 @@ export class Component {
   }
 
   /**
-   * @param type, Component.COMPONENT_TYPE or Component.STYLE_TYPE
+   * @param type, Constants.COMPONENT_TYPE or Constants.STYLE_TYPE
    */
   getProdotypeComponents(type: string): Array<ComponentData|StyleData> {
-    const className = type === Component.COMPONENT_TYPE ?
-        Component.COMPONENT_CLASS_NAME :
-        Component.STYLE_CLASS_NAME;
-    const attrName = type === Component.COMPONENT_TYPE ?
+    const className = type === Constants.COMPONENT_TYPE ?
+        Constants.COMPONENT_CLASS_NAME :
+        Constants.STYLE_CLASS_NAME;
+    const attrName = type === Constants.COMPONENT_TYPE ?
         Property.ELEMENT_ID_ATTR_NAME :
         'data-style-id';
     return Dom
@@ -295,7 +283,7 @@ export class Component {
             this.model.file.getContentDocument(), '.' + className)
         .map((el) => {
           const attr = el.getAttribute(attrName);
-          const data = type === Component.COMPONENT_TYPE ?
+          const data = type === Constants.COMPONENT_TYPE ?
               this.model.property.getComponentData(attr) :
               this.model.property.getStyleData(attr);
           return data;
@@ -306,7 +294,7 @@ export class Component {
   /**
    * update the dependencies of Prodotype components
    * FIXME: should have a callback to know if/when scripts are loaded
-   * @param type, Component.COMPONENT_TYPE or Component.STYLE_TYPE
+   * @param type, Constants.COMPONENT_TYPE or Constants.STYLE_TYPE
    */
   updateDepenedencies(type: string) {
     const head = this.model.head.getHeadElement();
@@ -339,7 +327,7 @@ export class Component {
    * hide component editors
    */
   resetSelection(type: string) {
-    if (type === Component.COMPONENT_TYPE) {
+    if (type === Constants.COMPONENT_TYPE) {
       if (this.prodotypeComponent) {
         this.prodotypeComponent.edit();
       }
@@ -376,7 +364,7 @@ export class Component {
       if (element && this.prodotypeComponent && componentData) {
         this.prodotypeComponent.edit(
             componentData,
-            this.getProdotypeComponents(Component.COMPONENT_TYPE) as Array<ComponentData>,
+            this.getProdotypeComponents(Constants.COMPONENT_TYPE) as Array<ComponentData>,
             componentData['templateName'], {
               'onChange': (newData, html) => {
                 // undo checkpoint
@@ -406,7 +394,7 @@ export class Component {
       this.componentEditorElement.classList.remove('hide-panel');
     } else {
       this.componentEditorElement.classList.add('hide-panel');
-      this.resetSelection(Component.COMPONENT_TYPE);
+      this.resetSelection(Constants.COMPONENT_TYPE);
     }
   }
 
@@ -473,7 +461,7 @@ export class Component {
     }
 
     // update dependencies
-    this.updateDepenedencies(Component.STYLE_TYPE);
+    this.updateDepenedencies(Constants.STYLE_TYPE);
   }
 
   /**
@@ -524,7 +512,7 @@ export class Component {
               pseudoClassData['visibility'], pseudoClassData['data'],
               displayName);
         });
-    this.updateDepenedencies(Component.STYLE_TYPE);
+    this.updateDepenedencies(Constants.STYLE_TYPE);
   }
 
   /**
@@ -542,7 +530,7 @@ export class Component {
         // build an object for each pseudoClass
 
         // build an object for each existing visibility
-        Component.STYLE_VISIBILITY
+        Constants.STYLE_VISIBILITY
             .map((visibility) => {
               return {
                 'visibility': visibility,
@@ -572,12 +560,12 @@ export class Component {
       className: StyleName, pseudoClass: PseudoClass, visibility: Visibility,
       opt_data?: PseudoClassData, opt_displayName?: string) {
     // create a new style if needed
-    if (className === Component.EMPTY_STYLE_CLASS_NAME) {
+    if (className === Constants.EMPTY_STYLE_CLASS_NAME) {
       const textBoxes = this.model.body.getSelection().filter(
           (el) => this.model.element.getType(el) === 'text');
       if (textBoxes.length > 0) {
         // create a new unique name
-        const allStyles = this.getProdotypeComponents(Component.STYLE_TYPE);
+        const allStyles = this.getProdotypeComponents(Constants.STYLE_TYPE);
         const baseDisplayName =
             textBoxes.length === 1 ? 'Text Style ' : 'Group Style ';
         const baseClassName =
@@ -622,7 +610,7 @@ export class Component {
     if (!elStyle) {
       const doc = this.model.file.getContentDocument();
       elStyle = doc.createElement('style');
-      elStyle.className = Component.STYLE_CLASS_NAME;
+      elStyle.className = Constants.STYLE_CLASS_NAME;
       elStyle.setAttribute('type', 'text/css');
       elStyle.setAttribute('data-style-id', className);
       head.appendChild(elStyle);
@@ -649,7 +637,7 @@ export class Component {
    * when needed for mobile-only
    */
   addMediaQuery(html: string, visibility: Visibility) {
-    if (visibility === Component.STYLE_VISIBILITY[0]) {
+    if (visibility === Constants.STYLE_VISIBILITY[0]) {
       return html;
     }
     return this.model.property.addMediaQuery(html);

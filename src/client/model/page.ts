@@ -20,6 +20,7 @@ import { goog } from '../Goog.js';
 import { Model, View } from '../types.js';
 import { SilexNotification } from '../utils/notification.js';
 import { Stage } from '../view/stage.js';
+import { Constants } from '../../Constants.js';
 
 /**
  * structure to store all of a page data
@@ -37,44 +38,6 @@ export class PageData {
  * @param view  view class which holds the other views
  */
 export class Page {
-  /**
-   * constant for the class name of the pages
-   */
-  static PAGE_CLASS_NAME: string = 'page-element';
-
-  /**
-   * constant for the class name of elements visible only on some pages
-   */
-  static PAGED_CLASS_NAME: string = 'paged-element';
-
-  /**
-   * constant for the class name set on the body when the pageable plugin is
-   * initialized
-   */
-  static PAGEABLE_PLUGIN_READY_CLASS_NAME: string = 'pageable-plugin-created';
-
-  /**
-   * constant for the class name of elements visible only on some pages
-   */
-  static PAGED_HIDDEN_CLASS_NAME: string = 'paged-element-hidden';
-
-  /**
-   * constant for the class name of element containing the pages
-   */
-  static PAGES_CONTAINER_CLASS_NAME: string = 'silex-pages';
-
-  /**
-   * constant for the class name of elements when it is in a visible page
-   * this css class is set in pageable.js
-   */
-  static PAGED_VISIBLE_CLASS_NAME: string = 'paged-element-visible';
-
-  /**
-   * constant for the class name of links when it links to a visible page
-   * this css class is set in pageable.js
-   */
-  static PAGE_LINK_ACTIVE_CLASS_NAME: string = 'page-link-active';
-
   // retrieve the element which will hold the body of the opened file
   iframeElement: any;
 
@@ -85,14 +48,14 @@ export class Page {
   /**
    * retrieve the first parent which is visible only on some pages
    * @return null or the element or one of its parents which has the css class
-   *     silex.model.Page.PAGED_CLASS_NAME
+   *     silex.model.Constants.PAGED_CLASS_NAME
    */
   getParentPage(element: HTMLElement): HTMLElement {
     if (this.model.element.isSectionContent(element)) {
       element = (element.parentElement as HTMLElement);
     }
     let parent = element.parentElement as HTMLElement;
-    while (parent && !parent.classList.contains(Page.PAGED_CLASS_NAME)) {
+    while (parent && !parent.classList.contains(Constants.PAGED_CLASS_NAME)) {
       parent = parent.parentElement as HTMLElement;
     }
     return (parent as HTMLElement | null);
@@ -284,7 +247,7 @@ export class Page {
    */
   createPage(name: string, displayName: string) {
     let container = this.model.body.getBodyElement().querySelector(
-        '.' + Page.PAGES_CONTAINER_CLASS_NAME);
+        '.' + Constants.PAGES_CONTAINER_CLASS_NAME);
 
     // create the DOM element
     let aTag = this.model.file.getContentDocument().createElement('a');
@@ -295,7 +258,7 @@ export class Page {
     container.appendChild(aTag);
 
     // for coherence with other silex elements
-    aTag.classList.add(Page.PAGE_CLASS_NAME);
+    aTag.classList.add(Constants.PAGE_CLASS_NAME);
 
     // select this page
     this.setCurrentPage(name);
@@ -348,10 +311,10 @@ export class Page {
     const pages = this.getPagesForElement(element);
     if (pages.length + 1 === this.getPages().length) {
       pages.forEach((page) => element.classList.remove(page));
-      element.classList.remove(Page.PAGED_CLASS_NAME);
+      element.classList.remove(Constants.PAGED_CLASS_NAME);
     } else {
       element.classList.add(pageName);
-      element.classList.add(Page.PAGED_CLASS_NAME);
+      element.classList.add(Constants.PAGED_CLASS_NAME);
     }
     this.refreshView();
   }
@@ -365,7 +328,7 @@ export class Page {
     }
     element.classList.remove(pageName);
     if (this.getPagesForElement(element).length <= 0) {
-      element.classList.remove(Page.PAGED_CLASS_NAME);
+      element.classList.remove(Constants.PAGED_CLASS_NAME);
     }
     this.refreshView();
   }
@@ -383,7 +346,7 @@ export class Page {
     });
 
     // the element is not "paged" anymore
-    element.classList.remove(Page.PAGED_CLASS_NAME);
+    element.classList.remove(Constants.PAGED_CLASS_NAME);
     this.refreshView();
   }
 

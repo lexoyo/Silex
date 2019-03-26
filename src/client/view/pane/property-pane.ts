@@ -18,6 +18,7 @@ import { goog } from '../../Goog.js';
 import { SilexElement } from '../../model/element.js';
 import { Controller, Model } from '../../types.js';
 import { PaneBase } from './pane-base.js';
+import { Constants } from '../../../Constants.js';
 
 /**
  * on of Silex Editors class
@@ -250,13 +251,13 @@ export class PropertyPane extends PaneBase {
       // alt, only for images
       let elementsType =
           this.getCommonProperty(selectedElements, function(element) {
-            return element.getAttribute(SilexElement.TYPE_ATTR);
+            return element.getAttribute(Constants.TYPE_ATTR);
           });
-      if (elementsType === SilexElement.TYPE_IMAGE) {
+      if (elementsType === Constants.TYPE_IMAGE) {
         this.altInput.removeAttribute('disabled');
         let alt = this.getCommonProperty(selectedElements, function(element) {
           let content = element.querySelector(
-              SilexElement.ELEMENT_CONTENT_CLASS_NAME);
+              Constants.ELEMENT_CONTENT_CLASS_NAME);
           if (content) {
             return content.getAttribute('alt');
           }

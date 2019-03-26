@@ -85,9 +85,9 @@ SilexServer.prototype.start = function(cbk) {
   // ace
   this.app.use('/libs/ace', serveStatic(Path.resolve(nodeModules('ace-builds'), 'ace-builds/src-min')));
   // alertify
-  this.app.use('/libs/alertify', serveStatic(Path.resolve(nodeModules('alertify'), 'alertify/lib')));
-  // normalize.css
-  this.app.use('/libs/normalize.css', serveStatic(Path.resolve(nodeModules('normalize.css'), 'normalize.css')));
+  this.app.use('/libs/alertify', serveStatic(Path.resolve(nodeModules('alertifyjs'), 'alertifyjs/build')));
+  // // normalize.css
+  // this.app.use('/libs/normalize.css', serveStatic(Path.resolve(nodeModules('normalize.css'), 'normalize.css')));
   // font-awesome
   this.app.use('/libs/font-awesome/css', serveStatic(Path.resolve(nodeModules('font-awesome'), 'font-awesome/css')));
   this.app.use('/libs/font-awesome/fonts', serveStatic(Path.resolve(nodeModules('font-awesome'), 'font-awesome/fonts')));

@@ -13,7 +13,7 @@
  * @fileoverview
  *   This class is used to manage Silex elements
  *   It has methods to manipulate the DOM elements
- *      created by new silex.model.SilexElement().createElement
+ *      created by new silex.model.Element().createElement
  */
 
 import { goog } from '../Goog.js';
@@ -23,7 +23,7 @@ import { Dom } from '../utils/dom.js';
 import { Style } from '../utils/style.js';
 import { Url } from '../utils/url.js';
 import { TemplateName } from './Data.js';
-
+import { Constants } from '../../Constants.js';
 
 /**
  * direction in the dom
@@ -40,6 +40,9 @@ export class DomDirection {
  * @param view  view class which holds the other views
  */
 export class SilexElement {
+  /**
+   * constant for default size of an element
+   */
   static INITIAL_ELEMENT_SIZE = 100;
 
   /**
@@ -52,82 +55,6 @@ export class SilexElement {
    */
   static MIN_WIDTH: number = 20;
 
-  /**
-   * constant for loader on elements
-   */
-  static LOADING_ELEMENT_CSS_CLASS: string = 'loading-image';
-
-  /**
-   * constant for silex element type
-   */
-  static TYPE_CONTAINER: string = 'container';
-
-  /**
-   * constant for silex element type
-   */
-  static TYPE_SECTION: string = 'section';
-
-  /**
-   * constant for the content element of a section, which is also a container
-   */
-  static TYPE_CONTAINER_CONTENT: string = 'silex-container-content';
-
-  /**
-   * constant for silex element type
-   */
-  static TYPE_IMAGE: string = 'image';
-
-  /**
-   * constant for silex element type
-   */
-  static TYPE_TEXT: string = 'text';
-
-  /**
-   * constant for silex element type
-   */
-  static TYPE_HTML: string = 'html';
-
-  /**
-   * constant for silex element type
-   */
-  static TYPE_ATTR: string = 'data-silex-type';
-
-  /**
-   * constant for the class name of the element content
-   */
-  static ELEMENT_CONTENT_CLASS_NAME: string = 'silex-element-content';
-
-  /**
-   * constant for the class name of the default site width, rule is set when
-   * setting is changed used to set a default width to section content container
-   */
-  static WEBSITE_WIDTH_CLASS_NAME: string = 'website-width';
-
-  /**
-   * constant for the attribute name of the links
-   */
-  static LINK_ATTR: string = 'data-silex-href';
-
-  /**
-   * constant for the class name of selected components
-   */
-  static SELECTED_CLASS_NAME: string = 'silex-selected';
-
-  /**
-   * constant for the class name of pasted components
-   * this will be removed from the component as soon as it is dragged
-   */
-  static JUST_ADDED_CLASS_NAME: string = 'silex-just-added';
-
-  /**
-   * class for elements which are hidden in mobile version
-   */
-  static HIDE_ON_MOBILE: string = 'hide-on-mobile';
-
-  /**
-   * class for elements which are hidden in desktop version
-   */
-  static HIDE_ON_DESKTOP: string = 'hide-on-desktop';
 
   constructor(public model: Model, public view: View) {}
 
@@ -163,7 +90,7 @@ export class SilexElement {
    * example: for a container this will return "container"
    */
   getType(element: HTMLElement): string {
-    return element.getAttribute(SilexElement.TYPE_ATTR);
+    return element.getAttribute(Constants.TYPE_ATTR);
   }
 
   /**
@@ -172,7 +99,7 @@ export class SilexElement {
    *     image, html box, section...)
    */
   isElementContent(element: HTMLElement): any {
-    return element.classList.contains(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
+    return element.classList.contains(Constants.ELEMENT_CONTENT_CLASS_NAME);
   }
 
   /**
@@ -183,7 +110,7 @@ export class SilexElement {
     if (!element || !element.classList) {
       return false;
     }
-    return element.classList.contains(SilexElement.TYPE_SECTION + '-element');
+    return element.classList.contains(Constants.TYPE_SECTION + '-element');
   }
 
   /**
@@ -197,7 +124,7 @@ export class SilexElement {
 
     // FIXME: this is a workaround, it happens in mobile editor, when
     // dragg/dropping (element is document)
-    return element.classList.contains(SilexElement.TYPE_CONTAINER_CONTENT);
+    return element.classList.contains(Constants.TYPE_CONTAINER_CONTENT);
   }
 
   /**
@@ -212,7 +139,7 @@ export class SilexElement {
     // FIXME: this is a workaround, it happens in mobile editor, when
     // dragg/dropping (element is document)
     return this.noSectionContent(element).classList.contains(
-        SilexElement.HIDE_ON_MOBILE);
+        Constants.HIDE_ON_MOBILE);
   }
 
   /**
@@ -221,9 +148,9 @@ export class SilexElement {
    */
   setHideOnMobile(element: HTMLElement, hide: boolean) {
     if (hide) {
-      this.noSectionContent(element).classList.add(SilexElement.HIDE_ON_MOBILE);
+      this.noSectionContent(element).classList.add(Constants.HIDE_ON_MOBILE);
     } else {
-      this.noSectionContent(element).classList.remove(SilexElement.HIDE_ON_MOBILE);
+      this.noSectionContent(element).classList.remove(Constants.HIDE_ON_MOBILE);
     }
   }
 
@@ -239,7 +166,7 @@ export class SilexElement {
     // FIXME: this is a workaround, it happens in mobile editor, when
     // dragg/dropping (element is document)
     return this.noSectionContent(element).classList.contains(
-        SilexElement.HIDE_ON_DESKTOP);
+        Constants.HIDE_ON_DESKTOP);
   }
 
   /**
@@ -248,9 +175,9 @@ export class SilexElement {
    */
   setHideOnDesktop(element: HTMLElement, hide: boolean) {
     if (hide) {
-      this.noSectionContent(element).classList.add(SilexElement.HIDE_ON_DESKTOP);
+      this.noSectionContent(element).classList.add(Constants.HIDE_ON_DESKTOP);
     } else {
-      this.noSectionContent(element).classList.remove(SilexElement.HIDE_ON_DESKTOP);
+      this.noSectionContent(element).classList.remove(Constants.HIDE_ON_DESKTOP);
     }
   }
 
@@ -305,7 +232,7 @@ export class SilexElement {
 
     // remove the 'just pasted' class
     if (!opt_preserveJustAdded) {
-      element.classList.remove(SilexElement.JUST_ADDED_CLASS_NAME);
+      element.classList.remove(Constants.JUST_ADDED_CLASS_NAME);
     }
 
     // retrieve style
@@ -397,7 +324,7 @@ export class SilexElement {
    */
   getContentNode(element: HTMLElement): HTMLElement {
     return element.querySelector(
-               ':scope > .' + SilexElement.ELEMENT_CONTENT_CLASS_NAME) ||
+               ':scope > .' + Constants.ELEMENT_CONTENT_CLASS_NAME) ||
         element;
   }
 
@@ -432,7 +359,7 @@ export class SilexElement {
     }
 
     // remove the 'just pasted' class
-    element.classList.remove(SilexElement.JUST_ADDED_CLASS_NAME);
+    element.classList.remove(Constants.JUST_ADDED_CLASS_NAME);
   }
 
   /**
@@ -464,7 +391,7 @@ export class SilexElement {
    */
   getImageUrl(element: HTMLElement): string {
     let url = '';
-    if (element.getAttribute(SilexElement.TYPE_ATTR) === SilexElement.TYPE_IMAGE) {
+    if (element.getAttribute(Constants.TYPE_ATTR) === Constants.TYPE_IMAGE) {
       // get the image tag
       let img = this.getContentNode(element);
       if (img) {
@@ -490,7 +417,7 @@ export class SilexElement {
       element: HTMLElement, url: string,
       opt_callback?: ((p1: HTMLElement, p2: HTMLElement) => any),
       opt_errorCallback?: ((p1: HTMLElement, p2: string) => any)) {
-    if (element.getAttribute(SilexElement.TYPE_ATTR) === SilexElement.TYPE_IMAGE) {
+    if (element.getAttribute(Constants.TYPE_ATTR) === Constants.TYPE_IMAGE) {
       // get the image tag
       const img = this.getContentNode(element) as HTMLImageElement;
       if (img) {
@@ -520,14 +447,14 @@ export class SilexElement {
 
               // add a marker to find the inner content afterwards, with
               // getContent
-              loadedImg.classList.add(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
+              loadedImg.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
 
               // remove the id set by the loader (it needs it to know what has
               // already been loaded?)
               loadedImg.removeAttribute('id');
 
               // remove loading asset
-              element.classList.remove(SilexElement.LOADING_ELEMENT_CSS_CLASS);
+              element.classList.remove(Constants.LOADING_ELEMENT_CSS_CLASS);
 
               // redraw tools
               this.model.body.setSelection(this.model.body.getSelection());
@@ -544,10 +471,10 @@ export class SilexElement {
         }, true, this);
 
         // add loading asset
-        element.classList.add(SilexElement.LOADING_ELEMENT_CSS_CLASS);
+        element.classList.add(Constants.LOADING_ELEMENT_CSS_CLASS);
 
         // remove previous img tag
-        let imgTags = element.querySelectorAll('img.' + SilexElement.ELEMENT_CONTENT_CLASS_NAME);
+        let imgTags = element.querySelectorAll('img.' + Constants.ELEMENT_CONTENT_CLASS_NAME);
         while (imgTags.length > 0) {
           imgTags[0].parentElement.removeChild(imgTags[0]);
         }
@@ -608,7 +535,7 @@ export class SilexElement {
     container.appendChild(element);
 
     // add the class to keep the element above all others
-    element.classList.add(SilexElement.JUST_ADDED_CLASS_NAME);
+    element.classList.add(Constants.JUST_ADDED_CLASS_NAME);
 
     // resize the body
     // call the method defined in front-end.js
@@ -677,14 +604,14 @@ export class SilexElement {
 
     // init the element depending on its type
     switch (this.getType(element)) {
-      case SilexElement.TYPE_CONTAINER:
-      case SilexElement.TYPE_HTML:
+      case Constants.TYPE_CONTAINER:
+      case Constants.TYPE_HTML:
         if (!this.isSection(element)) {
           defaultStyle['background-color'] = 'rgb(255, 255, 255)';
         }
         break;
-      case SilexElement.TYPE_TEXT:
-      case SilexElement.TYPE_IMAGE:
+      case Constants.TYPE_TEXT:
+      case Constants.TYPE_IMAGE:
         break;
     }
 
@@ -749,7 +676,7 @@ export class SilexElement {
    * create a DOM element, attach it to this container
    * and returns a new component for the element
    * @param type  the type of the element to create,
-   *    see TYPE_* constants of the class @see silex.model.SilexElement
+   *    see TYPE_* constants of the class @see silex.model.Element
    * @return   the newly created element
    */
   createElement(type: string): HTMLElement {
@@ -757,33 +684,33 @@ export class SilexElement {
     let element = null;
     switch (type) {
       // container
-      case SilexElement.TYPE_CONTAINER:
+      case Constants.TYPE_CONTAINER:
         element = this.createContainerElement();
         break;
 
       // section
-      case SilexElement.TYPE_SECTION:
+      case Constants.TYPE_SECTION:
         element = this.createSectionElement();
         break;
 
       // text
-      case SilexElement.TYPE_TEXT:
+      case Constants.TYPE_TEXT:
         element = this.createTextElement();
         break;
 
       // HTML box
-      case SilexElement.TYPE_HTML:
+      case Constants.TYPE_HTML:
         element = this.createHtmlElement();
         break;
 
       // Image
-      case SilexElement.TYPE_IMAGE:
+      case Constants.TYPE_IMAGE:
         element = this.createImageElement();
         break;
     }
 
     // init the element
-    element.classList.add(Body.EDITABLE_CLASS_NAME);
+    element.classList.add(Constants.EDITABLE_CLASS_NAME);
     this.model.property.initSilexId(
         element, this.model.file.getContentDocument());
 
@@ -801,14 +728,14 @@ export class SilexElement {
   createContainerElement(): HTMLElement {
     // create the conatiner
     let element = this.model.file.getContentDocument().createElement('div');
-    element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_CONTAINER);
+    element.setAttribute(Constants.TYPE_ATTR, Constants.TYPE_CONTAINER);
     return element;
   }
 
   createElementWithContent(className: string): HTMLElement {
     // create the element
     let element = this.model.file.getContentDocument().createElement('div');
-    element.setAttribute(SilexElement.TYPE_ATTR, className);
+    element.setAttribute(Constants.TYPE_ATTR, className);
 
     // create the container for text content
     let content = this.model.file.getContentDocument().createElement('div');
@@ -817,7 +744,7 @@ export class SilexElement {
     element.appendChild(content);
 
     // add a marker to find the inner content afterwards, with getContent
-    content.classList.add(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
+    content.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
 
     // done
     return element;
@@ -830,16 +757,16 @@ export class SilexElement {
   createSectionElement(): HTMLElement {
     // create the element
     let element = this.model.file.getContentDocument().createElement('div');
-    element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_CONTAINER);
-    element.classList.add(Body.PREVENT_DRAGGABLE_CLASS_NAME);
-    element.classList.add(SilexElement.TYPE_CONTAINER + '-element');
+    element.setAttribute(Constants.TYPE_ATTR, Constants.TYPE_CONTAINER);
+    element.classList.add(Constants.PREVENT_DRAGGABLE_CLASS_NAME);
+    element.classList.add(Constants.TYPE_CONTAINER + '-element');
 
     // content element is both a container and a content element
-    let content = this.createElement(SilexElement.TYPE_CONTAINER);
-    content.classList.add(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
-    content.classList.add(SilexElement.TYPE_CONTAINER_CONTENT);
-    content.classList.add(SilexElement.WEBSITE_WIDTH_CLASS_NAME);
-    content.classList.add(Body.PREVENT_DRAGGABLE_CLASS_NAME);
+    let content = this.createElement(Constants.TYPE_CONTAINER);
+    content.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
+    content.classList.add(Constants.TYPE_CONTAINER_CONTENT);
+    content.classList.add(Constants.WEBSITE_WIDTH_CLASS_NAME);
+    content.classList.add(Constants.PREVENT_DRAGGABLE_CLASS_NAME);
     element.appendChild(content);
     this.initElement(content);
 
@@ -853,7 +780,7 @@ export class SilexElement {
    */
   createTextElement(): HTMLElement {
     // create the element
-    let element = this.createElementWithContent(SilexElement.TYPE_TEXT);
+    let element = this.createElementWithContent(Constants.TYPE_TEXT);
 
     // add default content
     let content = this.getContentNode(element);
@@ -875,7 +802,7 @@ export class SilexElement {
   createHtmlElement(): HTMLElement {
     // create the element
     let element = this.model.file.getContentDocument().createElement('div');
-    element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_HTML);
+    element.setAttribute(Constants.TYPE_ATTR, Constants.TYPE_HTML);
 
     // create the container for html content
     let htmlContent = this.model.file.getContentDocument().createElement('div');
@@ -883,7 +810,7 @@ export class SilexElement {
     element.appendChild(htmlContent);
 
     // add a marker to find the inner content afterwards, with getContent
-    htmlContent.classList.add(SilexElement.ELEMENT_CONTENT_CLASS_NAME);
+    htmlContent.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
     return element;
   }
 
@@ -894,7 +821,7 @@ export class SilexElement {
   createImageElement(): HTMLElement {
     // create the element
     let element = this.model.file.getContentDocument().createElement('div');
-    element.setAttribute(SilexElement.TYPE_ATTR, SilexElement.TYPE_IMAGE);
+    element.setAttribute(Constants.TYPE_ATTR, Constants.TYPE_IMAGE);
     return element;
   }
 
@@ -906,9 +833,9 @@ export class SilexElement {
    */
   setLink(element: HTMLElement, opt_link?: string) {
     if (opt_link) {
-      element.setAttribute(SilexElement.LINK_ATTR, opt_link);
+      element.setAttribute(Constants.LINK_ATTR, opt_link);
     } else {
-      element.removeAttribute(SilexElement.LINK_ATTR);
+      element.removeAttribute(Constants.LINK_ATTR);
     }
   }
 
@@ -916,7 +843,7 @@ export class SilexElement {
    * set/get a "silex style link" on an element
    */
   getLink(element: HTMLElement): string {
-    return element.getAttribute(SilexElement.LINK_ATTR);
+    return element.getAttribute(Constants.LINK_ATTR);
   }
 
   /**
@@ -937,7 +864,7 @@ export class SilexElement {
     return element.className.split(' ')
         .filter((name) => {
           if (name === '' ||
-              Style.SILEX_CLASS_NAMES.indexOf(name) > -1 ||
+              Constants.SILEX_CLASS_NAMES.indexOf(name) > -1 ||
               pages.indexOf(name) > -1 ||
               componentCssClasses.indexOf(name) > -1 ||
               this.model.property.getSilexId(element) === name) {
@@ -960,7 +887,7 @@ export class SilexElement {
     let pages = this.model.page.getPages();
     let classNamesToKeep =
         element.className.split(' ').map((name) => {
-          if (Style.SILEX_CLASS_NAMES.indexOf(name) > -1 ||
+          if (Constants.SILEX_CLASS_NAMES.indexOf(name) > -1 ||
               pages.indexOf(name) > -1 ||
               this.model.property.getSilexId(element) === name) {
             return name;

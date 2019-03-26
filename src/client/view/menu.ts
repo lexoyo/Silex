@@ -20,7 +20,7 @@
 import { Config } from '../config.js';
 import { goog } from '../Goog.js';
 import { Component } from '../model/Component.js';
-import { SilexElement } from '../model/element.js';
+import { Constants } from '../../Constants.js';
 import { Controller, Model } from '../types.js';
 import { Keyboard } from '../utils/Keyboard.js';
 
@@ -116,7 +116,7 @@ export class Menu {
       // **
       const list = this.element.querySelector('.add-menu-container');
       const componentsDef =
-          this.model.component.getComponentsDef(Component.COMPONENT_TYPE);
+          this.model.component.getComponentsDef(Constants.COMPONENT_TYPE);
 
       // build a list of component categories
       const elements = {};
@@ -287,15 +287,15 @@ export class Menu {
         break;
       case 'insert.text':
         added = this.controller.insertMenuController.addElement(
-            SilexElement.TYPE_TEXT, opt_componentName);
+            Constants.TYPE_TEXT, opt_componentName);
         break;
       case 'insert.section':
         added = this.controller.insertMenuController.addElement(
-            SilexElement.TYPE_SECTION, opt_componentName);
+            Constants.TYPE_SECTION, opt_componentName);
         break;
       case 'insert.html':
         added = this.controller.insertMenuController.addElement(
-            SilexElement.TYPE_HTML, opt_componentName);
+            Constants.TYPE_HTML, opt_componentName);
         break;
       case 'insert.image':
 
@@ -304,7 +304,7 @@ export class Menu {
         break;
       case 'insert.container':
         added = this.controller.insertMenuController.addElement(
-            SilexElement.TYPE_CONTAINER, opt_componentName);
+            Constants.TYPE_CONTAINER, opt_componentName);
         break;
       case 'edit.delete.selection':
 

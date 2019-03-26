@@ -12,8 +12,9 @@
 'use strict';
 
 import SilexServer from './SilexServer';
-import DefaultConfig from './Config';
-const config = new DefaultConfig();
+import Config from './Config';
+
+const config = new Config();
 // here you can change config,
 // e.g. use config.publishRouterOptions.enableHostingGhPages
 const silex = new SilexServer(config);

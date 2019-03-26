@@ -17,7 +17,7 @@
 import {Model} from '../../types.js';
 import {Controller} from '../../types.js';
 import {AceEditorBase} from './ace-editor-base.js';
-import {SilexElement} from '../../model/element.js';
+import { Constants } from '../../../Constants.js';
 
 
 /**
@@ -81,7 +81,7 @@ export class HtmlEditor extends AceEditorBase {
           this.ace.setReadOnly(false);
         } else {
           if (this.model.element.getType(selection[0]) ===
-              SilexElement.TYPE_HTML) {
+              Constants.TYPE_HTML) {
             // edit current selection
             this.setValue(this.model.element.getInnerHtml(selection[0]));
             this.ace.setReadOnly(false);

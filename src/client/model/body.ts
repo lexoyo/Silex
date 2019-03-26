@@ -20,7 +20,7 @@
 import {View} from '../types.js';
 import {Model} from '../types.js';
 import {Stage} from '../view/stage.js';
-import {SilexElement} from '../model/element.js';
+import {Constants} from '../../Constants.js';
 
 /**
  * @param model  model class which holds the other models
@@ -40,31 +40,6 @@ export class Body {
   static focusInput: HTMLElement;
 
   /**
-   * attribute name used to store the type of element
-   */
-  static SILEX_TYPE_ATTR_NAME: string = 'data-silex-type';
-
-  /**
-   * class name used by the editable jquery plugin
-   */
-  static EDITABLE_CLASS_NAME: string = 'editable-style';
-
-  /**
-   * class name which can be used to change params of the eitable jquery plugin
-   */
-  static PREVENT_RESIZABLE_CLASS_NAME: string = 'prevent-resizable';
-
-  /**
-   * class name which can be used to change params of the eitable jquery plugin
-   */
-  static PREVENT_DRAGGABLE_CLASS_NAME: string = 'prevent-draggable';
-
-  /**
-   * class name which can be used to change params of the eitable jquery plugin
-   */
-  static PREVENT_DROPPABLE_CLASS_NAME: string = 'prevent-droppable';
-
-  /**
    * class name which can be used to force Silex to use height instead of
    * minHeight to set the height of an element this is useful if the element has
    * content with height set to 100%
@@ -72,21 +47,7 @@ export class Body {
   static SILEX_USE_HEIGHT_NOT_MINHEIGHT: string =
       'silex-use-height-not-minheight';
 
-  /**
-   * class name set on elements in which we are about to drop
-   */
-  static DROP_CANDIDATE_CLASS_NAME: string = 'drop-zone-candidate';
-
-  /**
-   * class name set on the body while the user is dragging an element
-   */
-  static DRAGGING_CLASS_NAME: string = 'dragging-pending';
-  view: View;
-  model: Model;
-
-  constructor(model: Model, view: View) {
-    this.view = view;
-    this.model = model;
+  constructor(private model: Model, private view: View) {
 
     // get the iframe
     // retrieve the element which will hold the body of the opened file
@@ -118,7 +79,7 @@ export class Body {
    * @return   array of elements which are currently selected
    */
   getSelection(): HTMLElement[] {
-    let elements = Array.from(this.getBodyElement().querySelectorAll(SilexElement.SELECTED_CLASS_NAME));
+    let elements = Array.from(this.getBodyElement().querySelectorAll(Constants.SELECTED_CLASS_NAME));
     if (!elements || elements.length === 0) {
       // default, return the body
       const bodyElement = this.getBodyElement();
@@ -148,17 +109,17 @@ export class Body {
     }
 
     // reset selection
-    let elements = Array.from(this.getBodyElement().querySelectorAll(SilexElement.SELECTED_CLASS_NAME));
+    let elements = Array.from(this.getBodyElement().querySelectorAll(Constants.SELECTED_CLASS_NAME));
     elements.forEach((element) => {
-      element.classList.remove(SilexElement.SELECTED_CLASS_NAME);
+      element.classList.remove(Constants.SELECTED_CLASS_NAME);
     });
 
     // also remove selected class from the body
-    this.getBodyElement().classList.remove(SilexElement.SELECTED_CLASS_NAME);
+    this.getBodyElement().classList.remove(Constants.SELECTED_CLASS_NAME);
 
     // update selection
     selectedElements.forEach((element) => {
-      element.classList.add(SilexElement.SELECTED_CLASS_NAME);
+      element.classList.add(Constants.SELECTED_CLASS_NAME);
     });
 
     // refresh views

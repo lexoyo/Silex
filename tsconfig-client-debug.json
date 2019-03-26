@@ -10,6 +10,6 @@
     "removeComments": false,
   },
   "include": [
-    "src/ts/index.ts",
+    "src/client/app.ts",
   ],
 }

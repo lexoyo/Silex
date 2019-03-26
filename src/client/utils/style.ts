@@ -14,50 +14,10 @@
  *
  */
 
-type GRgb = Array<number>;
-
 import { goog } from '../Goog.js';
-import { Body } from '../model/body.js';
-import { Component } from '../model/Component.js';
-import { DragSystem } from '../model/DragSystem.js';
-import { SilexElement } from '../model/element.js';
-import { Head } from '../model/head.js';
-import { Page } from '../model/page.js';
-import { BreadCrumbs } from '../view/bread-crumbs.js';
-
-
-console.log('xxxxxxxxx', SilexElement);
 
 export class Style {
 
-
-  /**
-   * constant for the class names which are of internal use in Silex
-   * they do not appear in the "css classes" text field of the style-pane
-   */
-  static SILEX_CLASS_NAMES: string[] = [
-    Body.DRAGGING_CLASS_NAME, Body.DROP_CANDIDATE_CLASS_NAME,
-    Body.PREVENT_DROPPABLE_CLASS_NAME, Body.PREVENT_RESIZABLE_CLASS_NAME,
-    Body.PREVENT_DRAGGABLE_CLASS_NAME, Body.EDITABLE_CLASS_NAME,
-    Head.ENABLE_MOBILE_CSS_CLASS, Page.PAGED_CLASS_NAME,
-    Page.PAGED_HIDDEN_CLASS_NAME, Page.PAGED_VISIBLE_CLASS_NAME,
-    Page.PAGEABLE_PLUGIN_READY_CLASS_NAME, Page.PAGE_LINK_ACTIVE_CLASS_NAME,
-    SilexElement.SELECTED_CLASS_NAME, SilexElement.JUST_ADDED_CLASS_NAME,
-    SilexElement.ELEMENT_CONTENT_CLASS_NAME,
-
-    // useful to hide it when the content container of a section is selected
-    SilexElement.TYPE_CONTAINER_CONTENT,
-    // useful to hide it when the content container of a section is selected
-    SilexElement.WEBSITE_WIDTH_CLASS_NAME, SilexElement.TYPE_CONTAINER + '-element',
-    SilexElement.TYPE_SECTION + '-element', SilexElement.TYPE_IMAGE + '-element',
-    SilexElement.TYPE_TEXT + '-element', SilexElement.TYPE_HTML + '-element',
-    SilexElement.HIDE_ON_MOBILE, Component.COMPONENT_CLASS_NAME,
-    BreadCrumbs.EDITABLE_STYLE_HOVER_CLASS,
-    // sticky lines classes
-    DragSystem.STUCK_CSS_CLASS, DragSystem.STUCK_LEFT_CSS_CLASS,
-    DragSystem.STUCK_RIGHT_CSS_CLASS, DragSystem.STUCK_TOP_CSS_CLASS,
-    DragSystem.STUCK_BOTTOM_CSS_CLASS
-  ];
 
   /**
    * convert style object to object
@@ -111,7 +71,7 @@ export class Style {
    * @param contentWindow of the iframe containing the website
    * @return the element bg color
    */
-  static computeBgColor(element: HTMLElement, contentWindow: Window): GRgb {
+  static computeBgColor(element: HTMLElement, contentWindow: Window): goog.Rgb {
     let parentColorArray;
 
     // retrieve the parents blended colors
@@ -169,7 +129,7 @@ export class Style {
       console.warn('was not able to take the element bg color into account');
       elementColorArray = null;
     }
-    let res: GRgb;
+    let res: goog.Rgb;
 
     // handle the case where there is no need to blend
     if (elementColorArray === null && parentColorArray === null) {

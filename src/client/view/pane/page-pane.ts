@@ -18,7 +18,7 @@
 
 
 import { goog } from '../../Goog.js';
-import { SilexElement } from "../../model/element.js";
+import { Constants } from '../../../Constants.js';
 import { Controller, Model } from '../../types.js';
 import { Dom } from '../../utils/dom.js';
 import { PaneBase } from './pane-base.js';
@@ -303,7 +303,7 @@ export class PagePane extends PaneBase {
       // get the link of the element
       let elementLink =
           (this.getCommonProperty(selectedElements, function(element) {
-            return element.getAttribute(SilexElement.LINK_ATTR);
+            return element.getAttribute(Constants.LINK_ATTR);
           }) as string);
 
       // default selection

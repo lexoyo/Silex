@@ -16,7 +16,7 @@
 
 
 import { goog } from '../Goog.js';
-import { Body } from '../model/body.js';
+import { Constants } from '../../Constants.js';
 import { Font, Model, View } from '../types.js';
 import { Style } from '../utils/style.js';
 import { ComponentData, CssRule, JsonData, ProdotypeData, ProdotypeTypes, SilexData, SilexId, StyleData, StyleName } from './Data.js';
@@ -553,7 +553,7 @@ export class Property {
    * @return the string defining all elements styles
    */
   getAllStyles(doc: Document): string {
-    const elements = doc.querySelectorAll('body, .' + Body.EDITABLE_CLASS_NAME);
+    const elements = doc.querySelectorAll('body, .' + Constants.EDITABLE_CLASS_NAME);
     let allStyles = '';
     for (let idx = 0; idx < elements.length; idx++) {
       const element = elements[idx];

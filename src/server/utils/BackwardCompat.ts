@@ -10,7 +10,7 @@
  */
 
 const Path = require('path');
-const constants = require('../../Constants.json');
+import { Constants } from '../../Constants.js';
 
 // FIXME: path in constants
 // const components = require('../../../dist/client/libs/prodotype/components/components.json')
@@ -39,7 +39,7 @@ export default class BackwardCompat {
    */
   update(doc): Promise<string> {
     // fix an issue when the style tag has no type, then json is "broken"
-    var styleTag = doc.querySelector('.' + constants.JSON_STYLE_TAG_CLASS_NAME);
+    var styleTag = doc.querySelector('.' + Constants.JSON_STYLE_TAG_CLASS_NAME);
     if(styleTag) styleTag.type = 'text/json'; // old versions of silex have no json at all so do nothing in that case
     // if no generator tag, create one
     var metaNode = doc.querySelector('meta[name="generator"]');

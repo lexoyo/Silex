@@ -16,18 +16,17 @@
  *
  */
 
-import {Model} from '../types.js';
-import {Controller} from '../types.js';
+import { Constants } from '../../Constants.js';
+import { Controller, Model } from '../types.js';
+import { InvalidationManager } from '../utils/invalidation-manager.js';
+import { BgPane } from './pane/bg-pane.js';
+import { BorderPane } from './pane/border-pane.js';
+import { GeneralStylePane } from './pane/general-style-pane.js';
+import { PagePane } from './pane/page-pane.js';
+import { PropertyPane } from './pane/property-pane.js';
+import { StylePane } from './pane/style-pane.js';
+import { StyleEditorPane } from './pane/StyleEditorPane.js';
 
-import {BgPane} from './pane/bg-pane.js';
-import {BorderPane} from './pane/border-pane.js';
-import {GeneralStylePane} from './pane/general-style-pane.js';
-import {PagePane} from './pane/page-pane.js';
-import {PropertyPane} from './pane/property-pane.js';
-import {StylePane} from './pane/style-pane.js';
-import {StyleEditorPane} from './pane/StyleEditorPane.js';
-import {InvalidationManager} from '../utils/invalidation-manager.js';
-import {Component} from '../model/Component.js';
 
 //////////////////////////////////////////////////////////////////
 // PropertyTool class
@@ -228,7 +227,7 @@ export class PropertyTool {
       if (selectedElements.length === 1) {
         this.model.component.editComponent(selectedElements[0]);
       } else {
-        this.model.component.resetSelection(Component.COMPONENT_TYPE);
+        this.model.component.resetSelection(Constants.COMPONENT_TYPE);
       }
     });
   }

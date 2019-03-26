@@ -18,6 +18,7 @@
 import {InvalidationManager} from '../utils/invalidation-manager.js';
 import {Controller} from '../types.js';
 import {Model} from '../types.js';
+import { Constants } from '../../Constants.js';
 
 
 /**
@@ -33,8 +34,6 @@ export class BreadCrumbs {
    * invalidation mechanism
    */
   invalidationManager: InvalidationManager;
-
-  static EDITABLE_STYLE_HOVER_CLASS = 'editable-style-hover';
 
   constructor(
       public element: HTMLElement, public model: Model,
@@ -125,10 +124,8 @@ export class BreadCrumbs {
     this.element.appendChild(crumb);
     crumb.onclick = () => this.controller.stageController.select(ancestor);
     if (ancestor.tagName.toUpperCase() !== 'BODY') {
-      crumb.onmouseover = () =>
-          ancestor.classList.add(BreadCrumbs.EDITABLE_STYLE_HOVER_CLASS);
-      crumb.onmouseout = () =>
-          ancestor.classList.remove(BreadCrumbs.EDITABLE_STYLE_HOVER_CLASS);
+      crumb.onmouseover = () => ancestor.classList.add(Constants.EDITABLE_STYLE_HOVER_CLASS);
+      crumb.onmouseout = () => ancestor.classList.remove(Constants.EDITABLE_STYLE_HOVER_CLASS);
     }
     const svg =
         '<svg class="svg" viewBox="0 0 7 28" height="28" width="7"><path d="M.5 0l6 14-6 14H7V0z" fill="currentColor"></path><path d="M1 0H0l6 14-6 14h1l6-14z" fill="#858585"></path></svg>';

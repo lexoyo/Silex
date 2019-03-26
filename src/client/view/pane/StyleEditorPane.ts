@@ -12,7 +12,7 @@
 import {Visibility} from '../../model/Data.js';
 import {StyleData} from '../../model/Data.js';
 import {StyleName} from '../../model/Data.js';
-import {Component} from '../../model/Component.js';
+import {Constants} from '../../../Constants.js';
 import {Controller} from '../../types.js';
 import {Model} from '../../types.js';
 import {PaneBase} from './pane-base.js';
@@ -143,10 +143,10 @@ export class StyleEditorPane extends PaneBase {
     this.element.querySelector('.edit-style').onclick = (e) => {
       this.tracker.trackAction('style-editor-events', 'edit-style');
       const oldClassName = this.styleCombo.value;
-      if (oldClassName === Component.BODY_STYLE_CSS_CLASS) {
+      if (oldClassName === Constants.BODY_STYLE_CSS_CLASS) {
         SilexNotification.alert(
             `The style '${
-                Component
+                Constants
                     .BODY_STYLE_NAME}' is a special style, you can not rename it.`,
             () => {});
       } else {
@@ -158,7 +158,7 @@ export class StyleEditorPane extends PaneBase {
           });
 
           // delete the old one
-          if (oldClassName != Component.EMPTY_STYLE_CLASS_NAME) {
+          if (oldClassName != Constants.EMPTY_STYLE_CLASS_NAME) {
             // case of rename the empty style (=> only create a new style)
             this.deleteStyle(oldClassName, false);
           }
@@ -195,7 +195,7 @@ export class StyleEditorPane extends PaneBase {
    * get the visibility (mobile+desktop or desktop) of the style being edited
    */
   getVisibility(): Visibility {
-    return Component.STYLE_VISIBILITY[this.isMobile() ? 1 : 0];
+    return Constants.STYLE_VISIBILITY[this.isMobile() ? 1 : 0];
   }
 
   /**
@@ -212,10 +212,10 @@ export class StyleEditorPane extends PaneBase {
    * apply a style to a set of elements, remove old styles
    */
   applyStyle(elements: HTMLElement[], newStyle: StyleName) {
-    if (newStyle === Component.BODY_STYLE_CSS_CLASS) {
+    if (newStyle === Constants.BODY_STYLE_CSS_CLASS) {
       SilexNotification.alert(
           `The style '${
-              Component
+              Constants
                   .BODY_STYLE_NAME}' is a special style, it is already applyed to all text elements.`,
           () => {});
     } else {
@@ -244,7 +244,7 @@ export class StyleEditorPane extends PaneBase {
    */
   getStyles(elements: HTMLElement[]): StyleName[] {
     const allStyles =
-        this.model.component.getProdotypeComponents(Component.STYLE_TYPE);
+        this.model.component.getProdotypeComponents(Constants.STYLE_TYPE);
     // no initial value so the first element in the array will be used, it
     // will start with the 2nd element keep only the styles defined in the
     // style editor
@@ -292,7 +292,7 @@ export class StyleEditorPane extends PaneBase {
         if (classNames.length >= 1) {
           return classNames[0];
         }
-        return Component.EMPTY_STYLE_CLASS_NAME;
+        return Constants.EMPTY_STYLE_CLASS_NAME;
       })();
       this.updateStyleList(selectionStyle);
     } else {
@@ -315,13 +315,13 @@ export class StyleEditorPane extends PaneBase {
     // add all the existing styles to the dropdown list
 
     // append options to the dom
-    (styleName === Component.EMPTY_STYLE_CLASS_NAME ? [{
-      'className': Component.EMPTY_STYLE_CLASS_NAME,
-      'displayName': Component.EMPTY_STYLE_DISPLAY_NAME
+    (styleName === Constants.EMPTY_STYLE_CLASS_NAME ? [{
+      'className': Constants.EMPTY_STYLE_CLASS_NAME,
+      'displayName': Constants.EMPTY_STYLE_DISPLAY_NAME
     }] :
                                                       [])
         .concat(
-            this.model.component.getProdotypeComponents(Component.STYLE_TYPE))
+            this.model.component.getProdotypeComponents(Constants.STYLE_TYPE))
         .map((obj) => {
           // create the combo box option
           const option = document.createElement('option');
@@ -341,7 +341,7 @@ export class StyleEditorPane extends PaneBase {
       const onlyTextBoxes = this.selectedElements.length > 0 &&
           this.selectedElements.reduce((prev, element) => {
             const styles = this.getStyles([element]);
-            if (styleNameNotNull === Component.EMPTY_STYLE_CLASS_NAME) {
+            if (styleNameNotNull === Constants.EMPTY_STYLE_CLASS_NAME) {
               // edit style only if there are only text boxes without styles
               return prev && this.isTextBox(element) && styles.length === 0;
             } else {
@@ -424,7 +424,7 @@ export class StyleEditorPane extends PaneBase {
     // styles","props":[{"name":"pseudoClass","type":["normal",":hover",":focus-within",
     // ...
     const componentsDef =
-        this.model.component.getComponentsDef(Component.STYLE_TYPE);
+        this.model.component.getComponentsDef(Constants.STYLE_TYPE);
     const pseudoClasses = componentsDef['text']['props'].filter(
         (prop) => prop.name === 'pseudoClass')[0]['type'];
 
@@ -514,10 +514,10 @@ export class StyleEditorPane extends PaneBase {
     if (opt_confirm === false) {
       this.doDeleteStyle(name);
     } else {
-      if (name === Component.BODY_STYLE_CSS_CLASS) {
+      if (name === Constants.BODY_STYLE_CSS_CLASS) {
         SilexNotification.alert(
             `The style '${
-                Component
+                Constants
                     .BODY_STYLE_NAME}' is a special style, you can not delete it.`,
             () => {});
       } else {
