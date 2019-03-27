@@ -22,46 +22,6 @@ body.loading-pending.advanced-mode-off
   include ./templates/body.jade
 
   // start Silex
-  script(type='text/javascript').
-    //- require(['js/src/ts/index.js'], function(indexValue) {
-    //-   console.log('boot', indexValue)
-    //- })
-    //- var x = require('./js/src/ts/index.js')
-    //- console.log('in the html', x)
-
-    //- console.log('starting Silex...', silex.App);
-    //- window.silexApp = new silex.App();
-    // boot silex app
-    //- require(['src/ts/app'], function(silex) {
-    //-   console.log('starting application...', silex.App);
-    //-   window.silexApp = new silex.App();
-    //- });
-
-
-    //- System.import('/js/admin.js');
-
-    //- System.config({
-    //-   //- transpiler: 'typescript',
-    //-   bundles: {
-    //-     "admin.js": ["App"],
-    //-   },
-    //- });
-    //- System
-    //-   .import('js/admin.js')
-    //-   //- .then(function, console.error.bind(console));
-    //-   .then(function(Mod) {
-    //-     console.log('xxxxx', Mod, Mod.App, Mod.Module)
-    //-   }, function(err) {
-    //-     console.log('yyyy', err)
-    //-   });
-
-
-    //- System.config({
-    //-     packages: {
-    //-         "components": {
-    //-             defaultExtension: "js"
-    //-         }
-    //-     }
-    //- });
-    //- System.import('/js/admin.js');
-
+  script(type='module').
+    import { App } from './js/app.js';
+    new App();

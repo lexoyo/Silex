@@ -71,8 +71,12 @@ SilexServer.prototype.start = function(cbk) {
   this.app.use(this.publishRouter);
   this.app.use(this.sslRouter);
 
-  // add static folders to serve silex files
-  this.app.use('/', serveStatic(Path.join(__dirname, '../../dist/client')));
+  // TODO: move all the following to router/StaticRouter.ts ?
+  // add static folders to serve published files
+  this.app.use('/', serveStatic(Path.join(__dirname, '../../../dist/html')));
+  this.app.use('/', serveStatic(Path.join(__dirname, '../../../dist/client')));
+  this.app.use('/js', serveStatic(Path.join(__dirname, '../../../dist/client/client')));
+  this.app.use('/assets', serveStatic(Path.join(__dirname, '../../../dist/public')));
   // debug silex, for js source map
   this.app.use('/js/src', serveStatic(Path.join(__dirname, '../../src')));
   // the scripts which have to be available in all versions (v2.1, v2.2, v2.3, ...)

@@ -7,9 +7,6 @@
     "sourceMap": true,
     "module": "commonjs",
     "removeComments": false,
-    "paths": {
-      "@shared/*": ["src/*"],
-    },
   },
   "include": [
     "src/server/silex_electron.ts",

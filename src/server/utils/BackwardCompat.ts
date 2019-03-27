@@ -20,7 +20,7 @@ import { Constants } from '../../Constants.js';
  * we get it from package.json
  * used for backward compat and for the static files URLs taken from //{{host}}/static/{{Y-Z}}
  */
-const PACKAGE_JSON_DATA = require(Path.resolve(__dirname, '../../../package.json'));
+const PACKAGE_JSON_DATA = require(Path.resolve(__dirname, '../../../../package.json'));
 const FRONT_END_VERSION = PACKAGE_JSON_DATA['version:frontend'].split('.').map(s => parseInt(s));
 const LATEST_VERSION = PACKAGE_JSON_DATA['version:backwardcompat'].split('.').map(s => parseInt(s));
 console.log('Silex starts with backward compat version', LATEST_VERSION, 'and front end version', FRONT_END_VERSION);

@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "dist/client/js/",
+    "outDir": "dist/client/",
     "target": "es6",
     "watch": false,
     "sourceMap": false,

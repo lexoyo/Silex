@@ -20,7 +20,7 @@ import BackwardCompat from '../utils/BackwardCompat';
 import DomTools from '../utils/DomTools';
 
 const clientRoot = Path.resolve(__dirname, '..');
-const constants = require('../../Constants.json');
+const constants = require('../../Constants.js');
 const nodeModules = require('node_modules-path');
 
 export default function({ port, rootUrl }, unifile) {

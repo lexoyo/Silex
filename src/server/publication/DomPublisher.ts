@@ -12,7 +12,7 @@
 const { URL } = require('url');
 const Path = require('path');
 import DomTools from '../utils/DomTools';
-const constants = require('../../Constants.json');
+const constants = require('../../Constants.js');
 
 /**
  * @fileoverview Helper class used to cleanup the DOM when publishing a website

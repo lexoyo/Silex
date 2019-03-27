@@ -9,7 +9,7 @@
 // http://www.silexlabs.org/silex/silex-licensing/
 //////////////////////////////////////////////////
 
-const constants = require('../../Constants.json');
+const constants = require('../../Constants.js');
 
 export default class DomTools {
   /**

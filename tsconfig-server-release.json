@@ -5,7 +5,7 @@
     "target": "es6",
     "watch": false,
     "sourceMap": false,
-    "module": "es6",
+    "module": "commonjs",
     "removeComments": true,
   },
   "include": [
