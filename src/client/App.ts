@@ -19,7 +19,7 @@
  *
  */
 
-import { Config } from './config.js';
+import { Config } from './ClientConfig.js';
 import { ContextMenuController } from './controller/context-menu-controller.js';
 import { CssEditorController } from './controller/css-editor-controller.js';
 import { EditMenuController } from './controller/edit-menu-controller.js';
@@ -59,8 +59,7 @@ import { Splitter } from './view/splitter.js';
 import { Stage } from './view/stage.js';
 import { TextFormatBar } from './view/TextFormatBar.js';
 import { Workspace } from './view/workspace.js';
-
-const DEBUG = false;
+import { Constants } from '../Constants.js';
 
 /**
  * Defines the entry point of Silex client application
@@ -90,10 +89,15 @@ export class App {
    * create all views and models and controllers
    *
    */
-  constructor() {
+  constructor(debug=false) {
+    // the debug flag comes from index.jade or debug.jade
+    Config.debug.debugMode = debug;
+    if(Config.debug.debugMode) {
+      console.warn('Silex starting in debug mode.')
+    }
+
     // **
     // general initializations
-    console.log('xxx', Model);
     this.model = new Model();
     this.view = new View();
     this.controller = new Controller();
@@ -122,11 +126,8 @@ export class App {
           () => {});
     }
 
-    // Fixme: add a debug flag in the config + different configs depending on
     // the build type
-    console.warn(
-        'FIXME: add a debug flag in the config + different configs depending on the build type');
-    if (!DEBUG) {
+    if (!Config.debug.debugMode) {
       // warning small screen size
       // height must be enough to view the settings pannel
       // width is just arbitrary
@@ -160,22 +161,18 @@ export class App {
   }
 
   initDebug() {
-    console.warn(
-        'FIXME: add a debug flag in the config + different configs depending on the build type');
-    if (DEBUG) {
+    if (Config.debug.debugMode && Config.debug.debugScript) {
       window['model'] = this.model;
       window['view'] = this.view;
       window['controller'] = this.controller;
       let script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = '/js/debug.js';
+      script.src = Config.debug.debugScript;
       document.body.appendChild(script);
     }
 
     // prevent accidental unload
-    console.warn(
-        'FIXME: add a debug flag in the config + different configs depending on the build type');
-    if (!DEBUG || Config.debug.preventQuit) {
+    if (!Config.debug.debugMode || Config.debug.preventQuit) {
       this.view.workspace.startWatchingUnload();
     }
   }
@@ -189,7 +186,7 @@ export class App {
     let stage: Stage = new Stage(stageElement, this.model, this.controller);
 
     // Menu
-    let menuElement = document.getElementsByClassName('silex-menu')[0] as HTMLElement;
+    let menuElement = document.getElementsByClassName(Menu.CLASS_NAME)[0] as HTMLElement;
     let menu: Menu = new Menu(menuElement, this.model, this.controller);
 
     // context menu

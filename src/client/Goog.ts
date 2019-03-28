@@ -15,16 +15,16 @@
  */
 
 export namespace goog {
-  export type Rgb = Array<number>;
+  // export type Rgb = Array<number>;
   export class String {
-    static toSelectorCase(str: string): string { return ''; }
-  }
-  export class Color {
-    static hexToRgb(_: string): any {return null}
-    static parse(_: string): any {return null}
+    static toSelectorCase(str: string): string {
+      console.log('todo: do not use this useless function')
+      const res = str.replace(/([A-Z])/g, '-$1').toLowerCase();
+      if(res !== str) console.error('these 2 strings should be the same', str, res);
+      return res;
+    }
   }
   export class Style {
-    static getBackgroundColor(el: HTMLElement): string { return '' }
     static getBounds(el: HTMLElement): { top: number, left: number, bottom: number, right: number, height: number, width: number } {
       return { top: 0, left: 0, bottom: 0, right: 0, height: 0, width: 0 }
     }

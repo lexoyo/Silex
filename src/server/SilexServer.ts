@@ -15,23 +15,21 @@ const express = require('express');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const nodeModules = require('node_modules-path');
 const session = require('cookie-session');
-const serveStatic = require('serve-static');
+
 import CloudExplorerRouter from './router/CloudExplorerRouter';
 import WebsiteRouter from './router/WebsiteRouter.js';
+import StaticRouter from './router/StaticRouter.js';
 import PublishRouter from './router/PublishRouter.js';
 import SslRouter from './router/SslRouter.js';
+import { Config } from './ServerConfig';
 
-export default function SilexServer(options) {
-  this.options = options;
-  const {
-    serverOptions,
-    publisherOptions,
-    ceOptions,
-    electronOptions,
-    sslOptions,
-  } = this.options;
+export default function SilexServer(config: Config) {
+  if(config.serverOptions.debug) {
+    require('source-map-support').install();
+  }
+
+  this.config = config;
 
   this.app = express();
 
@@ -44,71 +42,38 @@ export default function SilexServer(options) {
   this.app.use(cookieParser());
   this.app.use(session({
     name: 'silex-session',
-    secret: serverOptions.sessionSecret,
+    secret: this.config.serverOptions.sessionSecret,
   }));
 
   // create the routes for unifile/CloudExplorer
   // and for Silex tasks
-  this.ceRouter = CloudExplorerRouter(ceOptions);
-  this.websiteRouter = WebsiteRouter(serverOptions, this.ceRouter.unifile);
-  this.publishRouter = PublishRouter(publisherOptions, this.ceRouter.unifile);
-  this.sslRouter = SslRouter(sslOptions, this.app);
+  this.staticRouter = StaticRouter(this.config.staticOptions);
+  this.ceRouter = CloudExplorerRouter(this.config.ceOptions);
+  this.websiteRouter = WebsiteRouter(this.config.serverOptions, this.ceRouter.unifile);
+  this.publishRouter = PublishRouter(this.config.publisherOptions, this.ceRouter.unifile);
+  this.sslRouter = SslRouter(this.config.sslOptions, this.app);
   this.unifile = this.ceRouter.unifile; // for access by third party
 };
 
 SilexServer.prototype.start = function(cbk) {
-  const {
-    serverOptions,
-    publisherOptions,
-    ceOptions,
-    electronOptions,
-    sslOptions,
-  } = this.options;
-
   // use routers
-  this.app.use(serverOptions.cePath, this.ceRouter);
+  this.app.use(this.config.serverOptions.cePath, this.ceRouter);
+  this.app.use(this.staticRouter);
   this.app.use(this.websiteRouter);
   this.app.use(this.publishRouter);
   this.app.use(this.sslRouter);
 
-  // TODO: move all the following to router/StaticRouter.ts ?
   // add static folders to serve published files
-  this.app.use('/', serveStatic(Path.join(__dirname, '../../../dist/html')));
-  this.app.use('/', serveStatic(Path.join(__dirname, '../../../dist/client')));
-  this.app.use('/js', serveStatic(Path.join(__dirname, '../../../dist/client/client')));
-  this.app.use('/assets', serveStatic(Path.join(__dirname, '../../../dist/public')));
-  // debug silex, for js source map
-  this.app.use('/js/src', serveStatic(Path.join(__dirname, '../../src')));
-  // the scripts which have to be available in all versions (v2.1, v2.2, v2.3, ...)
-  this.app.use('/static', serveStatic(Path.join(__dirname, '../../static')));
-  // wysihtml
-  this.app.use('/libs/wysihtml', serveStatic(Path.resolve(nodeModules('wysihtml'), 'wysihtml/parser_rules')));
-  this.app.use('/libs/wysihtml', serveStatic(Path.resolve(nodeModules('wysihtml'), 'wysihtml/dist/minified')));
-  // js-beautify
-  this.app.use('/libs/js-beautify', serveStatic(Path.resolve(nodeModules('js-beautify'), 'js-beautify/js/lib')));
-  // ace
-  this.app.use('/libs/ace', serveStatic(Path.resolve(nodeModules('ace-builds'), 'ace-builds/src-min')));
-  // alertify
-  this.app.use('/libs/alertify', serveStatic(Path.resolve(nodeModules('alertifyjs'), 'alertifyjs/build')));
-  // // normalize.css
-  // this.app.use('/libs/normalize.css', serveStatic(Path.resolve(nodeModules('normalize.css'), 'normalize.css')));
-  // font-awesome
-  this.app.use('/libs/font-awesome/css', serveStatic(Path.resolve(nodeModules('font-awesome'), 'font-awesome/css')));
-  this.app.use('/libs/font-awesome/fonts', serveStatic(Path.resolve(nodeModules('font-awesome'), 'font-awesome/fonts')));
-  // templates
-  this.app.use('/libs/templates/silex-templates', serveStatic(Path.resolve(nodeModules('silex-templates'), 'silex-templates')));
-  this.app.use('/libs/templates/silex-blank-templates', serveStatic(Path.resolve(nodeModules('silex-blank-templates'), 'silex-blank-templates')));
-  this.app.use('/libs/prodotype', serveStatic(Path.resolve(nodeModules('prodotype'), 'prodotype/pub')));
+  this.app.use(this.staticRouter);
 
   // Start Silex as an Electron app
-  if(electronOptions.enabled) {
+  if(this.config.electronOptions.enabled) {
     require(Path.join(__dirname, 'silex_electron'));
   }
 
   // server 'loop'
-  this.app.listen(serverOptions.port, function() {
-    console.log('Listening on ' + serverOptions.port);
+  this.app.listen(this.config.serverOptions.port, () => {
+    console.log('Listening on ' + this.config.serverOptions.port);
     if(cbk) cbk();
   });
 };
-

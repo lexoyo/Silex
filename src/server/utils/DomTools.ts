@@ -191,7 +191,10 @@ export default class DomTools {
         html: headString.replace(regExp, ''),
       };
     }
-    return headString;
+    return {
+      userHead: '',
+      html: headString,
+    };
   };
 
 

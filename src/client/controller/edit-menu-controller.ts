@@ -258,16 +258,8 @@ super(model, view);
     } else {
       switch (this.model.element.getType(element)) {
         case Constants.TYPE_TEXT:
-          let bgColor = Style.computeBgColor(
-              element, this.model.file.getContentWindow());
-          if (!bgColor) {
-            // case where all parents are transparent
-            bgColor = [255, 255, 255, 255];
-          }
-
           // open the text editor
           this.view.textFormatBar.startEditing(this.view.fileExplorer);
-
           // this.view.propertyTool.openStyleTab();
           break;
         case Constants.TYPE_HTML:

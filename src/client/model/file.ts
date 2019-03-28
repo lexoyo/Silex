@@ -17,7 +17,6 @@
  *   It has methods to manipulate the File
  */
 
-import { goog } from '../Goog.js';
 import { Property } from '../model/property.js';
 import { CloudStorage } from '../service/cloud-storage.js';
 import { FileInfo, Model, View } from '../types.js';
@@ -327,16 +326,16 @@ export class File {
       opt_errCbk?: ((p1: Object, p2: string) => any)) {
     this.isTemplate = false;
     CloudStorage.getInstance().read(
-        fileInfo, (rawHtml, userHead) => {
-          // update model
-          this.close();
-          this.fileInfo = fileInfo;
-          this.addToLatestFiles(this.fileInfo);
-          this.model.head.setUserHeadTag(userHead);
-          if (cbk) {
-            cbk(rawHtml);
-          }
-        }, opt_errCbk);
+      fileInfo, (rawHtml, userHead) => {
+        // update model
+        this.close();
+        this.fileInfo = fileInfo;
+        this.addToLatestFiles(this.fileInfo);
+        this.model.head.setUserHeadTag(userHead);
+        if (cbk) {
+          cbk(rawHtml);
+        }
+      }, opt_errCbk);
   }
 
   /**

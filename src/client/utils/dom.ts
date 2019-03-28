@@ -151,25 +151,4 @@ export class Dom {
     });
     return res;
   }
-
-  /**
-   * retrieve all dom elements containing the components or styles
-   * @param parentNode the element into which we query, defaults to the
-   *     contentDocument of the website
-   * @param selector, CSS selector of the elements containing the components or
-   *     styles
-   * FIXME: use Array.from
-   */
-  static getElementsAsArray(parentNode: HTMLElement|Document, selector: string): HTMLElement[] {
-        console.warn('TODO: use Array.from')
-    // get all elements which are components
-    const components = parentNode.querySelectorAll(selector);
-
-    // make an array out of it
-    let arr = [];
-    for (let idx = 0; idx < components.length; idx++) {
-      arr.push(components[idx]);
-    }
-    return arr;
-  }
 }

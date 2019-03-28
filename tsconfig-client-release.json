@@ -9,6 +9,6 @@
     "removeComments": true,
   },
   "include": [
-    "src/client/app.ts"
+    "src/client/App.ts"
   ],
 }

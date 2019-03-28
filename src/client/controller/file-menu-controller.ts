@@ -20,7 +20,7 @@ import { FileExplorer } from '../view/dialog/file-explorer.js';
 import { PublishDialog } from '../view/dialog/PublishDialog.js';
 import { ControllerBase } from './controller-base.js';
 import { CloudStorage } from '../service/cloud-storage.js';
-import { Config } from '../config.js';
+import { Config } from '../ClientConfig.js';
 import { SilexTasks } from '../service/silex-tasks.js';
 
 /**

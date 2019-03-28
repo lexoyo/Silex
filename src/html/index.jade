@@ -8,11 +8,6 @@ head
       background-color: #444;
     }
 
-
-  script var exports = {};
-  // Silex styles and code
-  script(src='js/app.js' type='module')
-
   // all the css in the head with _styles.less imports
   link(rel='stylesheet', type='text/css', href='css/admin.css')
 
@@ -22,6 +17,7 @@ body.loading-pending.advanced-mode-off
   include ./templates/body.jade
 
   // start Silex
-  script(type='module').
-    import { App } from './js/app.js';
-    new App();
+  block silexboot
+    script(type='module').
+      import { App } from './js/App.js';
+      new App();

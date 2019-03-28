@@ -18,9 +18,9 @@ const CloudExplorer = require('cloud-explorer');
 
 import BackwardCompat from '../utils/BackwardCompat';
 import DomTools from '../utils/DomTools';
+import { Constants } from '../../Constants.js';
 
 const clientRoot = Path.resolve(__dirname, '..');
-const constants = require('../../Constants.js');
 const nodeModules = require('node_modules-path');
 
 export default function({ port, rootUrl }, unifile) {
@@ -111,6 +111,12 @@ export default function({ port, rootUrl }, unifile) {
         userHead,
       });
     })
+    .catch(err => {
+      console.error('Could not send website data: ', err)
+      res.status(400).send({
+        message: err.message,
+      });
+    })
   }
   /**
    * save a website to the cloud storage of the user
@@ -154,16 +160,16 @@ export default function({ port, rootUrl }, unifile) {
     var tag = dom.window.document.createElement('link');
     tag.rel = 'stylesheet';
     tag.href = rootUrl + '/css/editable.css';
-    tag.classList.add(constants.SILEX_TEMP_TAGS_CSS_CLASS);
+    tag.classList.add(Constants.SILEX_TEMP_TAGS_CSS_CLASS);
     dom.window.document.head.appendChild(tag);
     // add UI markup
-    const editableElements = dom.window.document.getElementsByClassName(constants.EDITABLE_CLASS_NAME);
+    const editableElements = dom.window.document.getElementsByClassName(Constants.EDITABLE_CLASS_NAME);
     for(let idx=0; idx<editableElements.length; idx++) {
       const el = editableElements[idx];
-      constants.RESIZE_HANDLE_CSS_CLASSES.forEach(className => {
+      Constants.RESIZE_HANDLE_CSS_CLASSES.forEach(className => {
         const handle = dom.window.document.createElement('div');
         handle.classList.add(className);
-        handle.classList.add(constants.RISZE_HANDLE_CSS_CLASS);
+        handle.classList.add(Constants.RISZE_HANDLE_CSS_CLASS);
         el.appendChild(handle);
       });
     }
@@ -190,13 +196,13 @@ export default function({ port, rootUrl }, unifile) {
       return path;
     });
     // remove temp tags
-    const toBeRemoved = dom.window.document.querySelectorAll(`.${constants.SILEX_TEMP_TAGS_CSS_CLASS}, #${constants.SILEX_CURRENT_PAGE_ID}, .${ constants.RISZE_HANDLE_CSS_CLASS }`);
+    const toBeRemoved = dom.window.document.querySelectorAll(`.${Constants.SILEX_TEMP_TAGS_CSS_CLASS}, #${Constants.SILEX_CURRENT_PAGE_ID}, .${ Constants.RISZE_HANDLE_CSS_CLASS }`);
     for(let idx=0; idx<toBeRemoved.length; idx++) {
       const el = toBeRemoved[idx];
       el.remove();
     }
     // remove useless css classes
-    constants.SILEX_TEMP_CLASS_NAMES.forEach(className => {
+    Constants.SILEX_TEMP_CLASS_NAMES.forEach(className => {
       Array.from(dom.window.document.getElementsByClassName(className))
       .forEach((el: HTMLElement) => el.classList.remove(className));
     });

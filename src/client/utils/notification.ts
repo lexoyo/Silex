@@ -110,12 +110,8 @@ export class SilexNotification {
       opt_okLabel?: string, opt_cancelLabel?: string,
       opt_default?: string) {
     SilexNotification.close();
-    // Alertify.dialog.labels.ok = opt_okLabel || 'ok'
-    // Alertify.dialog.labels.cancel = opt_cancelLabel || 'cancel'
-    alertify.set({
-      'labels':
-          {'ok': opt_okLabel || 'ok', 'cancel': opt_cancelLabel || 'cancel'}
-    });
+
+    alertify.labels = {'ok': opt_okLabel || 'ok', 'cancel': opt_cancelLabel || 'cancel'};
 
     // set the flag while the modal dialog is opened
     SilexNotification.isActive = true;

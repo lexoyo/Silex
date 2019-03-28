@@ -169,7 +169,7 @@ export class Head {
         metaNode.setAttribute('content', opt_value);
       } else {
         // remove the opt_value
-        metaNode.parentElement.removeChild(metaNode);
+        if(metaNode) metaNode.parentElement.removeChild(metaNode);
       }
     }
   }

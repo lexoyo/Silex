@@ -210,10 +210,6 @@ export class Property {
       this.prodotypeDataObj = Property.EMPTY_PRODOTYPE_DATA;
       console.info('Warning: no JSON styles array found in the dom');
     }
-
-    // make it easy to inspect the properties in debug mode
-    // FIXME: do this in app.js and use config
-    console.warn('FIXME: do this in app.js and use config');
   }
 
   /**

@@ -178,10 +178,9 @@ export class StyleEditorPane extends PaneBase {
    * @param includeOffPage, if false it excludes the elements which are not
    *     visible in the current page
    */
-  getElementsWithStyle(styleName: StyleName, includeOffPage: boolean):
-      Element[] {
-    const newSelection = Dom.getElementsAsArray(
-        this.model.file.getContentDocument(), '.' + styleName);
+  getElementsWithStyle(styleName: StyleName, includeOffPage: boolean): Element[] {
+    const doc = this.model.file.getContentDocument();
+    const newSelection: HTMLElement[] = Array.from(doc.querySelectorAll('.' + styleName));
     if (includeOffPage) {
       return newSelection;
     } else {
@@ -398,15 +397,15 @@ export class StyleEditorPane extends PaneBase {
     const visibilityData =
         (styleData['styles'] || {})[this.getVisibility()] || {};
     const tagData = visibilityData[this.getPseudoClass()] || {};
-    Dom.getElementsAsArray(this.element, '[data-prodotype-name]')
-        .forEach((el) => {
-          const tagName = el.getAttribute('data-prodotype-name');
-          const label = el.getAttribute('data-initial-value') +
-              (tagData[tagName] ? ' *' : '');
-          if (el.innerHTML != label) {
-            el.innerHTML = label;
-          }
-        });
+    Array.from(this.element.querySelectorAll('[data-prodotype-name]'))
+    .forEach((el: HTMLElement) => {
+      const tagName = el.getAttribute('data-prodotype-name');
+      const label = el.getAttribute('data-initial-value') +
+          (tagData[tagName] ? ' *' : '');
+      if (el.innerHTML != label) {
+        el.innerHTML = label;
+      }
+    });
   }
 
   /**
@@ -544,10 +543,9 @@ export class StyleEditorPane extends PaneBase {
     this.controller.propertyToolController.undoCheckPoint();
 
     // remove from elements
-    Dom
-        .getElementsAsArray(this.model.file.getContentDocument(), '.' + name)
-        .filter((el) => this.isTextBox(el))
-        .forEach((el) => el.classList.remove(name));
+    Array.from(this.model.file.getContentDocument().querySelectorAll('.' + name))
+    .filter((el: HTMLElement) => this.isTextBox(el))
+    .forEach((el: HTMLElement) => el.classList.remove(name));
 
     // remove from model
     this.model.component.removeStyle(option.value);

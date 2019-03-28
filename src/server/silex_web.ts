@@ -12,7 +12,7 @@
 'use strict';
 
 import SilexServer from './SilexServer';
-import Config from './Config';
+import { Config } from './ServerConfig';
 
 const config = new Config();
 // here you can change config,

@@ -1,32 +1,26 @@
 import {SilexNotification} from '../utils/notification.js';
-// goog.module('silex.utils.Shortcut');
-// goog.module('silex.utils.MenuShortcut');
 
-export interface Shortcut {
-  input?: boolean;
-  key?: string;
-  modifiers?: boolean;
-  altKey?: boolean;
-  shiftKey?: boolean;
-  ctrlKey?: boolean;
-}
+export type Shortcut = {
+  label?: string,
+  id?: string,
+  key: string,
+  altKey?: boolean,
+  ctrlKey?: boolean,
+  shiftKey?: boolean,
+  modifiers?: boolean,
+  input?: boolean,
+};
 
-export interface MenuShortcut {
-  checkable?: boolean;
-  id: string;
-  tooltip?: number;
-  input?: boolean;
-  key?: string;
-  altKey?: boolean;
-  shiftKey?: boolean;
-  ctrlKey?: boolean;
+type ShortcutItem = {
+  s: Shortcut,
+  cbk: (e: KeyboardEvent) => void,
 }
 
 /**
  * @class Keyboard
  */
 export class Keyboard {
-  shortcuts: any;
+  shortcuts: Map<string, ShortcutItem[]>;
 
   static isInput(target: HTMLElement) {
     return !target.tagName ||
@@ -42,7 +36,6 @@ export class Keyboard {
   }
 
   addShortcut(s: Shortcut, cbk: (p1: Event) => any) {
-    const {ctrlKey, altKey, shiftKey} = s;
     const key = s.key.toLowerCase();
     if (!cbk || !key) {
       throw new Error('Can not add shortcut, callback and key are required');
@@ -54,25 +47,24 @@ export class Keyboard {
   }
 
   handleKeyDown(e) {
-    console.error('TODO')
-    // const {target, shiftKey, ctrlKey, altKey, metaKey} = e;
-    // const key = e.key.toLowerCase();
-    // const shortcuts = this.getShortcuts(e);
-    // if (shortcuts.length > 0 &&
-    //     // not while in a modal alert
-    //     !SilexNotification.isActive) {
-    //   shortcuts.forEach((shortcut) => {
-    //     if (!e.defaultPrevented) {
-    //       shortcut.cbk(e);
-    //     } else {
-    //       console.log('event prevented, do not call shortcut callback');
-    //     }
-    //   });
-    //   e.preventDefault();
-    // }
+    const {target, shiftKey, ctrlKey, altKey, metaKey} = e;
+    const key = e.key.toLowerCase();
+    const shortcuts = this.getShortcutsFromEvent(e);
+    if (shortcuts.length > 0 &&
+        // not while in a modal alert
+        !SilexNotification.isActive) {
+      shortcuts.forEach((shortcut) => {
+        if (!e.defaultPrevented) {
+          shortcut.cbk(e);
+        } else {
+          console.log('event prevented, do not call shortcut callback');
+        }
+      });
+      e.preventDefault();
+    }
   }
 
-  getShortcuts(e): Shortcut[] {
+  getShortcutsFromEvent(e): ShortcutItem[] {
     const key = e.key.toLowerCase();
     if (!this.shortcuts.has(key)) {
       return [];
@@ -80,15 +72,15 @@ export class Keyboard {
     const shortcuts = this.shortcuts.get(key);
     return shortcuts.filter((shortcut) => {
       return (
-                 // accept all modifiers if modifiers is set to false
-                 shortcut.s.modifiers === false ||
-                 // otherwise check the modifiers
-                 !!shortcut.s.shiftKey === e.shiftKey &&
-                     !!shortcut.s.altKey === e.altKey &&
-                     !!shortcut.s.ctrlKey === e.ctrlKey) &&
-          (
-                 // not when in an input field
-                 shortcut.s.input !== false || !Keyboard.isInput((e.target as HTMLElement)));
+        // accept all modifiers if modifiers is set to false
+        shortcut.s.modifiers === false ||
+        // otherwise check the modifiers
+        !!shortcut.s.shiftKey === e.shiftKey &&
+            !!shortcut.s.altKey === e.altKey &&
+            !!shortcut.s.ctrlKey === e.ctrlKey) &&
+      (
+      // not when in an input field
+      shortcut.s.input !== false || !Keyboard.isInput((e.target as HTMLElement)));
     });
   }
 }

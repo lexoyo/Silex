@@ -16,6 +16,8 @@
 
 import { goog } from '../Goog.js';
 
+type Rgb = Array<number>;
+
 export class Style {
 
 
@@ -63,103 +65,13 @@ export class Style {
     return goog.Style.parseStyleAttribute(styleStr);
   }
 
-  /**
-   * Compute background color
-   * Takes the opacity of the backgrounds into account
-   * Recursively compute parents background colors
-   * @param element the element which bg color we want
-   * @param contentWindow of the iframe containing the website
-   * @return the element bg color
-   */
-  static computeBgColor(element: HTMLElement, contentWindow: Window): goog.Rgb {
-    let parentColorArray;
-
-    // retrieve the parents blended colors
-    if (element.parentElement && element.parentElement.nodeType === 1) {
-      parentColorArray = Style.computeBgColor((element.parentElement as HTMLElement), contentWindow);
-    } else {
-      parentColorArray = null;
-    }
-
-    // rgba array
-    let elementColorArray = null;
-    let elementColorStr =
-        contentWindow.getComputedStyle(element)['background-color'];
-    if (elementColorStr) {
-      // convert bg color from rgba to array
-      if (elementColorStr.indexOf('rgba') >= 0) {
-        // rgba case
-        let alpha = parseFloat(elementColorStr.substring(
-            elementColorStr.lastIndexOf(',') + 1,
-            elementColorStr.lastIndexOf(')')));
-        elementColorStr = elementColorStr.replace('rgba', 'rgb');
-        elementColorStr =
-            elementColorStr.substring(0, elementColorStr.lastIndexOf(',')) + ')';
-        elementColorArray =
-            goog.Color.hexToRgb(goog.Color.parse(elementColorStr).hex);
-        elementColorArray.push(alpha);
-      } else {
-        if (elementColorStr.indexOf('transparent') >= 0) {
-          // transparent case
-          elementColorArray = null;
-        } else {
-          if (elementColorStr.indexOf('rgb') >= 0) {
-            // rgb case
-            elementColorArray =
-                goog.Color.hexToRgb(goog.Color.parse(elementColorStr).hex);
-            elementColorArray.push(1);
-          } else {
-            if (elementColorStr.indexOf('#') >= 0) {
-              // hex case
-              elementColorArray = goog.Color.hexToRgb(elementColorStr);
-              elementColorArray.push(1);
-            } else {
-              // handle all colors, including the named colors
-              elementColorStr = goog.Style.getBackgroundColor(element);
-
-              // named color case
-              elementColorArray =
-                  goog.Color.hexToRgb(goog.Color.parse(elementColorStr).hex);
-              elementColorArray.push(1);
-            }
-          }
-        }
-      }
-    } else {
-      console.warn('was not able to take the element bg color into account');
-      elementColorArray = null;
-    }
-    let res: goog.Rgb;
-
-    // handle the case where there is no need to blend
-    if (elementColorArray === null && parentColorArray === null) {
-      // there is no need to blend
-      res = null;
-    } else {
-      if (elementColorArray === null) {
-        // there is no need to blend
-        res = parentColorArray;
-      } else {
-        if (parentColorArray === null) {
-          // there is no need to blend
-          res = elementColorArray;
-        } else {
-          // blend the parents and the element's bg colors
-          // f = (e*ae + p*(1-ae))
-          let complement = 1 - elementColorArray[3];
-          res = [
-            elementColorArray[0] * elementColorArray[3] +
-                parentColorArray[0] * complement,
-            elementColorArray[1] * elementColorArray[3] +
-                parentColorArray[1] * complement,
-            elementColorArray[2] * elementColorArray[3] +
-                parentColorArray[2] * complement,
-            1
-          ];
-        }
-      }
-    }
-    return res;
+  static hexToRgb(hexColor: string): any {
+    console.warn('why convert', hexColor, 'to RGB?')
+    var rgb = parseInt(hexColor.substr(1), 16);
+    var r = rgb >> 16;
+    var g = (rgb >> 8) & 255;
+    var b = rgb & 255;
+    return [r, g, b];
   }
 
   /**

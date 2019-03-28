@@ -52,9 +52,9 @@ export class Component {
     this.componentEditorElement = componentEditorElement;
     this.styleEditorElement = styleEditorElement;
     this.prodotypeComponent = new window['Prodotype'](
-        componentEditorElement, './libs/prodotype/components');
+        componentEditorElement, './prodotype/components');
     this.prodotypeStyle =
-        new window['Prodotype'](styleEditorElement, './libs/prodotype/styles');
+        new window['Prodotype'](styleEditorElement, './prodotype/styles');
     this.prodotypeComponent.ready((err) => {
       this.readyCbkArr.forEach((cbk) => cbk(err));
       this.readyCbkArr = [];
@@ -278,17 +278,15 @@ export class Component {
     const attrName = type === Constants.COMPONENT_TYPE ?
         Property.ELEMENT_ID_ATTR_NAME :
         'data-style-id';
-    return Dom
-        .getElementsAsArray(
-            this.model.file.getContentDocument(), '.' + className)
-        .map((el) => {
-          const attr = el.getAttribute(attrName);
-          const data = type === Constants.COMPONENT_TYPE ?
-              this.model.property.getComponentData(attr) :
-              this.model.property.getStyleData(attr);
-          return data;
-        })
-        .filter((data) => !!data);
+    return Array.from(this.model.file.getContentDocument().querySelectorAll('.' + className))
+    .map((el) => {
+      const attr = el.getAttribute(attrName);
+      const data = type === Constants.COMPONENT_TYPE ?
+          this.model.property.getComponentData(attr) :
+          this.model.property.getStyleData(attr);
+      return data;
+    })
+    .filter((data) => !!data);
   }
 
   /**

@@ -12,7 +12,7 @@
 'use strict';
 
 import index from './index';
-const config = new DefaultConfig();
+const config = new Config();
 // here you can change config,
 // e.g. use config.publishRouterOptions.enableHostingGhPages
 const silex = new SilexServer(config);
