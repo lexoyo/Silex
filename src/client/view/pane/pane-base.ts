@@ -137,37 +137,4 @@ export class PaneBase {
     }
     return value;
   }
-
-  /**
-   * color palette visibility
-   * do not set display to none,
-   *     because the setColor then leave the color palette UI unchanged
-   * @param hsvPalette   The HSV palete
-   * @param isVisible    The desired visibility
-   */
-  setColorPaletteVisibility(hsvPalette: any, isVisible: boolean) {
-    if (isVisible) {
-      if (!this.getColorPaletteVisibility(hsvPalette)) {
-        goog.Style.setStyle(hsvPalette.getElement(), 'visibility', '');
-        goog.Style.setStyle(hsvPalette.getElement(), 'position', '');
-      }
-    } else {
-      if (this.getColorPaletteVisibility(hsvPalette)) {
-        goog.Style.setStyle(hsvPalette.getElement(), 'visibility', 'hidden');
-        goog.Style.setStyle(hsvPalette.getElement(), 'position', 'absolute');
-      }
-    }
-  }
-
-  /**
-   * color palette visibility
-   * do not set display to none,
-   * because the setColor then leave the color palette UI unchanged
-   * @param hsvPalette   The HSV palete
-   * @return true if the color palete is visible
-   */
-  getColorPaletteVisibility(hsvPalette: any): boolean {
-    return goog.Style.getStyle(hsvPalette.getElement(), 'visibility') !==
-        'hidden';
-  }
 }

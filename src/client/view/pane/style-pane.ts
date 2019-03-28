@@ -150,19 +150,21 @@ export class StylePane extends PaneBase {
    * the content has changed, notify the controller
    */
   contentChanged() {
-    if (this.iAmSettingValue) {
-      return;
-    }
-    let value = this.ace.getValue();
-    if (value) {
-      value = value.replace('.element{\n', '');
-      value = value.replace('\n}', '');
-      value = value.replace(/\n/, ' ');
-    }
-    this.iAmSettingValue = true;
-    this.controller.propertyToolController.multipleStylesChanged(
-        Style.stringToStyle(value || ''));
-    this.iAmSettingValue = false;
+    console.warn('this is not allowed anymore');
+    this.ace.setValue(this.ace.getValue());
+    // if (this.iAmSettingValue) {
+    //   return;
+    // }
+    // let value = this.ace.getValue();
+    // if (value) {
+    //   value = value.replace('.element{\n', '');
+    //   value = value.replace('\n}', '');
+    //   value = value.replace(/\n/, ' ');
+    // }
+    // this.iAmSettingValue = true;
+    // this.controller.propertyToolController.multipleStylesChanged(
+    //     Style.stringToStyle(value || ''));
+    // this.iAmSettingValue = false;
   }
 }
 

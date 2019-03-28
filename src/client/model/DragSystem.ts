@@ -21,7 +21,6 @@
  */
 
 import { goog } from '../Goog.js';
-import { Body } from '../model/body.js';
 import { SilexElement } from '../model/element.js';
 import { Constants } from '../../Constants.js';
 import { Model, StickyLine, StickyPoint, View } from '../types.js';
@@ -292,7 +291,7 @@ export class DragSystem {
       if (follower.tagName.toUpperCase() !== 'BODY' &&
           !follower.classList.contains(
               Constants.PREVENT_RESIZABLE_CLASS_NAME)) {
-        let pos = goog.Style.getBounds(follower);
+        let pos = follower.getBoundingClientRect();
         let offsetPosX = pos.left;
         let offsetPosY = pos.top;
         let offsetSizeX = offsetX;
@@ -334,8 +333,8 @@ export class DragSystem {
             offsetSizeX = -offsetSizeX;
             break;
         }
-        const size = goog.Style.getBounds(follower);
-        const borderBox = goog.Style.getBounds(follower);
+        const size = follower.getBoundingClientRect();
+        const borderBox = follower.getBoundingClientRect();
         const style = win.getComputedStyle(follower);
         const paddingBox = {
           left: parseInt(style.paddingLeft, 10),
@@ -348,11 +347,12 @@ export class DragSystem {
         // (only when the background is smaller than the body)
         // TODO in a while: remove support of .background since it is now a
         // section
-        if ((follower.classList.contains(Stage.BACKGROUND_CLASS_NAME) ||
-             this.model.element.isSectionContent(follower)) &&
-            size.width < win.document.documentElement.clientWidth - 100) {
-          offsetSizeX *= 2;
-        }
+        // const BACKGROUND_CLASS_NAME = 'background';
+        // if ((follower.classList.contains(Stage.BACKGROUND_CLASS_NAME) ||
+        //      this.model.element.isSectionContent(follower)) &&
+        //     size.width < win.document.documentElement.clientWidth - 100) {
+        //   offsetSizeX *= 2;
+        // }
 
         // compute new size
         let newSizeW = size.width + offsetSizeX - borderBox.left -
@@ -476,14 +476,14 @@ export class DragSystem {
       if (this.isDraggable(follower)) {
         // do not do this anymore because the element is moved to the body
         // during drag so its position is wrong: update the toolboxes to display
-        // the position during drag let pos = goog.Style.getBounds(follower);
+        // the position during drag let pos = follower.getBoundingClientRect();
         // let finalY = Math.round(pos.top + offsetY);
         // let finalX = Math.round(pos.left + offsetX);
         // this.controller.stageController.styleChanged('top', finalY + 'px',
         // [follower], false);
         // this.controller.stageController.styleChanged('left', finalX + 'px',
         // [follower], false); move the element let pos =
-        // goog.Style.getBounds(follower);
+        // follower.getBoundingClientRect();
         let left = parseInt(this.model.element.getStyle(follower, 'left'), 10);
         let top = parseInt(this.model.element.getStyle(follower, 'top'), 10);
         this.model.element.setStyle(
@@ -496,10 +496,8 @@ export class DragSystem {
 
   isDraggable(element) {
     return element.tagName.toUpperCase() !== 'BODY' &&
-        !goog.Dom.getAncestorByClass(
-            element.parentElement, Constants.SELECTED_CLASS_NAME) &&
-        !element.classList.contains(
-            Constants.PREVENT_DRAGGABLE_CLASS_NAME);
+      !element.parentElement.closest('.' + Constants.SELECTED_CLASS_NAME) &&
+      !element.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME);
   }
 
   getBoundingBox(win, element: HTMLElement):
@@ -520,7 +518,7 @@ export class DragSystem {
       const computedHeight =
           parseInt(win.getComputedStyle(element).height || 0, 10);
       const height = Math.max(computedHeight, parseInt(box['min-height'], 10));
-      const elementPos = goog.Style.getBounds(element);
+      const elementPos = element.getBoundingClientRect();
       return {
         'left': elementPos.left,
         // parseInt(box.left, 10),

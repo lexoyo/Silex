@@ -84,8 +84,8 @@ export class StageController extends ControllerBase {
    */
   newContainer(container: HTMLElement, element: HTMLElement) {
     // initial positions
-    let elementPos = goog.Style.getBounds(element);
-    let newContainerPos = goog.Style.getBounds(container);
+    let elementPos = element.getBoundingClientRect();
+    let newContainerPos = container.getBoundingClientRect();
 
     // move to the new container
     element.parentElement.removeChild(element);

@@ -7,6 +7,7 @@
     "sourceMap": true,
     "module": "es6",
     "removeComments": false,
+    "moduleResolution": "node",
   },
   "include": [
     "src/client/App.ts",

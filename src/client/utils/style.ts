@@ -58,13 +58,6 @@ export class Style {
     return styleStr;
   }
 
-  /**
-   * convert style string to object
-   */
-  static stringToStyle(styleStr: string): Object {
-    return goog.Style.parseStyleAttribute(styleStr);
-  }
-
   static hexToRgb(hexColor: string): any {
     console.warn('why convert', hexColor, 'to RGB?')
     var rgb = parseInt(hexColor.substr(1), 16);

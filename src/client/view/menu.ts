@@ -41,12 +41,6 @@ export class Menu {
   */
   static CLASS_NAME: string = 'silex-menu';
 
-  /**
-  * reference to the menu class of the closure library
-  */
-  menu: goog.Menu;
-
-
   static SUB_MENU_CLASSES = [
     'page-tool-visible', 'about-menu-visible', 'file-menu-visible',
     'code-menu-visible', 'add-menu-visible'
@@ -125,22 +119,6 @@ export class Menu {
         this.closeAllSubMenu();
       }
     };
-  }
-
-  /**
-  * add an item to the menu
-  * @param itemData menu item as defined in config.js
-  */
-  addToMenu(itemData: Shortcut, menu: goog.Menu) {
-    let item;
-    if (itemData) {
-      // create the menu item
-      let label = itemData.label;
-      let id = itemData.id;
-      item = new goog.MenuItem(label);
-      item.setId(id);
-    }
-    menu.addChild(item, true);
   }
 
   /**

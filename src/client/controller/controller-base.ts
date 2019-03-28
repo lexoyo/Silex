@@ -129,37 +129,41 @@ export class ControllerBase {
    * async operation to improve performance
    */
   getStateAsync(opt_cbk: (p1: UndoItem) => any) {
-    this.model.file.getHtmlAsync((html) => {
-      opt_cbk({
-        html: html,
-        page: this.model.page.getCurrentPage(),
-        scrollX: this.view.stage.getScrollX(),
-        scrollY: this.view.stage.getScrollY()
-      });
-    });
+    throw new Error('not implemented');
+
+    // this.model.file.getHtmlAsync((html) => {
+    //   opt_cbk({
+    //     html: html,
+    //     page: this.model.page.getCurrentPage(),
+    //     scrollX: this.view.stage.getScrollX(),
+    //     scrollY: this.view.stage.getScrollY()
+    //   });
+    // });
   }
 
   /**
    * build a state object for undo/redo
    */
   getState(): UndoItem {
-    return {
-      html: this.model.file.getHtml(),
-      page: this.model.page.getCurrentPage(),
-      scrollX: this.view.stage.getScrollX(),
-      scrollY: this.view.stage.getScrollY()
-    };
+    throw new Error('not implemented');
+    // return {
+    //   html: this.model.file.getHtml(),
+    //   page: this.model.page.getCurrentPage(),
+    //   scrollX: this.view.stage.getScrollX(),
+    //   scrollY: this.view.stage.getScrollY()
+    // };
   }
 
   /**
    * build a state object for undo/redo
    */
   restoreState(state: UndoItem) {
-    this.model.file.setHtml(state.html, () => {
-      this.model.page.setCurrentPage(state.page);
-      this.view.stage.setScrollX(state.scrollX);
-      this.view.stage.setScrollY(state.scrollY);
-    }, false);
+    throw new Error('not implemented');
+    // this.model.file.setHtml(state.html, () => {
+    //   this.model.page.setCurrentPage(state.page);
+    //   this.view.stage.setScrollX(state.scrollX);
+    //   this.view.stage.setScrollY(state.scrollY);
+    // }, false);
   }
 
   /**

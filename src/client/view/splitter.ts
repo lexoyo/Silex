@@ -90,8 +90,8 @@ export class Splitter {
    * redraw the components
    */
   redraw() {
-    let pos = goog.Style.getBounds(this.element);
-    let parentSize = goog.Style.getBounds(this.element.parentElement as HTMLElement);
+    let pos = this.element.getBoundingClientRect();
+    let parentSize = this.element.parentElement.getBoundingClientRect();
 
     // apply the position to the elements
     this.onTheLeft.forEach(element => {
@@ -141,9 +141,9 @@ export class Splitter {
    */
   onMouseMoveFrame(e: Event) {
     if (this.isDown) {
-      let parentSize = goog.Style.getBounds(this.element.parentElement as HTMLElement);
-      let pos = goog.Style.getBounds(e.target as HTMLElement);
-      let posIFrame = goog.Style.getBounds(this.model.file.getIFrameElement());
+      let parentSize = this.element.parentElement.getBoundingClientRect();
+      let pos = (e.target as HTMLElement).getBoundingClientRect();
+      let posIFrame = this.model.file.getIFrameElement().getBoundingClientRect();
       this.element.style.right = parentSize.width - pos.left - posIFrame.left + 'px';
       this.redraw();
     }
@@ -154,8 +154,8 @@ export class Splitter {
    */
   onMouseMove(e: Event) {
     if (this.isDown) {
-      let parentSize = goog.Style.getBounds(this.element.parentElement as HTMLElement);
-      let pos = goog.Style.getBounds(e.target as HTMLElement);
+      let parentSize = this.element.parentElement.getBoundingClientRect();
+      let pos = (e.target as HTMLElement).getBoundingClientRect();
       this.element.style.right = parentSize.width - pos.left + 'px';
       this.redraw();
     }

@@ -551,30 +551,30 @@ export class SilexElement {
    * @param opt_offset an offset to apply to its position (x and y)
    */
   addElementDefaultPosition(element: HTMLElement, opt_offset?: number) {
+    throw new Error('not implemented');
     opt_offset = opt_offset || 0;
 
     // find the container (main background container or the stage)
-    const stageSize = this.view.stage.getStageSize();
-    const bb = this.model.property.getBoundingBox([element]);
-    const posX = Math.round(stageSize.width / 2 - bb.width / 2);
-    const posY = 100;
-    const container = this.getBestContainerForNewElement(posX, posY);
+    // const stageSize = {width: 0, height: 0};
+    // const bb = this.model.property.getBoundingBox([element]);
+    // const posX = Math.round(stageSize.width / 2 - bb.width / 2);
+    // const posY = 100;
+    // const container = this.getBestContainerForNewElement(posX, posY);
 
-    // take the scroll into account (drop at (100, 100) from top left corner of
-    // the window, not the stage)
-    const bbContainer = goog.Style.getBounds(container);
-    console.warn('TODO: check that this has left and top:', bbContainer);
-    const offsetX = posX + this.view.stage.getScrollX() - bbContainer['left'];
-    const offsetY = posY + this.view.stage.getScrollY() - bbContainer['top'];
+    // // take the scroll into account (drop at (100, 100) from top left corner of
+    // // the window, not the stage)
+    // const bbContainer = container.getBoundingClientRect();
+    // const offsetX = posX + this.view.stage.getScrollX() - bbContainer.left;
+    // const offsetY = posY + this.view.stage.getScrollY() - bbContainer.top;
 
-    // add to stage
-    this.addElement(container, element);
+    // // add to stage
+    // this.addElement(container, element);
 
-    // apply the style (force desktop style, not mobile)
-    const styleObject = this.model.property.getStyle(element, false);
-    styleObject.top = opt_offset + offsetY + 'px';
-    styleObject.left = opt_offset + offsetX + 'px';
-    this.model.property.setStyle(element, styleObject, false);
+    // // apply the style (force desktop style, not mobile)
+    // const styleObject = this.model.property.getStyle(element, false);
+    // styleObject.top = opt_offset + offsetY + 'px';
+    // styleObject.left = opt_offset + offsetX + 'px';
+    // this.model.property.setStyle(element, styleObject, false);
   }
 
   /**
@@ -596,61 +596,62 @@ export class SilexElement {
    * init the element depending on its type
    */
   initElement(element: HTMLElement) {
-    // default style
-    let defaultStyle = {};
-    defaultStyle['width'] = SilexElement.INITIAL_ELEMENT_SIZE + 'px';
-    defaultStyle[this.getHeightStyleName(element)] =
-        SilexElement.INITIAL_ELEMENT_SIZE + 'px';
+    throw new Error('not implemented');
+    // // default style
+    // let defaultStyle = {};
+    // defaultStyle['width'] = SilexElement.INITIAL_ELEMENT_SIZE + 'px';
+    // defaultStyle[this.getHeightStyleName(element)] =
+    //     SilexElement.INITIAL_ELEMENT_SIZE + 'px';
 
-    // init the element depending on its type
-    switch (this.getType(element)) {
-      case Constants.TYPE_CONTAINER:
-      case Constants.TYPE_HTML:
-        if (!this.isSection(element)) {
-          defaultStyle['background-color'] = 'rgb(255, 255, 255)';
-        }
-        break;
-      case Constants.TYPE_TEXT:
-      case Constants.TYPE_IMAGE:
-        break;
-    }
+    // // init the element depending on its type
+    // switch (this.getType(element)) {
+    //   case Constants.TYPE_CONTAINER:
+    //   case Constants.TYPE_HTML:
+    //     if (!this.isSection(element)) {
+    //       defaultStyle['background-color'] = 'rgb(255, 255, 255)';
+    //     }
+    //     break;
+    //   case Constants.TYPE_TEXT:
+    //   case Constants.TYPE_IMAGE:
+    //     break;
+    // }
 
-    // special case of section content
-    if (this.isSectionContent(element)) {
-      // no bg color for the content container
-      defaultStyle['background-color'] = '';
+    // // special case of section content
+    // if (this.isSectionContent(element)) {
+    //   // no bg color for the content container
+    //   defaultStyle['background-color'] = '';
 
-      // no width either, it will take the .website-width
-      // the default one from front-end.css or the one in the settings
-      defaultStyle['width'] = '';
-    }
+    //   // no width either, it will take the .website-width
+    //   // the default one from front-end.css or the one in the settings
+    //   defaultStyle['width'] = '';
+    // }
 
-    // send the scroll to the target
-    this.view.stage.setScrollTarget(element);
+    // // send the scroll to the target
+    // this.view.stage.setScrollTarget(element);
 
-    // default style to the element style
-    // keep the style if there is one, usually set by component::initComponent
-    const finalStyle = this.model.property.getStyle(element, false) || {};
-    for (let name in defaultStyle) {
-      finalStyle[name] = finalStyle[name] || defaultStyle[name];
-    }
+    // // default style to the element style
+    // // keep the style if there is one, usually set by component::initComponent
+    // const finalStyle = this.model.property.getStyle(element, false) || {};
+    // for (let name in defaultStyle) {
+    //   finalStyle[name] = finalStyle[name] || defaultStyle[name];
+    // }
 
-    // apply the style (force desktop style, not mobile)
-    this.model.property.setStyle(element, finalStyle, false);
+    // // apply the style (force desktop style, not mobile)
+    // this.model.property.setStyle(element, finalStyle, false);
 
-    // add the element to the stage
-    if (this.isSection(element)) {
-      this.addElement(this.model.body.getBodyElement(), element);
-    } else {
-      if (!this.isElementContent(element)) {
-        // add to the stage at the right position
-        // and in the right container
-        this.addElementDefaultPosition(element);
-      }
-    }
+    // // add the element to the stage
+    // if (this.isSection(element)) {
+    //   this.addElement(this.model.body.getBodyElement(), element);
+    // } else {
+    //   if (!this.isElementContent(element)) {
+    //     // add to the stage at the right position
+    //     // and in the right container
+    //     this.addElementDefaultPosition(element);
+    //   }
+    // }
 
-    // set element editable
-    this.initUiHandles(element);
+    // // set element editable
+    // this.initUiHandles(element);
   }
 
   /**

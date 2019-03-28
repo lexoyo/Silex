@@ -29,13 +29,16 @@
     "build:css:debug": "lessc src/css/_styles.less dist/html/css/admin.css --source-map",
     "build:html": "pug src/html/index.jade --out dist/html/ --no-debug",
     "build:html:debug": "pug src/html/debug.jade --out dist/html/",
-    "build:client:release": "tsc -p tsconfig-client-release.json",
-    "build:client:debug": "tsc -p tsconfig-client-debug.json",
-    "build:server:release": "tsc -p tsconfig-server-release.json",
-    "build:server:debug": "tsc -p tsconfig-server-debug.json",
-    "postinstall": "npm run build"
+    "build:client:release": "npm run workaround-babel && tsc -p tsconfig-client-release.json",
+    "build:client:debug": "npm run workaround-babel && tsc -p tsconfig-client-debug.json",
+    "build:server:release": "npm run workaround-babel && tsc -p tsconfig-server-release.json",
+    "build:server:debug": "npm run workaround-babel && tsc -p tsconfig-server-debug.json",
+    "postinstall": "npm run build",
+    "workaround-babel": "rm -rf `node_modules`/@types/babel__*",
+    "note: workaround issue:": "https://github.com/facebook/jest/issues/8218"
   },
   "dependencies": {
+    "stage": "github:lexoyo/stage#master",
     "ace-builds": "^1.4.3",
     "alertifyjs": "^1.11.2",
     "bluebird": "3.5.1",
@@ -72,8 +75,7 @@
     "electron": "^1.8.8",
     "electron-builder": "^20.28.2",
     "eslint": "^5.10.0",
-    "source-map-support": "^0.5.11",
-    "watch": "1.0.2"
+    "source-map-support": "^0.5.11"
   },
   "repository": {
     "type": "git",
