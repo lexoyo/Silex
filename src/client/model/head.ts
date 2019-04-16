@@ -16,11 +16,11 @@
  *   It has methods to manipulate the dom
  */
 
-import { Constants } from '../../Constants.js';
-import {View} from '../types.js';
-import {FileInfo} from '../types.js';
-import {Model} from '../types.js';
-import {Font} from '../types.js';
+import { Constants } from '../../Constants';
+import {View} from '../types';
+import {FileInfo} from '../types';
+import {Model} from '../types';
+import {Font} from '../types';
 
 
 /**

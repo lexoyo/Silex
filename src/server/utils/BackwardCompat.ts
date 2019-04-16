@@ -10,7 +10,7 @@
  */
 
 const Path = require('path');
-import { Constants } from '../../Constants.js';
+import { Constants } from '../../Constants';
 
 // FIXME: path in constants
 // const components = require('../../../dist/client/libs/prodotype/components/components.json')

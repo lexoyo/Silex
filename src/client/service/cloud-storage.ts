@@ -1,4 +1,4 @@
-import {FileInfo} from '../types.js';
+import {FileInfo} from '../types';
 
 /**
  * Silex, live web creation
@@ -17,8 +17,8 @@ import {FileInfo} from '../types.js';
  *
  */
 
-import {CloudExplorer} from '../externs.js';
-import {SilexNotification} from '../utils/notification.js';
+import {CloudExplorer} from '../externs';
+import {SilexNotification} from '../utils/notification';
 
 /**
  * the Silex CloudStorage service

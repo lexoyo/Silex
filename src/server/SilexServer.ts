@@ -18,10 +18,10 @@ const bodyParser = require('body-parser');
 const session = require('cookie-session');
 
 import CloudExplorerRouter from './router/CloudExplorerRouter';
-import WebsiteRouter from './router/WebsiteRouter.js';
-import StaticRouter from './router/StaticRouter.js';
-import PublishRouter from './router/PublishRouter.js';
-import SslRouter from './router/SslRouter.js';
+import WebsiteRouter from './router/WebsiteRouter';
+import StaticRouter from './router/StaticRouter';
+import PublishRouter from './router/PublishRouter';
+import SslRouter from './router/SslRouter';
 import { Config } from './ServerConfig';
 
 export default function SilexServer(config: Config) {

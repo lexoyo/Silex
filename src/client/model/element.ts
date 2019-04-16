@@ -16,14 +16,14 @@
  *      created by new silex.model.Element().createElement
  */
 
-import { goog } from '../Goog.js';
-import { Body } from '../model/body.js';
-import { Model, View } from '../types.js';
-import { Dom } from '../utils/dom.js';
-import { Style } from '../utils/style.js';
-import { Url } from '../utils/url.js';
-import { TemplateName } from './Data.js';
-import { Constants } from '../../Constants.js';
+import { goog } from '../Goog';
+import { Body } from '../model/body';
+import { Model, View } from '../types';
+import { Dom } from '../utils/dom';
+import { Style } from '../utils/style';
+import { Url } from '../utils/url';
+import { TemplateName } from './Data';
+import { Constants } from '../../Constants';
 
 /**
  * direction in the dom

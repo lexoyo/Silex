@@ -16,8 +16,5 @@ head
 body.loading-pending.advanced-mode-off
   include ./templates/body.jade
 
-  // start Silex
-  block silexboot
-    script(type='module').
-      import { App } from './js/App.js';
-      new App();
+  block silex-options
+  script(type='text/javascript' src='js/index.js')

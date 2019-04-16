@@ -15,14 +15,14 @@
  *   Components are based on Silex elements, use Prodotype to render a templates
  */
 
-import { Prodotype, ProdotypeCompDef } from '../externs.js';
-import { FileInfo, LinkData, Model, View } from '../types.js';
-import { Dom } from '../utils/dom.js';
-import { LinkDialog } from '../view/dialog/LinkDialog.js';
-import { ComponentData, PseudoClass, PseudoClassData, SilexId, StyleData, StyleName, Visibility } from './Data.js';
-import { Property } from './property.js';
-import { SilexNotification } from '../utils/notification.js';
-import { Constants } from '../../Constants.js';
+import { Prodotype, ProdotypeCompDef } from '../externs';
+import { FileInfo, LinkData, Model, View } from '../types';
+import { Dom } from '../utils/dom';
+import { LinkDialog } from '../view/dialog/LinkDialog';
+import { ComponentData, PseudoClass, PseudoClassData, SilexId, StyleData, StyleName, Visibility } from './Data';
+import { Property } from './property';
+import { SilexNotification } from '../utils/notification';
+import { Constants } from '../../Constants';
 
 /**
  * Manage Prodotype components and styles
@@ -422,17 +422,15 @@ export class Component {
           if (fileInfo) {
             cbk([{
               'url': fileInfo.absPath,
-              'lastModified': fileInfo.lastModified,
-              'lastModifiedDate': new Date(fileInfo.lastModified),
+              'modified': fileInfo.modified,
               'name': fileInfo.name,
               'size': fileInfo.size,
-              'type': fileInfo.type,
+              'mime': fileInfo.mime,
               'path': '',
               'absPath': '',
               'folder': '',
               'service': '',
               'isDir': true,
-              'mime': '',
             }]);
           }
         })

@@ -17,11 +17,11 @@
  */
 
 
-import { goog } from '../../Goog.js';
-import { Constants } from '../../../Constants.js';
-import { Controller, Model } from '../../types.js';
-import { Dom } from '../../utils/dom.js';
-import { PaneBase } from './pane-base.js';
+import { goog } from '../../Goog';
+import { Constants } from '../../../Constants';
+import { Controller, Model } from '../../types';
+import { Dom } from '../../utils/dom';
+import { PaneBase } from './pane-base';
 
 /**
  * on of Silex Editors class

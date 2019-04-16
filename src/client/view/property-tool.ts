@@ -16,16 +16,16 @@
  *
  */
 
-import { Constants } from '../../Constants.js';
-import { Controller, Model } from '../types.js';
-import { InvalidationManager } from '../utils/invalidation-manager.js';
-import { BgPane } from './pane/bg-pane.js';
-import { BorderPane } from './pane/border-pane.js';
-import { GeneralStylePane } from './pane/general-style-pane.js';
-import { PagePane } from './pane/page-pane.js';
-import { PropertyPane } from './pane/property-pane.js';
-import { StylePane } from './pane/style-pane.js';
-import { StyleEditorPane } from './pane/StyleEditorPane.js';
+import { Constants } from '../../Constants';
+import { Controller, Model } from '../types';
+import { InvalidationManager } from '../utils/invalidation-manager';
+import { BgPane } from './pane/bg-pane';
+import { BorderPane } from './pane/border-pane';
+import { GeneralStylePane } from './pane/general-style-pane';
+import { PagePane } from './pane/page-pane';
+import { PropertyPane } from './pane/property-pane';
+import { StylePane } from './pane/style-pane';
+import { StyleEditorPane } from './pane/StyleEditorPane';
 
 
 //////////////////////////////////////////////////////////////////

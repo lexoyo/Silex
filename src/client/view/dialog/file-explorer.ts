@@ -18,12 +18,12 @@
  */
 
 
-import {CloudStorage} from '../../service/cloud-storage.js';
-import {Model} from '../../types.js';
-import {Controller} from '../../types.js';
-import {FileInfo} from '../../types.js';
-import {CloudExplorer} from '../../externs.js';
-import {ModalDialog} from '../../view/ModalDialog.js';
+import {CloudStorage} from '../../service/cloud-storage';
+import {Model} from '../../types';
+import {Controller} from '../../types';
+import {FileInfo} from '../../types';
+import {CloudExplorer} from '../../externs';
+import {ModalDialog} from '../../view/ModalDialog';
 
 /**
  * the Silex FileExplorer class

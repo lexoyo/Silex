@@ -13,7 +13,7 @@
  * @fileoverview Silex config
  */
 
-import { Shortcut } from './utils/Keyboard.js';
+import { Shortcut } from './utils/Keyboard';
 
 export class Config {
 

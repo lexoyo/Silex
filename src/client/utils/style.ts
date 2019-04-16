@@ -14,7 +14,7 @@
  *
  */
 
-import { goog } from '../Goog.js';
+import { goog } from '../Goog';
 
 type Rgb = Array<number>;
 

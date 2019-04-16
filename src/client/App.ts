@@ -19,47 +19,46 @@
  *
  */
 
-import { Config } from './ClientConfig.js';
-import { ContextMenuController } from './controller/context-menu-controller.js';
-import { CssEditorController } from './controller/css-editor-controller.js';
-import { EditMenuController } from './controller/edit-menu-controller.js';
-import { FileMenuController } from './controller/file-menu-controller.js';
-import { HtmlEditorController } from './controller/html-editor-controller.js';
-import { InsertMenuController } from './controller/insert-menu-controller.js';
-import { JsEditorController } from './controller/js-editor-controller.js';
-import { PageToolController } from './controller/page-tool-controller.js';
-import { PropertyToolController } from './controller/property-tool-controller.js';
-import { SettingsDialogController } from './controller/settings-dialog-controller.js';
-import { StageController } from './controller/stage-controller.js';
-import { TextEditorController } from './controller/text-editor-controller.js';
-import { ToolMenuController } from './controller/tool-menu-controller.js';
-import { ViewMenuController } from './controller/view-menu-controller.js';
-import { Body } from './model/body.js';
-import { Component } from './model/Component.js';
-import { DragSystem } from './model/DragSystem.js';
-import { SilexElement } from './model/element.js';
-import { File } from './model/file.js';
-import { Head } from './model/head.js';
-import { Page } from './model/page.js';
-import { Property } from './model/property.js';
-import { Controller, Model, View } from './types.js';
-import { SilexNotification } from './utils/notification.js';
-import { BreadCrumbs } from './view/bread-crumbs.js';
-import { ContextMenu } from './view/context-menu.js';
-import { CssEditor } from './view/dialog/css-editor.js';
-import { Dashboard } from './view/dialog/Dashboard.js';
-import { FileExplorer } from './view/dialog/file-explorer.js';
-import { HtmlEditor } from './view/dialog/html-editor.js';
-import { JsEditor } from './view/dialog/js-editor.js';
-import { SettingsDialog } from './view/dialog/settings-dialog.js';
-import { Menu } from './view/menu.js';
-import { PageTool } from './view/page-tool.js';
-import { PropertyTool } from './view/property-tool.js';
-import { Splitter } from './view/splitter.js';
-import { Stage } from './view/stage.js';
-import { TextFormatBar } from './view/TextFormatBar.js';
-import { Workspace } from './view/workspace.js';
-import { Constants } from '../Constants.js';
+import { Config } from './ClientConfig';
+import { ContextMenuController } from './controller/context-menu-controller';
+import { CssEditorController } from './controller/css-editor-controller';
+import { EditMenuController } from './controller/edit-menu-controller';
+import { FileMenuController } from './controller/file-menu-controller';
+import { HtmlEditorController } from './controller/html-editor-controller';
+import { InsertMenuController } from './controller/insert-menu-controller';
+import { JsEditorController } from './controller/js-editor-controller';
+import { PageToolController } from './controller/page-tool-controller';
+import { PropertyToolController } from './controller/property-tool-controller';
+import { SettingsDialogController } from './controller/settings-dialog-controller';
+import { StageController } from './controller/stage-controller';
+import { TextEditorController } from './controller/text-editor-controller';
+import { ToolMenuController } from './controller/tool-menu-controller';
+import { ViewMenuController } from './controller/view-menu-controller';
+import { Body } from './model/body';
+import { Component } from './model/Component';
+import { SilexElement } from './model/element';
+import { File } from './model/file';
+import { Head } from './model/head';
+import { Page } from './model/page';
+import { Property } from './model/property';
+import { Controller, Model, View } from './types';
+import { SilexNotification } from './utils/notification';
+import { BreadCrumbs } from './view/bread-crumbs';
+import { ContextMenu } from './view/context-menu';
+import { CssEditor } from './view/dialog/css-editor';
+import { Dashboard } from './view/dialog/Dashboard';
+import { FileExplorer } from './view/dialog/file-explorer';
+import { HtmlEditor } from './view/dialog/html-editor';
+import { JsEditor } from './view/dialog/js-editor';
+import { SettingsDialog } from './view/dialog/settings-dialog';
+import { Menu } from './view/menu';
+import { PageTool } from './view/page-tool';
+import { PropertyTool } from './view/property-tool';
+import { Splitter } from './view/splitter';
+import { TextFormatBar } from './view/TextFormatBar';
+import { Workspace } from './view/workspace';
+
+import { Stage } from 'stage';
 
 /**
  * Defines the entry point of Silex client application
@@ -96,12 +95,6 @@ export class App {
       console.warn('Silex starting in debug mode.')
     }
 
-    // **
-    // general initializations
-    this.model = new Model();
-    this.view = new View();
-    this.controller = new Controller();
-
     // create all the components of Silex app
     this.initView();
     this.initModel();
@@ -109,7 +102,7 @@ export class App {
 
     // init views now that controllers and model are instanciated
     this.view.workspace.buildUi();
-    this.view.stage.buildUi();
+    // this.view.stage.buildUi();
     this.view.menu.buildUi();
     this.view.contextMenu.buildUi();
     this.view.breadCrumbs.buildUi();
@@ -183,7 +176,7 @@ export class App {
   initView() {
     // Stage
     let stageElement = document.getElementsByClassName('silex-stage')[0] as HTMLElement;
-    let stage: Stage = new Stage(stageElement, this.model, this.controller);
+    // let stage: Stage = new Stage(stageElement, this.model, this.controller);
 
     // Menu
     let menuElement = document.getElementsByClassName(Menu.CLASS_NAME)[0] as HTMLElement;
@@ -271,10 +264,22 @@ export class App {
     propSplitter.addRight(propertyToolElement);
 
     // init the view class which references all the views
-    this.view.init(
-        menu, contextMenu, breadCrumbs, stage, pageTool, propertyTool,
-        textFormatBar, htmlEditor, cssEditor, jsEditor, fileExplorer,
-        settingsDialog, dashboard, propSplitter, workspace);
+    this.view = {
+      menu,
+      contextMenu,
+      breadCrumbs,
+      pageTool,
+      propertyTool,
+      textFormatBar,
+      htmlEditor,
+      cssEditor,
+      jsEditor,
+      fileExplorer,
+      settingsDialog,
+      dashboard,
+      propSplitter,
+      workspace,
+    }
   }
 
   /**
@@ -282,34 +287,42 @@ export class App {
    * create the models to be passed to the controllers and the views
    */
   initModel() {
+    const iframeElement = (document.querySelector('.silex-stage-iframe') as HTMLIFrameElement);
+
     // init the model class which references all the views
-    this.model.init(
-        new File(this.model, this.view), new Head(this.model, this.view),
-        new Body(this.model, this.view), new Page(this.model, this.view),
-        new SilexElement(this.model, this.view),
-        new Component(this.model, this.view),
-        new Property(this.model, this.view),
-        new DragSystem(this.model, this.view));
+    this.model = {
+      file: new File(this.model, this.view),
+      head: new Head(this.model, this.view),
+      body: new Body(this.model, this.view),
+      page: new Page(this.model, this.view),
+      element: new SilexElement(this.model, this.view),
+      component: new Component(this.model, this.view),
+      property: new Property(this.model, this.view),
+      stage: new Stage(iframeElement, iframeElement.contentWindow.document.querySelectorAll('.editable-element')),
+    }
   }
 
   /**
    * init the controller class with references to the views and the models
    */
   initController() {
-    this.controller.init(
-        new FileMenuController(this.model, this.view),
-        new EditMenuController(this.model, this.view),
-        new ViewMenuController(this.model, this.view),
-        new InsertMenuController(this.model, this.view),
-        new ToolMenuController(this.model, this.view),
-        new ContextMenuController(this.model, this.view),
-        new StageController(this.model, this.view),
-        new PageToolController(this.model, this.view),
-        new PropertyToolController(this.model, this.view),
-        new SettingsDialogController(this.model, this.view),
-        new HtmlEditorController(this.model, this.view),
-        new CssEditorController(this.model, this.view),
-        new JsEditorController(this.model, this.view),
-        new TextEditorController(this.model, this.view));
+    this.controller = {
+      fileMenuController: new FileMenuController(this.model, this.view),
+      editMenuController: new EditMenuController(this.model, this.view),
+      viewMenuController: new ViewMenuController(this.model, this.view),
+      insertMenuController: new InsertMenuController(this.model, this.view),
+      toolMenuController: new ToolMenuController(this.model, this.view),
+      contextMenuController: new ContextMenuController(this.model, this.view),
+      stageController: new StageController(this.model, this.view),
+      pageToolController: new PageToolController(this.model, this.view),
+      propertyToolController: new PropertyToolController(this.model, this.view),
+      settingsDialogController: new SettingsDialogController(this.model, this.view),
+      htmlEditorController: new HtmlEditorController(this.model, this.view),
+      cssEditorController: new CssEditorController(this.model, this.view),
+      jsEditorController: new JsEditorController(this.model, this.view),
+      textEditorController: new TextEditorController(this.model, this.view),
+    }
   }
 }
+
+window['silex'] = new App();

@@ -15,11 +15,11 @@
  */
 
 
-import { goog } from '../Goog.js';
-import { Constants } from '../../Constants.js';
-import { Font, Model, View } from '../types.js';
-import { Style } from '../utils/style.js';
-import { ComponentData, CssRule, JsonData, ProdotypeData, ProdotypeTypes, SilexData, SilexId, StyleData, StyleName } from './Data.js';
+import { goog } from '../Goog';
+import { Constants } from '../../Constants';
+import { Font, Model, View } from '../types';
+import { Style } from '../utils/style';
+import { ComponentData, CssRule, JsonData, ProdotypeData, ProdotypeTypes, SilexData, SilexId, StyleData, StyleName } from './Data';
 
 
 export interface CSSRuleInfo {

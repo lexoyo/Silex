@@ -14,7 +14,7 @@
  *
  */
 
-import {FileInfo} from '../types.js';
+import {FileInfo} from '../types';
 
 export class Url {
   /**

@@ -14,9 +14,9 @@
  * Controls the general params of the selected component
  *
  */
-import { Model, Controller } from '../../types.js';
-import {PaneBase} from './pane-base.js';
-import {Style} from '../../utils/style.js';
+import { Model, Controller } from '../../types';
+import {PaneBase} from './pane-base';
+import {Style} from '../../utils/style';
 
 /**
  * on of Silex Editors class

@@ -16,7 +16,7 @@
  *
  */
 
-import {PublicationOptions, Provider, Hosting, VHost} from '../types.js';
+import {PublicationOptions, Provider, Hosting, VHost} from '../types';
 /**
  * the Silex SilexTasks singleton
  * based on http://www.inkfilepicker.com/

@@ -14,7 +14,7 @@
  * @fileoverview define externs for libs used in Silex
  */
 
-import { ComponentData } from './model/Data.js';
+import { ComponentData } from './model/Data';
 
 /**
  * @typedef {{

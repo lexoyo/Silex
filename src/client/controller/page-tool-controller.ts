@@ -14,10 +14,10 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-import {Model} from '../types.js';
-import {View} from '../types.js';
-import {ControllerBase} from './controller-base.js';
-import {SilexNotification} from '../utils/notification.js';
+import {Model} from '../types';
+import {View} from '../types';
+import {ControllerBase} from './controller-base';
+import {SilexNotification} from '../utils/notification';
 
 /**
  * @param view  view class which holds the other views

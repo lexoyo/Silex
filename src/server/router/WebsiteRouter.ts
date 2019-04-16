@@ -18,7 +18,7 @@ const CloudExplorer = require('cloud-explorer');
 
 import BackwardCompat from '../utils/BackwardCompat';
 import DomTools from '../utils/DomTools';
-import { Constants } from '../../Constants.js';
+import { Constants } from '../../Constants';
 
 const clientRoot = Path.resolve(__dirname, '..');
 const nodeModules = require('node_modules-path');

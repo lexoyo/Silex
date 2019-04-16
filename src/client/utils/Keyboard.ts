@@ -1,4 +1,4 @@
-import {SilexNotification} from '../utils/notification.js';
+import {SilexNotification} from '../utils/notification';
 
 export type Shortcut = {
   label?: string,

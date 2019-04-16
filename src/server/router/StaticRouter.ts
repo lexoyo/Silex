@@ -9,7 +9,7 @@ export default function(staticOptions: StaticOptions) {
   // add static folders to serve published files
   router.use('/', serveStatic(Path.join(__dirname, '../../../../dist/html')));
   router.use('/', serveStatic(Path.join(__dirname, '../../../../dist/client')));
-  router.use('/js', serveStatic(Path.join(__dirname, '../../../../dist/client/client')));
+  router.use('/js', serveStatic(Path.join(__dirname, '../../../../dist/client')));
   router.use('/assets', serveStatic(Path.join(__dirname, '../../../../dist/public/assets')));
   router.use('/css', serveStatic(Path.join(__dirname, '../../../../dist/public/css')));
   router.use('/prodotype', serveStatic(Path.join(__dirname, '../../../../dist/prodotype')));

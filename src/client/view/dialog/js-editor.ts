@@ -1,5 +1,5 @@
-import {Controller} from '../../types.js';
-import {Model} from '../../types.js';
+import {Controller} from '../../types';
+import {Model} from '../../types';
 
 /**
  * Silex, live web creation
@@ -18,7 +18,7 @@ import {Model} from '../../types.js';
  *
  */
 
-import {AceEditorBase} from './ace-editor-base.js';
+import {AceEditorBase} from './ace-editor-base';
 
 /**
  * @class {silex.view.dialog.CssEditor}

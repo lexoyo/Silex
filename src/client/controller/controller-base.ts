@@ -18,17 +18,17 @@
  *
  */
 
-import { Constants } from '../../Constants.js';
-import {Tracker} from '../service/tracker.js';
-import {UndoItem} from '../types.js';
-import {ClipboardItem} from '../types.js';
-import {Model} from '../types.js';
-import {View} from '../types.js';
+import { Constants } from '../../Constants';
+import {Tracker} from '../service/tracker';
+import {UndoItem} from '../types';
+import {ClipboardItem} from '../types';
+import {Model} from '../types';
+import {View} from '../types';
 
-import {FileInfo} from '../types.js';
-import {InvalidationManager} from '../utils/invalidation-manager.js';
-import {SilexNotification} from '../utils/notification.js';
-import {FileExplorer} from '../view/dialog/file-explorer.js';
+import {FileInfo} from '../types';
+import {InvalidationManager} from '../utils/invalidation-manager';
+import {SilexNotification} from '../utils/notification';
+import {FileExplorer} from '../view/dialog/file-explorer';
 
 /**
  * base class for all UI controllers of the controller package

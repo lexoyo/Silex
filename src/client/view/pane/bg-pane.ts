@@ -14,13 +14,13 @@
  * Controls the background params
  *
  */
-import {Model} from '../../types.js';
-import {Controller} from '../../types.js';
-import {Style} from '../../utils/style.js';
+import {Model} from '../../types';
+import {Controller} from '../../types';
+import {Style} from '../../utils/style';
 
-import {ColorPicker} from '../ColorPicker.js';
+import {ColorPicker} from '../ColorPicker';
 
-import {PaneBase} from './pane-base.js';
+import {PaneBase} from './pane-base';
 
 /**
  * on of Silex Editors class

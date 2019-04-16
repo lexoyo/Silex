@@ -15,9 +15,9 @@
  *
  */
 
-import { goog } from '../../Goog.js';
-import { Controller, Model } from '../../types.js';
-import { PaneBase } from './pane-base.js';
+import { goog } from '../../Goog';
+import { Controller, Model } from '../../types';
+import { PaneBase } from './pane-base';
 
 
 /**

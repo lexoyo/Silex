@@ -1,5 +1,5 @@
-import {Controller} from '../types.js';
-import {Model} from '../types.js';
+import {Controller} from '../types';
+import {Model} from '../types';
 
 
 /**
@@ -19,8 +19,8 @@ import {Model} from '../types.js';
  *
  */
 
- import {InvalidationManager} from '../utils/invalidation-manager.js';
- import {ControllerBase} from '../controller/controller-base.js';
+ import {InvalidationManager} from '../utils/invalidation-manager';
+ import {ControllerBase} from '../controller/controller-base';
 
 /**
  * @param element   container to render the UI
@@ -88,7 +88,7 @@ export class ContextMenu {
     });
     this.element.querySelector('.sticky-elements')
         .addEventListener('click', () => {
-          this.model.dragSystem.toggleStickyElements();
+          throw 'todo'
         });
   }
 
@@ -138,11 +138,11 @@ export class ContextMenu {
       } else {
         this.element.querySelector('.paste').classList.add('off');
       }
-      if (this.model.dragSystem.getStickyElements()) {
-        this.element.querySelector('.sticky-elements').classList.remove('off');
-      } else {
-        this.element.querySelector('.sticky-elements').classList.add('off');
-      }
+      // if (this.model.dragSystem.getStickyElements()) {
+      //   this.element.querySelector('.sticky-elements').classList.remove('off');
+      // } else {
+      //   this.element.querySelector('.sticky-elements').classList.add('off');
+      // }
     });
   }
 }

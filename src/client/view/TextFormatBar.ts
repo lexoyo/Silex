@@ -15,13 +15,13 @@
  * box It uses the wysihtml library to change text format
  */
 
-import { wysihtml, WysiHtmlEditor } from '../externs.js';
-import { Body } from '../model/body.js';
-import { Tracker } from '../service/tracker.js';
-import { Controller, LinkData, Model } from '../types.js';
-import { SilexNotification } from '../utils/notification.js';
-import { FileExplorer } from '../view/dialog/file-explorer.js';
-import { LinkDialog, LINK_ATTRIBUTES } from './dialog/LinkDialog.js';
+import { wysihtml, WysiHtmlEditor } from '../externs';
+import { Body } from '../model/body';
+import { Tracker } from '../service/tracker';
+import { Controller, LinkData, Model } from '../types';
+import { SilexNotification } from '../utils/notification';
+import { FileExplorer } from '../view/dialog/file-explorer';
+import { LinkDialog, LINK_ATTRIBUTES } from './dialog/LinkDialog';
 
 /**
  * @class {silex.view.TextFormatBar}

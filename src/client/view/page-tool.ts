@@ -16,10 +16,10 @@
  *
  */
 
-import { PageData } from '../model/page.js';
-import { Controller, Model } from '../types.js';
-import { Dom } from '../utils/dom.js';
-import { InvalidationManager } from '../utils/invalidation-manager.js';
+import { PageData } from '../model/page';
+import { Controller, Model } from '../types';
+import { Dom } from '../utils/dom';
+import { InvalidationManager } from '../utils/invalidation-manager';
 
 /**
  *

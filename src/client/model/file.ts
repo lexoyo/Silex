@@ -17,10 +17,10 @@
  *   It has methods to manipulate the File
  */
 
-import { Property } from '../model/property.js';
-import { CloudStorage } from '../service/cloud-storage.js';
-import { FileInfo, Model, View } from '../types.js';
-import { Stage } from '../view/stage.js';
+import { Property } from '../model/property';
+import { CloudStorage } from '../service/cloud-storage';
+import { FileInfo, Model, View } from '../types';
+// import { Stage } from '../view/stage';
 
 /**
  * @param model  model class which holds the other models
@@ -73,7 +73,7 @@ export class File {
   private contentWindow_: Window;
 
   constructor(public model: Model, public view: View) {
-    this.iFrameElement_ = (document.querySelector('.' + Stage.STAGE_CLASS_NAME) as HTMLIFrameElement);
+    this.iFrameElement_ = (document.querySelector('.' + 'Stage.STAGE_CLASS_NAME') as HTMLIFrameElement);
     this.contentDocument_ = this.iFrameElement_.contentDocument;
     this.contentWindow_ = this.iFrameElement_.contentWindow;
 
@@ -123,7 +123,8 @@ export class File {
       rawHtml: string, opt_cbk?: (() => any),
       opt_showLoader?: boolean) {
     // cleanup
-    this.view.stage.removeEvents(this.contentDocument_.body);
+    // this.view.stage.removeEvents(this.contentDocument_.body);
+    throw 'todo'
 
     // reset iframe content
     this.contentDocument_.open();
@@ -131,10 +132,11 @@ export class File {
     this.contentDocument_.close();
 
     // loading
+    throw 'todo'
     if (opt_showLoader !== false) {
-      this.view.stage.element.classList.add(File.LOADING_CSS_CLASS);
+      // this.view.stage.element.classList.add(File.LOADING_CSS_CLASS);
     } else {
-      this.view.stage.element.classList.add(File.LOADING_LIGHT_CSS_CLASS);
+      // this.view.stage.element.classList.add(File.LOADING_LIGHT_CSS_CLASS);
     }
 
     // write the content
@@ -174,7 +176,8 @@ export class File {
     this.model.head.updateFromDom();
 
     // restore event listeners
-    this.view.stage.initEvents(this.contentWindow_);
+    throw 'todo'
+    // this.view.stage.initEvents(this.contentWindow_);
 
     // notify the caller
     if (opt_cbk) {
@@ -182,8 +185,9 @@ export class File {
     }
 
     // loading
-    this.view.stage.element.classList.remove(File.LOADING_CSS_CLASS);
-    this.view.stage.element.classList.remove(File.LOADING_LIGHT_CSS_CLASS);
+    throw 'todo'
+    // this.view.stage.element.classList.remove(File.LOADING_CSS_CLASS);
+    // this.view.stage.element.classList.remove(File.LOADING_LIGHT_CSS_CLASS);
 
     // refresh the view
     let page = this.model.page.getCurrentPage();

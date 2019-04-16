@@ -17,9 +17,9 @@
  *   redraw many times in the same key frame
  *
  */
-import { Controller, Model, View } from '../types.js';
-import { SilexNotification } from '../utils/notification.js';
-import { InvalidationManager } from '../utils/invalidation-manager.js';
+import { Controller, Model, View } from '../types';
+import { SilexNotification } from '../utils/notification';
+import { InvalidationManager } from '../utils/invalidation-manager';
 
 
 /**

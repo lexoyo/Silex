@@ -16,8 +16,8 @@
  *
  */
 
-import { goog } from '../../Goog.js';
-import { Controller, Model } from '../../types.js';
+import { goog } from '../../Goog';
+import { Controller, Model } from '../../types';
 
 
 /**

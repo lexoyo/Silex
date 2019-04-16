@@ -15,11 +15,11 @@
  * FIXME: use a type instead of Promise<any>
  */
 
-import { File } from '../../model/file.js';
-import { SilexTasks } from '../../service/silex-tasks.js';
-import { Model, Provider, VHost, View, PublicationOptions } from '../../types.js';
-import { SilexNotification } from '../../utils/notification.js';
-import { TipOfTheDay } from '../../view/tip-of-the-day.js';
+import { File } from '../../model/file';
+import { SilexTasks } from '../../service/silex-tasks';
+import { Model, Provider, VHost, View, PublicationOptions } from '../../types';
+import { SilexNotification } from '../../utils/notification';
+import { TipOfTheDay } from '../../view/tip-of-the-day';
 
 /**
  * the PublishDialog class

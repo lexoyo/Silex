@@ -15,10 +15,10 @@
  *
  */
 
-import { goog } from '../../Goog.js';
-import { Controller, Model } from '../../types.js';
-import { ColorPicker } from '../ColorPicker.js';
-import { PaneBase } from './pane-base.js';
+import { goog } from '../../Goog';
+import { Controller, Model } from '../../types';
+import { ColorPicker } from '../ColorPicker';
+import { PaneBase } from './pane-base';
 
 /**
  * on of Silex Editors class

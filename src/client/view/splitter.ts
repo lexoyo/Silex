@@ -1,5 +1,5 @@
-import {Controller} from '../types.js';
-import {Model} from '../types.js';
+import {Controller} from '../types';
+import {Model} from '../types';
 
 
 /**
@@ -20,7 +20,7 @@ import {Model} from '../types.js';
  */
 
 
-import { goog } from '../Goog.js';
+import { goog } from '../Goog';
 
 /**
  * @param element   container to render the UI

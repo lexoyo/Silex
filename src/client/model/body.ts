@@ -17,10 +17,9 @@
  */
 
 
-import {View} from '../types.js';
-import {Model} from '../types.js';
-import {Stage} from '../view/stage.js';
-import {Constants} from '../../Constants.js';
+import {View} from '../types';
+import {Model} from '../types';
+import {Constants} from '../../Constants';
 
 /**
  * @param model  model class which holds the other models
@@ -51,7 +50,7 @@ export class Body {
 
     // get the iframe
     // retrieve the element which will hold the body of the opened file
-    this.iframeElement = (document.querySelector('.' + Stage.STAGE_CLASS_NAME) as HTMLIFrameElement);
+    this.iframeElement = (document.querySelector('.' + 'Stage.STAGE_CLASS_NAME') as HTMLIFrameElement);
 
     // hide the focus input and attach it to the DOM
     Body.focusInput.style.left = '-1000px';
@@ -128,7 +127,7 @@ export class Body {
     this.view.pageTool.redraw(selectedElements, pages, page);
     this.view.propertyTool.redraw(selectedElements, pages, page);
     this.view.textFormatBar.redraw(selectedElements, pages, page);
-    this.view.stage.redraw(selectedElements, pages, page);
+    // this.view.stage.redraw(selectedElements, pages, page);
     this.view.contextMenu.redraw(selectedElements, pages, page);
     this.view.breadCrumbs.redraw(selectedElements, pages, page);
     this.view.htmlEditor.setSelection(selectedElements);

@@ -15,10 +15,10 @@
  *
  */
 
-import {InvalidationManager} from '../utils/invalidation-manager.js';
-import {Controller} from '../types.js';
-import {Model} from '../types.js';
-import { Constants } from '../../Constants.js';
+import {InvalidationManager} from '../utils/invalidation-manager';
+import {Controller} from '../types';
+import {Model} from '../types';
+import { Constants } from '../../Constants';
 
 
 /**

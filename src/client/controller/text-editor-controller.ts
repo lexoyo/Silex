@@ -14,9 +14,9 @@
  *      and call the main {silex.controller.Controller} controller's methods
  *
  */
-import {Model} from '../types.js';
-import {View} from '../types.js';
-import {ControllerBase} from './controller-base.js';
+import {Model} from '../types';
+import {View} from '../types';
+import {ControllerBase} from './controller-base';
 const MENU_WIDTH = 35;
 const CONTEXT_MENU_HEIGHT = 35;
 
@@ -34,7 +34,7 @@ export class TextEditorController extends ControllerBase {
 
   attachToTextBox(textBox, toolbar) {
     const pos = textBox.getBoundingClientRect();
-    const stageSize = this.view.stage.element.getBoundingClientRect();
+    const stageSize = null// this.view.stage.element.getBoundingClientRect();
     const theoricalBottom = stageSize.height + stageSize.top - pos.top;
     const bottom = Math.max(
         theoricalBottom - pos.height + CONTEXT_MENU_HEIGHT,

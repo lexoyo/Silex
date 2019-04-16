@@ -13,8 +13,8 @@
  * @fileoverview The dialog to edit links
  *
  */
-import {SilexNotification} from '../../utils/notification.js';
-import {LinkData} from '../../types.js';
+import {SilexNotification} from '../../utils/notification';
+import {LinkData} from '../../types';
 
 export const LINK_ATTRIBUTES =
     ['href', 'rel', 'target', 'type', 'title', 'download'];

@@ -14,11 +14,11 @@
  *
  */
 
-import { goog } from '../../Goog.js';
-import { SilexElement } from '../../model/element.js';
-import { Controller, Model } from '../../types.js';
-import { PaneBase } from './pane-base.js';
-import { Constants } from '../../../Constants.js';
+import { goog } from '../../Goog';
+import { SilexElement } from '../../model/element';
+import { Controller, Model } from '../../types';
+import { PaneBase } from './pane-base';
+import { Constants } from '../../../Constants';
 
 /**
  * on of Silex Editors class

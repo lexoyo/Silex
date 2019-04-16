@@ -16,11 +16,11 @@
  *
  */
 
-import { goog } from '../Goog.js';
-import { Model, View } from '../types.js';
-import { SilexNotification } from '../utils/notification.js';
-import { Stage } from '../view/stage.js';
-import { Constants } from '../../Constants.js';
+import { goog } from '../Goog';
+import { Model, View } from '../types';
+import { SilexNotification } from '../utils/notification';
+// import { Stage } from '../view/stage';
+import { Constants } from '../../Constants';
 
 /**
  * structure to store all of a page data
@@ -42,7 +42,7 @@ export class Page {
   iframeElement: any;
 
   constructor(public model: Model, public view: View) {
-    this.iframeElement = document.querySelector('.' + Stage.STAGE_CLASS_NAME);
+    this.iframeElement = document.querySelector('.' + 'Stage.STAGE_CLASS_NAME');
   }
 
   /**
@@ -117,7 +117,7 @@ export class Page {
     this.view.pageTool.redraw(selectedElements, pages, currentPage);
     this.view.propertyTool.redraw(selectedElements, pages, currentPage);
     this.view.textFormatBar.redraw(selectedElements, pages, currentPage);
-    this.view.stage.redraw(selectedElements, pages, currentPage);
+    // this.view.stage.redraw(selectedElements, pages, currentPage);
   }
 
   /**

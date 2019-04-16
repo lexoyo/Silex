@@ -16,7 +16,7 @@
  * browser'scolor picker for the color
  */
 
-import {Style} from '../utils/style.js';
+import {Style} from '../utils/style';
 
 export class ColorPicker {
   // store for later use

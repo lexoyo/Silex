@@ -14,11 +14,11 @@
  *
  */
 
-import { CloudStorage } from '../../service/cloud-storage.js';
-import { Controller, FileInfo, Font, Model } from '../../types.js';
-import { SilexNotification } from '../../utils/notification.js';
-import { Url } from '../../utils/url.js';
-import { ModalDialog } from '../ModalDialog.js';
+import { CloudStorage } from '../../service/cloud-storage';
+import { Controller, FileInfo, Font, Model } from '../../types';
+import { SilexNotification } from '../../utils/notification';
+import { Url } from '../../utils/url';
+import { ModalDialog } from '../ModalDialog';
 
 /**
  * constant for all pane css classes

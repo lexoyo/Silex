@@ -15,14 +15,14 @@
  *
  */
 
-import { DomDirection, SilexElement } from '../model/element.js';
-import { ClipboardItem, Model, View } from '../types.js';
-import { InvalidationManager } from '../utils/invalidation-manager.js';
-import { SilexNotification } from '../utils/notification.js';
-import { Style } from '../utils/style.js';
-import { FileExplorer } from '../view/dialog/file-explorer.js';
-import { ControllerBase } from './controller-base.js';
-import { Constants } from '../../Constants.js';
+import { DomDirection, SilexElement } from '../model/element';
+import { ClipboardItem, Model, View } from '../types';
+import { InvalidationManager } from '../utils/invalidation-manager';
+import { SilexNotification } from '../utils/notification';
+import { Style } from '../utils/style';
+import { FileExplorer } from '../view/dialog/file-explorer';
+import { ControllerBase } from './controller-base';
+import { Constants } from '../../Constants';
 
 /**
  * @param view  view class which holds the other views

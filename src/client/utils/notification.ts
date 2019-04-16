@@ -11,7 +11,7 @@
  * http://www.silexlabs.org/silex/silex-licensing/
  */
 
-import { goog } from '../Goog.js';
+import { goog } from '../Goog';
 
 /**
  * @fileoverview Helper class for common tasks

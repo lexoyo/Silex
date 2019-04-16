@@ -15,9 +15,9 @@
  *
  */
 
-import { goog } from '../Goog.js';
-import { Model, View } from '../types.js';
-import { ControllerBase } from './controller-base.js';
+import { goog } from '../Goog';
+import { Model, View } from '../types';
+import { ControllerBase } from './controller-base';
 
 
 /**

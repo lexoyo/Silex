@@ -17,12 +17,12 @@
 *
 */
 
-import { Config } from '../ClientConfig.js';
+import { Config } from '../ClientConfig';
 import { Shortcut } from '../utils/Keyboard.js'
-import { goog } from '../Goog.js';
-import { Constants } from '../../Constants.js';
-import { Controller, Model } from '../types.js';
-import { Keyboard } from '../utils/Keyboard.js';
+import { goog } from '../Goog';
+import { Constants } from '../../Constants';
+import { Controller, Model } from '../types';
+import { Keyboard } from '../utils/Keyboard';
 
 
 /**

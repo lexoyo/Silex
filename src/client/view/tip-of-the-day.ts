@@ -16,7 +16,7 @@
  *
  */
 
-import {Tracker} from '../service/tracker.js';
+import {Tracker} from '../service/tracker';
 
 /**
  * @param element   container to render the UI
