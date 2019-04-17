@@ -24,6 +24,7 @@ import { Style } from '../utils/style';
 import { Url } from '../utils/url';
 import { TemplateName } from './Data';
 import { Constants } from '../../Constants';
+import { getUiElements } from '../view/UiElements';
 
 /**
  * direction in the dom
@@ -55,6 +56,20 @@ export class SilexElement {
    */
   static MIN_WIDTH: number = 20;
 
+  static loadImage(url: string, {success, error}: {success: (img: HTMLImageElement) => void, error: (e: Event) => void}) {
+    var img = new Image();
+    img.onload = (e) => {
+      img.onload = null;
+      img.onerror = null;
+      success(img);
+    }
+    img.onerror = (e: Event) => {
+      img.onload = null;
+      img.onerror = null;
+      error(e);
+    }
+    img.src = url;
+  }
 
   constructor(public model: Model, public view: View) {}
 
@@ -230,11 +245,6 @@ export class SilexElement {
     // convert to css case
     styleName = goog.String.toSelectorCase(styleName);
 
-    // remove the 'just pasted' class
-    if (!opt_preserveJustAdded) {
-      element.classList.remove(Constants.JUST_ADDED_CLASS_NAME);
-    }
-
     // retrieve style
     let styleObject = this.model.property.getStyle(element);
     if (!styleObject) {
@@ -243,7 +253,7 @@ export class SilexElement {
 
     // apply the new style
     if (styleObject[styleName] !== opt_styleValue) {
-      if (goog.Is.isDefAndNotNull(opt_styleValue)) {
+      if (opt_styleValue !== null) {
         styleObject[styleName] = opt_styleValue;
       } else {
         styleObject[styleName] = '';
@@ -267,7 +277,7 @@ export class SilexElement {
     if (opt_applyToContent) {
       element = this.getContentNode(element);
     }
-    if (goog.Is.isDefAndNotNull(opt_propertyValue)) {
+    if (opt_propertyValue !== null) {
       element.setAttribute(propertyName, (opt_propertyValue as string));
     } else {
       element.removeAttribute(propertyName);
@@ -357,9 +367,6 @@ export class SilexElement {
             element, element.parentElement.childNodes[0]);
         break;
     }
-
-    // remove the 'just pasted' class
-    element.classList.remove(Constants.JUST_ADDED_CLASS_NAME);
   }
 
   /**
@@ -421,55 +428,6 @@ export class SilexElement {
       // get the image tag
       const img = this.getContentNode(element) as HTMLImageElement;
       if (img) {
-        // img.innerHTML = '';
-        // listen to the complete event
-        let imageLoader = new goog.ImageLoader();
-        goog.Event.listenOnce(
-            imageLoader, goog.EventType.LOAD, function(e: Event) {
-              // handle the loaded image
-              const loadedImg = e.target as HTMLImageElement;
-
-              // update element size
-              this.setStyle(
-                  element, 'width',
-                  Math.max(SilexElement.MIN_WIDTH, loadedImg.naturalWidth) + 'px', true);
-              this.setStyle(
-                  element, this.getHeightStyleName(element),
-                  Math.max(SilexElement.MIN_HEIGHT, loadedImg.naturalHeight) + 'px', true);
-
-              // callback
-              if (opt_callback) {
-                opt_callback(element, loadedImg);
-              }
-
-              // add the image to the element
-              element.appendChild(loadedImg);
-
-              // add a marker to find the inner content afterwards, with
-              // getContent
-              loadedImg.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
-
-              // remove the id set by the loader (it needs it to know what has
-              // already been loaded?)
-              loadedImg.removeAttribute('id');
-
-              // remove loading asset
-              element.classList.remove(Constants.LOADING_ELEMENT_CSS_CLASS);
-
-              // redraw tools
-              this.model.body.setSelection(this.model.body.getSelection());
-            }, true, this);
-        goog.Event.listenOnce(imageLoader, goog.EventType.ERROR, function(e) {
-          console.error(
-              'An error occured while loading the image.', element, e);
-
-          // callback
-          if (opt_errorCallback) {
-            opt_errorCallback(
-                element, 'An error occured while loading the image.');
-          }
-        }, true, this);
-
         // add loading asset
         element.classList.add(Constants.LOADING_ELEMENT_CSS_CLASS);
 
@@ -479,9 +437,48 @@ export class SilexElement {
           imgTags[0].parentElement.removeChild(imgTags[0]);
         }
 
-        // load the image
-        imageLoader.addImage(url, url);
-        imageLoader.start();
+        // load the new image
+        SilexElement.loadImage(url, {
+          success: loadedImg => {
+            // update element size
+            this.setStyle(
+                element, 'width',
+                Math.max(SilexElement.MIN_WIDTH, loadedImg.naturalWidth) + 'px', true);
+            this.setStyle(
+                element, this.getHeightStyleName(element),
+                Math.max(SilexElement.MIN_HEIGHT, loadedImg.naturalHeight) + 'px', true);
+
+            // callback
+            if (opt_callback) {
+              opt_callback(element, loadedImg);
+            }
+
+            // add the image to the element
+            element.appendChild(loadedImg);
+
+            // add a marker to find the inner content afterwards, with
+            // getContent
+            loadedImg.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
+
+            // remove the id set by the loader (it needs it to know what has
+            // already been loaded?)
+            loadedImg.removeAttribute('id');
+
+            // remove loading asset
+            element.classList.remove(Constants.LOADING_ELEMENT_CSS_CLASS);
+
+            // redraw tools
+            this.model.body.setSelection(this.model.body.getSelection());
+          },
+          error: e => {
+            console.error('An error occured while loading the image.', element, e);
+
+            // callback
+            if (opt_errorCallback) {
+              opt_errorCallback(element, 'An error occured while loading the image.');
+            }
+          },
+        });
       } else {
         console.error(
             'The image could not be retrieved from the element.', element);
@@ -534,9 +531,6 @@ export class SilexElement {
     }
     container.appendChild(element);
 
-    // add the class to keep the element above all others
-    element.classList.add(Constants.JUST_ADDED_CLASS_NAME);
-
     // resize the body
     // call the method defined in front-end.js
     // this will resize the body according to its content
@@ -550,126 +544,90 @@ export class SilexElement {
    * @param element    the element to add
    * @param opt_offset an offset to apply to its position (x and y)
    */
-  addElementDefaultPosition(element: HTMLElement, opt_offset?: number) {
-    throw new Error('not implemented');
-    opt_offset = opt_offset || 0;
+  addElementDefaultPosition(element: HTMLElement, opt_offset: number = 0) {
+    const scrollData = this.view.stage.getScroll();
 
     // find the container (main background container or the stage)
-    // const stageSize = {width: 0, height: 0};
-    // const bb = this.model.property.getBoundingBox([element]);
-    // const posX = Math.round(stageSize.width / 2 - bb.width / 2);
-    // const posY = 100;
-    // const container = this.getBestContainerForNewElement(posX, posY);
+    const stageSize = getUiElements().stage.getBoundingClientRect();
+    const bb = this.model.property.getBoundingBox([element]);
+    const posX = Math.round(stageSize.width / 2 - bb.width / 2);
+    const posY = Math.round(stageSize.height / 2 - bb.height / 2);
+    const container = this.view.stage.getDropZone(posX, posY, element) || this.model.body.getBodyElement();
 
-    // // take the scroll into account (drop at (100, 100) from top left corner of
-    // // the window, not the stage)
-    // const bbContainer = container.getBoundingClientRect();
-    // const offsetX = posX + this.view.stage.getScrollX() - bbContainer.left;
-    // const offsetY = posY + this.view.stage.getScrollY() - bbContainer.top;
+    // take the scroll into account (drop at (100, 100) from top left corner of
+    // the window, not the stage)
+    const bbContainer = container.getBoundingClientRect();
+    const offsetX = posX + scrollData.x - bbContainer.left;
+    const offsetY = posY + scrollData.y - bbContainer.top;
 
-    // // add to stage
-    // this.addElement(container, element);
+    // add to stage
+    this.addElement(container, element);
 
-    // // apply the style (force desktop style, not mobile)
-    // const styleObject = this.model.property.getStyle(element, false);
-    // styleObject.top = opt_offset + offsetY + 'px';
-    // styleObject.left = opt_offset + offsetX + 'px';
-    // this.model.property.setStyle(element, styleObject, false);
-  }
-
-  /**
-   * find the best drop zone at a given position
-   * NEW: drop in the body directly since containers have their own z-index
-   *      and the element is partly hidden sometimes if we drop it in a
-   * container
-   * @param x position in px
-   * @param y position in px
-   * @return the container element under (x, y)
-   */
-  getBestContainerForNewElement(x: number, y: number): HTMLElement {
-    // let dropZone = this.view.stage.getDropZone(x, y) || {'element':
-    // this.model.body.getBodyElement(), 'zIndex': 0}; return dropZone.element;
-    return this.model.body.getBodyElement();
+    // apply the style (force desktop style, not mobile)
+    const styleObject = this.model.property.getStyle(element, false);
+    styleObject.top = opt_offset + offsetY + 'px';
+    styleObject.left = opt_offset + offsetX + 'px';
+    this.model.property.setStyle(element, styleObject, false);
   }
 
   /**
    * init the element depending on its type
    */
   initElement(element: HTMLElement) {
-    throw new Error('not implemented');
-    // // default style
-    // let defaultStyle = {};
-    // defaultStyle['width'] = SilexElement.INITIAL_ELEMENT_SIZE + 'px';
-    // defaultStyle[this.getHeightStyleName(element)] =
-    //     SilexElement.INITIAL_ELEMENT_SIZE + 'px';
+    // default style
+    let defaultStyle = {};
+    defaultStyle['width'] = SilexElement.INITIAL_ELEMENT_SIZE + 'px';
+    defaultStyle[this.getHeightStyleName(element)] =
+        SilexElement.INITIAL_ELEMENT_SIZE + 'px';
 
-    // // init the element depending on its type
-    // switch (this.getType(element)) {
-    //   case Constants.TYPE_CONTAINER:
-    //   case Constants.TYPE_HTML:
-    //     if (!this.isSection(element)) {
-    //       defaultStyle['background-color'] = 'rgb(255, 255, 255)';
-    //     }
-    //     break;
-    //   case Constants.TYPE_TEXT:
-    //   case Constants.TYPE_IMAGE:
-    //     break;
-    // }
+    // init the element depending on its type
+    switch (this.getType(element)) {
+      case Constants.TYPE_CONTAINER:
+      case Constants.TYPE_HTML:
+        if (!this.isSection(element)) {
+          defaultStyle['background-color'] = 'rgb(255, 255, 255)';
+        }
+        break;
+      case Constants.TYPE_TEXT:
+      case Constants.TYPE_IMAGE:
+        break;
+    }
 
-    // // special case of section content
-    // if (this.isSectionContent(element)) {
-    //   // no bg color for the content container
-    //   defaultStyle['background-color'] = '';
+    // special case of section content
+    if (this.isSectionContent(element)) {
+      // no bg color for the content container
+      defaultStyle['background-color'] = '';
 
-    //   // no width either, it will take the .website-width
-    //   // the default one from front-end.css or the one in the settings
-    //   defaultStyle['width'] = '';
-    // }
+      // no width either, it will take the .website-width
+      // the default one from front-end.css or the one in the settings
+      defaultStyle['width'] = '';
+    }
 
-    // // send the scroll to the target
-    // this.view.stage.setScrollTarget(element);
+    // default style to the element style
+    // keep the style if there is one, usually set by component::initComponent
+    const finalStyle = this.model.property.getStyle(element, false) || {};
+    for (let name in defaultStyle) {
+      finalStyle[name] = finalStyle[name] || defaultStyle[name];
+    }
 
-    // // default style to the element style
-    // // keep the style if there is one, usually set by component::initComponent
-    // const finalStyle = this.model.property.getStyle(element, false) || {};
-    // for (let name in defaultStyle) {
-    //   finalStyle[name] = finalStyle[name] || defaultStyle[name];
-    // }
+    // apply the style (force desktop style, not mobile)
+    this.model.property.setStyle(element, finalStyle, false);
 
-    // // apply the style (force desktop style, not mobile)
-    // this.model.property.setStyle(element, finalStyle, false);
+    // add the element to the stage
+    if (this.isSection(element)) {
+      this.addElement(this.model.body.getBodyElement(), element);
+      // send the scroll to the target
+      this.view.stage.center([element]);
+    } else {
+      if (!this.isElementContent(element)) {
+        // add to the stage at the right position
+        // and in the right container
+        this.addElementDefaultPosition(element);
+      }
+    }
 
-    // // add the element to the stage
-    // if (this.isSection(element)) {
-    //   this.addElement(this.model.body.getBodyElement(), element);
-    // } else {
-    //   if (!this.isElementContent(element)) {
-    //     // add to the stage at the right position
-    //     // and in the right container
-    //     this.addElementDefaultPosition(element);
-    //   }
-    // }
-
-    // // set element editable
-    // this.initUiHandles(element);
-  }
-
-  /**
-   * Add UI to resize elements. This is usually done on the server side but when
-   * the client side adds an element it does add UIs itself.
-   */
-  initUiHandles(element: HTMLElement) {
-      [
-        'ui-resizable-n', 'ui-resizable-s', 'ui-resizable-e',
-        'ui-resizable-w', 'ui-resizable-ne', 'ui-resizable-nw',
-        'ui-resizable-se', 'ui-resizable-sw'
-      ].forEach((className) => {
-          let handle =
-              this.model.file.getContentDocument().createElement('div');
-          handle.classList.add(className);
-          handle.classList.add('ui-resizable-handle');
-          element.appendChild(handle);
-        });
+    // update stage store
+    this.view.stage.addElement(element);
   }
 
   /**
@@ -914,7 +872,7 @@ export class SilexElement {
    * @return 'height' or 'minHeight' depending on the element type
    */
   getHeightStyleName(element: HTMLElement): string {
-    if (element.classList.contains(Body.SILEX_USE_HEIGHT_NOT_MINHEIGHT)) {
+    if (element.classList.contains(Constants.SILEX_USE_HEIGHT_NOT_MINHEIGHT)) {
       return 'height';
     }
     return 'min-height';

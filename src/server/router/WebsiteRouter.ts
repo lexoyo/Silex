@@ -166,12 +166,6 @@ export default function({ port, rootUrl }, unifile) {
     const editableElements = dom.window.document.getElementsByClassName(Constants.EDITABLE_CLASS_NAME);
     for(let idx=0; idx<editableElements.length; idx++) {
       const el = editableElements[idx];
-      Constants.RESIZE_HANDLE_CSS_CLASSES.forEach(className => {
-        const handle = dom.window.document.createElement('div');
-        handle.classList.add(className);
-        handle.classList.add(Constants.RISZE_HANDLE_CSS_CLASS);
-        el.appendChild(handle);
-      });
     }
   }
   /**

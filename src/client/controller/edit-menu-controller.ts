@@ -92,12 +92,11 @@ super(model, view);
             })
             .filter((element) => {
               // not the body
-              return body !== element &&
-                  // not an element which has a selected parent
-                  // FIXME: closest is not yet defined on Element in google
-                  // closure, remove the array access ['closest'] when it is
-                  element.parentElement['closest'](
-                      '.' + Constants.SELECTED_CLASS_NAME) == null;
+              return body !== element
+                  // // not an element which has a selected parent
+                  // // FIXME: closest is not yet defined on Element in google
+                  // // closure, remove the array access ['closest'] when it is
+                  // && element.parentElement['closest']('.' + Constants.SELECTED_CLASS_NAME) == null;
             })
             .map((element) => {
               return element.cloneNode(true) as HTMLElement;

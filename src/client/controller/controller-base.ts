@@ -29,6 +29,7 @@ import {FileInfo} from '../types';
 import {InvalidationManager} from '../utils/invalidation-manager';
 import {SilexNotification} from '../utils/notification';
 import {FileExplorer} from '../view/dialog/file-explorer';
+import { getUiElements } from '../view/UiElements';
 
 /**
  * base class for all UI controllers of the controller package
@@ -129,41 +130,43 @@ export class ControllerBase {
    * async operation to improve performance
    */
   getStateAsync(opt_cbk: (p1: UndoItem) => any) {
-    throw new Error('not implemented');
+    const scrollData = this.view.stage.getScroll();
 
-    // this.model.file.getHtmlAsync((html) => {
-    //   opt_cbk({
-    //     html: html,
-    //     page: this.model.page.getCurrentPage(),
-    //     scrollX: this.view.stage.getScrollX(),
-    //     scrollY: this.view.stage.getScrollY()
-    //   });
-    // });
+    this.model.file.getHtmlAsync((html) => {
+      opt_cbk({
+        html: html,
+        page: this.model.page.getCurrentPage(),
+        scrollX: scrollData.x,
+        scrollY: scrollData.y,
+      });
+    });
   }
 
   /**
    * build a state object for undo/redo
    */
   getState(): UndoItem {
-    throw new Error('not implemented');
-    // return {
-    //   html: this.model.file.getHtml(),
-    //   page: this.model.page.getCurrentPage(),
-    //   scrollX: this.view.stage.getScrollX(),
-    //   scrollY: this.view.stage.getScrollY()
-    // };
+    const scrollData = this.view.stage.getScroll();
+
+    return {
+      html: this.model.file.getHtml(),
+      page: this.model.page.getCurrentPage(),
+      scrollX: scrollData.x,
+      scrollY: scrollData.y,
+    };
   }
 
   /**
    * build a state object for undo/redo
    */
   restoreState(state: UndoItem) {
-    throw new Error('not implemented');
-    // this.model.file.setHtml(state.html, () => {
-    //   this.model.page.setCurrentPage(state.page);
-    //   this.view.stage.setScrollX(state.scrollX);
-    //   this.view.stage.setScrollY(state.scrollY);
-    // }, false);
+    this.model.file.setHtml(state.html, () => {
+      this.model.page.setCurrentPage(state.page);
+      this.view.stage.setScroll({
+        x: state.scrollX,
+        y: state.scrollY,
+      });
+    }, false);
   }
 
   /**

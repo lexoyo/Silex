@@ -122,11 +122,11 @@ export class BreadCrumbs {
     this.element.appendChild(crumb);
     crumb.onclick = () => this.controller.stageController.select(ancestor);
     if (ancestor.tagName.toUpperCase() !== 'BODY') {
-      crumb.onmouseover = () => ancestor.classList.add(Constants.EDITABLE_STYLE_HOVER_CLASS);
-      crumb.onmouseout = () => ancestor.classList.remove(Constants.EDITABLE_STYLE_HOVER_CLASS);
+      console.warn('not implemented hover style')
+      // crumb.onmouseover = () => ancestor.classList.add(Constants.EDITABLE_STYLE_HOVER_CLASS);
+      // crumb.onmouseout = () => ancestor.classList.remove(Constants.EDITABLE_STYLE_HOVER_CLASS);
     }
-    const svg =
-        '<svg class="svg" viewBox="0 0 7 28" height="28" width="7"><path d="M.5 0l6 14-6 14H7V0z" fill="currentColor"></path><path d="M1 0H0l6 14-6 14h1l6-14z" fill="#858585"></path></svg>';
+    const svg = '<svg class="svg" viewBox="0 0 7 28" height="28" width="7"><path d="M.5 0l6 14-6 14H7V0z" fill="currentColor"></path><path d="M1 0H0l6 14-6 14h1l6-14z" fill="#858585"></path></svg>';
     const sep = document.createElement('DIV');
     sep.classList.add('sep');
     sep.innerHTML = svg;

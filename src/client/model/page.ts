@@ -79,7 +79,7 @@ export class Page {
    * @return name of the page currently opened
    */
   getCurrentPage(): string {
-    if (goog.Is.isNull(this.model.file.getContentWindow()['jQuery'])) {
+    if (!this.model.file.getContentWindow()['jQuery']) {
       throw new Error('JQuery not loaded in the opened website');
     }
     let bodyElement = this.model.body.getBodyElement();

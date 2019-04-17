@@ -33,14 +33,6 @@ export class Body {
    */
   static focusInput: HTMLElement;
 
-  /**
-   * class name which can be used to force Silex to use height instead of
-   * minHeight to set the height of an element this is useful if the element has
-   * content with height set to 100%
-   */
-  static SILEX_USE_HEIGHT_NOT_MINHEIGHT: string =
-      'silex-use-height-not-minheight';
-
   constructor(private model: Model, private view: View) {
     // hide the focus input and attach it to the DOM
     Body.focusInput.style.left = '-1000px';
@@ -68,59 +60,49 @@ export class Body {
    * @return   array of elements which are currently selected
    */
   getSelection(): HTMLElement[] {
-    let elements = Array.from(this.getBodyElement().querySelectorAll(Constants.SELECTED_CLASS_NAME));
-    if (!elements || elements.length === 0) {
-      // default, return the body
-      const bodyElement = this.getBodyElement();
-      if (!bodyElement) {
-        console.warn(
-            'Could not get body element because it is not created yet.');
-        return [];
+    if(this.view.stage) {
+      let elements = this.view.stage.getSelection().map(s => s.el);
+      if (!elements || elements.length === 0) {
+        // default, return the body
+        const bodyElement = this.getBodyElement();
+        if (!bodyElement) {
+          console.warn(
+              'Could not get body element because it is not created yet.');
+          return [];
+        }
+        return [bodyElement];
       }
-      return [bodyElement];
-    }
 
-    // build the result array
-    let res = [];
-    elements.forEach((element) => {
-      res.push(element);
-    });
-    return res;
+      // build the result array
+      let res = [];
+      elements.forEach((element) => {
+        res.push(element);
+      });
+      return res;
+    }
+    else {
+      return [];
+    }
   }
 
   /**
    * @param selectedElements  array of elements which are to select
    */
   setSelection(selectedElements: HTMLElement[]) {
-    if (this.getBodyElement() === null) {
-      // body is null, this happens while undoing or redoing
-      return;
+    if(this.view.stage) {
+      this.view.stage.setSelection(selectedElements);
+
+      // refresh views
+      let pages = this.model.page.getPages();
+      let page = this.model.page.getCurrentPage();
+      this.view.pageTool.redraw(selectedElements, pages, page);
+      this.view.propertyTool.redraw(selectedElements, pages, page);
+      this.view.textFormatBar.redraw(selectedElements, pages, page);
+      // this.view.stage.redraw(selectedElements, pages, page);
+      this.view.contextMenu.redraw(selectedElements, pages, page);
+      this.view.breadCrumbs.redraw(selectedElements, pages, page);
+      this.view.htmlEditor.setSelection(selectedElements);
     }
-
-    // reset selection
-    let elements = Array.from(this.getBodyElement().querySelectorAll(Constants.SELECTED_CLASS_NAME));
-    elements.forEach((element) => {
-      element.classList.remove(Constants.SELECTED_CLASS_NAME);
-    });
-
-    // also remove selected class from the body
-    this.getBodyElement().classList.remove(Constants.SELECTED_CLASS_NAME);
-
-    // update selection
-    selectedElements.forEach((element) => {
-      element.classList.add(Constants.SELECTED_CLASS_NAME);
-    });
-
-    // refresh views
-    let pages = this.model.page.getPages();
-    let page = this.model.page.getCurrentPage();
-    this.view.pageTool.redraw(selectedElements, pages, page);
-    this.view.propertyTool.redraw(selectedElements, pages, page);
-    this.view.textFormatBar.redraw(selectedElements, pages, page);
-    // this.view.stage.redraw(selectedElements, pages, page);
-    this.view.contextMenu.redraw(selectedElements, pages, page);
-    this.view.breadCrumbs.redraw(selectedElements, pages, page);
-    this.view.htmlEditor.setSelection(selectedElements);
   }
 
   removeWysihtmlMarkup(root: HTMLElement|Document) {

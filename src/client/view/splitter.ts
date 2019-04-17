@@ -20,8 +20,7 @@ import {Model} from '../types';
  */
 
 
-import { goog } from '../Goog';
-import { getUiElements } from './UiElements';
+import { addEvent } from 'stage/src/ts/utils/Events'
 
 /**
  * @param element   container to render the UI
@@ -107,14 +106,17 @@ export class Splitter {
   /**
    * handle mouse event
    */
+  toBeCleared: Array<() => void> = [];
   onMouseDown(e: Event) {
     this.isDown = true;
 
     // listen mouse events
-    this.model.file.getContentWindow().addEventListener('mousemove', e => this.onMouseMoveFrame(e), false);
-    this.model.file.getContentWindow().addEventListener('mouseup', e => this.onMouseUp(e), true);
-    document.body.addEventListener('mouseup', e => this.onMouseUp(e), false);
-    document.body.addEventListener('mousemove', e => this.onMouseMove(e), false);
+    this.toBeCleared.push(
+      addEvent(this.model.file.getContentWindow(), 'mousemove', (e: MouseEvent) => this.onMouseMove(e), false),
+      addEvent(this.model.file.getContentWindow(), 'mouseup', e => this.onMouseUp(e), true),
+      addEvent(document.body, 'mouseup', e => this.onMouseUp(e), false),
+      addEvent(document.body, 'mousemove', (e: MouseEvent) => this.onMouseMove(e), false),
+    );
   }
 
   /**
@@ -122,41 +124,21 @@ export class Splitter {
    */
   onMouseUp(e: Event) {
     this.isDown = false;
-
-    // stop listening
-    goog.Event.unlisten(
-        this.model.file.getContentWindow(), 'mousemove', this.onMouseMoveFrame,
-        false, this);
-    goog.Event.unlisten(
-        this.model.file.getContentWindow(), 'mouseup', this.onMouseUp, true,
-        this);
-    goog.Event.unlisten(document.body, 'mouseup', this.onMouseUp, false, this);
-    goog.Event.unlisten(
-        document.body, 'mousemove', this.onMouseMove, false, this);
-  }
-
-  /**
-   * handle mouse event of the iframe
-   */
-  onMouseMoveFrame(e: Event) {
-    if (this.isDown) {
-      let parentSize = this.element.parentElement.getBoundingClientRect();
-      let pos = (e.target as HTMLElement).getBoundingClientRect();
-      let posIFrame = getUiElements().stage.getBoundingClientRect();
-      this.element.style.right = parentSize.width - pos.left - posIFrame.left + 'px';
-      this.redraw();
-    }
+    this.toBeCleared.forEach(clear => clear());
+    this.toBeCleared = [];
   }
 
   /**
    * handle mouse event
    */
-  onMouseMove(e: Event) {
-    if (this.isDown) {
+  onMouseMove(e: MouseEvent) {
+    let right = parseInt(this.element.style.right);
+    if(this.element.style.right === '') {
       let parentSize = this.element.parentElement.getBoundingClientRect();
       let pos = (e.target as HTMLElement).getBoundingClientRect();
-      this.element.style.right = parentSize.width - pos.left + 'px';
-      this.redraw();
+      right = parentSize.right - pos.right;
     }
+    this.element.style.right = (right - e.movementX) + 'px';
+    this.redraw();
   }
 }

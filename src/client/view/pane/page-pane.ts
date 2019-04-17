@@ -90,7 +90,7 @@ export class PagePane extends PaneBase {
     this.linkInputTextField.style.display = 'none';
 
     // Watch for field changes, to display below.
-    this.linkInputTextField.addEventListener('input', () => this.onLinkTextChanged(), false);
+    this.linkInputTextField.oninput = () => this.onLinkTextChanged();
     this.viewOnDeviceEl = (this.element.querySelector('.view-on-mobile') as HTMLDivElement);
     this.viewOnDeviceEl.onclick = (e) => {
       const selected: HTMLInputElement = this.element.querySelector('.view-on-mobile input:checked');
@@ -101,12 +101,12 @@ export class PagePane extends PaneBase {
       });
     };
     this.viewOnAllPagesCheckbox = this.element.querySelector('.view-on-allpages-check');
-    this.viewOnAllPagesCheckbox.addEventListener('change', () => {
+    this.viewOnAllPagesCheckbox.onchange = () => {
       if (this.viewOnAllPagesCheckbox.checked) {
         this.checkAllPages();
       }
       this.removeFromAllPages();
-    }, false);
+    };
   }
 
   /**
@@ -152,8 +152,7 @@ export class PagePane extends PaneBase {
         if (item.checkbox.parentElement != null) {
           item.checkbox.parentElement.removeChild(item.checkbox);
         }
-        goog.Event.removeAll(
-            item.checkbox, goog.EventType.CHANGE);
+        item.checkbox.onchange = null;
       });
     }
 
@@ -163,9 +162,9 @@ export class PagePane extends PaneBase {
     this.pageCheckboxes = items.map((item, idx) => {
       const checkbox: HTMLInputElement = item.querySelector('.page-check');
       const name = this.pages[idx++];
-      checkbox.addEventListener('change', () => {
+      checkbox.onchange = () => {
         this.checkPage(name, checkbox);
-      }, false);
+      };
       return {checkbox: checkbox, pageName: name};
     });
   }
@@ -248,7 +247,7 @@ export class PagePane extends PaneBase {
         }
       }
     });
-    if (!goog.Is.isNull(visibility)) {
+    if (visibility !== null) {
       Array.from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
           .forEach((el: HTMLInputElement) => {
             el.checked = visibility === el.value;
@@ -282,7 +281,7 @@ export class PagePane extends PaneBase {
 
         // set visibility
         isInNoPage = isInNoPage && isInPage === false;
-        if (goog.Is.isNull(isInPage)) {
+        if (isInPage === null) {
           // multiple elements selected with different values
           item.checkbox.indeterminate = true;
         } else {

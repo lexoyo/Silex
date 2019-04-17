@@ -86,7 +86,7 @@ export class GeneralStylePane extends PaneBase {
       let opacity = this.getCommonProperty(selectedElements, (element) => {
         return this.model.element.getStyle(element, 'opacity');
       });
-      if (goog.Is.isNull(opacity)) {
+      if (opacity === null) {
         this.opacityInput.value = '';
       } else {
         if (opacity === '') {

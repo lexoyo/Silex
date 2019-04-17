@@ -119,7 +119,6 @@ export class ColorPicker {
         this.colorInput.style.opacity = 1;
 
         // this will not accept rgba, only rgb:
-        // var hex = goog.Color.parse(this.color).hex;
         let hex = Style.rgbaToHex(this.color);
         this.colorInput.value = hex.substring(0, hex.length - 2);
         this.opacityInput.disabled = false;

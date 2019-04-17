@@ -73,6 +73,8 @@ export default class BackwardCompat {
         if(actions.length) allActions['2.2.8'] = actions;
       return this.to2_2_9(version, doc).then((actions:Array<string>) => {
         if(actions.length) allActions['2.2.9'] = actions;
+      return this.to2_2_10(version, doc).then((actions:Array<string>) => {
+        if(actions.length) allActions['2.2.10'] = actions;
         // update the static scripts to match the current server and latest version
         this.updateStatic(doc);
         // store the latest version
@@ -90,8 +92,9 @@ export default class BackwardCompat {
           ${ report }
         `;
       })
-      })
-    }
+    })
+  })
+}
     else {
       // update the static scripts to match the current server URL
       this.updateStatic(doc);
@@ -222,6 +225,29 @@ export default class BackwardCompat {
               <p><a target="_blank" href="https://github.com/silexlabs/Silex/wiki/Hamburger-menu">Read more about the Hamburger Menu component here</a>.</p>
             `);
           }
+        }
+        resolve(actions);
+      });
+    }
+    /**
+     * @param {Array.<number>} version
+     * @param {Document} doc
+     * @return {Promise} a Promise
+     */
+    to2_2_10(version, doc):Promise<Array<string>> {
+      return new Promise((resolve, reject) => {
+        let actions = [];
+        if (this.hasToUpdate(version, [2, 2, 10])) {
+          console.log('updating', version, [2, 2, 10]);
+
+          // make sections background draggable but not resizeable
+          const sections: HTMLElement[] = Array.from(doc.querySelectorAll('.section-element'));
+          sections.forEach(el => el.classList.remove(Constants.PREVENT_DRAGGABLE_CLASS_NAME));
+          sections.forEach(el => el.classList.add(Constants.PREVENT_RESIZABLE_CLASS_NAME));
+
+          actions.push(`
+            <p>I made the sections draggable.</p>
+          `);
         }
         resolve(actions);
       });

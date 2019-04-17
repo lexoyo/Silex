@@ -56,12 +56,6 @@ export class Property {
   static ELEMENT_ID_PREFIX = 'silex-id-';
 
   /**
-   * constant for the attribute name holding the IDs given to Silex editable
-   * elements
-   */
-  static ELEMENT_ID_ATTR_NAME = 'data-silex-id';
-
-  /**
    * constant for the value of media query for mobile version
    * @static
    */
@@ -106,7 +100,7 @@ export class Property {
    * @return uniqueId
    */
   getSilexId(element: HTMLElement): SilexId {
-    return element.getAttribute(Property.ELEMENT_ID_ATTR_NAME);
+    return element.getAttribute(Constants.ELEMENT_ID_ATTR_NAME);
   }
 
   /**
@@ -117,7 +111,7 @@ export class Property {
     if (oldId) {
       element.classList.remove(oldId);
     }
-    element.setAttribute(Property.ELEMENT_ID_ATTR_NAME, uniqueId);
+    element.setAttribute(Constants.ELEMENT_ID_ATTR_NAME, uniqueId);
     element.classList.add(uniqueId);
   }
 
@@ -128,7 +122,7 @@ export class Property {
       Element {
     opt_doc = opt_doc || this.model.file.getContentDocument();
     return opt_doc.querySelector(
-        '[' + Property.ELEMENT_ID_ATTR_NAME + '="' + uniqueId + '"]');
+        '[' + Constants.ELEMENT_ID_ATTR_NAME + '="' + uniqueId + '"]');
   }
 
   /**

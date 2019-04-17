@@ -22,6 +22,7 @@ import { FileInfo, Model, View } from '../types';
 // import { Stage } from 'stage'; // this is not recognized by my IDE
 import { Stage } from '../../../node_modules/stage/src/ts/index';
 import { getUiElements } from '../view/UiElements';
+import { Constants } from '../../Constants';
 
 /**
  * @param model  model class which holds the other models
@@ -171,8 +172,49 @@ export class File {
     this.model.head.updateFromDom();
 
     // restore event listeners
-    this.view.stage = new Stage(this.iFrameElement_, this.iFrameElement_.contentWindow.document.querySelectorAll('.editable-element'))
-
+    this.view.stage = new Stage(this.iFrameElement_, this.iFrameElement_.contentWindow.document.querySelectorAll(`[${Constants.ELEMENT_ID_ATTR_NAME}]`), {
+      isSelectable: (el => el.classList.contains(Constants.EDITABLE_CLASS_NAME)),
+      isDraggable: (el => !el.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME)),
+      isDropZone: ((el) => !el.classList.contains(Constants.PREVENT_DROPPABLE_CLASS_NAME)),
+      isResizeable: ((el) => !el.classList.contains(Constants.PREVENT_RESIZABLE_CLASS_NAME)),
+      useMinHeight: ((el) => !el.classList.contains(Constants.SILEX_USE_HEIGHT_NOT_MINHEIGHT)),
+      canDrop: ((el: HTMLElement, dropZone: HTMLElement) => {
+        // sections can only be dropped in the body
+        return !el.classList.contains(Constants.TYPE_SECTION)
+          || dropZone.tagName.toLowerCase() === 'body';
+      }),
+      onDrop: (selectables => {
+        selectables.forEach(s => {
+          if(!s.el.classList.contains(Constants.TYPE_SECTION)) {
+            this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
+            this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
+          }
+          s.el.style.top = '';
+          s.el.style.left = '';
+          s.el.style.right = '';
+          s.el.style.bottom = '';
+          s.el.style.width = '';
+          s.el.style.height = '';
+          s.el.style.position = '';
+        });
+      }),
+      onResizeEnd: (selectables => {
+        selectables.forEach(s => {
+          this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
+          this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
+          this.model.element.setStyle(s.el, 'width', s.metrics.computedStyleRect.width + 'px');
+          this.model.element.setStyle(s.el, 'height', s.metrics.computedStyleRect.height + 'px');
+          s.el.style.top = '';
+          s.el.style.left = '';
+          s.el.style.right = '';
+          s.el.style.bottom = '';
+          s.el.style.width = '';
+          s.el.style.height = '';
+          s.el.style.position = '';
+        });
+      }),
+    });
+    console.log('created store', this.view.stage.store.getState());
     // notify the caller
     if (opt_cbk) {
       opt_cbk();

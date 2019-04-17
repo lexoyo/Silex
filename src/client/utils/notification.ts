@@ -71,10 +71,10 @@ export class SilexNotification {
   static activateNative() {
     if ('Notification' in window && Notification.permission !== 'denied') {
       if (!SilexNotification.useNative()) {
-        goog.Event.listenOnce(
-            document, goog.EventType.MOUSEMOVE, function(e) {
-              Notification.requestPermission();
-            });
+        document.addEventListener('mousemove', function activateNativeListener(e) {
+          Notification.requestPermission();
+          document.removeEventListener('mousemove', activateNativeListener);
+        });
       }
     }
   }

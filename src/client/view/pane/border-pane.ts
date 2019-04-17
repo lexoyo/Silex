@@ -214,18 +214,18 @@ export class BorderPane extends PaneBase {
 
     // get corner radius value, get the first non-zero value
     let val = values[0];
-    if (goog.Is.isDef(values[1]) && val === '0' || val === '0px') {
+    if (values[1] !== null && val === '0' || val === '0px') {
       val = values[1];
     }
-    if (goog.Is.isDef(values[2]) && val === '0' || val === '0px') {
+    if (values[2] !== null && val === '0' || val === '0px') {
       val = values[2];
     }
-    if (goog.Is.isDef(values[3]) && val === '0' || val === '0px') {
+    if (values[3] !== null && val === '0' || val === '0px') {
       val = values[3];
     }
 
     // remove unit when needed
-    if (goog.Is.isDef(val) && val !== '0' && val !== '0px') {
+    if (val !== null && val !== '0' && val !== '0px') {
       this.borderRadiusInput.value = val.substr(0, val.indexOf('px'));
 
       // corner placement
@@ -253,13 +253,13 @@ export class BorderPane extends PaneBase {
 
     // get the first non-zero value
     let val = values[0];
-    if (goog.Is.isDef(values[1]) && val === '0' || val === '0px') {
+    if (values[1] !== null && val === '0' || val === '0px') {
       val = values[1];
     }
-    if (goog.Is.isDef(values[2]) && val === '0' || val === '0px') {
+    if (values[2] !== null && val === '0' || val === '0px') {
       val = values[2];
     }
-    if (goog.Is.isDef(values[3]) && val === '0' || val === '0px') {
+    if (values[3] !== null && val === '0' || val === '0px') {
       val = values[3];
     }
 
@@ -387,7 +387,7 @@ export class BorderPane extends PaneBase {
    */
   onBorderCornerChanged() {
     // corner radius
-    if (goog.Is.isDef(this.borderRadiusInput.value) &&
+    if (this.borderRadiusInput.value !== null &&
         this.borderRadiusInput.value !== '') {
       // corner placement
       let borderWidthStr = '';

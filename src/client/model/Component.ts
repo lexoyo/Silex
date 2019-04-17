@@ -276,7 +276,7 @@ export class Component {
         Constants.COMPONENT_CLASS_NAME :
         Constants.STYLE_CLASS_NAME;
     const attrName = type === Constants.COMPONENT_TYPE ?
-        Property.ELEMENT_ID_ATTR_NAME :
+        Constants.ELEMENT_ID_ATTR_NAME :
         'data-style-id';
     return Array.from(this.model.file.getContentDocument().querySelectorAll('.' + className))
     .map((el) => {

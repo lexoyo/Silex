@@ -141,7 +141,7 @@ export class PropertyPane extends PaneBase {
 
       // apply the change to all elements
       this.selectedElements.forEach((element) => {
-        if (goog.Is.isNumber(oldValue)) {
+        if (oldValue != NaN) {
           // compute the new value relatively to the old value,
           // in order to match the group movement
           let elementStyle = this.model.element.getStyle(element, name);

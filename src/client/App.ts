@@ -269,7 +269,7 @@ export class App {
     const propSplitter: Splitter = new Splitter(uiElements.verticalSplitter, emptyModel, emptyController, () => workspace.resizeProperties());
     propSplitter.addLeft(uiElements.contextMenu);
     propSplitter.addLeft(uiElements.breadCrumbs);
-    propSplitter.addLeft(uiElements.stage);
+    propSplitter.addLeft(uiElements.stage.parentElement);
     propSplitter.addRight(uiElements.propertyTool);
 
     // init the view class which references all the views

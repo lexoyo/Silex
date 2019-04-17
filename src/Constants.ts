@@ -16,21 +16,6 @@
 
 export class Constants {
   /**
-   * class name set on the body while the user is dragging an element
-   */
-  static DRAGGING_CLASS_NAME: string = 'dragging-pending';
-
-  /**
-   * class name set on elements in which we are about to drop
-   */
-  static DROP_CANDIDATE_CLASS_NAME: string = 'drop-zone-candidate';
-
-  /**
-   * class name set when mouse is over the element **in the bread crumbs component**
-   */
-  static EDITABLE_STYLE_HOVER_CLASS = 'editable-style-hover';
-
-  /**
    * constant for the class name of the pages
    */
   static PAGE_CLASS_NAME: string = 'page-element';
@@ -109,6 +94,12 @@ export class Constants {
   static TYPE_ATTR: string = 'data-silex-type';
 
   /**
+   * constant for the attribute name holding the IDs given to Silex editable
+   * elements
+   */
+  static ELEMENT_ID_ATTR_NAME = 'data-silex-id';
+
+  /**
    * constant for the class name of the element content
    */
   static ELEMENT_CONTENT_CLASS_NAME: string = 'silex-element-content';
@@ -130,12 +121,6 @@ export class Constants {
   static SELECTED_CLASS_NAME: string = 'silex-selected';
 
   /**
-   * constant for the class name of pasted components
-   * this will be removed from the component as soon as it is dragged
-   */
-  static JUST_ADDED_CLASS_NAME: string = 'silex-just-added';
-
-  /**
    * class for elements which are hidden in mobile version
    */
   static HIDE_ON_MOBILE: string = 'hide-on-mobile';
@@ -144,11 +129,6 @@ export class Constants {
    * class for elements which are hidden in desktop version
    */
   static HIDE_ON_DESKTOP: string = 'hide-on-desktop';
-
-  /**
-   * attribute name used to store the type of element
-   */
-  static SILEX_TYPE_ATTR_NAME: string = 'data-silex-type';
 
   /**
    * class name used by the editable jquery plugin
@@ -171,6 +151,13 @@ export class Constants {
   static PREVENT_DROPPABLE_CLASS_NAME: string = 'prevent-droppable';
 
   /**
+   * class name which can be used to force Silex to use height instead of
+   * minHeight to set the height of an element this is useful if the element has
+   * content with height set to 100%
+   */
+  static SILEX_USE_HEIGHT_NOT_MINHEIGHT: string = 'silex-use-height-not-minheight';
+
+  /**
    * id of the style element which holds silex editable css styles
    */
   static SILEX_STYLE_ELEMENT_CSS_CLASS = 'silex-style';
@@ -189,14 +176,6 @@ export class Constants {
    * css class set to enable mobile version
    */
   static ENABLE_MOBILE_CSS_CLASS = 'enable-mobile';
-
-  // sticky lines constants
-  static STICKY_DISTANCE = 5;
-  static STUCK_CSS_CLASS = 'stuck';
-  static STUCK_LEFT_CSS_CLASS = 'stuck-left';
-  static STUCK_RIGHT_CSS_CLASS = 'stuck-right';
-  static STUCK_TOP_CSS_CLASS = 'stuck-top';
-  static STUCK_BOTTOM_CSS_CLASS = 'stuck-bottom';
 
   // head tag constants
   static SILEX_CURRENT_PAGE_ID = 'current-page-style';
@@ -224,46 +203,36 @@ export class Constants {
    * they do not appear in the "css classes" text field of the style-pane
    */
   static SILEX_CLASS_NAMES: string[] = [
-    Constants.DRAGGING_CLASS_NAME, Constants.DROP_CANDIDATE_CLASS_NAME,
-    Constants.PREVENT_DROPPABLE_CLASS_NAME, Constants.PREVENT_RESIZABLE_CLASS_NAME,
-    Constants.PREVENT_DRAGGABLE_CLASS_NAME, Constants.EDITABLE_CLASS_NAME,
-    Constants.ENABLE_MOBILE_CSS_CLASS, Constants.PAGED_CLASS_NAME,
-    Constants.PAGED_HIDDEN_CLASS_NAME, Constants.PAGED_VISIBLE_CLASS_NAME,
-    Constants.PAGEABLE_PLUGIN_READY_CLASS_NAME, Constants.PAGE_LINK_ACTIVE_CLASS_NAME,
-    Constants.SELECTED_CLASS_NAME, Constants.JUST_ADDED_CLASS_NAME,
+    Constants.PREVENT_DROPPABLE_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_CLASS_NAME,
+    Constants.PREVENT_DRAGGABLE_CLASS_NAME,
+    Constants.EDITABLE_CLASS_NAME,
+    Constants.ENABLE_MOBILE_CSS_CLASS,
+    Constants.PAGED_CLASS_NAME,
+    Constants.PAGED_HIDDEN_CLASS_NAME,
+    Constants.PAGED_VISIBLE_CLASS_NAME,
+    Constants.PAGEABLE_PLUGIN_READY_CLASS_NAME,
+    Constants.PAGE_LINK_ACTIVE_CLASS_NAME,
+    Constants.SELECTED_CLASS_NAME,
     Constants.ELEMENT_CONTENT_CLASS_NAME,
     // useful to hide it when the content container of a section is selected
     Constants.TYPE_CONTAINER_CONTENT,
     // useful to hide it when the content container of a section is selected
-    Constants.WEBSITE_WIDTH_CLASS_NAME, Constants.TYPE_CONTAINER + '-element',
-    Constants.TYPE_SECTION + '-element', Constants.TYPE_IMAGE + '-element',
-    Constants.TYPE_TEXT + '-element', Constants.TYPE_HTML + '-element',
-    Constants.HIDE_ON_MOBILE, Constants.COMPONENT_CLASS_NAME,
-    Constants.EDITABLE_STYLE_HOVER_CLASS,
-    // sticky lines classes
-    Constants.STUCK_CSS_CLASS, Constants.STUCK_LEFT_CSS_CLASS,
-    Constants.STUCK_RIGHT_CSS_CLASS, Constants.STUCK_TOP_CSS_CLASS,
-    Constants.STUCK_BOTTOM_CSS_CLASS
+    Constants.WEBSITE_WIDTH_CLASS_NAME,
+    Constants.TYPE_CONTAINER + '-element',
+    Constants.TYPE_SECTION + '-element',
+    Constants.TYPE_IMAGE + '-element',
+    Constants.TYPE_TEXT + '-element',
+    Constants.TYPE_HTML + '-element',
+    Constants.HIDE_ON_MOBILE,
+    Constants.COMPONENT_CLASS_NAME,
   ];
   static SILEX_TEMP_CLASS_NAMES = [
-    Constants.DRAGGING_CLASS_NAME,
-    Constants.DROP_CANDIDATE_CLASS_NAME,
     Constants.EDITABLE_CLASS_NAME,
     Constants.PAGE_LINK_ACTIVE_CLASS_NAME,
     Constants.PAGEABLE_PLUGIN_READY_CLASS_NAME,
     Constants.PAGED_HIDDEN_CLASS_NAME,
     Constants.PAGED_VISIBLE_CLASS_NAME,
-    Constants.JUST_ADDED_CLASS_NAME,
     Constants.SELECTED_CLASS_NAME,
-  ];
-  static RESIZE_HANDLE_CSS_CLASSES = [
-      'ui-resizable-n',
-      'ui-resizable-s',
-      'ui-resizable-e',
-      'ui-resizable-w',
-      'ui-resizable-ne',
-      'ui-resizable-nw',
-      'ui-resizable-se',
-      'ui-resizable-sw'
   ];
 }
