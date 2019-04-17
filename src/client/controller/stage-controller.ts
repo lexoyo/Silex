@@ -15,7 +15,6 @@
  *
  */
 
-import { goog } from '../Goog';
 import { Model, View } from '../types';
 import { ControllerBase } from './controller-base';
 

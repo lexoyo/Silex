@@ -34,13 +34,6 @@ import { Keyboard } from '../utils/Keyboard';
 *                                  the controller instances
 */
 export class Menu {
-  /**
-  * Get the menu container
-  * @static
-  * @type {string}
-  */
-  static CLASS_NAME: string = 'silex-menu';
-
   static SUB_MENU_CLASSES = [
     'page-tool-visible', 'about-menu-visible', 'file-menu-visible',
     'code-menu-visible', 'add-menu-visible'

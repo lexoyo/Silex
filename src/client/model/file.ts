@@ -1,4 +1,3 @@
-
 /**
  * Silex, live web creation
  * http://projects.silexlabs.org/?/silex/
@@ -20,7 +19,9 @@
 import { Property } from '../model/property';
 import { CloudStorage } from '../service/cloud-storage';
 import { FileInfo, Model, View } from '../types';
-// import { Stage } from '../view/stage';
+// import { Stage } from 'stage'; // this is not recognized by my IDE
+import { Stage } from '../../../node_modules/stage/src/ts/index';
+import { getUiElements } from '../view/UiElements';
 
 /**
  * @param model  model class which holds the other models
@@ -73,7 +74,7 @@ export class File {
   private contentWindow_: Window;
 
   constructor(public model: Model, public view: View) {
-    this.iFrameElement_ = (document.querySelector('.' + 'Stage.STAGE_CLASS_NAME') as HTMLIFrameElement);
+    this.iFrameElement_ = getUiElements().stage;
     this.contentDocument_ = this.iFrameElement_.contentDocument;
     this.contentWindow_ = this.iFrameElement_.contentWindow;
 
@@ -83,13 +84,6 @@ export class File {
     this.contentDocument_.open();
     this.getContentDocument().write('');
     this.contentDocument_.close();
-  }
-
-  /**
-   * the get the iframe element
-   */
-  getIFrameElement(): HTMLIFrameElement {
-    return this.iFrameElement_;
   }
 
   /**
@@ -123,8 +117,10 @@ export class File {
       rawHtml: string, opt_cbk?: (() => any),
       opt_showLoader?: boolean) {
     // cleanup
-    // this.view.stage.removeEvents(this.contentDocument_.body);
-    throw 'todo'
+    if(!!this.view.stage) {
+      this.view.stage.cleanup();
+      this.view.stage = null;
+    }
 
     // reset iframe content
     this.contentDocument_.open();
@@ -132,11 +128,10 @@ export class File {
     this.contentDocument_.close();
 
     // loading
-    throw 'todo'
     if (opt_showLoader !== false) {
-      // this.view.stage.element.classList.add(File.LOADING_CSS_CLASS);
+      this.iFrameElement_.classList.add(File.LOADING_CSS_CLASS);
     } else {
-      // this.view.stage.element.classList.add(File.LOADING_LIGHT_CSS_CLASS);
+      this.iFrameElement_.classList.add(File.LOADING_LIGHT_CSS_CLASS);
     }
 
     // write the content
@@ -176,8 +171,7 @@ export class File {
     this.model.head.updateFromDom();
 
     // restore event listeners
-    throw 'todo'
-    // this.view.stage.initEvents(this.contentWindow_);
+    this.view.stage = new Stage(this.iFrameElement_, this.iFrameElement_.contentWindow.document.querySelectorAll('.editable-element'))
 
     // notify the caller
     if (opt_cbk) {
@@ -185,9 +179,8 @@ export class File {
     }
 
     // loading
-    throw 'todo'
-    // this.view.stage.element.classList.remove(File.LOADING_CSS_CLASS);
-    // this.view.stage.element.classList.remove(File.LOADING_LIGHT_CSS_CLASS);
+    this.iFrameElement_.classList.remove(File.LOADING_CSS_CLASS);
+    this.iFrameElement_.classList.remove(File.LOADING_LIGHT_CSS_CLASS);
 
     // refresh the view
     let page = this.model.page.getCurrentPage();

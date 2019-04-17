@@ -51,7 +51,8 @@ import { Splitter } from './view/splitter';
 import { TextFormatBar } from './view/TextFormatBar';
 import { Workspace } from './view/workspace';
 
-import { Stage } from 'stage';
+// import { Stage } from 'stage'; // this is not recognized by my IDE
+import { Stage } from '../../node_modules/stage/src/ts/index';
 
 /**
  * warning: if you change that type, also change the default value in LinkDialog
@@ -148,7 +149,6 @@ export interface Model {
   element: SilexElement;
   component: Component;
   property: Property;
-  stage: Stage;
 }
 
 /**
@@ -189,4 +189,5 @@ export interface View {
   dashboard: Dashboard;
   propSplitter: Splitter;
   workspace: Workspace;
+  stage: Stage;
 };

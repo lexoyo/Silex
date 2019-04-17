@@ -19,6 +19,7 @@ import {FileInfo} from '../types';
 
 import {CloudExplorer} from '../externs';
 import {SilexNotification} from '../utils/notification';
+import { getUiElements } from '../view/UiElements';
 
 /**
  * the Silex CloudStorage service
@@ -39,16 +40,16 @@ export class CloudStorage {
   }
 
   ready(cbk: () => any) {
+    const uiElements = getUiElements();
     // cloud explorer instance
-    const ceIframe = document.querySelector('#silex-file-explorer') as HTMLIFrameElement;
-    if (ceIframe.contentWindow['ce']) {
-      this.ce = (ceIframe.contentWindow['ce'] as CloudExplorer);
+    if (uiElements.fileExplorer.contentWindow['ce']) {
+      this.ce = (uiElements.fileExplorer.contentWindow['ce'] as CloudExplorer);
       cbk();
     } else {
       if (this.cbks == null) {
         this.cbks = [];
-        ceIframe.addEventListener('load', (e) => {
-          this.ce = (ceIframe.contentWindow['ce'] as CloudExplorer);
+        uiElements.fileExplorer.addEventListener('load', (e) => {
+          this.ce = (uiElements.fileExplorer.contentWindow['ce'] as CloudExplorer);
           this.cbks.forEach((cbk) => cbk());
           this.cbks = [];
         });

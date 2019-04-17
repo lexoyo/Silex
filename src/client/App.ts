@@ -58,7 +58,10 @@ import { Splitter } from './view/splitter';
 import { TextFormatBar } from './view/TextFormatBar';
 import { Workspace } from './view/workspace';
 
-import { Stage } from 'stage';
+// import { Stage } from 'stage'; // this is not recognized by my IDE
+import { Stage } from '../../node_modules/stage/src/ts/index';
+
+import { getUiElements } from './view/UiElements';
 
 /**
  * Defines the entry point of Silex client application
@@ -95,14 +98,57 @@ export class App {
       console.warn('Silex starting in debug mode.')
     }
 
+    // empty objects, to pass references to each other and later populate them
+    const emptyModel: Model = {
+      file: null,
+      head: null,
+      body: null,
+      page: null,
+      element: null,
+      component: null,
+      property: null,
+    };
+    const emptyController: Controller = {
+      fileMenuController: null,
+      editMenuController: null,
+      viewMenuController: null,
+      insertMenuController: null,
+      toolMenuController: null,
+      contextMenuController: null,
+      stageController: null,
+      pageToolController: null,
+      propertyToolController: null,
+      settingsDialogController: null,
+      htmlEditorController: null,
+      cssEditorController: null,
+      jsEditorController: null,
+      textEditorController: null,
+    };
+    const emptyView: View = {
+      menu: null,
+      contextMenu: null,
+      breadCrumbs: null,
+      pageTool: null,
+      propertyTool: null,
+      textFormatBar: null,
+      htmlEditor: null,
+      cssEditor: null,
+      jsEditor: null,
+      fileExplorer: null,
+      settingsDialog: null,
+      dashboard: null,
+      propSplitter: null,
+      workspace: null,
+      stage: null,
+    };
+
     // create all the components of Silex app
-    this.initView();
-    this.initModel();
-    this.initController();
+    this.model = this.initModel(emptyView, emptyController, emptyModel);
+    this.controller = this.initController(emptyView, emptyController, emptyModel);
+    this.view = this.initView(emptyView, emptyController, emptyModel);
 
     // init views now that controllers and model are instanciated
     this.view.workspace.buildUi();
-    // this.view.stage.buildUi();
     this.view.menu.buildUi();
     this.view.contextMenu.buildUi();
     this.view.breadCrumbs.buildUi();
@@ -158,7 +204,8 @@ export class App {
       window['model'] = this.model;
       window['view'] = this.view;
       window['controller'] = this.controller;
-      let script = document.createElement('script');
+
+      const script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = Config.debug.debugScript;
       document.body.appendChild(script);
@@ -173,155 +220,116 @@ export class App {
   /**
    * creation of the view instances
    */
-  initView() {
+  initView(emptyView, emptyController, emptyModel) {
+    const uiElements = getUiElements();
+
     // Stage
-    let stageElement = document.getElementsByClassName('silex-stage')[0] as HTMLElement;
-    // let stage: Stage = new Stage(stageElement, this.model, this.controller);
+    const stage: Stage = null;
 
     // Menu
-    let menuElement = document.getElementsByClassName(Menu.CLASS_NAME)[0] as HTMLElement;
-    let menu: Menu = new Menu(menuElement, this.model, this.controller);
+    const menu: Menu = new Menu(uiElements.menu, emptyModel, emptyController);
 
     // context menu
-    let contextMenuElement =
-        document.getElementsByClassName(ContextMenu.CLASS_NAME)[0] as HTMLElement;
-    let contextMenu: ContextMenu =
-        new ContextMenu(contextMenuElement, this.model, this.controller);
+    const contextMenu: ContextMenu = new ContextMenu(uiElements.contextMenu, emptyModel, emptyController);
 
     // bread crumbs
-    let breadCrumbsElement =
-        document.getElementsByClassName('silex-bread-crumbs')[0] as HTMLElement;
-    let breadCrumbs: BreadCrumbs =
-        new BreadCrumbs(breadCrumbsElement, this.model, this.controller);
+    const breadCrumbs: BreadCrumbs = new BreadCrumbs(uiElements.breadCrumbs, emptyModel, emptyController);
 
     // PageTool
-    let pageToolElement = document.getElementsByClassName('silex-page-tool')[0] as HTMLElement;
-    let pageTool: PageTool =
-        new PageTool(pageToolElement, this.model, this.controller);
+    const pageTool: PageTool = new PageTool(uiElements.pageTool, emptyModel, emptyController);
 
     // HtmlEditor
-    let htmlEditorElement =
-        document.getElementsByClassName('silex-html-editor')[0] as HTMLElement;
-    let htmlEditor: HtmlEditor =
-        new HtmlEditor(htmlEditorElement, this.model, this.controller);
+    const htmlEditor: HtmlEditor = new HtmlEditor(uiElements.htmlEditor, emptyModel, emptyController);
 
     // CssEditor
-    let cssEditorElement =
-        document.getElementsByClassName('silex-css-editor')[0] as HTMLElement;
-    let cssEditor: CssEditor =
-        new CssEditor(cssEditorElement, this.model, this.controller);
+    const cssEditor: CssEditor = new CssEditor(uiElements.cssEditor, emptyModel, emptyController);
 
     // JsEditor
-    let jsEditorElement = document.getElementsByClassName('silex-js-editor')[0] as HTMLElement;
-    let jsEditor: JsEditor =
-        new JsEditor(jsEditorElement, this.model, this.controller);
+    const jsEditor: JsEditor = new JsEditor(uiElements.jsEditor, emptyModel, emptyController);
 
     // SettingsDialog
-    let settingsDialogElement =
-        document.getElementsByClassName('silex-settings-dialog')[0] as HTMLElement;
-    let settingsDialog: SettingsDialog =
-        new SettingsDialog(settingsDialogElement, this.model, this.controller);
+    const settingsDialog: SettingsDialog = new SettingsDialog(uiElements.settingsDialog, emptyModel, emptyController);
 
     // Dashboard
-    let dashboardElement =
-        document.getElementsByClassName('silex-dashboard')[0] as HTMLElement;
-    let dashboard: Dashboard =
-        new Dashboard(dashboardElement, this.model, this.controller);
+    const dashboard: Dashboard = new Dashboard(uiElements.dashboard, emptyModel, emptyController);
 
     // FileExplorer
-    let fileExplorerElement =
-        (document.getElementById('silex-file-explorer') as HTMLElement);
-    let fileExplorer: FileExplorer =
-        new FileExplorer(fileExplorerElement, this.model, this.controller);
+    const fileExplorer: FileExplorer = new FileExplorer(uiElements.fileExplorer, emptyModel, emptyController);
 
     // PropertyTool
-    let propertyToolElement =
-        document.getElementsByClassName('silex-property-tool')[0] as HTMLElement;
-    let propertyTool: PropertyTool =
-        new PropertyTool(propertyToolElement, this.model, this.controller);
+    const propertyTool: PropertyTool = new PropertyTool(uiElements.propertyTool, emptyModel, emptyController);
 
     // TextFormatBar
-    let textFormatBarElement =
-        document.getElementsByClassName('silex-text-format-bar')[0] as HTMLElement;
-    let textFormatBar: TextFormatBar =
-        new TextFormatBar(textFormatBarElement, this.model, this.controller);
+    const textFormatBar: TextFormatBar = new TextFormatBar(uiElements.textFormatBar, emptyModel, emptyController);
 
     // workspace
-    let workspaceElement =
-        document.getElementsByClassName('silex-workspace')[0] as HTMLElement;
-    let workspace: Workspace =
-        new Workspace(workspaceElement, this.model, this.controller);
+    const workspace: Workspace = new Workspace(uiElements.workspace, emptyModel, emptyController);
 
     // add splitters
-    let propSplitterElement =
-        document.getElementsByClassName('vertical-splitter')[0] as HTMLElement;
-    let propSplitter: Splitter = new Splitter(
-        propSplitterElement, this.model, this.controller,
-        () => workspace.resizeProperties());
-    propSplitter.addLeft(contextMenuElement);
-    propSplitter.addLeft(breadCrumbsElement);
-    propSplitter.addLeft(stageElement);
-    propSplitter.addRight(propertyToolElement);
+    const propSplitter: Splitter = new Splitter(uiElements.verticalSplitter, emptyModel, emptyController, () => workspace.resizeProperties());
+    propSplitter.addLeft(uiElements.contextMenu);
+    propSplitter.addLeft(uiElements.breadCrumbs);
+    propSplitter.addLeft(uiElements.stage);
+    propSplitter.addRight(uiElements.propertyTool);
 
     // init the view class which references all the views
-    this.view = {
-      menu,
-      contextMenu,
-      breadCrumbs,
-      pageTool,
-      propertyTool,
-      textFormatBar,
-      htmlEditor,
-      cssEditor,
-      jsEditor,
-      fileExplorer,
-      settingsDialog,
-      dashboard,
-      propSplitter,
-      workspace,
-    }
+    emptyView.menu = menu;
+    emptyView.contextMenu = contextMenu;
+    emptyView.breadCrumbs = breadCrumbs;
+    emptyView.pageTool = pageTool;
+    emptyView.propertyTool = propertyTool;
+    emptyView.textFormatBar = textFormatBar;
+    emptyView.htmlEditor = htmlEditor;
+    emptyView.cssEditor = cssEditor;
+    emptyView.jsEditor = jsEditor;
+    emptyView.fileExplorer = fileExplorer;
+    emptyView.settingsDialog = settingsDialog;
+    emptyView.dashboard = dashboard;
+    emptyView.propSplitter = propSplitter;
+    emptyView.workspace = workspace;
+    emptyView.stage = stage;
+    emptyView.uiElements = uiElements;
+
+    return emptyView;
   }
 
   /**
    * creation of the model classes
    * create the models to be passed to the controllers and the views
    */
-  initModel() {
-    const iframeElement = (document.querySelector('.silex-stage-iframe') as HTMLIFrameElement);
-
+  initModel(emptyView, emptyController, emptyModel) {
     // init the model class which references all the views
-    this.model = {
-      file: new File(this.model, this.view),
-      head: new Head(this.model, this.view),
-      body: new Body(this.model, this.view),
-      page: new Page(this.model, this.view),
-      element: new SilexElement(this.model, this.view),
-      component: new Component(this.model, this.view),
-      property: new Property(this.model, this.view),
-      stage: new Stage(iframeElement, iframeElement.contentWindow.document.querySelectorAll('.editable-element')),
-    }
+    emptyModel.file = new File(emptyModel, emptyView);
+    emptyModel.head = new Head(emptyModel, emptyView);
+    emptyModel.body = new Body(emptyModel, emptyView);
+    emptyModel.page = new Page(emptyModel, emptyView);
+    emptyModel.element = new SilexElement(emptyModel, emptyView);
+    emptyModel.component = new Component(emptyModel, emptyView);
+    emptyModel.property = new Property(emptyModel, emptyView);
+
+    return emptyModel;
   }
 
   /**
    * init the controller class with references to the views and the models
    */
-  initController() {
-    this.controller = {
-      fileMenuController: new FileMenuController(this.model, this.view),
-      editMenuController: new EditMenuController(this.model, this.view),
-      viewMenuController: new ViewMenuController(this.model, this.view),
-      insertMenuController: new InsertMenuController(this.model, this.view),
-      toolMenuController: new ToolMenuController(this.model, this.view),
-      contextMenuController: new ContextMenuController(this.model, this.view),
-      stageController: new StageController(this.model, this.view),
-      pageToolController: new PageToolController(this.model, this.view),
-      propertyToolController: new PropertyToolController(this.model, this.view),
-      settingsDialogController: new SettingsDialogController(this.model, this.view),
-      htmlEditorController: new HtmlEditorController(this.model, this.view),
-      cssEditorController: new CssEditorController(this.model, this.view),
-      jsEditorController: new JsEditorController(this.model, this.view),
-      textEditorController: new TextEditorController(this.model, this.view),
-    }
+  initController(emptyView, emptyController, emptyModel) {
+    emptyController.fileMenuController = new FileMenuController(emptyModel, emptyView);
+    emptyController.editMenuController = new EditMenuController(emptyModel, emptyView);
+    emptyController.viewMenuController = new ViewMenuController(emptyModel, emptyView);
+    emptyController.insertMenuController = new InsertMenuController(emptyModel, emptyView);
+    emptyController.toolMenuController = new ToolMenuController(emptyModel, emptyView);
+    emptyController.contextMenuController = new ContextMenuController(emptyModel, emptyView);
+    emptyController.stageController = new StageController(emptyModel, emptyView);
+    emptyController.pageToolController = new PageToolController(emptyModel, emptyView);
+    emptyController.propertyToolController = new PropertyToolController(emptyModel, emptyView);
+    emptyController.settingsDialogController = new SettingsDialogController(emptyModel, emptyView);
+    emptyController.htmlEditorController = new HtmlEditorController(emptyModel, emptyView);
+    emptyController.cssEditorController = new CssEditorController(emptyModel, emptyView);
+    emptyController.jsEditorController = new JsEditorController(emptyModel, emptyView);
+    emptyController.textEditorController = new TextEditorController(emptyModel, emptyView);
+
+    return emptyController;
   }
 }
 

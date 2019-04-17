@@ -27,11 +27,6 @@ import {Constants} from '../../Constants';
  */
 export class Body {
   /**
-   * element which holds the opened website
-   */
-  iframeElement: HTMLIFrameElement;
-
-  /**
    * input element to get the focus
    * used to blur the UI inputs
    * @static
@@ -47,11 +42,6 @@ export class Body {
       'silex-use-height-not-minheight';
 
   constructor(private model: Model, private view: View) {
-
-    // get the iframe
-    // retrieve the element which will hold the body of the opened file
-    this.iframeElement = (document.querySelector('.' + 'Stage.STAGE_CLASS_NAME') as HTMLIFrameElement);
-
     // hide the focus input and attach it to the DOM
     Body.focusInput.style.left = '-1000px';
     Body.focusInput.style.position = 'absolute';

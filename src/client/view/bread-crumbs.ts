@@ -35,9 +35,7 @@ export class BreadCrumbs {
    */
   invalidationManager: InvalidationManager;
 
-  constructor(
-      public element: HTMLElement, public model: Model,
-      public controller: Controller) {
+  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
     this.invalidationManager = new InvalidationManager(500);
   }
 

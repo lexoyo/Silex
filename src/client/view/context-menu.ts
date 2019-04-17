@@ -32,13 +32,6 @@ import {Model} from '../types';
  */
 export class ContextMenu {
   /**
-   * Get the silex context menu
-   * @static
-   * @type {string}
-   */
-  static CLASS_NAME: string = 'silex-context-menu';
-
-  /**
    * hold the element in the context menu which has the current page name
    */
   currentPageElement: HTMLElement;
@@ -48,9 +41,7 @@ export class ContextMenu {
    */
   invalidationManager: InvalidationManager;
 
-  constructor(
-      public element: HTMLElement, public model: Model,
-      public controller: Controller) {
+  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
     this.currentPageElement = element.querySelector('.current-page');
     this.currentPageElement.onclick = (e) =>
         this.controller.viewMenuController.showPages();

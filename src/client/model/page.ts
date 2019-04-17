@@ -19,7 +19,6 @@
 import { goog } from '../Goog';
 import { Model, View } from '../types';
 import { SilexNotification } from '../utils/notification';
-// import { Stage } from '../view/stage';
 import { Constants } from '../../Constants';
 
 /**
@@ -38,12 +37,7 @@ export class PageData {
  * @param view  view class which holds the other views
  */
 export class Page {
-  // retrieve the element which will hold the body of the opened file
-  iframeElement: any;
-
-  constructor(public model: Model, public view: View) {
-    this.iframeElement = document.querySelector('.' + 'Stage.STAGE_CLASS_NAME');
-  }
+  constructor(public model: Model, public view: View) {}
 
   /**
    * retrieve the first parent which is visible only on some pages

@@ -51,9 +51,7 @@ export class PaneBase {
    */
   iAmRedrawing: boolean;
 
-  constructor(
-      public element: HTMLElement, public model: Model,
-      public controller: Controller) {}
+  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {}
 
   /**
    * notify the controller that the style changed

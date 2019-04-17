@@ -48,9 +48,7 @@ export class Workspace {
   // store the window viewport for later use
   previewWindow: any;
 
-  constructor(
-      public element: HTMLElement, public model: Model,
-      public controller: Controller) {
+  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
     this.invalidationManagerRedraw = new InvalidationManager(500);
     this.invalidationManagerResize = new InvalidationManager(500);
   }

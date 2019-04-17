@@ -21,6 +21,7 @@ import {Model} from '../types';
 
 
 import { goog } from '../Goog';
+import { getUiElements } from './UiElements';
 
 /**
  * @param element   container to render the UI
@@ -48,9 +49,7 @@ export class Splitter {
    */
   static WIDTH = 5;
 
-  constructor(
-      public element: HTMLElement, public model: Model,
-      public controller: Controller, opt_onRedraw?: (() => any)) {
+  constructor(public element: HTMLElement, public model: Model, public controller: Controller, opt_onRedraw?: (() => any)) {
     this.onRedraw = opt_onRedraw;
 
     // mouse down event
@@ -143,7 +142,7 @@ export class Splitter {
     if (this.isDown) {
       let parentSize = this.element.parentElement.getBoundingClientRect();
       let pos = (e.target as HTMLElement).getBoundingClientRect();
-      let posIFrame = this.model.file.getIFrameElement().getBoundingClientRect();
+      let posIFrame = getUiElements().stage.getBoundingClientRect();
       this.element.style.right = parentSize.width - pos.left - posIFrame.left + 'px';
       this.redraw();
     }
