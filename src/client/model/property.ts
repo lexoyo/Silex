@@ -396,9 +396,8 @@ export class Property {
    * this creates or update a rule in the style tag with id
    * INLINE_STYLE_TAG_CLASS_NAME if style is null this will remove the rule
    */
-  setStyle(
-      element: HTMLElement, styleObj: Object,
-      opt_isMobile?: boolean) {
+  setStyle(element: HTMLElement, styleObj: Object, opt_isMobile?: boolean) {
+    console.log('setStyle', element, styleObj, opt_isMobile)
     const deleteStyle = !styleObj;
     const style = styleObj || {};
     const elementId = (this.getSilexId(element) as SilexId);
@@ -435,16 +434,6 @@ export class Property {
           this.setStyle(parentElement, parentStyle, isMobile);
         }
       }
-
-      // to selector case
-      for (let key in style) {
-        const value = style[key];
-        let cssName = goog.String.toSelectorCase(key);
-        if (cssName !== key && value !== null && value !== '') {
-          delete style[key];
-          style[cssName] = value;
-        }
-      }
     }
 
     // store in JSON
@@ -462,17 +451,14 @@ export class Property {
     if (cssRuleObject) {
       this.styleSheet.deleteRule(cssRuleObject.index);
     }
-
     // convert style to string
     if (!deleteStyle) {
       // we use the class name because elements have their ID as a css class too
-      const styleStr =
-          '.' + elementId + '{' + Style.styleToString(style) + '} ';
+      const styleStr = '.' + elementId + '{' + Style.styleToString(style) + '} ';
       if (isMobile) {
         // add the rule to the dom to see the changes, mobile rules after
         // desktop ones
-        this.styleSheet.insertRule(
-            this.addMediaQuery(styleStr), this.styleSheet.cssRules.length);
+        this.styleSheet.insertRule(this.addMediaQuery(styleStr), this.styleSheet.cssRules.length);
       } else {
         this.styleSheet.insertRule(styleStr, 0);
       }

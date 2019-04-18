@@ -16,8 +16,6 @@
  *      created by new silex.model.Element().createElement
  */
 
-import { goog } from '../Goog';
-import { Body } from '../model/body';
 import { Model, View } from '../types';
 import { Dom } from '../utils/dom';
 import { Style } from '../utils/style';
@@ -213,8 +211,7 @@ export class SilexElement {
    * @param styleName  the style name
    * @return           the style of the element
    */
-  getStyle(element: HTMLElement, styleName: string): string {
-    const cssName = goog.String.toSelectorCase(styleName);
+  getStyle(element: HTMLElement, cssName: string): string {
     const isMobile = this.view.workspace.getMobileEditor();
     let styleObject = this.model.property.getStyle(element, isMobile);
     if (styleObject && styleObject[cssName]) {
@@ -243,7 +240,7 @@ export class SilexElement {
       element: HTMLElement, styleName: string, opt_styleValue?: string,
       opt_preserveJustAdded?: boolean) {
     // convert to css case
-    styleName = goog.String.toSelectorCase(styleName);
+    styleName = styleName;
 
     // retrieve style
     let styleObject = this.model.property.getStyle(element);

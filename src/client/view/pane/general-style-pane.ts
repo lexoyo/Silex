@@ -15,7 +15,6 @@
  *
  */
 
-import { goog } from '../../Goog';
 import { Controller, Model } from '../../types';
 import { PaneBase } from './pane-base';
 

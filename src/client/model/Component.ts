@@ -488,8 +488,7 @@ export class Component {
             })
         ),
         'text', {
-          'onChange': (newData, html) =>
-              this.styleChanged(className, pseudoClass, visibility, newData),
+          'onChange': (newData, html) => this.styleChanged(className, pseudoClass, visibility, newData),
           'onBrowse': (e, url, cbk) => this.onBrowse(e, url, cbk)
         });
   }
@@ -503,10 +502,7 @@ export class Component {
     this.getPseudoClassData(
             opt_data || ({'styles': {'desktop': {'normal': {}}}, 'templateName': ''} as StyleData))
         .forEach((pseudoClassData) => {
-          this.styleChanged(
-              className, pseudoClassData['pseudoClass'],
-              pseudoClassData['visibility'], pseudoClassData['data'],
-              displayName);
+          this.styleChanged(className, pseudoClassData['pseudoClass'], pseudoClassData['visibility'], pseudoClassData['data'], displayName);
         });
     this.updateDepenedencies(Constants.STYLE_TYPE);
   }
@@ -552,9 +548,7 @@ export class Component {
   /**
    * apply the style to the dom and save it to the JSON object
    */
-  styleChanged(
-      className: StyleName, pseudoClass: PseudoClass, visibility: Visibility,
-      opt_data?: PseudoClassData, opt_displayName?: string) {
+  styleChanged(className: StyleName, pseudoClass: PseudoClass, visibility: Visibility, opt_data?: PseudoClassData, opt_displayName?: string) {
     // create a new style if needed
     if (className === Constants.EMPTY_STYLE_CLASS_NAME) {
       const textBoxes = this.model.body.getSelection().filter(

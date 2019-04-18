@@ -23,6 +23,7 @@ import { FileInfo, Model, View } from '../types';
 import { Stage } from '../../../node_modules/stage/src/ts/index';
 import { getUiElements } from '../view/UiElements';
 import { Constants } from '../../Constants';
+import { cpus } from 'os';
 
 /**
  * @param model  model class which holds the other models
@@ -183,7 +184,7 @@ export class File {
         return !el.classList.contains(Constants.TYPE_SECTION)
           || dropZone.tagName.toLowerCase() === 'body';
       }),
-      onDrop: (selectables => {
+      onDrop: selectables => {
         selectables.forEach(s => {
           if(!s.el.classList.contains(Constants.TYPE_SECTION)) {
             this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
@@ -197,8 +198,9 @@ export class File {
           s.el.style.height = '';
           s.el.style.position = '';
         });
-      }),
-      onResizeEnd: (selectables => {
+        this.updateView();
+      },
+      onResizeEnd: selectables => {
         selectables.forEach(s => {
           this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
           this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
@@ -212,9 +214,14 @@ export class File {
           s.el.style.height = '';
           s.el.style.position = '';
         });
-      }),
+        this.updateView();
+      },
+      onSelect: change => this.updateView(),
+      onResize: change => this.updateView(),
+      onDrag: change => this.updateView(),
     });
     console.log('created store', this.view.stage.store.getState());
+
     // notify the caller
     if (opt_cbk) {
       opt_cbk();
@@ -232,6 +239,11 @@ export class File {
     if (this.isTemplate) {
       this.model.head.setPublicationPath(null);
     }
+  }
+  updateView() {
+    const selection = this.view.stage.getSelection();
+    console.log('onSelect', selection.map(s => s.el.getAttribute(Constants.ELEMENT_ID_ATTR_NAME)));
+    this.model.body.setSelection(selection.map(s => s.el));
   }
 
   /**

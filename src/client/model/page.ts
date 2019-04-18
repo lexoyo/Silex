@@ -16,7 +16,6 @@
  *
  */
 
-import { goog } from '../Goog';
 import { Model, View } from '../types';
 import { SilexNotification } from '../utils/notification';
 import { Constants } from '../../Constants';

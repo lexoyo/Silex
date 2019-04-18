@@ -16,7 +16,6 @@
  *
  */
 
-import { goog } from '../../Goog';
 import { Controller, Model } from '../../types';
 
 
@@ -51,20 +50,19 @@ export class PaneBase {
    */
   iAmRedrawing: boolean;
 
-  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {}
+  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
+
+  }
 
   /**
    * notify the controller that the style changed
    * @param styleName   not css style but camel case
    */
-  styleChanged(
-      styleName: string, opt_styleValue?: string,
-      opt_elements?: HTMLElement[]) {
+  styleChanged(styleName: string, opt_styleValue?: string, opt_elements?: HTMLElement[]) {
     this.iAmSettingValue = true;
 
     // notify the controller
-    this.controller.propertyToolController.styleChanged(
-        styleName, opt_styleValue, opt_elements);
+    this.controller.propertyToolController.styleChanged(styleName, opt_styleValue, opt_elements);
     this.iAmSettingValue = false;
   }
 
@@ -93,9 +91,7 @@ export class PaneBase {
    *     file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
+  redraw(selectedElements: HTMLElement[], pageNames: string[], currentPageName: string) {
     if (!selectedElements) {
       throw new Error('selection array is undefined');
     }

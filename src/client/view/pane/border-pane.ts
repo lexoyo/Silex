@@ -15,7 +15,6 @@
  *
  */
 
-import { goog } from '../../Goog';
 import { Controller, Model } from '../../types';
 import { ColorPicker } from '../ColorPicker';
 import { PaneBase } from './pane-base';
@@ -140,7 +139,7 @@ export class BorderPane extends PaneBase {
     // border width, this builds a string like "0px 1px 2px 3px"
     // FIXME: should not build a string which is then split in redrawBorderWidth
     let borderWidth = this.getCommonProperty(selectedElements, (element) => {
-      let w = this.model.element.getStyle(element, 'borderWidth');
+      let w = this.model.element.getStyle(element, 'border-width');
       if (w && w != '') {
         return w;
       } else {
@@ -159,7 +158,7 @@ export class BorderPane extends PaneBase {
     // border style
     let borderStyle = this.getCommonProperty(selectedElements, (element) => {
       let style;
-      style = this.model.element.getStyle(element, 'borderStyle');
+      style = this.model.element.getStyle(element, 'border-style');
       if (style) {
         return style;
       }
@@ -174,7 +173,7 @@ export class BorderPane extends PaneBase {
     // border radius
     let borderRadiusStr = this.getCommonProperty(
         selectedElements,
-        (element) => this.model.element.getStyle(element, 'borderRadius'));
+        (element) => this.model.element.getStyle(element, 'border-radius'));
     if (borderRadiusStr) {
       this.redrawBorderRadius(borderRadiusStr);
     } else {
@@ -190,7 +189,7 @@ export class BorderPane extends PaneBase {
     if (selectedElements.length > 0) {
       this.colorPicker.setDisabled(false);
       let color = this.getCommonProperty(selectedElements, (element) => {
-        let w = this.model.element.getStyle(element, 'borderColor');
+        let w = this.model.element.getStyle(element, 'border-color');
         return w || 'rgba(0,0,0,1)';
       });
 
@@ -401,9 +400,9 @@ export class BorderPane extends PaneBase {
           borderWidthStr += '0 ';
         }
       }
-      this.styleChanged('borderRadius', borderWidthStr);
+      this.styleChanged('border-radius', borderWidthStr);
     } else {
-      this.styleChanged('borderRadius', '');
+      this.styleChanged('border-radius', '');
     }
   }
 }

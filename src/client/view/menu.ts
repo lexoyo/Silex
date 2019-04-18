@@ -12,14 +12,11 @@
 /**
 * @fileoverview
 * the Silex menu on the left
-* TODO: clean up and remove the old google closure menu
 * based on closure menu class
 *
 */
 
 import { Config } from '../ClientConfig';
-import { Shortcut } from '../utils/Keyboard.js'
-import { goog } from '../Goog';
 import { Constants } from '../../Constants';
 import { Controller, Model } from '../types';
 import { Keyboard } from '../utils/Keyboard';

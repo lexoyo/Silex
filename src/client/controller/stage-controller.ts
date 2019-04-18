@@ -91,12 +91,8 @@ export class StageController extends ControllerBase {
     container.appendChild(element);
 
     // restore position
-    this.styleChanged(
-        'left', Math.round(elementPos.left - newContainerPos.left) + 'px', [element],
-        false);
-    this.styleChanged(
-        'top', Math.round(elementPos.top - newContainerPos.top) + 'px', [element],
-        false);
+    this.styleChanged('left', Math.round(elementPos.left - newContainerPos.left) + 'px', [element], false);
+    this.styleChanged('top', Math.round(elementPos.top - newContainerPos.top) + 'px', [element], false);
 
     // check if a parent is visible only on some pages,
     // then element should be visible everywhere

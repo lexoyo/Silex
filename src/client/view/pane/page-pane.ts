@@ -17,7 +17,6 @@
  */
 
 
-import { goog } from '../../Goog';
 import { Constants } from '../../../Constants';
 import { Controller, Model } from '../../types';
 import { Dom } from '../../utils/dom';

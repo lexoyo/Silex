@@ -14,12 +14,16 @@
  *
  */
 
-import { goog } from '../Goog';
-
 type Rgb = Array<number>;
 
 export class Style {
 
+  // static toSelectorCase(str: string): string {
+  //   const res = str.replace(/([A-Z])/g, '-$1').toLowerCase();
+  //   if(res !== str) console.error('these 2 strings should be the same', str, res);
+  //   // else console.warn('todo: do not use this useless function')
+  //   return res;
+  // }
 
   /**
    * convert style object to object
@@ -52,7 +56,7 @@ export class Style {
       if (style[idx] && typeof style[idx] === 'string' && style[idx] !== '' &&
           idx.match(/[^0-9]/)) {
         styleStr +=
-            opt_tab + goog.String.toSelectorCase(idx) + ': ' + style[idx] + '; ';
+            opt_tab + idx + ': ' + style[idx] + '; ';
       }
     }
     return styleStr;

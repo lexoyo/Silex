@@ -503,10 +503,8 @@ export class ControllerBase {
   refreshView() {
     let pages = this.model.page.getPages();
     let currentPage = this.model.page.getCurrentPage();
-    this.view.propertyTool.redraw(
-        this.model.body.getSelection(), pages, currentPage);
-    this.view.textFormatBar.redraw(
-        this.model.body.getSelection(), pages, currentPage);
+    this.view.propertyTool.redraw(this.model.body.getSelection(), pages, currentPage);
+    this.view.textFormatBar.redraw(this.model.body.getSelection(), pages, currentPage);
   }
 
   /**

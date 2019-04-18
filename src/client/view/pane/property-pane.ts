@@ -14,7 +14,6 @@
  *
  */
 
-import { goog } from '../../Goog';
 import { SilexElement } from '../../model/element';
 import { Controller, Model } from '../../types';
 import { PaneBase } from './pane-base';
@@ -226,13 +225,14 @@ export class PropertyPane extends PaneBase {
       this.altInput.removeAttribute('disabled');
       this.titleInput.removeAttribute('disabled');
       this.selectedElements = selectedElements;
+
       let bb = this.model.property.getBoundingBox(selectedElements);
 
       // display position and size
-      this.topInput.value = bb.top.toString() || '0';
-      this.leftInput.value = bb.left.toString() || '0';
-      this.widthInput.value = bb.width.toString() || '0';
-      this.heightInput.value = bb.height.toString() || '0';
+      this.topInput.value = (bb.top || 0).toString();
+      this.leftInput.value = (bb.left || 0).toString();
+      this.widthInput.value = (bb.width || 0).toString();
+      this.heightInput.value = (bb.height || 0).toString();
 
       // special case of the background / main container only selected element
       if (selectedElements.length === 1) {

@@ -90,18 +90,24 @@ export class Body {
    */
   setSelection(selectedElements: HTMLElement[]) {
     if(this.view.stage) {
-      this.view.stage.setSelection(selectedElements);
+      const selection = this.view.stage.getSelection().map(s => s.el);
+      // only if selection changed
+      if(selection.filter(el => !selectedElements.find(s => s === el)).length !== 0
+        || selectedElements.filter(el => !selection.find(s => s === el)).length !== 0) {
 
-      // refresh views
-      let pages = this.model.page.getPages();
-      let page = this.model.page.getCurrentPage();
-      this.view.pageTool.redraw(selectedElements, pages, page);
-      this.view.propertyTool.redraw(selectedElements, pages, page);
-      this.view.textFormatBar.redraw(selectedElements, pages, page);
-      // this.view.stage.redraw(selectedElements, pages, page);
-      this.view.contextMenu.redraw(selectedElements, pages, page);
-      this.view.breadCrumbs.redraw(selectedElements, pages, page);
-      this.view.htmlEditor.setSelection(selectedElements);
+        this.view.stage.setSelection(selectedElements);
+      }
+
+        // refresh views
+        let pages = this.model.page.getPages();
+        let page = this.model.page.getCurrentPage();
+        this.view.pageTool.redraw(selectedElements, pages, page);
+        this.view.propertyTool.redraw(selectedElements, pages, page);
+        this.view.textFormatBar.redraw(selectedElements, pages, page);
+        // this.view.stage.redraw(selectedElements, pages, page);
+        this.view.contextMenu.redraw(selectedElements, pages, page);
+        this.view.breadCrumbs.redraw(selectedElements, pages, page);
+        this.view.htmlEditor.setSelection(selectedElements);
     }
   }
 

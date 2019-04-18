@@ -105,27 +105,27 @@ export class BgPane extends PaneBase {
   buildBgImageProperties() {
     this.attachmentComboBox = this.initComboBox(
         '.bg-attachment-combo-box', (event) => {
-          this.styleChanged('backgroundAttachment', event.target.value);
+          this.styleChanged('background-attachment', event.target.value);
         });
     this.vPositionComboBox = this.initComboBox(
         '.bg-position-v-combo-box', (event) => {
           let hPosition = this.hPositionComboBox.value;
           let vPosition = this.vPositionComboBox.value;
-          this.styleChanged('backgroundPosition', vPosition + ' ' + hPosition);
+          this.styleChanged('background-position', vPosition + ' ' + hPosition);
         });
     this.hPositionComboBox = this.initComboBox(
         '.bg-position-h-combo-box', (event) => {
           let hPosition = this.hPositionComboBox.value;
           let vPosition = this.vPositionComboBox.value;
-          this.styleChanged('backgroundPosition', vPosition + ' ' + hPosition);
+          this.styleChanged('background-position', vPosition + ' ' + hPosition);
         });
     this.repeatComboBox =
         this.initComboBox('.bg-repeat-combo-box', (event) => {
-          this.styleChanged('backgroundRepeat', event.target.value);
+          this.styleChanged('background-repeat', event.target.value);
         });
     this.sizeComboBox =
         this.initComboBox('.bg-size-combo-box', (event) => {
-          this.styleChanged('backgroundSize', event.target.value);
+          this.styleChanged('background-size', event.target.value);
         });
   }
 
@@ -155,7 +155,7 @@ export class BgPane extends PaneBase {
       this.colorPicker.setDisabled(false);
       let color =
           this.getCommonProperty(selectedElements, element => {
-            return this.model.element.getStyle(element, 'backgroundColor') ||
+            return this.model.element.getStyle(element, 'background-color') ||
                 '';
           });
 
@@ -185,7 +185,7 @@ export class BgPane extends PaneBase {
     };
     let bgImage =
         this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'backgroundImage');
+          return this.model.element.getStyle(element, 'background-image');
         });
     if (bgImage !== null && bgImage !== 'none' && bgImage !== '') {
       enableBgComponents(true);
@@ -196,7 +196,7 @@ export class BgPane extends PaneBase {
     // bg image attachment
     let bgImageAttachment =
         this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'backgroundAttachment');
+          return this.model.element.getStyle(element, 'background-attachment');
         });
     if (bgImageAttachment) {
       this.attachmentComboBox.value = bgImageAttachment;
@@ -207,7 +207,7 @@ export class BgPane extends PaneBase {
     // bg image position
     let bgImagePosition =
         this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'backgroundPosition');
+          return this.model.element.getStyle(element, 'background-position');
         });
     if (bgImagePosition) {
       // convert 50% in cennter
@@ -236,7 +236,7 @@ export class BgPane extends PaneBase {
     // bg image repeat
     let bgImageRepeat =
         this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'backgroundRepeat');
+          return this.model.element.getStyle(element, 'background-repeat');
         });
     if (bgImageRepeat) {
       this.repeatComboBox.value = bgImageRepeat;
@@ -247,7 +247,7 @@ export class BgPane extends PaneBase {
     // bg image size
     let bgImageSize =
         this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'backgroundSize');
+          return this.model.element.getStyle(element, 'background-size');
         });
     if (bgImageSize) {
       this.sizeComboBox.value = bgImageSize;
@@ -266,7 +266,7 @@ export class BgPane extends PaneBase {
     }
 
     // notify the toolbox
-    this.styleChanged('backgroundColor', this.colorPicker.getColor());
+    this.styleChanged('background-color', this.colorPicker.getColor());
   }
 
   /**
@@ -283,7 +283,6 @@ export class BgPane extends PaneBase {
       }
     });
 
-    // return the google closure object
     return comboBox;
   }
 
@@ -298,7 +297,7 @@ export class BgPane extends PaneBase {
    * User has clicked the clear image button
    */
   onClearImageButton() {
-    this.styleChanged('backgroundImage', '');
+    this.styleChanged('background-image', '');
 
     // UI needs to be updated (which is prevented in this.styleChanged by the
     // flag iAmSettingTheValue
