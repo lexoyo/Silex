@@ -61,12 +61,12 @@ export class Constants {
   /**
    * constant for silex element type
    */
-  static TYPE_CONTAINER: string = 'container';
+  static TYPE_CONTAINER: string = 'container-element';
 
   /**
    * constant for silex element type
    */
-  static TYPE_SECTION: string = 'section';
+  static TYPE_SECTION: string = 'section-element';
 
   /**
    * constant for the content element of a section, which is also a container
@@ -76,17 +76,17 @@ export class Constants {
   /**
    * constant for silex element type
    */
-  static TYPE_IMAGE: string = 'image';
+  static TYPE_IMAGE: string = 'image-element';
 
   /**
    * constant for silex element type
    */
-  static TYPE_TEXT: string = 'text';
+  static TYPE_TEXT: string = 'text-element';
 
   /**
    * constant for silex element type
    */
-  static TYPE_HTML: string = 'html';
+  static TYPE_HTML: string = 'html-element';
 
   /**
    * constant for silex element type
@@ -136,17 +136,42 @@ export class Constants {
   static EDITABLE_CLASS_NAME: string = 'editable-style';
 
   /**
-   * class name which can be used to change params of the eitable jquery plugin
+   * class name which can be used to change params of the stage
    */
   static PREVENT_RESIZABLE_CLASS_NAME: string = 'prevent-resizable';
 
   /**
-   * class name which can be used to change params of the eitable jquery plugin
+   * class name which can be used to change params of the stage
+   */
+  static PREVENT_RESIZABLE_TOP_CLASS_NAME: string = 'prevent-resizable-top';
+
+  /**
+   * class name which can be used to change params of the stage
+   */
+  static PREVENT_RESIZABLE_LEFT_CLASS_NAME: string = 'prevent-resizable-left';
+
+  /**
+   * class name which can be used to change params of the stage
+   */
+  static PREVENT_RESIZABLE_BOTTOM_CLASS_NAME: string = 'prevent-resizable-bottom';
+
+  /**
+   * class name which can be used to change params of the stage
+   */
+  static PREVENT_RESIZABLE_RIGHT_CLASS_NAME: string = 'prevent-resizable-right';
+
+  /**
+   * class name which can be used to change params of the stage
+   */
+  static PREVENT_SELECTABLE_CLASS_NAME: string = 'prevent-selectable';
+
+  /**
+   * class name which can be used to change params of the stage
    */
   static PREVENT_DRAGGABLE_CLASS_NAME: string = 'prevent-draggable';
 
   /**
-   * class name which can be used to change params of the eitable jquery plugin
+   * class name which can be used to change params of the stage
    */
   static PREVENT_DROPPABLE_CLASS_NAME: string = 'prevent-droppable';
 
@@ -219,11 +244,11 @@ export class Constants {
     Constants.TYPE_CONTAINER_CONTENT,
     // useful to hide it when the content container of a section is selected
     Constants.WEBSITE_WIDTH_CLASS_NAME,
-    Constants.TYPE_CONTAINER + '-element',
-    Constants.TYPE_SECTION + '-element',
-    Constants.TYPE_IMAGE + '-element',
-    Constants.TYPE_TEXT + '-element',
-    Constants.TYPE_HTML + '-element',
+    Constants.TYPE_CONTAINER,
+    Constants.TYPE_SECTION,
+    Constants.TYPE_IMAGE,
+    Constants.TYPE_TEXT,
+    Constants.TYPE_HTML,
     Constants.HIDE_ON_MOBILE,
     Constants.COMPONENT_CLASS_NAME,
   ];

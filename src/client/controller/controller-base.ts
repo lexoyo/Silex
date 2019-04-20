@@ -258,9 +258,7 @@ export class ControllerBase {
    * set a given style to the current selection
    * @param opt_isUndoable default is true
    */
-  styleChanged(
-      name: string, value?: string, opt_elements?: HTMLElement[],
-      opt_isUndoable?: boolean) {
+  styleChanged(name: string, value?: string, opt_elements?: HTMLElement[], opt_isUndoable?: boolean) {
     if (!opt_elements) {
       opt_elements = this.model.body.getSelection();
     }
@@ -272,7 +270,31 @@ export class ControllerBase {
     // apply the change to all elements
     opt_elements.forEach((element) => {
       // update the model
-      this.model.element.setStyle(element, name, value);
+      switch(name) {
+        case 'top':
+        case 'left':
+        case 'width':
+        case 'height':
+        case 'min-height':
+          if(name === 'min-height') name = 'height';
+          const state = this.view.stage.getState(element);
+          this.view.stage.setState(element, {
+            ...state,
+            metrics: {
+              ...state.metrics,
+              computedStyleRect: {
+                ...state.metrics.computedStyleRect,
+                top: name === 'top' ? parseInt(value) : state.metrics.computedStyleRect.top,
+                left: name === 'left' ? parseInt(value) : state.metrics.computedStyleRect.left,
+                width: name === 'width' ? parseInt(value) : state.metrics.computedStyleRect.width,
+                height: name === 'height' ? parseInt(value) : state.metrics.computedStyleRect.height,
+              }
+            },
+          });
+        break;
+        default:
+          this.model.element.setStyle(element, name, value);
+      }
     });
 
     // refresh the view
@@ -304,9 +326,7 @@ export class ControllerBase {
   /**
    * set a given property to the current selection
    */
-  propertyChanged(
-      name: string, value?: string, opt_elements?: HTMLElement[],
-      opt_applyToContent?: boolean) {
+  propertyChanged(name: string, value?: string, opt_elements?: HTMLElement[], opt_applyToContent?: boolean) {
     if (!opt_elements) {
       opt_elements = this.model.body.getSelection();
     }

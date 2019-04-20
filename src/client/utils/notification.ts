@@ -119,7 +119,10 @@ export class SilexNotification {
 
       // call the callback
       cbk.apply(this, arguments);
-    }, opt_default);
+    }, opt_default).set({
+      movable: false,
+      transition:'fade',
+    });
   }
 
   /**

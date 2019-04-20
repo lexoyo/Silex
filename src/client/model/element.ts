@@ -715,7 +715,7 @@ export class SilexElement {
     let element = this.model.file.getContentDocument().createElement('div');
     element.setAttribute(Constants.TYPE_ATTR, Constants.TYPE_CONTAINER);
     element.classList.add(Constants.PREVENT_DRAGGABLE_CLASS_NAME);
-    element.classList.add(Constants.TYPE_CONTAINER + '-element');
+    element.classList.add(Constants.TYPE_CONTAINER);
 
     // content element is both a container and a content element
     let content = this.createElement(Constants.TYPE_CONTAINER);

@@ -15,7 +15,6 @@
  */
 
 
-import { goog } from '../Goog';
 import { Constants } from '../../Constants';
 import { Font, Model, View } from '../types';
 import { Style } from '../utils/style';

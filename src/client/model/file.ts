@@ -174,10 +174,17 @@ export class File {
 
     // restore event listeners
     this.view.stage = new Stage(this.iFrameElement_, this.iFrameElement_.contentWindow.document.querySelectorAll(`[${Constants.ELEMENT_ID_ATTR_NAME}]`), {
-      isSelectable: (el => el.classList.contains(Constants.EDITABLE_CLASS_NAME)),
+      isSelectable: (el => !el.classList.contains(Constants.PREVENT_SELECTABLE_CLASS_NAME)),
       isDraggable: (el => !el.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME)),
       isDropZone: ((el) => !el.classList.contains(Constants.PREVENT_DROPPABLE_CLASS_NAME)),
-      isResizeable: ((el) => !el.classList.contains(Constants.PREVENT_RESIZABLE_CLASS_NAME)),
+      isResizeable: ((el) => {
+        return el.classList.contains(Constants.PREVENT_RESIZABLE_CLASS_NAME) ? false : ({
+          top: !el.classList.contains(Constants.PREVENT_RESIZABLE_TOP_CLASS_NAME),
+          left: !el.classList.contains(Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME),
+          bottom: !el.classList.contains(Constants.PREVENT_RESIZABLE_BOTTOM_CLASS_NAME),
+          right: !el.classList.contains(Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME),
+        })
+      }),
       useMinHeight: ((el) => !el.classList.contains(Constants.SILEX_USE_HEIGHT_NOT_MINHEIGHT)),
       canDrop: ((el: HTMLElement, dropZone: HTMLElement) => {
         // sections can only be dropped in the body
@@ -242,7 +249,6 @@ export class File {
   }
   updateView() {
     const selection = this.view.stage.getSelection();
-    console.log('onSelect', selection.map(s => s.el.getAttribute(Constants.ELEMENT_ID_ATTR_NAME)));
     this.model.body.setSelection(selection.map(s => s.el));
   }
 

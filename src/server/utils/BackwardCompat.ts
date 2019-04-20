@@ -240,13 +240,29 @@ export default class BackwardCompat {
         if (this.hasToUpdate(version, [2, 2, 10])) {
           console.log('updating', version, [2, 2, 10]);
 
-          // make sections background draggable but not resizeable
-          const sections: HTMLElement[] = Array.from(doc.querySelectorAll('.section-element'));
-          sections.forEach(el => el.classList.remove(Constants.PREVENT_DRAGGABLE_CLASS_NAME));
-          sections.forEach(el => el.classList.add(Constants.PREVENT_RESIZABLE_CLASS_NAME));
+          // the body is a drop zone, not selectable, not draggable, resizeable
+          doc.body.classList.add(
+            Constants.PREVENT_DRAGGABLE_CLASS_NAME,
+            Constants.PREVENT_RESIZABLE_CLASS_NAME,
+            Constants.PREVENT_SELECTABLE_CLASS_NAME);
+
+          // each section background and foreground is a drop zone, not selectable, not draggable, resizeable
+          const changedSections = Array.from(doc.querySelectorAll(`.${Constants.TYPE_SECTION}`));
+          changedSections.forEach((el: HTMLElement) => el.classList.add(
+            Constants.PREVENT_DRAGGABLE_CLASS_NAME,
+            Constants.PREVENT_RESIZABLE_CLASS_NAME,
+            Constants.PREVENT_SELECTABLE_CLASS_NAME
+          ));
+
+          const changedSectionsContent = Array.from(doc.querySelectorAll(`.${Constants.TYPE_SECTION}, .${Constants.TYPE_SECTION} .${Constants.TYPE_CONTAINER_CONTENT}`));
+          changedSectionsContent.forEach((el: HTMLElement) => el.classList.add(
+            Constants.PREVENT_DRAGGABLE_CLASS_NAME,
+            Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME,
+            Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME
+          ));
 
           actions.push(`
-            <p>I made the sections draggable.</p>
+            <p>I addapted ${changedSections.length} sections and the body to the new selection tool.</p>
           `);
         }
         resolve(actions);

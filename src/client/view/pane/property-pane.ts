@@ -96,7 +96,7 @@ export class PropertyPane extends PaneBase {
     this.topInput.setAttribute('data-style-name', 'top');
     this.topInput.addEventListener('input', e => this.onPositionChanged(e), false);
     this.heightInput = document.querySelector('.height-input');
-    this.heightInput.setAttribute('data-style-name', 'minHeight');
+    this.heightInput.setAttribute('data-style-name', 'min-height');
     this.heightInput.addEventListener('input', e => this.onPositionChanged(e), false);
     this.altInput = document.querySelector('.alt-input');
     this.altInput.addEventListener('input', e => this.onAltChanged(e), false);
@@ -125,7 +125,7 @@ export class PropertyPane extends PaneBase {
       switch (name) {
         case 'width':
           value = Math.max(value, SilexElement.MIN_WIDTH);
-        case 'minHeight':
+        case 'min-height':
           value = Math.max(value, SilexElement.MIN_HEIGHT);
       }
 

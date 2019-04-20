@@ -70,17 +70,14 @@ export class PaneBase {
    * notify the controller that a property has changed
    * @param propertyName   property name, e.g. 'src'
    */
-  propertyChanged(
-      propertyName: string, opt_propertyValue?: string,
-      opt_elements?: HTMLElement[], opt_applyToContent?: boolean) {
+  propertyChanged(propertyName: string, opt_propertyValue?: string, opt_elements?: HTMLElement[], opt_applyToContent?: boolean) {
     if (this.iAmRedrawing) {
       return;
     }
     this.iAmSettingValue = true;
 
     // notify the controller
-    this.controller.propertyToolController.propertyChanged(
-        propertyName, opt_propertyValue, opt_elements, opt_applyToContent);
+    this.controller.propertyToolController.propertyChanged(propertyName, opt_propertyValue, opt_elements, opt_applyToContent);
     this.iAmSettingValue = false;
   }
 
