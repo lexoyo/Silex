@@ -156,8 +156,7 @@ export class TextFormatBar {
 
         // this.currentTextBox.insertBefore(this.element,
         // this.currentTextBox.firstChild);
-        this.controller.textEditorController.attachToTextBox(
-            this.currentTextBox, this.element);
+        this.controller.textEditorController.attachToTextBox(this.currentTextBox, this.element);
         const editable = this.model.element.getContentNode(this.currentTextBox);
         const options = {
           'toolbar': this.toolbar,

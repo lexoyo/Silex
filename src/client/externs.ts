@@ -118,7 +118,7 @@ export interface UnifileResponse {
 /**
  * wysihtml library
  */
-export var wysihtml:any;
+export var wysihtml:any = window['wysihtml'];
 
 // export declare var wysihtml:WysiHtml;
 // export declare class wysihtml {

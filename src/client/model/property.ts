@@ -400,9 +400,8 @@ export class Property {
     const deleteStyle = !styleObj;
     const style = styleObj || {};
     const elementId = (this.getSilexId(element) as SilexId);
-    const isMobile = opt_isMobile != null ?
-        opt_isMobile :
-        this.view.workspace.getMobileEditor();
+    const isMobile = opt_isMobile != null ? opt_isMobile : this.view.workspace.getMobileEditor();
+
     if (!deleteStyle) {
       // styles of sections are special
       if (this.model.element.isSection(element)) {
@@ -410,11 +409,9 @@ export class Property {
         delete style['width'];
 
         // apply height to section content and not section itself
-        const contentElement =
-            (this.model.element.getContentNode(element) as HTMLElement);
+        const contentElement = (this.model.element.getContentNode(element) as HTMLElement);
         const contentStyle = this.getStyle(contentElement, isMobile) || {};
-        if (style['min-height'] &&
-            style['min-height'] !== contentStyle['min-height']) {
+        if (style['min-height'] && style['min-height'] !== contentStyle['min-height']) {
           contentStyle['min-height'] = style['min-height'];
           this.setStyle(contentElement, contentStyle, isMobile);
         }

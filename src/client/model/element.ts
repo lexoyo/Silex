@@ -236,9 +236,7 @@ export class SilexElement {
    * @param  opt_preserveJustAdded     if true, do not remove the "just added"
    *     css class, default is false
    */
-  setStyle(
-      element: HTMLElement, styleName: string, opt_styleValue?: string,
-      opt_preserveJustAdded?: boolean) {
+  setStyle(element: HTMLElement, styleName: string, opt_styleValue?: string, opt_preserveJustAdded?: boolean) {
     // convert to css case
     styleName = styleName;
 

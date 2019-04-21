@@ -17,6 +17,7 @@
 import {Model} from '../types';
 import {View} from '../types';
 import {ControllerBase} from './controller-base';
+import { getUiElements } from '../view/UiElements';
 const MENU_WIDTH = 35;
 const CONTEXT_MENU_HEIGHT = 35;
 
@@ -34,11 +35,9 @@ export class TextEditorController extends ControllerBase {
 
   attachToTextBox(textBox, toolbar) {
     const pos = textBox.getBoundingClientRect();
-    const stageSize = null// this.view.stage.element.getBoundingClientRect();
+    const stageSize = getUiElements().stage.getBoundingClientRect();
     const theoricalBottom = stageSize.height + stageSize.top - pos.top;
-    const bottom = Math.max(
-        theoricalBottom - pos.height + CONTEXT_MENU_HEIGHT,
-        Math.min(stageSize.height - 20, theoricalBottom));
+    const bottom = Math.max(theoricalBottom - pos.height + CONTEXT_MENU_HEIGHT, Math.min(stageSize.height - 20, theoricalBottom));
     const left = pos.left + MENU_WIDTH;
     toolbar.style.bottom = bottom + 'px';
     toolbar.style.left = left + 'px';

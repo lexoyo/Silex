@@ -278,6 +278,7 @@ export class ControllerBase {
         case 'min-height':
           if(name === 'min-height') name = 'height';
           const state = this.view.stage.getState(element);
+          console.log('Set state');
           this.view.stage.setState(element, {
             ...state,
             metrics: {

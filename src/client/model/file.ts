@@ -192,6 +192,7 @@ export class File {
           || dropZone.tagName.toLowerCase() === 'body';
       }),
       onDrop: selectables => {
+        console.log('Drag end');
         selectables.forEach(s => {
           if(!s.el.classList.contains(Constants.TYPE_SECTION)) {
             this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
@@ -203,31 +204,61 @@ export class File {
           s.el.style.bottom = '';
           s.el.style.width = '';
           s.el.style.height = '';
+          s.el.style.minHeight = '';
           s.el.style.position = '';
         });
         this.updateView();
       },
       onResizeEnd: selectables => {
+        console.log('Resize end');
         selectables.forEach(s => {
           this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
           this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
           this.model.element.setStyle(s.el, 'width', s.metrics.computedStyleRect.width + 'px');
-          this.model.element.setStyle(s.el, 'height', s.metrics.computedStyleRect.height + 'px');
+          this.model.element.setStyle(s.el, s.useMinHeight ? 'min-height' : 'height', s.metrics.computedStyleRect.height + 'px');
           s.el.style.top = '';
           s.el.style.left = '';
           s.el.style.right = '';
           s.el.style.bottom = '';
           s.el.style.width = '';
           s.el.style.height = '';
+          s.el.style.minHeight = '';
           s.el.style.position = '';
         });
         this.updateView();
+      },
+      onEdit: selectables => {
+        // TextEditorController
+        console.log('onEdit', selectables, this.model.element.getType(selectables[0].el));
+        if(selectables.length > 1) {
+          // open properties
+        }
+        else if(selectables.length === 1) {
+          switch(this.model.element.getType(selectables[0].el)) {
+            case Constants.TYPE_TEXT:
+              console.log('edit text xxx');
+              window['silex'].controller.editMenuController.editElement();
+              break;
+            case Constants.TYPE_CONTAINER:
+            case Constants.TYPE_SECTION:
+            case Constants.TYPE_CONTAINER_CONTENT:
+            case Constants.TYPE_IMAGE:
+            case Constants.TYPE_TEXT:
+            case Constants.TYPE_HTML:
+            case Constants.TYPE_ATTR:
+              console.error('edition of type', this.model.element.getType(selectables[0].el), 'todo')
+              break;
+          }
+        }
+      },
+      onEditEnd: () => {
+        // TextEditorController
+        console.log('onEditEnd to do');
       },
       onSelect: change => this.updateView(),
       onResize: change => this.updateView(),
       onDrag: change => this.updateView(),
     });
-    console.log('created store', this.view.stage.store.getState());
 
     // notify the caller
     if (opt_cbk) {
