@@ -254,16 +254,20 @@ export default class BackwardCompat {
             Constants.PREVENT_SELECTABLE_CLASS_NAME
           ));
 
+          // we add classes to the elements so that we can tell the stage component if an element is draggable, resizeable, selectable...
           const changedSectionsContent = Array.from(doc.querySelectorAll(`.${Constants.TYPE_SECTION}, .${Constants.TYPE_SECTION} .${Constants.TYPE_CONTAINER_CONTENT}`));
           changedSectionsContent.forEach((el: HTMLElement) => el.classList.add(
             Constants.PREVENT_DRAGGABLE_CLASS_NAME,
             Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME,
             Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME
           ));
+          actions.push(`Changed the body and ${changedSections.length} sections with new CSS classes to <a href="https://github.com/silexlabs/stage/" target="_blank">the new stage component.</a>`);
 
-          actions.push(`
-            <p>I addapted ${changedSections.length} sections and the body to the new selection tool.</p>
-          `);
+          // types are now with a "-element" suffix
+          const changedElements = Array.from(doc.querySelectorAll(`[${Constants.TYPE_ATTR}]`));
+          changedElements.forEach((el: HTMLElement) => el.setAttribute(Constants.TYPE_ATTR, el.getAttribute(Constants.TYPE_ATTR) + '-element'));
+
+          actions.push(`Also changed the ${ changedElements.length } elements type to match the new version of Silex.`);
         }
         resolve(actions);
       });

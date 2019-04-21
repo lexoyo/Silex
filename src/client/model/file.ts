@@ -173,10 +173,11 @@ export class File {
     this.model.head.updateFromDom();
 
     // restore event listeners
+    console.log('move this into an appropriate place')
     this.view.stage = new Stage(this.iFrameElement_, this.iFrameElement_.contentWindow.document.querySelectorAll(`[${Constants.ELEMENT_ID_ATTR_NAME}]`), {
       isSelectable: (el => !el.classList.contains(Constants.PREVENT_SELECTABLE_CLASS_NAME)),
       isDraggable: (el => !el.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME)),
-      isDropZone: ((el) => !el.classList.contains(Constants.PREVENT_DROPPABLE_CLASS_NAME)),
+      isDropZone: ((el) => !el.classList.contains(Constants.PREVENT_DROPPABLE_CLASS_NAME) && el.classList.contains(Constants.TYPE_CONTAINER)),
       isResizeable: ((el) => {
         return el.classList.contains(Constants.PREVENT_RESIZABLE_CLASS_NAME) ? false : ({
           top: !el.classList.contains(Constants.PREVENT_RESIZABLE_TOP_CLASS_NAME),
@@ -229,15 +230,17 @@ export class File {
       },
       onEdit: selectables => {
         // TextEditorController
-        console.log('onEdit', selectables, this.model.element.getType(selectables[0].el));
         if(selectables.length > 1) {
           // open properties
         }
         else if(selectables.length === 1) {
-          switch(this.model.element.getType(selectables[0].el)) {
+          const element = selectables[0].el;
+          console.log('onEdit 1 element', selectables, this.model.element.getType(element));
+          switch(this.model.element.getType(element)) {
             case Constants.TYPE_TEXT:
-              console.log('edit text xxx');
+              console.log('edit text', element);
               window['silex'].controller.editMenuController.editElement();
+              this.view.stage.catchingEvents = false;
               break;
             case Constants.TYPE_CONTAINER:
             case Constants.TYPE_SECTION:
@@ -246,7 +249,7 @@ export class File {
             case Constants.TYPE_TEXT:
             case Constants.TYPE_HTML:
             case Constants.TYPE_ATTR:
-              console.error('edition of type', this.model.element.getType(selectables[0].el), 'todo')
+              console.error('edition of type', this.model.element.getType(element), 'todo')
               break;
           }
         }
@@ -254,6 +257,7 @@ export class File {
       onEditEnd: () => {
         // TextEditorController
         console.log('onEditEnd to do');
+        this.view.stage.catchingEvents = true;
       },
       onSelect: change => this.updateView(),
       onResize: change => this.updateView(),

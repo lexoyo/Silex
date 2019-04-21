@@ -123,7 +123,7 @@ export class SilexElement {
     if (!element || !element.classList) {
       return false;
     }
-    return element.classList.contains(Constants.TYPE_SECTION + '-element');
+    return element.classList.contains(Constants.TYPE_SECTION);
   }
 
   /**
@@ -669,7 +669,7 @@ export class SilexElement {
         element, this.model.file.getContentDocument());
 
     // add css class for Silex styles
-    element.classList.add(type + '-element');
+    element.classList.add(type);
 
     // return the element
     return element;

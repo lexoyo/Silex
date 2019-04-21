@@ -105,6 +105,9 @@ export class TextFormatBar {
    * stop edit, destroy wysihtml object and reset everything
    */
   stopEditing() {
+    console.log('move this into an appropriate place')
+    if(window['silex'].view.stage && window['silex'].view.stage.getEditMode() === true) window['silex'].view.stage.setEditMode(false);
+
     if (this.wysihtmlEditor) {
       const doc = this.model.file.getContentDocument();
       const win = this.model.file.getContentWindow();
@@ -219,11 +222,9 @@ export class TextFormatBar {
         // handle the focus
         doc.addEventListener('keydown', this.onKeyPressedBinded);
         win.addEventListener('scroll', this.onScrollBinded);
-        this.currentTextBox.onclick = (e) => {
-          if ((e.target as HTMLElement) === this.currentTextBox) {
-            this.stopEditing();
-          }
-        };
+        this.wysihtmlEditor.on('blur', (e) => {
+          this.stopEditing();
+        });
         this.wysihtmlEditor.on('load', () => {
           this.wysihtmlEditor.focus(false);
           setTimeout(() => {
