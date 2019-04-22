@@ -110,7 +110,7 @@ export class Page {
     this.view.pageTool.redraw(selectedElements, pages, currentPage);
     this.view.propertyTool.redraw(selectedElements, pages, currentPage);
     this.view.textFormatBar.redraw(selectedElements, pages, currentPage);
-    // this.view.stage.redraw(selectedElements, pages, currentPage);
+    this.view.stageWrapper.redraw();
   }
 
   /**

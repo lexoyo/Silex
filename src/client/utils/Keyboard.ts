@@ -35,7 +35,8 @@ export class Keyboard {
     doc.addEventListener('keydown', (e) => this.handleKeyDown(e));
   }
 
-  addShortcut(s: Shortcut, cbk: (p1: Event) => any) {
+  addShortcut(s: Shortcut, cbk: (p1: Event) => void) {
+    console.log('addShortcut', s)
     const key = s.key.toLowerCase();
     if (!cbk || !key) {
       throw new Error('Can not add shortcut, callback and key are required');
@@ -47,38 +48,43 @@ export class Keyboard {
   }
 
   handleKeyDown(e) {
-    const shortcuts = this.getShortcutsFromEvent(e);
-    if (shortcuts.length > 0 &&
-        // not while in a modal alert
-        !SilexNotification.isActive) {
-      shortcuts.forEach((shortcut) => {
-        if (!e.defaultPrevented) {
+    console.log('handleKeyDown', e.key)
+    if(e.defaultPrevented) {
+      console.warn('event prevented, do not call shortcut callback');
+    } else {
+      const shortcuts = this.getShortcutsFromEvent(e);
+      console.log('found', shortcuts, SilexNotification.isActive);
+      if (shortcuts.length > 0 &&
+          // not while in a modal alert
+          !SilexNotification.isActive) {
+        console.log('found shortcuts', shortcuts)
+        shortcuts.forEach((shortcut) => {
           shortcut.cbk(e);
-        } else {
-          console.log('event prevented, do not call shortcut callback');
-        }
-      });
-      e.preventDefault();
+        });
+        e.preventDefault();
+      }
     }
   }
 
   getShortcutsFromEvent(e): ShortcutItem[] {
     const key = e.key.toLowerCase();
+    console.log('getShortcutsFromEvent', e.key, this.shortcuts)
     if (!this.shortcuts.has(key)) {
       return [];
     }
     const shortcuts = this.shortcuts.get(key);
     return shortcuts.filter((shortcut) => {
+      console.log('getShortcutsFromEvent filter', shortcuts, !!(shortcut.s.shiftKey) === !!(e.shiftKey), !!(shortcut.s.altKey) === !!(e.altKey), !!(shortcut.s.ctrlKey) === !!(e.ctrlKey), shortcut.s.input !== false, !Keyboard.isInput((e.target as HTMLElement)));
       return (
         // accept all modifiers if modifiers is set to false
-        shortcut.s.modifiers === false ||
+        shortcut.s.modifiers === false || (
         // otherwise check the modifiers
-        !!shortcut.s.shiftKey === e.shiftKey &&
-            !!shortcut.s.altKey === e.altKey &&
-            !!shortcut.s.ctrlKey === e.ctrlKey) &&
-      (
-      // not when in an input field
-      shortcut.s.input !== false || !Keyboard.isInput((e.target as HTMLElement)));
+        !!(shortcut.s.shiftKey) === !!(e.shiftKey) &&
+        !!(shortcut.s.altKey) === !!(e.altKey) &&
+        !!(shortcut.s.ctrlKey) === !!(e.ctrlKey)) &&
+        // not when in an input field
+        (shortcut.s.input !== false || !Keyboard.isInput(e.target as HTMLElement))
+      );
     });
   }
 }

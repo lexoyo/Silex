@@ -1,3 +1,16 @@
+interface Dialog {
+  set(optoins: any);
+  close();
+  setContent(el: HTMLElement|DocumentFragment);
+}
+interface Alertify {
+  alert(title:string, message: string, cbk: () => void): Dialog;
+  prompt(title:string, message: string, value: string, ok: (evt: Event, value: string) => void, cancel: () => void): Dialog;
+  confirm(title:string, message: string, ok: () => void, cancel: () => void): Dialog;
+  notify(message: string, type: string, wait: number, cbk: () => void);
+}
+declare var alertify: Alertify;
+
 
 
 /**
@@ -40,6 +53,11 @@ export class SilexNotification {
    * flag to indicate wether a modal dialog is opened
    */
   static isActive: boolean = false;
+
+  /**
+   * flag to indicate wether a modal dialog is opened
+   */
+  static currentDialog: Dialog;
 
   /**
    * flag to indicate wether the window/tab has focus
@@ -97,74 +115,78 @@ export class SilexNotification {
     }
   }
 
-  /**
-   * core method for alert, prompt and confirm
-   */
-  static dialog(
-      dialogMethod:
-          (p1: string, p2: (...p1) => any, p3?: string, p4?: string,
-           p5?: string) => any,
-      message: string, cbk: (p1: boolean, p2: string) => any,
-      opt_okLabel?: string, opt_cancelLabel?: string,
-      opt_default?: string) {
-    SilexNotification.close();
-
-    alertify.labels = {'ok': opt_okLabel || 'ok', 'cancel': opt_cancelLabel || 'cancel'};
-
-    // set the flag while the modal dialog is opened
-    SilexNotification.isActive = true;
-    dialogMethod(message, function() {
-      // reset the flag
-      SilexNotification.isActive = false;
-
-      // call the callback
-      cbk.apply(this, arguments);
-    }, opt_default).set({
-      movable: false,
-      transition:'fade',
-    });
-  }
 
   /**
    * close (cancel) the current notification
    */
   static close() {
-    const btn: HTMLElement = document.querySelector('#alertify-cancel') ||
-        document.querySelector('#alertify-ok');
-    if (btn) {
-      btn.click();
-    }
+    if(SilexNotification.currentDialog) SilexNotification.currentDialog.close();
+  }
+
+  static setup(dialog: Dialog) {
+    SilexNotification.close();
+    SilexNotification.isActive = true;
+    SilexNotification.currentDialog = dialog;
+    return dialog.set({
+      movable: false,
+      transition: 'fade',
+    } as any);
   }
 
   /**
    * display a message
    */
-  static alert(
-      message: string, cbk: () => any, opt_okLabel?: string,
-      opt_cancelLabel?: string) {
-    SilexNotification.dialog(
-        alertify.alert, message, cbk, opt_okLabel, opt_cancelLabel);
+  static alert(message: string, cbk: () => any, label: string = 'ok') {
+    const title = ''; // todo: provide a title
+    SilexNotification.setup(alertify.alert(title, message, () => {
+      SilexNotification.isActive = false;
+      SilexNotification.currentDialog = null;
+      cbk();
+    }).set({
+      label,
+    } as any));
   }
 
   /**
    * ask for a text
    */
-  static prompt(
-      message: string, text: string,
-      cbk: (p1: boolean, p2: string) => any,
-      opt_okLabel?: string, opt_cancelLabel?: string) {
-    SilexNotification.dialog(
-        alertify.prompt, message, cbk, opt_okLabel, opt_cancelLabel, text);
+  static prompt(message: string, text: string, cbk: (p1: boolean, p2: string) => any, ok: string = 'ok', cancel: string = 'cancel') {
+    const title = ''; // todo: provide a title
+    SilexNotification.setup(alertify.prompt(title, message, text, (evt, value) => {
+      SilexNotification.isActive = false;
+      SilexNotification.currentDialog = null;
+      cbk(true, value);
+    }, () => {
+      SilexNotification.isActive = false;
+      SilexNotification.currentDialog = null;
+      cbk(false, null);
+    }).set({
+      label: {
+        ok,
+        cancel,
+      },
+    } as any));
   }
 
   /**
    * ask for confirmation
    */
-  static confirm(
-      message: string, cbk: (p1: boolean) => any,
-      opt_okLabel?: string, opt_cancelLabel?: string) {
-    SilexNotification.dialog(
-        alertify.confirm, message, cbk, opt_okLabel, opt_cancelLabel);
+  static confirm(message: string, cbk: (p1: boolean) => any, ok: string = 'ok', cancel: string = 'cancel') {
+    const title = ''; // todo: provide a title
+    SilexNotification.setup(alertify.confirm(title, message, () => {
+      SilexNotification.isActive = false;
+      SilexNotification.currentDialog = null;
+      cbk(true);
+    }, () => {
+      SilexNotification.isActive = false;
+      SilexNotification.currentDialog = null;
+      cbk(false);
+    }).set({
+      label: {
+        ok,
+        cancel,
+      },
+    } as any));
   }
 
   /**
@@ -172,9 +194,8 @@ export class SilexNotification {
    */
   static notifySuccess(message: string) {
     console.log(message);
-    alertify.set({'delay': SilexNotification.NOTIFICATION_DURATION_MS});
     SilexNotification.nativeNotification(message, SilexNotification.SUCCESS_ICON);
-    alertify.success(message);
+    alertify.notify(message, 'success', SilexNotification.NOTIFICATION_DURATION_MS, () => {});
   }
 
   /**
@@ -182,53 +203,51 @@ export class SilexNotification {
    */
   static notifyError(message: string) {
     console.error(message);
-    alertify.set({'delay': SilexNotification.NOTIFICATION_DURATION_MS});
     SilexNotification.nativeNotification(message, SilexNotification.ERROR_ICON);
-    alertify.error(message);
+    alertify.notify(message, 'error', SilexNotification.NOTIFICATION_DURATION_MS, () => {});
   }
 
   /**
    * notify the user with success formatting
    */
   static notifyInfo(message: string) {
-    alertify.set({'delay': SilexNotification.NOTIFICATION_DURATION_MS});
     SilexNotification.nativeNotification(message, SilexNotification.INFO_ICON);
-    alertify.log(message);
+    alertify.notify(message, 'notify', SilexNotification.NOTIFICATION_DURATION_MS, () => {});
   }
 
   /**
    * change the text of the current notification
    */
-  static setText(message: string) {
-    document.querySelector('.alertify-message').innerHTML = message;
+  static setContent(el: HTMLElement|DocumentFragment) {
+    if(SilexNotification.currentDialog) {
+      SilexNotification.currentDialog.setContent(el);
+    }
   }
 
   /**
-   * @return element which holds the text of the current notification
+   * change the text of the current notification
    */
-  static getTextElement(): HTMLElement {
-    return document.querySelector('.alertify-message');
-  }
-
-  /**
-   * @return element which holds the text field of the current notification
-   */
-  static getFormBody(): HTMLElement {
-    return document.querySelector('.alertify-text-wrapper');
+  static setText(text: string) {
+    if(SilexNotification.currentDialog) {
+      const el = document.createDocumentFragment();
+      el.append(`<p>${text}</p>`);
+      SilexNotification.currentDialog.setContent(el);
+    }
   }
 
   /**
    * @return element which holds the buttons of the current notification
    */
-  static getFormButtons(): HTMLElement {
-    return document.querySelector('.alertify-buttons');
+  static addButton(el: HTMLElement) {
+    const container = document.querySelector('.ajs-buttons');
+    container.insertBefore(el, container.childNodes[0]);
   }
 
   /**
    * add an HTML panel with info of type "while you wait, here is an info"
    */
   static setInfoPanel(element: HTMLElement) {
-    let container = document.querySelector('.alertify-inner');
+    let container = document.querySelector('.ajs-content');
     let infoPanel = container.querySelector('.silex-info-panel') as HTMLElement;
     if (infoPanel === null) {
       infoPanel = document.createElement('DIV');

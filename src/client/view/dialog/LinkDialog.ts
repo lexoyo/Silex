@@ -31,11 +31,7 @@ const DEFAULT_LINK_DATA = {
  * the LinkDialog class
  */
 export class LinkDialog {
-  model: any;
-
-  constructor(model) {
-    this.model = model;
-  }
+  constructor(private model) {}
 
   open(
       linkDataArg: LinkData, pageNames: string[],
@@ -86,31 +82,30 @@ export class LinkDialog {
         });
 
     // add a remove link button
-    const dialogButtons = SilexNotification.getFormButtons();
     const fragmentButtons = document.createElement('fragment');
     fragmentButtons.innerHTML = `
-              <button class="alertify-button alertify-button-cancel alertify-button-remove">remove link</button>
-            `;
-    dialogButtons.insertBefore(fragmentButtons, dialogButtons.childNodes[0]);
-    (dialogButtons.querySelector('.alertify-button-remove') as HTMLElement).onclick = (e) => {
+      <button class="alertify-button alertify-button-cancel alertify-button-remove">remove link</button>
+    `;
+    (fragmentButtons.querySelector('.alertify-button-remove') as HTMLElement).onclick = (e) => {
       SilexNotification.close();
       cbk(null);
     };
+    SilexNotification.addButton(fragmentButtons);
 
     // add info about the link
-    const dialogBody = SilexNotification.getFormBody();
-    dialogBody.innerHTML = this.getDialogHtml(
-        {isExternal: isExternal, linkData: linkData, pageNames: pageNames});
+    const dialogBody = document.createDocumentFragment();
+    dialogBody.append(this.getDialogHtml({isExternal: isExternal, linkData: linkData, pageNames: pageNames}));
     Array.from(dialogBody.querySelectorAll('.link-editor-tab-label'))
-        .forEach((el: HTMLElement) => {
-          el.onclick = (_) => {
-            Array
-                .from(dialogBody.querySelectorAll(
-                    '.link-editor-tab-label.checked'))
-                .forEach((selected) => selected.classList.remove('checked'));
-            el.classList.add('checked');
-          };
-        });
+    .forEach((el: HTMLElement) => {
+      el.onclick = (_) => {
+      Array
+      .from(dialogBody.querySelectorAll(
+        '.link-editor-tab-label.checked'))
+        .forEach((selected) => selected.classList.remove('checked'));
+        el.classList.add('checked');
+      };
+    });
+    SilexNotification.setContent(dialogBody);
   }
 
   getDialogHtml({isExternal, linkData, pageNames}) {

@@ -17,6 +17,10 @@ export class StageWrapper {
    */
   constructor(protected element: HTMLElement, protected model: Model, protected controller: Controller) {}
 
+  redraw() {
+    if(!this.stage) return;
+    this.stage.redraw();
+  }
   addElement(element: HTMLElement) {
     if(!this.stage) return;
     this.stage.addElement(element);

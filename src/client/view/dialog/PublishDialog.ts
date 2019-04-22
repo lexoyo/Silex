@@ -20,19 +20,15 @@ import { SilexTasks } from '../../service/silex-tasks';
 import { Model, Provider, VHost, View, PublicationOptions } from '../../types';
 import { SilexNotification } from '../../utils/notification';
 import { TipOfTheDay } from '../../view/tip-of-the-day';
+import { getUiElements } from '../UiElements';
 
 /**
  * the PublishDialog class
  */
 export class PublishDialog {
-  // store the params
-  model: any;
-  view: any;
   service: SilexTasks;
 
-  constructor(model: Model, view: View) {
-    this.model = model;
-    this.view = view;
+  constructor(private model: Model, private view: View) {
     this.service = SilexTasks.getInstance();
   }
 
@@ -41,10 +37,10 @@ export class PublishDialog {
    */
   loading(on: boolean) {
     if (on) {
-      this.view.stage.element.classList.add(
+      getUiElements().stage.classList.add(
           File.LOADING_LIGHT_CSS_CLASS);
     } else {
-      this.view.stage.element.classList.remove(
+      getUiElements().stage.classList.remove(
           File.LOADING_LIGHT_CSS_CLASS);
     }
   }
@@ -54,35 +50,35 @@ export class PublishDialog {
    */
   open(): Promise<any> {
     return (new Promise((resolve, reject) => {
-             this.loading(true);
-             this.service.hosting((hosting) => {
-               this.loading(false);
-               const providerName = this.model.head.getHostingProvider();
-               const publicationPath = this.model.head.getPublicationPath();
-               if (providerName && publicationPath) {
-                 const provider: Provider = hosting['providers'].find(
-                     (p) => p['name'] === providerName);
-                 const providerDisplayName = provider ?
-                     provider['displayName'] || provider['name'] :
-                     publicationPath.service;
-                 SilexNotification.confirm(
-                     `I am about to publish your webiste to <strong>${
-                         providerDisplayName}</strong>, in the folder ${
-                         publicationPath.path}.`,
-                     (ok) => {
-                       resolve(this.doOpen(ok, hosting, providerName));
-                     },
-                     'Continue', 'Edit publish settings');
-               } else {
-                 // no publish settings
-                 resolve(this.doOpen(false, hosting, providerName));
-               }
-             }, (msg) => reject(msg));
-           }))
-        .catch((msg) => {
-          this.loading(false);
-          throw msg;
-        });
+      this.loading(true);
+      this.service.hosting((hosting) => {
+        this.loading(false);
+        const providerName = this.model.head.getHostingProvider();
+        const publicationPath = this.model.head.getPublicationPath();
+        if (providerName && publicationPath) {
+          const provider: Provider = hosting['providers'].find(
+              (p) => p['name'] === providerName);
+          const providerDisplayName = provider ?
+              provider['displayName'] || provider['name'] :
+              publicationPath.service;
+          SilexNotification.confirm(
+              `I am about to publish your webiste to <strong>${
+                  providerDisplayName}</strong>, in the folder ${
+                  publicationPath.path}.`,
+              (ok) => {
+                resolve(this.doOpen(ok, hosting, providerName));
+              },
+              'Continue', 'Edit publish settings');
+        } else {
+          // no publish settings
+          resolve(this.doOpen(false, hosting, providerName));
+        }
+      }, (msg) => reject(msg));
+    }))
+    .catch((msg) => {
+      this.loading(false);
+      throw msg;
+    });
   }
 
   doOpen(usePredifinedSettings, hosting, providerName) {
@@ -114,25 +110,26 @@ export class PublishDialog {
         </a>
       `;
       SilexNotification.prompt(
-          'Choose the hosting provider you love! &nbsp; ' + helpBtnStr,
-          'unused', (ok) => {
-            if (ok) {
-              const idx = selectEl.selectedIndex;
-              const provider = providers[idx];
-              resolve(this.selectProviderFolder(provider));
-            } else {
-              resolve(null);
-            }
-          }, 'next', 'cancel');
-      const body = SilexNotification.getFormBody();
-      body.innerHTML = `
-    <select class="providers">
-      ${
-          providers.map(
-              (p) => `<option value="${p.name}">${p.displayName}</option>`)}
-    </select>
-    <br />
-  `;
+        'Choose the hosting provider you love! &nbsp; ' + helpBtnStr,
+        'unused', (ok) => {
+          if (ok) {
+            const idx = selectEl.selectedIndex;
+            const provider = providers[idx];
+            resolve(this.selectProviderFolder(provider));
+          } else {
+            resolve(null);
+          }
+        }, 'next', 'cancel');
+      const body = document.createDocumentFragment();
+      body.append(`
+        <select class="providers">
+          ${
+              providers.map(
+                  (p) => `<option value="${p.name}">${p.displayName}</option>`)}
+        </select>
+        <br />
+      `);
+      SilexNotification.setContent(body);
       const selectEl = body.querySelector('.providers') as HTMLSelectElement;
       if (providerName) {
         selectEl.value = providerName;
@@ -165,7 +162,7 @@ export class PublishDialog {
         this.loading(true);
         this.service.authorize(provider, (loginUrl) => {
           this.loading(false);
-          SilexNotification.alert(
+          SilexNotification.confirm(
               `Please&nbsp;
           <a href="${loginUrl}" target="_blank">
             click here and login to ${provider['displayName']}.
@@ -210,15 +207,16 @@ export class PublishDialog {
                     resolve(this.selectDomain(provider, vhost));
                   }
                 }, 'next', 'cancel');
-            const body = SilexNotification.getFormBody();
-            body.innerHTML = `
+            const body = document.createDocumentFragment();
+            body.append(`
               <select class="vhosts">
                 ${
                 vhosts.map(
                     (v) => `<option value="${v.name}">${v.name}</option>`)}
               </select>
               <br />
-            `;
+            `);
+            SilexNotification.setContent(body);
             const selectEl = body.querySelector('.vhosts') as HTMLSelectElement;
             const publicationPath = this.model.head.getPublicationPath();
             if (publicationPath) {
