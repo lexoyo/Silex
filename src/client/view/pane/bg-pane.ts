@@ -55,7 +55,7 @@ export class BgPane extends PaneBase {
   currentPageName: any;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
-    // call super
+
     super(element, model, controller);
 
     // init the component
@@ -144,7 +144,7 @@ export class BgPane extends PaneBase {
     }
     this.iAmRedrawing = true;
 
-    // call super
+
     super.redraw( selectedElements, pageNames, currentPageName);
     this.selectedElements = selectedElements;
     this.pageNames = pageNames;

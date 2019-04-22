@@ -24,7 +24,7 @@ import {ControllerBase} from './controller-base';
  */
 export class PropertyToolController extends ControllerBase {
   constructor(model: Model, view: View) {
-    // call super
+
 super(model, view);
   }
 

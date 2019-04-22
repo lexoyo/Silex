@@ -366,8 +366,7 @@ export class Component {
             componentData['templateName'], {
               'onChange': (newData, html) => {
                 // undo checkpoint
-                this.view.settingsDialog.controller.settingsDialogController
-                    .undoCheckPoint();
+                this.view.settingsDialog.controller.settingsDialogController.undoCheckPoint();
 
                 // remove the editable elements temporarily
                 const tempElements = this.saveEditableChildren(element);
@@ -411,40 +410,35 @@ export class Component {
     const promise = this.view.fileExplorer.openFile();
 
     // add tracking and undo/redo checkpoint
-    this.view.settingsDialog.controller.settingsDialogController.track(
-        promise, 'prodotype.browse');
-    this.view.settingsDialog.controller.settingsDialogController.undoredo(
-        promise);
+    this.view.settingsDialog.controller.settingsDialogController.track(promise, 'prodotype.browse');
+    this.view.settingsDialog.controller.settingsDialogController.undoredo(promise);
 
     // handle the result
     promise
-        .then((fileInfo: FileInfo) => {
-          if (fileInfo) {
-            cbk([{
-              'url': fileInfo.absPath,
-              'modified': fileInfo.modified,
-              'name': fileInfo.name,
-              'size': fileInfo.size,
-              'mime': fileInfo.mime,
-              'path': '',
-              'absPath': '',
-              'folder': '',
-              'service': '',
-              'isDir': true,
-            }]);
-          }
-        })
-        .catch((error) => {
-          SilexNotification.notifyError(
-              'Error: I could not select the file. <br /><br />' +
-              (error.message || ''));
-        });
+    .then((fileInfo: FileInfo) => {
+      if (fileInfo) {
+        cbk([{
+          'url': fileInfo.absPath,
+          'modified': fileInfo.modified,
+          'name': fileInfo.name,
+          'size': fileInfo.size,
+          'mime': fileInfo.mime,
+          'path': '',
+          'absPath': '',
+          'folder': '',
+          'service': '',
+          'isDir': true,
+        }]);
+      }
+    })
+    .catch((error) => {
+      SilexNotification.notifyError('Error: I could not select the file. <br /><br />' + (error.message || ''));
+    });
   }
 
   removeStyle(className) {
     // undo checkpoint
-    this.view.settingsDialog.controller.settingsDialogController
-        .undoCheckPoint();
+    this.view.settingsDialog.controller.settingsDialogController.undoCheckPoint();
 
     // remove prodotype data from json object
     this.model.property.setStyleData(className);
@@ -478,14 +472,14 @@ export class Component {
     this.prodotypeStyle.edit(
         pseudoClassData,
         [{displayName: '', name: '', templateName: ''}]
-            .concat(this.model.property.getFonts()
-            .map((font) => {
-              return {
-                displayName: font.family,
-                name: font.family,
-                templateName: ''
-              };
-            })
+          .concat(this.model.property.getFonts()
+          .map((font) => {
+            return {
+              displayName: font.family,
+              name: font.family,
+              templateName: ''
+            };
+          })
         ),
         'text', {
           'onChange': (newData, html) => this.styleChanged(className, pseudoClass, visibility, newData),
@@ -496,14 +490,12 @@ export class Component {
   /**
    * save an empty style or reset a style
    */
-  initStyle(
-      displayName: string, className: StyleName, opt_data?: StyleData) {
+  initStyle(displayName: string, className: StyleName, opt_data?: StyleData) {
     // render all pseudo classes in all visibility object
-    this.getPseudoClassData(
-            opt_data || ({'styles': {'desktop': {'normal': {}}}, 'templateName': ''} as StyleData))
-        .forEach((pseudoClassData) => {
-          this.styleChanged(className, pseudoClassData['pseudoClass'], pseudoClassData['visibility'], pseudoClassData['data'], displayName);
-        });
+    this.getPseudoClassData(opt_data || ({'styles': {'desktop': {'normal': {}}}, 'templateName': ''} as StyleData))
+    .forEach((pseudoClassData) => {
+      this.styleChanged(className, pseudoClassData['pseudoClass'], pseudoClassData['visibility'], pseudoClassData['data'], displayName);
+    });
     this.updateDepenedencies(Constants.STYLE_TYPE);
   }
 
@@ -511,38 +503,32 @@ export class Component {
    * build an array of all the data we provide to Prodotype for the "text"
    * template
    */
-  getPseudoClassData(styleData: StyleData):
-      {visibility: Visibility,
-       pseudoClass: PseudoClass,
-       data: PseudoClassData}[] {
+  getPseudoClassData(styleData: StyleData): {visibility: Visibility, pseudoClass: PseudoClass, data: PseudoClassData}[] {
     // return all pseudo classes in all visibility object
-    return
-        // flatten
-
-        // build an object for each pseudoClass
-
-        // build an object for each existing visibility
-        Constants.STYLE_VISIBILITY
-            .map((visibility) => {
-              return {
-                'visibility': visibility,
-                'data': styleData['styles'][visibility]
-              };
-            })
-            .filter((obj) => !!obj['data'])
-            .map((vData) => {
-              const arrayOfPCData = [];
-              for (let pcName in vData.data) {
-                arrayOfPCData.push({
-                  'visibility': vData['visibility'],
-                  'pseudoClass': pcName,
-                  /* unused, the data is in data */
-                  'data': vData.data[pcName]
-                });
-              }
-              return arrayOfPCData;
-            })
-            .reduce((acc, val) => acc.concat(val), []);
+    // flatten
+    // build an object for each pseudoClass
+    // build an object for each existing visibility
+    return Constants.STYLE_VISIBILITY
+    .map((visibility) => {
+      return {
+        'visibility': visibility,
+        'data': styleData['styles'][visibility]
+      };
+    })
+    .filter((obj) => !!obj['data'])
+    .map((vData) => {
+      const arrayOfPCData = [];
+      for (let pcName in vData.data) {
+        arrayOfPCData.push({
+          'visibility': vData['visibility'],
+          'pseudoClass': pcName,
+          /* unused, the data is in data */
+          'data': vData.data[pcName]
+        });
+      }
+      return arrayOfPCData;
+    })
+    .reduce((acc, val) => acc.concat(val), []);
   }
 
   /**
@@ -578,8 +564,7 @@ export class Component {
     newData['pseudoClass'] = pseudoClass;
 
     // undo checkpoint
-    this.view.settingsDialog.controller.settingsDialogController
-        .undoCheckPoint();
+    this.view.settingsDialog.controller.settingsDialogController.undoCheckPoint();
 
     // store the component's data for later edition
     const styleData = (this.model.property.getStyleData(className) || {

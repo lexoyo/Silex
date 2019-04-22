@@ -70,7 +70,7 @@ export class PagePane extends PaneBase {
   selectedElements: HTMLElement[] = null;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
-    // call super
+
     super(element, model, controller);
 
     // init the component
@@ -211,7 +211,7 @@ export class PagePane extends PaneBase {
     }
     this.iAmRedrawing = true;
 
-    // call super
+
     super.redraw( selectedElements, pageNames, currentPageName);
     this.selectedElements = selectedElements;
 

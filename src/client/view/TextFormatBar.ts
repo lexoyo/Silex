@@ -31,9 +31,6 @@ export class TextFormatBar {
   tracker: any;
 
   // store the params
-  element: any;
-  model: any;
-  controller: any;
   selectedElements: HTMLElement[] = null;
   pageNames: string[] = null;
   currentPageName: string = null;
@@ -50,16 +47,13 @@ export class TextFormatBar {
    *
    * @param element   container to render the UI
    * @param model  model class which holds
-   *                                  the model instances - views use it for
+   * the model instances - views use it for
    * read operation only
    * @param controller  structure which holds
-   *                                  the controller instances
+   * the controller instances
    */
-  constructor(element: HTMLElement, model: Model, controller: Controller) {
+  constructor(private element: HTMLElement, private model: Model, private controller: Controller) {
     this.tracker = Tracker.getInstance();
-    this.element = element;
-    this.model = model;
-    this.controller = controller;
     this.linkDialog = new LinkDialog(this.model);
     this.toolbar = this.element.querySelector('#wysihtml5-toolbar');
     this.onKeyPressedBinded = this.onKeyPressed.bind(this);

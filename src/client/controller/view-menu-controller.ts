@@ -25,7 +25,7 @@ import {ControllerBase} from './controller-base';
  */
 export class ViewMenuController extends ControllerBase {
   constructor(model: Model, view: View) {
-    // call super
+
 super(model, view);
   }
 

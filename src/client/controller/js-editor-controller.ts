@@ -23,7 +23,7 @@ import {ControllerBase} from './controller-base';
  */
 export class JsEditorController extends ControllerBase {
   constructor(model: Model, view: View) {
-    // call super
+
 super(model, view);
   }
 

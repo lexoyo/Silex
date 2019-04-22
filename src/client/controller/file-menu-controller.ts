@@ -28,7 +28,7 @@ import { SilexTasks } from '../service/silex-tasks';
  */
 export class FileMenuController extends ControllerBase {
   constructor(model: Model, view: View) {
-    // call super
+
     super(model, view);
   }
 

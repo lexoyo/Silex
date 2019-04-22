@@ -42,7 +42,7 @@ export class StylePane extends PaneBase {
   ace: AceAjax.Editor;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
-    // call super
+
     super(element, model, controller);
 
     // init the component
@@ -97,7 +97,7 @@ export class StylePane extends PaneBase {
     }
     this.iAmRedrawing = true;
 
-    // call super
+
     super.redraw( selectedElements, pageNames, currentPageName);
 
     // css classes

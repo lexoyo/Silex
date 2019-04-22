@@ -25,28 +25,25 @@ import {FileExplorer} from '../view/dialog/file-explorer';
  * @param view  view class which holds the other views
  */
 export class SettingsDialogController extends ControllerBase {
+
   constructor(model: Model, view: View) {
-    // call super
-super(model, view);
+    super(model, view);
   }
 
   /**
    * track actions
    */
   track(promise: Promise<FileInfo>, trackActionName: string) {
-    this.tracker.trackAction(
-        'controller-events', 'request', trackActionName, 0);
+    this.tracker.trackAction('controller-events', 'request', trackActionName, 0);
     promise
-        .then((fileInfo) => {
-          this.tracker.trackAction(
-              'controller-events', 'success', trackActionName, 1);
-          return fileInfo;
-        })
-        .catch((error) => {
-          this.tracker.trackAction(
-              'controller-events', 'error', trackActionName, -1);
-          throw error;
-        });
+    .then((fileInfo) => {
+      this.tracker.trackAction('controller-events', 'success', trackActionName, 1);
+      return fileInfo;
+    })
+    .catch((error) => {
+      this.tracker.trackAction('controller-events', 'error', trackActionName, -1);
+      throw error;
+    });
   }
 
   /**

@@ -50,9 +50,7 @@ import { PropertyTool } from './view/property-tool';
 import { Splitter } from './view/splitter';
 import { TextFormatBar } from './view/TextFormatBar';
 import { Workspace } from './view/workspace';
-
-// import { Stage } from 'stage'; // this is not recognized by my IDE
-import { Stage } from '../../node_modules/stage/src/ts/index';
+import { StageWrapper } from './view/StageWrapper';
 
 /**
  * warning: if you change that type, also change the default value in LinkDialog
@@ -189,5 +187,5 @@ export interface View {
   dashboard: Dashboard;
   propSplitter: Splitter;
   workspace: Workspace;
-  stage: Stage;
+  stageWrapper: StageWrapper;
 };

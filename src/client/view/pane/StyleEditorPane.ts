@@ -51,10 +51,10 @@ export class StyleEditorPane extends PaneBase {
    *
    * @param element   container to render the UI
    * @param model  model class which holds
-   *                                  the model instances - views use it for
+   * the model instances - views use it for
    * read operation only
    * @param controller  structure which holds
-   *                                  the controller instances
+   * the controller instances
    */
   constructor(element: HTMLElement, model: Model, controller: Controller) {
     super(element, model, controller);

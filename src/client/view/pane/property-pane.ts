@@ -75,7 +75,7 @@ export class PropertyPane extends PaneBase {
   titleInput: HTMLInputElement;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
-    // call super
+
     super(element, model, controller);
 
     // init the component
@@ -206,7 +206,7 @@ export class PropertyPane extends PaneBase {
     }
     this.iAmRedrawing = true;
 
-    // call super
+
     super.redraw( selectedElements, pageNames, currentPageName);
 
     // not available for stage element

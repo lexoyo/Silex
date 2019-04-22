@@ -34,7 +34,7 @@ export class EditMenuController extends ControllerBase {
   undoredoInvalidationManager: InvalidationManager;
 
   constructor(model: Model, view: View) {
-    // call super
+
 super(model, view);
     this.undoredoInvalidationManager = new InvalidationManager(1000);
   }

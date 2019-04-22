@@ -172,8 +172,7 @@ export class File {
     // update the settings
     this.model.head.updateFromDom();
 
-    // restore event listeners
-    console.log('move this into an appropriate place')
+    // restore the stage
     this.view.stage = new Stage(this.iFrameElement_, this.iFrameElement_.contentWindow.document.querySelectorAll(`[${Constants.ELEMENT_ID_ATTR_NAME}]`), {
       isSelectable: (el => !el.classList.contains(Constants.PREVENT_SELECTABLE_CLASS_NAME)),
       isDraggable: (el => !el.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME)),
@@ -255,9 +254,9 @@ export class File {
         }
       },
       onEditEnd: () => {
-        // TextEditorController
-        console.log('onEditEnd to do');
+        console.log('onEditEnd');
         this.view.stage.catchingEvents = true;
+        this.view.stage.redraw();
       },
       onSelect: change => this.updateView(),
       onResize: change => this.updateView(),

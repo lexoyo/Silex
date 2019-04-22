@@ -63,7 +63,7 @@ export class BorderPane extends PaneBase {
   iAmRedrawing: boolean;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
-    // call super
+
     super(element, model, controller);
 
     // init the component
@@ -133,7 +133,7 @@ export class BorderPane extends PaneBase {
     }
     this.iAmRedrawing = true;
 
-    // call super
+
     super.redraw(selectedElements, pageNames, currentPageName);
 
     // border width, this builds a string like "0px 1px 2px 3px"

@@ -24,7 +24,7 @@ import {SilexNotification} from '../utils/notification';
  */
 export class PageToolController extends ControllerBase {
   constructor(model: Model, view: View) {
-    // call super
+
 super(model, view);
   }
 

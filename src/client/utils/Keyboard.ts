@@ -47,8 +47,6 @@ export class Keyboard {
   }
 
   handleKeyDown(e) {
-    const {target, shiftKey, ctrlKey, altKey, metaKey} = e;
-    const key = e.key.toLowerCase();
     const shortcuts = this.getShortcutsFromEvent(e);
     if (shortcuts.length > 0 &&
         // not while in a modal alert

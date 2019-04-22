@@ -62,6 +62,7 @@ import { Workspace } from './view/workspace';
 import { Stage } from '../../node_modules/stage/src/ts/index';
 
 import { getUiElements } from './view/UiElements';
+import { StageWrapper } from './view/StageWrapper';
 
 /**
  * Defines the entry point of Silex client application
@@ -139,7 +140,7 @@ export class App {
       dashboard: null,
       propSplitter: null,
       workspace: null,
-      stage: null,
+      stageWrapper: null,
     };
 
     // create all the components of Silex app
@@ -224,49 +225,49 @@ export class App {
     const uiElements = getUiElements();
 
     // Stage
-    const stage: Stage = null;
+    const stageWrapper = new StageWrapper(uiElements.stage, emptyModel, emptyController);
 
     // Menu
-    const menu: Menu = new Menu(uiElements.menu, emptyModel, emptyController);
+    const menu = new Menu(uiElements.menu, emptyModel, emptyController);
 
     // context menu
-    const contextMenu: ContextMenu = new ContextMenu(uiElements.contextMenu, emptyModel, emptyController);
+    const contextMenu = new ContextMenu(uiElements.contextMenu, emptyModel, emptyController);
 
     // bread crumbs
-    const breadCrumbs: BreadCrumbs = new BreadCrumbs(uiElements.breadCrumbs, emptyModel, emptyController);
+    const breadCrumbs = new BreadCrumbs(uiElements.breadCrumbs, emptyModel, emptyController);
 
     // PageTool
-    const pageTool: PageTool = new PageTool(uiElements.pageTool, emptyModel, emptyController);
+    const pageTool = new PageTool(uiElements.pageTool, emptyModel, emptyController);
 
     // HtmlEditor
-    const htmlEditor: HtmlEditor = new HtmlEditor(uiElements.htmlEditor, emptyModel, emptyController);
+    const htmlEditor = new HtmlEditor(uiElements.htmlEditor, emptyModel, emptyController);
 
     // CssEditor
-    const cssEditor: CssEditor = new CssEditor(uiElements.cssEditor, emptyModel, emptyController);
+    const cssEditor = new CssEditor(uiElements.cssEditor, emptyModel, emptyController);
 
     // JsEditor
-    const jsEditor: JsEditor = new JsEditor(uiElements.jsEditor, emptyModel, emptyController);
+    const jsEditor = new JsEditor(uiElements.jsEditor, emptyModel, emptyController);
 
     // SettingsDialog
-    const settingsDialog: SettingsDialog = new SettingsDialog(uiElements.settingsDialog, emptyModel, emptyController);
+    const settingsDialog = new SettingsDialog(uiElements.settingsDialog, emptyModel, emptyController);
 
     // Dashboard
-    const dashboard: Dashboard = new Dashboard(uiElements.dashboard, emptyModel, emptyController);
+    const dashboard = new Dashboard(uiElements.dashboard, emptyModel, emptyController);
 
     // FileExplorer
-    const fileExplorer: FileExplorer = new FileExplorer(uiElements.fileExplorer, emptyModel, emptyController);
+    const fileExplorer = new FileExplorer(uiElements.fileExplorer, emptyModel, emptyController);
 
     // PropertyTool
-    const propertyTool: PropertyTool = new PropertyTool(uiElements.propertyTool, emptyModel, emptyController);
+    const propertyTool = new PropertyTool(uiElements.propertyTool, emptyModel, emptyController);
 
     // TextFormatBar
-    const textFormatBar: TextFormatBar = new TextFormatBar(uiElements.textFormatBar, emptyModel, emptyController);
+    const textFormatBar = new TextFormatBar(uiElements.textFormatBar, emptyModel, emptyController);
 
     // workspace
-    const workspace: Workspace = new Workspace(uiElements.workspace, emptyModel, emptyController);
+    const workspace = new Workspace(uiElements.workspace, emptyModel, emptyController);
 
     // add splitters
-    const propSplitter: Splitter = new Splitter(uiElements.verticalSplitter, emptyModel, emptyController, () => workspace.resizeProperties());
+    const propSplitter = new Splitter(uiElements.verticalSplitter, emptyModel, emptyController, () => workspace.resizeProperties());
     propSplitter.addLeft(uiElements.contextMenu);
     propSplitter.addLeft(uiElements.breadCrumbs);
     propSplitter.addLeft(uiElements.stage.parentElement);
@@ -287,7 +288,7 @@ export class App {
     emptyView.dashboard = dashboard;
     emptyView.propSplitter = propSplitter;
     emptyView.workspace = workspace;
-    emptyView.stage = stage;
+    emptyView.stageWrapper = stageWrapper;
     emptyView.uiElements = uiElements;
 
     return emptyView;

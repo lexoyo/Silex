@@ -30,11 +30,6 @@ const PANE_CSS_CLASSES: string[] =
  * the Silex SettingsDialog class
  */
 export class SettingsDialog {
-  // store the params
-  element: any;
-  model: any;
-  controller: any;
-
   /**
    * store the mobile checkbox
    */
@@ -57,15 +52,12 @@ export class SettingsDialog {
   /**
    * @param element   container to render the UI
    * @param model  model class which holds
-   *                                  the model instances - views use it for
+   * the model instances - views use it for
    * read operation only
    * @param controller  structure which holds
-   *                                               the controller instances
+   * the controller instances
    */
-  constructor(element: HTMLElement, model: Model, controller: Controller) {
-    this.element = element;
-    this.model = model;
-    this.controller = controller;
+  constructor(private element: HTMLElement, private model: Model, private controller: Controller) {
     this.modalDialog = new ModalDialog({
       name:'Settings dialog',
       element: element,

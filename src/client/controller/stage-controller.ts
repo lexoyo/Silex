@@ -24,7 +24,7 @@ import { ControllerBase } from './controller-base';
  */
 export class StageController extends ControllerBase {
   constructor(model: Model, view: View) {
-    // call super
+
     super(model, view);
   }
 
@@ -73,29 +73,29 @@ export class StageController extends ControllerBase {
     this.undoCheckPoint();
   }
 
-  /**
-   * an element is dropped in a new container
-   * this will always occure when the user drops elements,
-   * even in the same container as before since we move the elements to the body
-   * while dragging (stage.js)
-   * @param container the container
-   * @param element the dropped element
-   */
-  newContainer(container: HTMLElement, element: HTMLElement) {
-    // initial positions
-    let elementPos = element.getBoundingClientRect();
-    let newContainerPos = container.getBoundingClientRect();
+  // /**
+  //  * an element is dropped in a new container
+  //  * this will always occure when the user drops elements,
+  //  * even in the same container as before since we move the elements to the body
+  //  * while dragging (stage.js)
+  //  * @param container the container
+  //  * @param element the dropped element
+  //  */
+  // newContainer(container: HTMLElement, element: HTMLElement) {
+  //   // initial positions
+  //   let elementPos = element.getBoundingClientRect();
+  //   let newContainerPos = container.getBoundingClientRect();
 
-    // move to the new container
-    element.parentElement.removeChild(element);
-    container.appendChild(element);
+  //   // move to the new container
+  //   element.parentElement.removeChild(element);
+  //   container.appendChild(element);
 
-    // restore position
-    this.styleChanged('left', Math.round(elementPos.left - newContainerPos.left) + 'px', [element], false);
-    this.styleChanged('top', Math.round(elementPos.top - newContainerPos.top) + 'px', [element], false);
+  //   // restore position
+  //   this.styleChanged('left', Math.round(elementPos.left - newContainerPos.left) + 'px', [element], false);
+  //   this.styleChanged('top', Math.round(elementPos.top - newContainerPos.top) + 'px', [element], false);
 
-    // check if a parent is visible only on some pages,
-    // then element should be visible everywhere
-    this.checkElementVisibility(element);
-  }
+  //   // check if a parent is visible only on some pages,
+  //   // then element should be visible everywhere
+  //   this.checkElementVisibility(element);
+  // }
 }

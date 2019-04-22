@@ -37,7 +37,7 @@ export class GeneralStylePane extends PaneBase {
   opacityInput: HTMLInputElement;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
-    // call super
+
     super(element, model, controller);
 
     // init the component
@@ -67,7 +67,7 @@ export class GeneralStylePane extends PaneBase {
     }
     this.iAmRedrawing = true;
 
-    // call super
+
     super.redraw( selectedElements, pageNames, currentPageName);
 
     // not available for stage element
