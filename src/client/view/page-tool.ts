@@ -25,10 +25,10 @@ import { InvalidationManager } from '../utils/invalidation-manager';
  *
  * @param element   container to render the UI
  * @param model  model class which holds
- *                                  the model instances - views use it for read
+  * the model instances - views use it for read
  * operation only
  * @param controller  structure which holds
- *                                  the controller instances
+ * the controller instances
  */
 export class PageTool {
   /**

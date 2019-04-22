@@ -30,6 +30,7 @@ import {InvalidationManager} from '../utils/invalidation-manager';
 import {SilexNotification} from '../utils/notification';
 import {FileExplorer} from '../view/dialog/file-explorer';
 import { getUiElements } from '../view/UiElements';
+import { LinkDialog } from '../view/dialog/LinkDialog';
 
 /**
  * base class for all UI controllers of the controller package
@@ -42,41 +43,46 @@ export class ControllerBase {
    * @see isDirty
    * @static because it is shared by all controllers
    */
-  static lastSaveUndoIdx: number = -1;
+  protected static lastSaveUndoIdx: number = -1;
 
   /**
    * array of the states of the website
    * @static because it is shared by all controllers
    */
-  static undoHistory: UndoItem[] = [];
+  protected static undoHistory: UndoItem[] = [];
 
   /**
    * array of the states of the website
    * @static because it is shared by all controllers
    */
-  static redoHistory: UndoItem[] = [];
+  protected static redoHistory: UndoItem[] = [];
 
   /**
    * @static because it is shared by all controllers
    */
-  static clipboard: ClipboardItem[] = null;
+  protected static clipboard: ClipboardItem[] = null;
 
   /**
    * flag to indicate that a getState ation is pending
    * will be 0 unless an undo check point is being created
    */
-  static getStatePending: number = 0;
+  protected static getStatePending: number = 0;
 
   /**
    * {silex.service.Tracker} tracker used to pull statistics on the user actions
    * @see     silex.service.Tracker
    */
-  tracker: Tracker;
+  protected tracker: Tracker;
 
   /**
    * invalidation mechanism
    */
-  undoCheckpointInvalidationManager: InvalidationManager;
+  private undoCheckpointInvalidationManager: InvalidationManager;
+
+  /**
+   * link editor
+   */
+  protected linkDialog: LinkDialog;
 
   /**
    * base class for all UI controllers of the controller package
@@ -90,6 +96,25 @@ export class ControllerBase {
     // catchall error tracker
     window.onerror = ((msg: string, url: string, line: number, colno, error) => this.tracker.trackOnError(msg, url, line));
     this.undoCheckpointInvalidationManager = new InvalidationManager(1000);
+
+    // init link editor
+    this.linkDialog = new LinkDialog(this.model);
+  }
+
+  /**
+   * track actions
+   */
+  track(promise: Promise<FileInfo>, trackActionName: string) {
+    this.tracker.trackAction('controller-events', 'request', trackActionName, 0);
+    promise
+    .then((fileInfo) => {
+      this.tracker.trackAction('controller-events', 'success', trackActionName, 1);
+      return fileInfo;
+    })
+    .catch((error) => {
+      this.tracker.trackAction('controller-events', 'error', trackActionName, -1);
+      throw error;
+    });
   }
 
   /**
@@ -99,6 +124,18 @@ export class ControllerBase {
   isDirty(): boolean {
     return ControllerBase.lastSaveUndoIdx !==
         ControllerBase.undoHistory.length - 1;
+  }
+
+  /**
+   * enable undo/redo
+   */
+  undoredo(promise: Promise<FileInfo>) {
+    promise.then((fileInfo) => {
+      if (fileInfo) {
+        this.undoCheckPoint();
+      }
+      return fileInfo;
+    });
   }
 
   /**
@@ -130,7 +167,7 @@ export class ControllerBase {
    * async operation to improve performance
    */
   getStateAsync(opt_cbk: (p1: UndoItem) => any) {
-    const scrollData = this.view.stage.getScroll();
+    const scrollData = this.view.stageWrapper.getScroll();
 
     this.model.file.getHtmlAsync((html) => {
       opt_cbk({
@@ -146,7 +183,7 @@ export class ControllerBase {
    * build a state object for undo/redo
    */
   getState(): UndoItem {
-    const scrollData = this.view.stage.getScroll();
+    const scrollData = this.view.stageWrapper.getScroll();
 
     return {
       html: this.model.file.getHtml(),
@@ -162,7 +199,7 @@ export class ControllerBase {
   restoreState(state: UndoItem) {
     this.model.file.setHtml(state.html, () => {
       this.model.page.setCurrentPage(state.page);
-      this.view.stage.setScroll({
+      this.view.stageWrapper.setScroll({
         x: state.scrollX,
         y: state.scrollY,
       });
@@ -277,9 +314,9 @@ export class ControllerBase {
         case 'height':
         case 'min-height':
           if(name === 'min-height') name = 'height';
-          const state = this.view.stage.getState(element);
+          const state = this.view.stageWrapper.getState(element);
           console.log('Set state');
-          this.view.stage.setState(element, {
+          this.view.stageWrapper.setState(element, {
             ...state,
             metrics: {
               ...state.metrics,

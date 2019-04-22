@@ -19,6 +19,7 @@ import {Model} from '../types';
 import {View} from '../types';
 
 import {ControllerBase} from './controller-base';
+import { getUiElements } from '../view/UiElements';
 
 /**
  * @param view  view class which holds the other views
@@ -36,14 +37,14 @@ super(model, view);
   dockPanel(dock: boolean) {
     if (dock) {
       document.body.classList.add('dock-editors');
-      this.view.propSplitter.addRight(this.view.cssEditor.element);
-      this.view.propSplitter.addRight(this.view.jsEditor.element);
-      this.view.propSplitter.addRight(this.view.htmlEditor.element);
+      this.view.propSplitter.addRight(getUiElements().cssEditor);
+      this.view.propSplitter.addRight(getUiElements().jsEditor);
+      this.view.propSplitter.addRight(getUiElements().htmlEditor);
     } else {
       document.body.classList.remove('dock-editors');
-      this.view.propSplitter.remove(this.view.cssEditor.element);
-      this.view.propSplitter.remove(this.view.jsEditor.element);
-      this.view.propSplitter.remove(this.view.htmlEditor.element);
+      this.view.propSplitter.remove(getUiElements().cssEditor);
+      this.view.propSplitter.remove(getUiElements().jsEditor);
+      this.view.propSplitter.remove(getUiElements().htmlEditor);
     }
   }
 }

@@ -25,10 +25,10 @@ import {Model} from '../types';
 /**
  * @param element   container to render the UI
  * @param model  model class which holds
- *                                  the model instances - views use it for read
+  * the model instances - views use it for read
  * operation only
  * @param controller  structure which holds
- *                                  the controller instances
+ * the controller instances
  */
 export class ContextMenu {
   /**
@@ -124,11 +124,12 @@ export class ContextMenu {
         this.element.querySelector('.down').classList.remove('off');
         this.element.querySelector('.bottom').classList.remove('off');
       }
-      if (ControllerBase.clipboard && ControllerBase.clipboard.length > 0) {
+      if (this.controller.contextMenuController.hasElementsToPaste()) {
         this.element.querySelector('.paste').classList.remove('off');
       } else {
         this.element.querySelector('.paste').classList.add('off');
       }
+      console.warn('todo: sticky elements UI (remove or implement')
       // if (this.model.dragSystem.getStickyElements()) {
       //   this.element.querySelector('.sticky-elements').classList.remove('off');
       // } else {

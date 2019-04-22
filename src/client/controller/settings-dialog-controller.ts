@@ -31,34 +31,6 @@ export class SettingsDialogController extends ControllerBase {
   }
 
   /**
-   * track actions
-   */
-  track(promise: Promise<FileInfo>, trackActionName: string) {
-    this.tracker.trackAction('controller-events', 'request', trackActionName, 0);
-    promise
-    .then((fileInfo) => {
-      this.tracker.trackAction('controller-events', 'success', trackActionName, 1);
-      return fileInfo;
-    })
-    .catch((error) => {
-      this.tracker.trackAction('controller-events', 'error', trackActionName, -1);
-      throw error;
-    });
-  }
-
-  /**
-   * enable undo/redo
-   */
-  undoredo(promise: Promise<FileInfo>) {
-    promise.then((fileInfo) => {
-      if (fileInfo) {
-        this.undoCheckPoint();
-      }
-      return fileInfo;
-    });
-  }
-
-  /**
    * the user clicked "browse" button in the publish settings panel
    */
   browsePublishPath(opt_cbk) {

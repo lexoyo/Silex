@@ -16,12 +16,8 @@
  */
 
 import { Prodotype, ProdotypeCompDef } from '../externs';
-import { FileInfo, LinkData, Model, View } from '../types';
-import { Dom } from '../utils/dom';
-import { LinkDialog } from '../view/dialog/LinkDialog';
+import { Model, View } from '../types';
 import { ComponentData, PseudoClass, PseudoClassData, SilexId, StyleData, StyleName, Visibility } from './Data';
-import { Property } from './property';
-import { SilexNotification } from '../utils/notification';
 import { Constants } from '../../Constants';
 
 /**
@@ -35,15 +31,12 @@ export class Component {
   componentEditorElement: HTMLElement = null;
   styleEditorElement: HTMLElement = null;
   readyCbkArr: ((p1: Object) => any)[] = [];
-  linkDialog: LinkDialog;
 
   /**
    * @param model  model class which holds the other models
    * @param view  view class which holds the other views
    */
-  constructor(public model: Model, public view: View) {
-    this.linkDialog = new LinkDialog(this.model);
-  }
+  constructor(public model: Model, public view: View) {}
 
   /**
    * load the Prodotype library
@@ -84,8 +77,7 @@ export class Component {
     const styleData =
         this.model.property.getStyleData(Constants.BODY_STYLE_CSS_CLASS);
     if (!styleData) {
-      this.initStyle(
-          Constants.BODY_STYLE_NAME, Constants.BODY_STYLE_CSS_CLASS, null);
+      this.initStyle(Constants.BODY_STYLE_NAME, Constants.BODY_STYLE_CSS_CLASS, null);
     }
 
     // make sure that body has the style
@@ -272,18 +264,12 @@ export class Component {
    * @param type, Constants.COMPONENT_TYPE or Constants.STYLE_TYPE
    */
   getProdotypeComponents(type: string): Array<ComponentData|StyleData> {
-    const className = type === Constants.COMPONENT_TYPE ?
-        Constants.COMPONENT_CLASS_NAME :
-        Constants.STYLE_CLASS_NAME;
-    const attrName = type === Constants.COMPONENT_TYPE ?
-        Constants.ELEMENT_ID_ATTR_NAME :
-        'data-style-id';
+    const className = type === Constants.COMPONENT_TYPE ? Constants.COMPONENT_CLASS_NAME : Constants.STYLE_CLASS_NAME;
+    const attrName = type === Constants.COMPONENT_TYPE ? Constants.ELEMENT_ID_ATTR_NAME : 'data-style-id';
     return Array.from(this.model.file.getContentDocument().querySelectorAll('.' + className))
     .map((el) => {
       const attr = el.getAttribute(attrName);
-      const data = type === Constants.COMPONENT_TYPE ?
-          this.model.property.getComponentData(attr) :
-          this.model.property.getStyleData(attr);
+      const data = type === Constants.COMPONENT_TYPE ? this.model.property.getComponentData(attr) : this.model.property.getStyleData(attr);
       return data;
     })
     .filter((data) => !!data);
@@ -352,94 +338,8 @@ export class Component {
     return fragment;
   }
 
-  /**
-   * @param element, the component to edit
-   */
-  editComponent(element: HTMLElement) {
-    if (this.isComponent(element)) {
-      const componentData =
-          this.model.property.getElementComponentData(element);
-      if (element && this.prodotypeComponent && componentData) {
-        this.prodotypeComponent.edit(
-            componentData,
-            this.getProdotypeComponents(Constants.COMPONENT_TYPE) as Array<ComponentData>,
-            componentData['templateName'], {
-              'onChange': (newData, html) => {
-                // undo checkpoint
-                this.view.settingsDialog.controller.settingsDialogController.undoCheckPoint();
-
-                // remove the editable elements temporarily
-                const tempElements = this.saveEditableChildren(element);
-
-                // store the component's data for later edition
-                this.model.property.setElementComponentData(element, newData);
-
-                // update the element with the new template
-                this.model.element.setInnerHtml(element, html);
-
-                // execute the scripts
-                this.executeScripts(element);
-
-                // put back the editable elements
-                element.appendChild(tempElements);
-              },
-              'onBrowse': (e, url, cbk) => this.onBrowse(e, url, cbk),
-              'onEditLink': (e, linkData, cbk) =>
-                  this.onEditLink(e, linkData, cbk)
-            });
-      }
-      this.componentEditorElement.classList.remove('hide-panel');
-    } else {
-      this.componentEditorElement.classList.add('hide-panel');
-      this.resetSelection(Constants.COMPONENT_TYPE);
-    }
-  }
-
-  onEditLink(e: Event, linkData: LinkData, cbk: (p1: LinkData) => any) {
-    e.preventDefault();
-    let pages = this.model.page.getPages();
-    this.linkDialog.open(linkData, pages, (linkData) => {
-      cbk(linkData);
-    });
-  }
-
-  onBrowse(e: Event, url: string, cbk: (p1: FileInfo[]) => any) {
-    e.preventDefault();
-
-    // browse with CE
-    const promise = this.view.fileExplorer.openFile();
-
-    // add tracking and undo/redo checkpoint
-    this.view.settingsDialog.controller.settingsDialogController.track(promise, 'prodotype.browse');
-    this.view.settingsDialog.controller.settingsDialogController.undoredo(promise);
-
-    // handle the result
-    promise
-    .then((fileInfo: FileInfo) => {
-      if (fileInfo) {
-        cbk([{
-          'url': fileInfo.absPath,
-          'modified': fileInfo.modified,
-          'name': fileInfo.name,
-          'size': fileInfo.size,
-          'mime': fileInfo.mime,
-          'path': '',
-          'absPath': '',
-          'folder': '',
-          'service': '',
-          'isDir': true,
-        }]);
-      }
-    })
-    .catch((error) => {
-      SilexNotification.notifyError('Error: I could not select the file. <br /><br />' + (error.message || ''));
-    });
-  }
 
   removeStyle(className) {
-    // undo checkpoint
-    this.view.settingsDialog.controller.settingsDialogController.undoCheckPoint();
-
     // remove prodotype data from json object
     this.model.property.setStyleData(className);
 
@@ -455,46 +355,18 @@ export class Component {
   }
 
   /**
-   * @param className, the css class to edit the style for
-   * @param pseudoClass, e.g. normal, :hover, ::first-letter
-   * @param visibility, e.g. mobile only, desktop and mobile...
-   */
-  editStyle(
-      className: StyleName, pseudoClass: PseudoClass, visibility: Visibility) {
-    const styleData =
-        this.model.property.getStyleData(className) || {'styles': {}};
-    const visibilityData = styleData['styles'][visibility] || {};
-    const pseudoClassData = visibilityData[pseudoClass] || {
-      'templateName': 'text',
-      'className': className,
-      'pseudoClass': pseudoClass
-    };
-    this.prodotypeStyle.edit(
-        pseudoClassData,
-        [{displayName: '', name: '', templateName: ''}]
-          .concat(this.model.property.getFonts()
-          .map((font) => {
-            return {
-              displayName: font.family,
-              name: font.family,
-              templateName: ''
-            };
-          })
-        ),
-        'text', {
-          'onChange': (newData, html) => this.styleChanged(className, pseudoClass, visibility, newData),
-          'onBrowse': (e, url, cbk) => this.onBrowse(e, url, cbk)
-        });
-  }
-
-  /**
    * save an empty style or reset a style
    */
   initStyle(displayName: string, className: StyleName, opt_data?: StyleData) {
     // render all pseudo classes in all visibility object
-    this.getPseudoClassData(opt_data || ({'styles': {'desktop': {'normal': {}}}, 'templateName': ''} as StyleData))
+    this.getPseudoClassData(opt_data || ({
+      className: '',
+      displayName: '',
+      templateName: '',
+      styles: {'desktop': {'normal': {}}},
+    } as StyleData))
     .forEach((pseudoClassData) => {
-      this.styleChanged(className, pseudoClassData['pseudoClass'], pseudoClassData['visibility'], pseudoClassData['data'], displayName);
+      this.componentStyleChanged(className, pseudoClassData['pseudoClass'], pseudoClassData['visibility'], pseudoClassData['data'], displayName);
     });
     this.updateDepenedencies(Constants.STYLE_TYPE);
   }
@@ -534,7 +406,7 @@ export class Component {
   /**
    * apply the style to the dom and save it to the JSON object
    */
-  styleChanged(className: StyleName, pseudoClass: PseudoClass, visibility: Visibility, opt_data?: PseudoClassData, opt_displayName?: string) {
+  componentStyleChanged(className: StyleName, pseudoClass: PseudoClass, visibility: Visibility, opt_data?: PseudoClassData, opt_displayName?: string) {
     // create a new style if needed
     if (className === Constants.EMPTY_STYLE_CLASS_NAME) {
       const textBoxes = this.model.body.getSelection().filter(
@@ -562,9 +434,6 @@ export class Component {
     const newData = opt_data || {};
     newData['className'] = className;
     newData['pseudoClass'] = pseudoClass;
-
-    // undo checkpoint
-    this.view.settingsDialog.controller.settingsDialogController.undoCheckPoint();
 
     // store the component's data for later edition
     const styleData = (this.model.property.getStyleData(className) || {
@@ -602,9 +471,6 @@ export class Component {
             elStyle.innerHTML = htmlStrings.join('');
           });
     }
-
-    // refresh the view
-    this.view.settingsDialog.controller.propertyToolController.refreshView();
   }
 
   /**

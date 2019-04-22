@@ -60,55 +60,48 @@ export class Body {
    * @return   array of elements which are currently selected
    */
   getSelection(): HTMLElement[] {
-    if(this.view.stage) {
-      let elements = this.view.stage.getSelection().map(s => s.el);
-      if (!elements || elements.length === 0) {
-        // default, return the body
-        const bodyElement = this.getBodyElement();
-        if (!bodyElement) {
-          console.warn(
-              'Could not get body element because it is not created yet.');
-          return [];
-        }
-        return [bodyElement];
+    let elements = this.view.stageWrapper.getSelection().map(s => s.el);
+    if (!elements || elements.length === 0) {
+      // default, return the body
+      const bodyElement = this.getBodyElement();
+      if (!bodyElement) {
+        console.warn(
+            'Could not get body element because it is not created yet.');
+        return [];
       }
+      return [bodyElement];
+    }
 
-      // build the result array
-      let res = [];
-      elements.forEach((element) => {
-        res.push(element);
-      });
-      return res;
-    }
-    else {
-      return [];
-    }
+    // build the result array
+    let res = [];
+    elements.forEach((element) => {
+      res.push(element);
+    });
+    return res;
   }
 
   /**
    * @param selectedElements  array of elements which are to select
    */
   setSelection(selectedElements: HTMLElement[]) {
-    if(this.view.stage) {
-      const selection = this.view.stage.getSelection().map(s => s.el);
-      // only if selection changed
-      if(selection.filter(el => !selectedElements.find(s => s === el)).length !== 0
-        || selectedElements.filter(el => !selection.find(s => s === el)).length !== 0) {
+    const selection = this.view.stageWrapper.getSelection().map(s => s.el);
+    // only if selection changed
+    if(selection.filter(el => !selectedElements.find(s => s === el)).length !== 0
+      || selectedElements.filter(el => !selection.find(s => s === el)).length !== 0) {
 
-        this.view.stage.setSelection(selectedElements);
-      }
-
-        // refresh views
-        let pages = this.model.page.getPages();
-        let page = this.model.page.getCurrentPage();
-        this.view.pageTool.redraw(selectedElements, pages, page);
-        this.view.propertyTool.redraw(selectedElements, pages, page);
-        this.view.textFormatBar.redraw(selectedElements, pages, page);
-        // this.view.stage.redraw(selectedElements, pages, page);
-        this.view.contextMenu.redraw(selectedElements, pages, page);
-        this.view.breadCrumbs.redraw(selectedElements, pages, page);
-        this.view.htmlEditor.setSelection(selectedElements);
+      this.view.stageWrapper.setSelection(selectedElements);
     }
+
+      // refresh views
+      let pages = this.model.page.getPages();
+      let page = this.model.page.getCurrentPage();
+      this.view.pageTool.redraw(selectedElements, pages, page);
+      this.view.propertyTool.redraw(selectedElements, pages, page);
+      this.view.textFormatBar.redraw(selectedElements, pages, page);
+      // this.view.stageWrapper.redraw(selectedElements, pages, page);
+      this.view.contextMenu.redraw(selectedElements, pages, page);
+      this.view.breadCrumbs.redraw(selectedElements, pages, page);
+      this.view.htmlEditor.setSelection(selectedElements);
   }
 
   removeWysihtmlMarkup(root: HTMLElement|Document) {

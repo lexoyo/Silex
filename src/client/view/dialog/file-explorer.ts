@@ -53,7 +53,7 @@ export class FileExplorer {
    * @param controller  structure which holds
    * the controller instances
    */
-  constructor(private element: HTMLElement, private model: Model, private controller: Controller) {
+  constructor(protected element: HTMLElement, protected model: Model, protected controller: Controller) {
     // cloud explorer instance
     CloudStorage.getInstance().ready(() => {
       this.ce = CloudStorage.getInstance().ce;

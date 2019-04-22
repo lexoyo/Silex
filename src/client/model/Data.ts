@@ -29,8 +29,8 @@ export type ComponentData = {
 };
 
 export type StyleData = {
-  className?: StyleName,
-  displayName?: string,
+  className: StyleName,
+  displayName: string,
   templateName: TemplateName,
   styles: {[key: string]: VisibilityData}
 };

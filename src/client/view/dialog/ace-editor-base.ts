@@ -48,7 +48,7 @@ export class AceEditorBase {
    * @param controller  structure which holds
    * the controller instances
    */
-  constructor(private element: HTMLElement, private model: Model, private controller: Controller) {
+  constructor(protected element: HTMLElement, protected model: Model, protected controller: Controller) {
     // init the menu and UIs
     this.ace = ace.edit(element.querySelector('.ace-editor') as HTMLElement);
     this.ace.setTheme('ace/theme/idle_fingers');

@@ -98,4 +98,15 @@ export class StageController extends ControllerBase {
   //   // then element should be visible everywhere
   //   this.checkElementVisibility(element);
   // }
+
+  stopEdit() {
+    if(this.view.stageWrapper.getEditMode()) {
+      this.view.stageWrapper.setEditMode(false);
+    }
+  }
+  startEdit() {
+    if(!this.view.stageWrapper.getEditMode()) {
+      this.view.stageWrapper.setEditMode(true);
+    }
+  }
 }

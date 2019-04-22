@@ -29,10 +29,6 @@ export class StyleEditorPane extends PaneBase {
   // tracker for analytics
   tracker: any;
 
-  // store the params
-  element: any;
-  model: any;
-  controller: any;
   selectedElements: HTMLElement[] = null;
   styleComboPrevValue: StyleName = '';
 
@@ -59,21 +55,13 @@ export class StyleEditorPane extends PaneBase {
   constructor(element: HTMLElement, model: Model, controller: Controller) {
     super(element, model, controller);
     this.tracker = Tracker.getInstance();
-    this.element = element;
-    this.model = model;
-    this.controller = controller;
     this.styleCombo = this.element.querySelector('.class-name-style-combo-box');
-    this.pseudoClassCombo =
-        this.element.querySelector('.pseudoclass-style-combo-box');
-    this.mobileOnlyCheckbox =
-        this.element.querySelector('.visibility-style-checkbox');
+    this.pseudoClassCombo = this.element.querySelector('.pseudoclass-style-combo-box');
+    this.mobileOnlyCheckbox = this.element.querySelector('.visibility-style-checkbox');
     this.pseudoClassCombo.onchange = (e) => {
       this.tracker.trackAction('style-editor-events', 'select-pseudo-class');
-      this.model.component.editStyle(
-          this.styleCombo.value, this.getPseudoClass(), this.getVisibility());
-      const styleData =
-          (this.model.property.getStyleData(this.styleCombo.value) ||
-           {} as StyleData);
+      this.controller.editMenuController.editStyle(this.styleCombo.value, this.getPseudoClass(), this.getVisibility());
+      const styleData = (this.model.property.getStyleData(this.styleCombo.value) ||  {} as StyleData);
       this.updateTagButtonBar(styleData);
     };
     this.mobileOnlyCheckbox.onchange = (e) => {
@@ -91,11 +79,11 @@ export class StyleEditorPane extends PaneBase {
       // refresh the view
       this.controller.propertyToolController.refreshView();
     };
-    this.element.querySelector('.add-style').onclick = (e) => {
+    (this.element.querySelector('.add-style') as HTMLElement).onclick = (e) => {
       this.tracker.trackAction('style-editor-events', 'create-style');
       this.createStyle();
     };
-    this.element.querySelector('.remove-style').onclick = (e) => {
+    (this.element.querySelector('.remove-style') as HTMLElement).onclick = (e) => {
       this.tracker.trackAction('style-editor-events', 'remove-style');
 
       // delete from styles list
@@ -103,7 +91,7 @@ export class StyleEditorPane extends PaneBase {
     };
 
     // un-apply style
-    this.element.querySelector('.unapply-style').onclick = (e) => {
+    (this.element.querySelector('.unapply-style') as HTMLElement).onclick = (e) => {
       this.tracker.trackAction('style-editor-events', 'unapply-style');
       this.selectedElements.filter((el) => this.isTextBox(el))
           .forEach((element) => {
@@ -117,8 +105,7 @@ export class StyleEditorPane extends PaneBase {
     this.selectionCountTotal.onclick = (e) => {
       this.tracker.trackAction(
           'style-editor-events', 'select-elements-with-style');
-      const newSelection =
-          this.getElementsWithStyle(this.styleCombo.value, true);
+      const newSelection = this.getElementsWithStyle(this.styleCombo.value, true);
       this.model.body.setSelection(newSelection);
     };
     this.selectionCountPage = this.element.querySelector('.on-page');
@@ -131,7 +118,7 @@ export class StyleEditorPane extends PaneBase {
     };
 
     // duplicate a style
-    this.element.querySelector('.duplicate-style').onclick = (e) => {
+    (this.element.querySelector('.duplicate-style') as HTMLElement).onclick = (e) => {
       this.tracker.trackAction('style-editor-events', 'duplicate-style');
       this.createStyle(this.model.property.getStyleData(this.styleCombo.value));
     };
@@ -140,7 +127,7 @@ export class StyleEditorPane extends PaneBase {
     // this.model.component.initStyle(this.styleCombo.options[this.styleCombo.selectedIndex].text,
     // this.styleCombo.value, this.getPseudoClass(), this.getVisibility());
     // rename style
-    this.element.querySelector('.edit-style').onclick = (e) => {
+    (this.element.querySelector('.edit-style') as HTMLElement).onclick = (e) => {
       this.tracker.trackAction('style-editor-events', 'edit-style');
       const oldClassName = this.styleCombo.value;
       if (oldClassName === Constants.BODY_STYLE_CSS_CLASS) {
@@ -167,7 +154,7 @@ export class StyleEditorPane extends PaneBase {
     };
 
     // for tracking only
-    this.element.querySelector('.style-editor-tag-form .labels').onclick =
+    (this.element.querySelector('.style-editor-tag-form .labels') as HTMLElement).onclick =
         (e) => {
           this.tracker.trackAction('style-editor-events', 'select-tag');
         };
@@ -178,7 +165,7 @@ export class StyleEditorPane extends PaneBase {
    * @param includeOffPage, if false it excludes the elements which are not
    *     visible in the current page
    */
-  getElementsWithStyle(styleName: StyleName, includeOffPage: boolean): Element[] {
+  getElementsWithStyle(styleName: StyleName, includeOffPage: boolean): HTMLElement[] {
     const doc = this.model.file.getContentDocument();
     const newSelection: HTMLElement[] = Array.from(doc.querySelectorAll('.' + styleName));
     if (includeOffPage) {
@@ -317,18 +304,16 @@ export class StyleEditorPane extends PaneBase {
     (styleName === Constants.EMPTY_STYLE_CLASS_NAME ? [{
       'className': Constants.EMPTY_STYLE_CLASS_NAME,
       'displayName': Constants.EMPTY_STYLE_DISPLAY_NAME
-    }] :
-                                                      [])
-        .concat(
-            this.model.component.getProdotypeComponents(Constants.STYLE_TYPE))
-        .map((obj) => {
-          // create the combo box option
-          const option = document.createElement('option');
-          option.value = obj['className'];
-          option.innerHTML = obj['displayName'];
-          return option;
-        })
-        .forEach((option) => this.styleCombo.appendChild(option));
+    }] : [])
+    .concat(this.model.component.getProdotypeComponents(Constants.STYLE_TYPE) as {className: string, displayName: string}[])
+    .map((obj) => {
+      // create the combo box option
+      const option = document.createElement('option');
+      option.value = obj['className'];
+      option.innerHTML = obj['displayName'];
+      return option;
+    })
+    .forEach((option) => this.styleCombo.appendChild(option));
     if (styleName != null) {
       const styleNameNotNull = (styleName as StyleName);
 
@@ -367,8 +352,7 @@ export class StyleEditorPane extends PaneBase {
         this.styleComboPrevValue = styleNameNotNull;
 
         // start editing the style with prodotype
-        this.model.component.editStyle(
-            styleNameNotNull, this.getPseudoClass(), this.getVisibility());
+        this.controller.editMenuController.editStyle(styleNameNotNull, this.getPseudoClass(), this.getVisibility());
 
         // update selection count
         const total = this.getElementsWithStyle(styleNameNotNull, true).length;
@@ -482,25 +466,23 @@ export class StyleEditorPane extends PaneBase {
       SilexNotification.alert(
           'Error: you need to select a TextBox for this action.', () => {});
     } else {
-      SilexNotification.prompt(
-          'Enter a name for your style!',
-          opt_data ? opt_data['displayName'] : 'My Style', (accept, name) => {
-            if (accept && name && name !== '') {
-              this.controller.propertyToolController.undoCheckPoint();
-              const className = name.replace(/ /g, '-').toLowerCase();
-              this.model.component.initStyle(name, className, opt_data);
-              this.applyStyle(textBoxes, className);
+      SilexNotification.prompt('Enter a name for your style!', opt_data ? opt_data['displayName'] : 'My Style', (accept, name) => {
+        if (accept && name && name !== '') {
+          this.controller.propertyToolController.undoCheckPoint();
+          const className = name.replace(/ /g, '-').toLowerCase();
+          this.model.component.initStyle(name, className, opt_data);
+          this.applyStyle(textBoxes, className);
 
-              // FIXME: needed to select className but
-              // model.Component::initStyle calls refreshView which calls
-              // updateStyleList
-              this.updateStyleList(className);
-              if (opt_cbk) {
-                opt_cbk(name);
-              }
-              this.controller.propertyToolController.refreshView();
-            }
-          });
+          // FIXME: needed to select className but
+          // model.Component::initStyle calls refreshView which calls
+          // updateStyleList
+          this.updateStyleList(className);
+          if (opt_cbk) {
+            opt_cbk(name);
+          }
+          this.controller.propertyToolController.refreshView();
+        }
+      });
     }
   }
 
@@ -546,6 +528,9 @@ export class StyleEditorPane extends PaneBase {
     Array.from(this.model.file.getContentDocument().querySelectorAll('.' + name))
     .filter((el: HTMLElement) => this.isTextBox(el))
     .forEach((el: HTMLElement) => el.classList.remove(name));
+
+    // undo checkpoint
+    this.controller.settingsDialogController.undoCheckPoint();
 
     // remove from model
     this.model.component.removeStyle(option.value);

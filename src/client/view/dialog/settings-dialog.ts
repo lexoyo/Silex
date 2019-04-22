@@ -57,7 +57,7 @@ export class SettingsDialog {
    * @param controller  structure which holds
    * the controller instances
    */
-  constructor(private element: HTMLElement, private model: Model, private controller: Controller) {
+  constructor(protected element: HTMLElement, protected model: Model, protected controller: Controller) {
     this.modalDialog = new ModalDialog({
       name:'Settings dialog',
       element: element,
@@ -164,7 +164,7 @@ export class SettingsDialog {
     });
 
     // font button
-    this.element.querySelector('.pane.fonts-pane .add-font-btn').onclick =
+    (this.element.querySelector('.pane.fonts-pane .add-font-btn') as HTMLElement).onclick =
         (e) => {
           this.addFont();
         };
@@ -216,7 +216,7 @@ export class SettingsDialog {
    * binds an input element with a callback
    */
   bindTextField(cssSelector: string, cbk: (p1: string) => any) {
-    let input = this.element.querySelector(cssSelector);
+    let input = this.element.querySelector(cssSelector) as HTMLInputElement;
     if (!input) {
       throw new Error(
           'Settings panel error: could not find the element to bind.');
@@ -245,7 +245,7 @@ export class SettingsDialog {
    * @see silex.model.Head
    */
   setInputValue(cssSelector: string, opt_value?: string) {
-    let input = this.element.querySelector(cssSelector);
+    let input = this.element.querySelector(cssSelector) as HTMLInputElement;
     if (opt_value) {
       input.value = opt_value;
     } else {
@@ -304,14 +304,9 @@ export class SettingsDialog {
    * @return the publication path
    */
   getPublicationPath(): FileInfo {
-    const service =
-        this.element.querySelector('.publish-pane .input-publication-service')
-            .value;
-    const path =
-        this.element.querySelector('.publish-pane .input-publication-path')
-            .value;
-    if (this.publicationPath != null && service && path && service !== '' &&
-        path !== '') {
+    const service = (this.element.querySelector('.publish-pane .input-publication-service') as HTMLInputElement).value;
+    const path = (this.element.querySelector('.publish-pane .input-publication-path') as HTMLInputElement).value;
+    if (this.publicationPath != null && service && path && service !== '' && path !== '') {
       this.publicationPath.service = service;
       this.publicationPath.path = path;
     }

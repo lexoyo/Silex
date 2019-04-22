@@ -20,10 +20,7 @@ import { Property } from '../model/property';
 import { CloudStorage } from '../service/cloud-storage';
 import { FileInfo, Model, View } from '../types';
 // import { Stage } from 'stage'; // this is not recognized by my IDE
-import { Stage } from '../../../node_modules/stage/src/ts/index';
 import { getUiElements } from '../view/UiElements';
-import { Constants } from '../../Constants';
-import { cpus } from 'os';
 
 /**
  * @param model  model class which holds the other models
@@ -118,11 +115,6 @@ export class File {
   setHtml(
       rawHtml: string, opt_cbk?: (() => any),
       opt_showLoader?: boolean) {
-    // cleanup
-    if(!!this.view.stage) {
-      this.view.stage.cleanup();
-      this.view.stage = null;
-    }
 
     // reset iframe content
     this.contentDocument_.open();
@@ -173,95 +165,7 @@ export class File {
     this.model.head.updateFromDom();
 
     // restore the stage
-    this.view.stage = new Stage(this.iFrameElement_, this.iFrameElement_.contentWindow.document.querySelectorAll(`[${Constants.ELEMENT_ID_ATTR_NAME}]`), {
-      isSelectable: (el => !el.classList.contains(Constants.PREVENT_SELECTABLE_CLASS_NAME)),
-      isDraggable: (el => !el.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME)),
-      isDropZone: ((el) => !el.classList.contains(Constants.PREVENT_DROPPABLE_CLASS_NAME) && el.classList.contains(Constants.TYPE_CONTAINER)),
-      isResizeable: ((el) => {
-        return el.classList.contains(Constants.PREVENT_RESIZABLE_CLASS_NAME) ? false : ({
-          top: !el.classList.contains(Constants.PREVENT_RESIZABLE_TOP_CLASS_NAME),
-          left: !el.classList.contains(Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME),
-          bottom: !el.classList.contains(Constants.PREVENT_RESIZABLE_BOTTOM_CLASS_NAME),
-          right: !el.classList.contains(Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME),
-        })
-      }),
-      useMinHeight: ((el) => !el.classList.contains(Constants.SILEX_USE_HEIGHT_NOT_MINHEIGHT)),
-      canDrop: ((el: HTMLElement, dropZone: HTMLElement) => {
-        // sections can only be dropped in the body
-        return !el.classList.contains(Constants.TYPE_SECTION)
-          || dropZone.tagName.toLowerCase() === 'body';
-      }),
-      onDrop: selectables => {
-        console.log('Drag end');
-        selectables.forEach(s => {
-          if(!s.el.classList.contains(Constants.TYPE_SECTION)) {
-            this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
-            this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
-          }
-          s.el.style.top = '';
-          s.el.style.left = '';
-          s.el.style.right = '';
-          s.el.style.bottom = '';
-          s.el.style.width = '';
-          s.el.style.height = '';
-          s.el.style.minHeight = '';
-          s.el.style.position = '';
-        });
-        this.updateView();
-      },
-      onResizeEnd: selectables => {
-        console.log('Resize end');
-        selectables.forEach(s => {
-          this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
-          this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
-          this.model.element.setStyle(s.el, 'width', s.metrics.computedStyleRect.width + 'px');
-          this.model.element.setStyle(s.el, s.useMinHeight ? 'min-height' : 'height', s.metrics.computedStyleRect.height + 'px');
-          s.el.style.top = '';
-          s.el.style.left = '';
-          s.el.style.right = '';
-          s.el.style.bottom = '';
-          s.el.style.width = '';
-          s.el.style.height = '';
-          s.el.style.minHeight = '';
-          s.el.style.position = '';
-        });
-        this.updateView();
-      },
-      onEdit: selectables => {
-        // TextEditorController
-        if(selectables.length > 1) {
-          // open properties
-        }
-        else if(selectables.length === 1) {
-          const element = selectables[0].el;
-          console.log('onEdit 1 element', selectables, this.model.element.getType(element));
-          switch(this.model.element.getType(element)) {
-            case Constants.TYPE_TEXT:
-              console.log('edit text', element);
-              window['silex'].controller.editMenuController.editElement();
-              this.view.stage.catchingEvents = false;
-              break;
-            case Constants.TYPE_CONTAINER:
-            case Constants.TYPE_SECTION:
-            case Constants.TYPE_CONTAINER_CONTENT:
-            case Constants.TYPE_IMAGE:
-            case Constants.TYPE_TEXT:
-            case Constants.TYPE_HTML:
-            case Constants.TYPE_ATTR:
-              console.error('edition of type', this.model.element.getType(element), 'todo')
-              break;
-          }
-        }
-      },
-      onEditEnd: () => {
-        console.log('onEditEnd');
-        this.view.stage.catchingEvents = true;
-        this.view.stage.redraw();
-      },
-      onSelect: change => this.updateView(),
-      onResize: change => this.updateView(),
-      onDrag: change => this.updateView(),
-    });
+    this.view.stageWrapper.initStage(this.iFrameElement_);
 
     // notify the caller
     if (opt_cbk) {
@@ -280,10 +184,6 @@ export class File {
     if (this.isTemplate) {
       this.model.head.setPublicationPath(null);
     }
-  }
-  updateView() {
-    const selection = this.view.stage.getSelection();
-    this.model.body.setSelection(selection.map(s => s.el));
   }
 
   /**

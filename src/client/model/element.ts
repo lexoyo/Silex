@@ -540,14 +540,14 @@ export class SilexElement {
    * @param opt_offset an offset to apply to its position (x and y)
    */
   addElementDefaultPosition(element: HTMLElement, opt_offset: number = 0) {
-    const scrollData = this.view.stage.getScroll();
+    const scrollData = this.view.stageWrapper.getScroll();
 
     // find the container (main background container or the stage)
     const stageSize = getUiElements().stage.getBoundingClientRect();
     const bb = this.model.property.getBoundingBox([element]);
     const posX = Math.round(stageSize.width / 2 - bb.width / 2);
     const posY = Math.round(stageSize.height / 2 - bb.height / 2);
-    const container = this.view.stage.getDropZone(posX, posY, element) || this.model.body.getBodyElement();
+    const container = this.view.stageWrapper.getDropZone(posX, posY, element) || this.model.body.getBodyElement();
 
     // take the scroll into account (drop at (100, 100) from top left corner of
     // the window, not the stage)
@@ -612,7 +612,7 @@ export class SilexElement {
     if (this.isSection(element)) {
       this.addElement(this.model.body.getBodyElement(), element);
       // send the scroll to the target
-      this.view.stage.center([element]);
+      this.view.stageWrapper.center([element]);
     } else {
       if (!this.isElementContent(element)) {
         // add to the stage at the right position
@@ -622,7 +622,7 @@ export class SilexElement {
     }
 
     // update stage store
-    this.view.stage.addElement(element);
+    this.view.stageWrapper.addElement(element);
   }
 
   /**

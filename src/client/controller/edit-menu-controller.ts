@@ -16,13 +16,14 @@
  */
 
 import { DomDirection, SilexElement } from '../model/element';
-import { ClipboardItem, Model, View } from '../types';
+import { ClipboardItem, Model, View, LinkData, FileInfo } from '../types';
 import { InvalidationManager } from '../utils/invalidation-manager';
 import { SilexNotification } from '../utils/notification';
 import { Style } from '../utils/style';
 import { FileExplorer } from '../view/dialog/file-explorer';
 import { ControllerBase } from './controller-base';
 import { Constants } from '../../Constants';
+import { ComponentData, StyleName, PseudoClass, Visibility } from '../model/Data';
 
 /**
  * @param view  view class which holds the other views
@@ -282,6 +283,122 @@ super(model, view);
       }
     }
   }
+
+    /**
+   * @param element, the component to edit
+   */
+  editComponent(element: HTMLElement) {
+    if (this.model.component.isComponent(element)) {
+      const componentData = this.model.property.getElementComponentData(element);
+      if (element && this.model.component.prodotypeComponent && componentData) {
+        this.model.component.prodotypeComponent.edit(
+            componentData,
+            this.model.component.getProdotypeComponents(Constants.COMPONENT_TYPE) as Array<ComponentData>,
+            componentData['templateName'], {
+              'onChange': (newData, html) => {
+                // undo checkpoint
+                this.undoCheckPoint();
+
+                // remove the editable elements temporarily
+                const tempElements = this.model.component.saveEditableChildren(element);
+
+                // store the component's data for later edition
+                this.model.property.setElementComponentData(element, newData);
+
+                // update the element with the new template
+                this.model.element.setInnerHtml(element, html);
+
+                // execute the scripts
+                this.model.component.executeScripts(element);
+
+                // put back the editable elements
+                element.appendChild(tempElements);
+              },
+              'onBrowse': (e, url, cbk) => this.onBrowse(e, url, cbk),
+              'onEditLink': (e, linkData, cbk) =>
+                  this.onEditLink(e, linkData, cbk)
+            });
+      }
+      this.model.component.componentEditorElement.classList.remove('hide-panel');
+    } else {
+      this.model.component.componentEditorElement.classList.add('hide-panel');
+      this.model.component.resetSelection(Constants.COMPONENT_TYPE);
+    }
+  }
+
+  onEditLink(e: Event, linkData: LinkData, cbk: (p1: LinkData) => any) {
+    e.preventDefault();
+    let pages = this.model.page.getPages();
+    this.linkDialog.open(linkData, pages, (linkData) => {
+      cbk(linkData);
+    });
+  }
+
+  onBrowse(e: Event, url: string, cbk: (p1: FileInfo[]) => any) {
+    e.preventDefault();
+
+    // browse with CE
+    const promise = this.view.fileExplorer.openFile();
+
+    // add tracking and undo/redo checkpoint
+    this.track(promise, 'prodotype.browse');
+    this.undoredo(promise);
+
+    // handle the result
+    promise
+    .then((fileInfo: FileInfo) => {
+      if (fileInfo) {
+        cbk([{
+          'url': fileInfo.absPath,
+          'modified': fileInfo.modified,
+          'name': fileInfo.name,
+          'size': fileInfo.size,
+          'mime': fileInfo.mime,
+          'path': '',
+          'absPath': '',
+          'folder': '',
+          'service': '',
+          'isDir': true,
+        }]);
+      }
+    })
+    .catch((error) => {
+      SilexNotification.notifyError('Error: I could not select the file. <br /><br />' + (error.message || ''));
+    });
+  }
+
+
+  /**
+   * @param className, the css class to edit the style for
+   * @param pseudoClass, e.g. normal, :hover, ::first-letter
+   * @param visibility, e.g. mobile only, desktop and mobile...
+   */
+  editStyle(className: StyleName, pseudoClass: PseudoClass, visibility: Visibility) {
+  const styleData = this.model.property.getStyleData(className) || {'styles': {}};
+  const visibilityData = styleData['styles'][visibility] || {};
+  const pseudoClassData = visibilityData[pseudoClass] || {
+    'templateName': 'text',
+    'className': className,
+    'pseudoClass': pseudoClass
+  };
+  this.model.component.prodotypeStyle.edit(
+    pseudoClassData,
+    [{displayName: '', name: '', templateName: ''}]
+      .concat(this.model.property.getFonts()
+      .map((font) => {
+        return {
+          displayName: font.family,
+          name: font.family,
+          templateName: ''
+        };
+      })
+    ),
+    'text', {
+      'onChange': (newData, html) => this.model.component.componentStyleChanged(className, pseudoClass, visibility, newData),
+      'onBrowse': (e, url, cbk) => this.onBrowse(e, url, cbk)
+    });
+  }
+
 
   /**
    * get the index of the element in the DOM

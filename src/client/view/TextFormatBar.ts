@@ -52,7 +52,7 @@ export class TextFormatBar {
    * @param controller  structure which holds
    * the controller instances
    */
-  constructor(private element: HTMLElement, private model: Model, private controller: Controller) {
+  constructor(protected element: HTMLElement, protected model: Model, protected controller: Controller) {
     this.tracker = Tracker.getInstance();
     this.linkDialog = new LinkDialog(this.model);
     this.toolbar = this.element.querySelector('#wysihtml5-toolbar');
@@ -67,7 +67,7 @@ export class TextFormatBar {
    */
   getLink(): LinkData {
     return LINK_ATTRIBUTES.reduce((acc, attr) => {
-      const el = this.element.querySelector('.get-' + attr);
+      const el = this.element.querySelector('.get-' + attr) as HTMLInputElement;
       if (!el) {
         console.error(
             'could not get data from link editor for attribute', attr);
@@ -99,8 +99,7 @@ export class TextFormatBar {
    * stop edit, destroy wysihtml object and reset everything
    */
   stopEditing() {
-    console.log('move this into an appropriate place')
-    if(window['silex'].view.stage && window['silex'].view.stage.getEditMode() === true) window['silex'].view.stage.setEditMode(false);
+    this.controller.stageController.stopEdit();
 
     if (this.wysihtmlEditor) {
       const doc = this.model.file.getContentDocument();
@@ -113,7 +112,7 @@ export class TextFormatBar {
       // remove and put back the whole UI
       // this is the way to go with wysihtml
       // @see https://github.com/Voog/wysihtml/issues/109#issuecomment-198350743
-      this.element.querySelector('.image-details').style.display = 'none';
+      (this.element.querySelector('.image-details') as HTMLElement).style.display = 'none';
       this.wysihtmlEditor.destroy();
       this.wysihtmlEditor = null;
       const parent = this.toolbar.parentElement;
@@ -231,49 +230,40 @@ export class TextFormatBar {
               this.wysihtmlEditor.focus(false);
             }
           }, 500);
-          this.element.querySelector('.insert-image').onclick = (e) => {
-            this.tracker.trackAction(
-                'controller-events', 'request', 'insert.image.text', 0);
+          (this.element.querySelector('.insert-image') as HTMLElement).onclick = (e) => {
+            this.tracker.trackAction('controller-events', 'request', 'insert.image.text', 0);
             fileExplorer.openFile(FileExplorer.IMAGE_EXTENSIONS)
                 .then((fileInfo) => {
                   if (fileInfo) {
                     // undo checkpoint
                     this.controller.textEditorController.undoCheckPoint();
-                    this.wysihtmlEditor.composer.commands.exec(
-                        'insertImage', {src: fileInfo.absPath, alt: ''});
-                    this.tracker.trackAction(
-                        'controller-events', 'success', 'insert.image.text', 1);
+                    this.wysihtmlEditor.composer.commands.exec('insertImage', {src: fileInfo.absPath, alt: ''});
+                    this.tracker.trackAction('controller-events', 'success', 'insert.image.text', 1);
                   }
                 })
                 .catch((error) => {
-                  SilexNotification.notifyError(
-                      'Error: I did not manage to load the image. \n' +
-                      (error.message || ''));
-                  this.tracker.trackAction(
-                      'controller-events', 'error', 'insert.image.text', -1);
+                  SilexNotification.notifyError('Error: I did not manage to load the image. \n' + (error.message || ''));
+                  this.tracker.trackAction('controller-events', 'error', 'insert.image.text', -1);
                 });
           };
 
           // image details UI
-          const imageDetails = this.element.querySelector('.image-details');
-          const autoBtn = imageDetails.querySelector('#auto-submit-image');
+          const imageDetails = this.element.querySelector('.image-details') as HTMLElement;
+          const autoBtn = imageDetails.querySelector('#auto-submit-image') as HTMLElement;
 
           function autoSubmitImage(e) {
             // give time to the value to be updated and validate wysihtml image
             // dialog
-            setTimeout((_) => {
+            setTimeout(() => {
               autoBtn.click();
               imageDetails.style.display = '';
               (e.target as HTMLElement).focus();
             }, 100);
           }
-          imageDetails.querySelector('.float').onchange = (e) =>
-              autoSubmitImage(e);
-          imageDetails.querySelector('.src').onkeydown = (e) =>
-              autoSubmitImage(e);
-          imageDetails.querySelector('.alt').onkeydown = (e) =>
-              autoSubmitImage(e);
-          this.element.querySelector('.create-link').onclick = (e) => {
+          (imageDetails.querySelector('.float') as HTMLElement).onchange = (e) => autoSubmitImage(e);
+          (imageDetails.querySelector('.src') as HTMLElement).onkeydown = (e) => autoSubmitImage(e);
+          (imageDetails.querySelector('.alt') as HTMLElement).onkeydown = (e) => autoSubmitImage(e);
+          (this.element.querySelector('.create-link') as HTMLElement).onclick = (e) => {
             // open link editor
             this.linkDialog.open(this.getLink(), this.pageNames, (options) => {
               if (options) {
@@ -306,9 +296,7 @@ export class TextFormatBar {
    *     file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
+  redraw(selectedElements: HTMLElement[], pageNames: string[], currentPageName: string) {
     // reuse selectedElements in combo box on change
     this.selectedElements = selectedElements;
 

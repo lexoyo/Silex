@@ -47,7 +47,7 @@ export class Dashboard {
    * @param controller  structure which holds
    * the controller instances
    */
-  constructor(private element: HTMLElement, private model: Model, private controller: Controller) {
+  constructor(protected element: HTMLElement, protected model: Model, protected controller: Controller) {
     this.modalDialog = new ModalDialog({
       name: 'Dashboard',
       element: element,
@@ -158,7 +158,7 @@ export class Dashboard {
     };
 
     // click event
-    const body = this.element.querySelector('.body');
+    const body = this.element.querySelector('.body') as HTMLElement;
     body.onclick = (e) => {
       // listen for a click in the list of recent files
       const a = (e.target as HTMLElement);
@@ -221,14 +221,14 @@ export class Dashboard {
     loadNext(toLoad);
 
     // clear button
-    const clearBtn = this.element.querySelector('.clear-btn');
+    const clearBtn = this.element.querySelector('.clear-btn') as HTMLElement;
     clearBtn.onclick = (e) => {
       this.model.file.clearLatestFiles();
       this.redraw();
     };
 
     // browse / import button
-    const moreBtn = this.element.querySelector('.more-btn');
+    const moreBtn = this.element.querySelector('.more-btn') as HTMLElement;
     moreBtn.onclick = (e) => {
       this.modalDialog.close();
 
