@@ -17,6 +17,7 @@
  */
 
 import { Controller, Model } from '../../types';
+import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
 
 
 /**
@@ -30,40 +31,27 @@ import { Controller, Model } from '../../types';
  * the controller instances
  */
 export class PaneBase {
+  protected pageNames: string[];
+  protected currentPageName: string;
+  /**
+   * store the last selection
+   */
+  protected states: SelectableState[] = null;
+
   /**
    * base url for relative/absolute urls
    */
-  baseUrl = null;
+  protected baseUrl = null;
 
-  /**
-   * {bool} flag to prevent redraw while changing a value myself
-   *        this is true when the user has used the toolbox to change a value,
-   *        while the call to notify the controller is processed
-   */
-  iAmSettingValue: boolean;
-
-  /**
-   * {bool} flag to prevent notifying the controller while changing a value myself
-   *        this is true during redraw
-   *        it is useful because setting a value of an input element
-   *        automatically triggers a change event
-   */
-  iAmRedrawing: boolean;
-
-  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
-
-  }
+  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {}
 
   /**
    * notify the controller that the style changed
    * @param styleName   not css style but camel case
    */
   styleChanged(styleName: string, opt_styleValue?: string, opt_elements?: HTMLElement[]) {
-    this.iAmSettingValue = true;
-
     // notify the controller
     this.controller.propertyToolController.styleChanged(styleName, opt_styleValue, opt_elements);
-    this.iAmSettingValue = false;
   }
 
   /**
@@ -71,27 +59,20 @@ export class PaneBase {
    * @param propertyName   property name, e.g. 'src'
    */
   propertyChanged(propertyName: string, opt_propertyValue?: string, opt_elements?: HTMLElement[], opt_applyToContent?: boolean) {
-    if (this.iAmRedrawing) {
-      return;
-    }
-    this.iAmSettingValue = true;
-
     // notify the controller
     this.controller.propertyToolController.propertyChanged(propertyName, opt_propertyValue, opt_elements, opt_applyToContent);
-    this.iAmSettingValue = false;
   }
 
   /**
    * refresh the displayed data
    * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
-  redraw(selectedElements: HTMLElement[], pageNames: string[], currentPageName: string) {
-    if (!selectedElements) {
-      throw new Error('selection array is undefined');
-    }
+  redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
+    this.states = states;
+    this.pageNames = pageNames;
+    this.currentPageName = currentPageName;
   }
 
   /**
@@ -102,15 +83,12 @@ export class PaneBase {
    *     same for all elements
    * FIXME: we should use Array::reduce
    */
-  getCommonProperty(
-      elements: HTMLElement[],
-      getPropertyFunction: (p1: HTMLElement) => string | number | boolean |
-          null): any {
+  getCommonProperty(states: SelectableState[], getPropertyFunction: (p1: SelectableState) => string | number | boolean | null): any {
     let value = null;
     let hasCommonValue: boolean = true;
     let isFirstValue = true;
-    elements.forEach((element) => {
-      let elementValue = getPropertyFunction(element);
+    states.forEach(state => {
+      let elementValue = getPropertyFunction(state);
       if (isFirstValue) {
         isFirstValue = false;
 

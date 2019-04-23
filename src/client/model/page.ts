@@ -104,9 +104,10 @@ export class Page {
     const pages = this.getPages();
     const currentPage = this.getCurrentPage();
     const selectedElements = this.model.body.getSelection();
+    const states = this.view.stageWrapper.getSelection();
     this.view.contextMenu.redraw(selectedElements, pages, currentPage);
     this.view.pageTool.redraw(selectedElements, pages, currentPage);
-    this.view.propertyTool.redraw(selectedElements, pages, currentPage);
+    this.view.propertyTool.redraw(states, pages, currentPage);
     this.view.textFormatBar.redraw(selectedElements, pages, currentPage);
     this.view.stageWrapper.redraw();
   }

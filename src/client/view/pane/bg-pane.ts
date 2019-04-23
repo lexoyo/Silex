@@ -21,10 +21,11 @@ import {Style} from '../../utils/style';
 import {ColorPicker} from '../ColorPicker';
 
 import {PaneBase} from './pane-base';
+import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
 
 /**
  * on of Silex Editors class
- * let user edit style of components
+ * const user edit style of components
  * @param element   container to render the UI
  * @param model  model class which holds
   * the model instances - views use it for read
@@ -47,12 +48,6 @@ export class BgPane extends PaneBase {
   hPositionComboBox: any;
   repeatComboBox: any;
   sizeComboBox: any;
-  iAmRedrawing: boolean;
-
-  // remember selection
-  selectedElements: HTMLElement[] = null;
-  pageNames: any;
-  currentPageName: any;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
     super(element, model, controller);
@@ -108,14 +103,14 @@ export class BgPane extends PaneBase {
         });
     this.vPositionComboBox = this.initComboBox(
         '.bg-position-v-combo-box', (event) => {
-          let hPosition = this.hPositionComboBox.value;
-          let vPosition = this.vPositionComboBox.value;
+          const hPosition = this.hPositionComboBox.value;
+          const vPosition = this.vPositionComboBox.value;
           this.styleChanged('background-position', vPosition + ' ' + hPosition);
         });
     this.hPositionComboBox = this.initComboBox(
         '.bg-position-h-combo-box', (event) => {
-          let hPosition = this.hPositionComboBox.value;
-          let vPosition = this.vPositionComboBox.value;
+          const hPosition = this.hPositionComboBox.value;
+          const vPosition = this.vPositionComboBox.value;
           this.styleChanged('background-position', vPosition + ' ' + hPosition);
         });
     this.repeatComboBox =
@@ -130,33 +125,17 @@ export class BgPane extends PaneBase {
 
   /**
    * redraw the properties
-   * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param states the elements currently selected
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
-    if (this.iAmSettingValue) {
-      return;
-    }
-    this.iAmRedrawing = true;
-
-
-    super.redraw( selectedElements, pageNames, currentPageName);
-    this.selectedElements = selectedElements;
-    this.pageNames = pageNames;
-    this.currentPageName = currentPageName;
+  redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
+    super.redraw(states, pageNames, currentPageName);
 
     // BG color
-    if (selectedElements.length > 0) {
+    if (states.length > 0) {
       this.colorPicker.setDisabled(false);
-      let color =
-          this.getCommonProperty(selectedElements, element => {
-            return this.model.element.getStyle(element, 'background-color') ||
-                '';
-          });
+      const color = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-color') || '');
 
       // indeterminate state
       this.colorPicker.setIndeterminate(color == null);
@@ -170,7 +149,7 @@ export class BgPane extends PaneBase {
     }
 
     // BG image
-    let enableBgComponents = (enable) => {
+    const enableBgComponents = (enable) => {
       if (enable) {
         this.bgClearBgImage.classList.remove('disabled');
       } else {
@@ -182,10 +161,8 @@ export class BgPane extends PaneBase {
       this.repeatComboBox.disabled = !enable;
       this.sizeComboBox.disabled = !enable;
     };
-    let bgImage =
-        this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'background-image');
-        });
+    const bgImage = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-image'));
+
     if (bgImage !== null && bgImage !== 'none' && bgImage !== '') {
       enableBgComponents(true);
     } else {
@@ -193,10 +170,7 @@ export class BgPane extends PaneBase {
     }
 
     // bg image attachment
-    let bgImageAttachment =
-        this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'background-attachment');
-        });
+    const bgImageAttachment = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-attachment'));
     if (bgImageAttachment) {
       this.attachmentComboBox.value = bgImageAttachment;
     } else {
@@ -204,25 +178,19 @@ export class BgPane extends PaneBase {
     }
 
     // bg image position
-    let bgImagePosition =
-        this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'background-position');
-        });
+    const bgImagePosition =
+        this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-position'));
     if (bgImagePosition) {
-      // convert 50% in cennter
-      let posArr = bgImagePosition.split(' ');
+      // convert 50% in center
+      const posArr = bgImagePosition.split(' ');
       let hPosition = posArr[0] || 'left';
       let vPosition = posArr[1] || 'top';
 
       // convert 0% by left, 50% by center, 100% by right
-      hPosition = hPosition.replace('100%', 'right')
-                      .replace('50%', 'center')
-                      .replace('0%', 'left');
+      hPosition = hPosition.replace('100%', 'right').replace('50%', 'center').replace('0%', 'left');
 
       // convert 0% by top, 50% by center, 100% by bottom
-      vPosition = vPosition.replace('100%', 'bottom')
-                      .replace('50%', 'center')
-                      .replace('0%', 'top');
+      vPosition = vPosition.replace('100%', 'bottom').replace('50%', 'center').replace('0%', 'top');
 
       // update the drop down lists to display the bg image position
       this.vPositionComboBox.value = vPosition;
@@ -233,10 +201,8 @@ export class BgPane extends PaneBase {
     }
 
     // bg image repeat
-    let bgImageRepeat =
-        this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'background-repeat');
-        });
+    const bgImageRepeat = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-repeat'));
+
     if (bgImageRepeat) {
       this.repeatComboBox.value = bgImageRepeat;
     } else {
@@ -244,26 +210,19 @@ export class BgPane extends PaneBase {
     }
 
     // bg image size
-    let bgImageSize =
-        this.getCommonProperty(selectedElements, element => {
-          return this.model.element.getStyle(element, 'background-size');
-        });
+    const bgImageSize = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-size'));
+
     if (bgImageSize) {
       this.sizeComboBox.value = bgImageSize;
     } else {
       this.sizeComboBox.selectedIndex = 0;
     }
-    this.iAmRedrawing = false;
   }
 
   /**
    * User has selected a color
    */
   onColorChanged() {
-    if (this.iAmRedrawing) {
-      return;
-    }
-
     // notify the toolbox
     this.styleChanged('background-color', this.colorPicker.getColor());
   }
@@ -273,11 +232,11 @@ export class BgPane extends PaneBase {
    */
   initComboBox(selector, onChange) {
     // create the combo box
-    let comboBox = this.element.querySelector(selector);
+    const comboBox = this.element.querySelector(selector);
 
     // attach event
     comboBox.addEventListener('change', () => {
-      if (onChange && !this.iAmRedrawing) {
+      if (onChange) {
         onChange();
       }
     });
@@ -300,6 +259,6 @@ export class BgPane extends PaneBase {
 
     // UI needs to be updated (which is prevented in this.styleChanged by the
     // flag iAmSettingTheValue
-    this.redraw(this.selectedElements, this.pageNames, this.currentPageName);
+    this.redraw(this.states, this.pageNames, this.currentPageName);
   }
 }

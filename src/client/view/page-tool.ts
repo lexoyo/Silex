@@ -96,8 +96,7 @@ export class PageTool {
    * refresh the pages
    * find all pages in the dom
    * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
   redraw(

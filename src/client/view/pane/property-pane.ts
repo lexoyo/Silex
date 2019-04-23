@@ -18,10 +18,11 @@ import { SilexElement } from '../../model/element';
 import { Controller, Model } from '../../types';
 import { PaneBase } from './pane-base';
 import { Constants } from '../../../Constants';
+import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
 
 /**
  * on of Silex Editors class
- * let user edit style of components
+ * const user edit style of components
  * @param element   container to render the UI
  * @param model  model class which holds
   * the model instances - views use it for read
@@ -30,19 +31,6 @@ import { Constants } from '../../../Constants';
  * the controller instances
  */
 export class PropertyPane extends PaneBase {
-  /**
-   * store the last selection
-   */
-  selectedElements: HTMLElement[] = null;
-
-  // position and size
-  iAmRedrawing: boolean;
-
-  /**
-   * callback to call to let the user edit the image url
-   */
-  // selectImage = null;
-
   /**
    * UI for position and size
    */
@@ -110,10 +98,10 @@ export class PropertyPane extends PaneBase {
    */
   onPositionChanged(e) {
     // get the selected element
-    let input: HTMLInputElement = e.target;
+    const input: HTMLInputElement = e.target;
 
     // the name of the property to change
-    let name: string = input.getAttribute('data-style-name');
+    const name: string = input.getAttribute('data-style-name');
 
     // do nothing if the value is not a number (numeric stepers's value set to
     // '')
@@ -125,33 +113,35 @@ export class PropertyPane extends PaneBase {
       switch (name) {
         case 'width':
           value = Math.max(value, SilexElement.MIN_WIDTH);
+          break;
         case 'min-height':
           value = Math.max(value, SilexElement.MIN_HEIGHT);
+          break;
       }
 
       // get the old value
-      let oldValue = parseFloat(input.getAttribute('data-prev-value') || '0');
+      const oldValue = parseFloat(input.getAttribute('data-prev-value') || '0');
 
       // keep track of the new value for next time
       input.setAttribute('data-prev-value', value.toString());
 
       // compute the offset
-      let offset = value - oldValue;
+      const offset = value - oldValue;
 
       // apply the change to all elements
-      this.selectedElements.forEach((element) => {
+      this.states.forEach(state => {
         if (oldValue != NaN) {
           // compute the new value relatively to the old value,
           // in order to match the group movement
-          let elementStyle = this.model.element.getStyle(element, name);
+          const elementStyle = this.model.element.getStyle(state.el, name);
           let styleValue = 0;
           if (elementStyle && elementStyle !== '') {
             styleValue = parseFloat(elementStyle);
           }
-          let newValue = styleValue + offset;
+          const newValue = styleValue + offset;
 
           // apply the change to the current element
-          this.styleChanged(name, newValue + 'px', [element]);
+          this.styleChanged(name, newValue + 'px', [state.el]);
         } else {
           this.styleChanged(name, value + 'px');
         }
@@ -165,7 +155,7 @@ export class PropertyPane extends PaneBase {
    */
   onAltChanged(e) {
     // get the selected element
-    let input: HTMLInputElement = e.target;
+    const input: HTMLInputElement = e.target;
 
     // apply the change to all elements
     if (input.value !== '') {
@@ -181,7 +171,7 @@ export class PropertyPane extends PaneBase {
    */
   onTitleChanged(e) {
     // get the selected element
-    let input: HTMLInputElement = e.target;
+    const input: HTMLInputElement = e.target;
 
     // apply the change to all elements
     if (input.value !== '') {
@@ -193,40 +183,28 @@ export class PropertyPane extends PaneBase {
 
   /**
    * redraw the properties
-   * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param states the elements currently selected
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
-    if (this.iAmSettingValue) {
-      return;
-    }
-    this.iAmRedrawing = true;
-
-
-    super.redraw( selectedElements, pageNames, currentPageName);
+  redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
+    super.redraw(states, pageNames, currentPageName);
 
     // not available for stage element
-    let elementsNoStage = [];
-    selectedElements.forEach((element) => {
-      if (this.model.body.getBodyElement() !== element) {
-        elementsNoStage.push(element);
-      }
-    });
-    if (elementsNoStage.length > 0) {
-      // not stage element only
-      this.leftInput.removeAttribute('disabled');
-      this.topInput.removeAttribute('disabled');
-      this.widthInput.removeAttribute('disabled');
-      this.heightInput.removeAttribute('disabled');
-      this.altInput.removeAttribute('disabled');
-      this.titleInput.removeAttribute('disabled');
-      this.selectedElements = selectedElements;
+    const statesNoBody: SelectableState[] = states.filter(data => data.el !== this.model.body.getBodyElement());
+    this.states = statesNoBody;
 
-      let bb = this.model.property.getBoundingBox(selectedElements);
+    if (statesNoBody.length > 0) {
+      // not stage element only
+      this.leftInput.disabled = false;
+      this.topInput.disabled = false;
+      this.widthInput.disabled = false;
+      this.heightInput.disabled = false;
+      this.altInput.disabled = false;
+      this.titleInput.disabled = false;
+
+      console.warn('Use stage metrics here');
+      const bb = this.model.property.getBoundingBox(states.map(state => state.el));
 
       // display position and size
       this.topInput.value = (bb.top || 0).toString();
@@ -235,29 +213,21 @@ export class PropertyPane extends PaneBase {
       this.heightInput.value = (bb.height || 0).toString();
 
       // special case of the background / main container only selected element
-      if (selectedElements.length === 1) {
-        if (selectedElements[0].classList.contains('background') ||
-            this.model.element.isSection(selectedElements[0]) ||
-            this.model.element.isSectionContent(selectedElements[0]) ||
-            this.isMobileMode()) {
-          this.topInput.value = '';
-          this.leftInput.value = '';
-        }
-        if (this.model.element.isSection(selectedElements[0])) {
-          this.widthInput.value = '';
-        }
+      if (statesNoBody.length === 1 && this.model.element.isSection(statesNoBody[0].el)) {
+        this.widthInput.value = '';
+        this.widthInput.disabled = true;
+      }
+      else {
+        this.widthInput.disabled = false;
       }
 
       // alt, only for images
-      let elementsType =
-          this.getCommonProperty(selectedElements, function(element) {
-            return element.getAttribute(Constants.TYPE_ATTR);
-          });
+      const elementsType = this.getCommonProperty(states, state => this.model.element.getType(state.el));
+
       if (elementsType === Constants.TYPE_IMAGE) {
-        this.altInput.removeAttribute('disabled');
-        let alt = this.getCommonProperty(selectedElements, function(element) {
-          let content = element.querySelector(
-              Constants.ELEMENT_CONTENT_CLASS_NAME);
+        this.altInput.disabled = false;
+        const alt = this.getCommonProperty(states, state => {
+          const content = state.el.querySelector(Constants.ELEMENT_CONTENT_CLASS_NAME);
           if (content) {
             return content.getAttribute('alt');
           }
@@ -270,13 +240,11 @@ export class PropertyPane extends PaneBase {
         }
       } else {
         this.altInput.value = '';
-        this.altInput.setAttribute('disabled', 'true');
+        this.altInput.disabled = true;
       }
 
       // title
-      let title = this.getCommonProperty(selectedElements, function(element) {
-        return element.getAttribute('title');
-      });
+      const title = this.getCommonProperty(states, state => state.el.getAttribute('title'));
       if (title) {
         this.titleInput.value = title;
       } else {
@@ -284,17 +252,17 @@ export class PropertyPane extends PaneBase {
       }
     } else {
       // stage element only
-      this.leftInput.setAttribute('disabled', 'true');
+      this.leftInput.disabled = true;
       this.leftInput.value = '';
-      this.topInput.setAttribute('disabled', 'true');
+      this.topInput.disabled = true;
       this.topInput.value = '';
-      this.widthInput.setAttribute('disabled', 'true');
+      this.widthInput.disabled = true;
       this.widthInput.value = '';
-      this.heightInput.setAttribute('disabled', 'true');
+      this.heightInput.disabled = true;
       this.heightInput.value = '';
-      this.altInput.setAttribute('disabled', 'true');
+      this.altInput.disabled = true;
       this.altInput.value = '';
-      this.titleInput.setAttribute('disabled', 'true');
+      this.titleInput.disabled = true;
       this.titleInput.value = '';
     }
 
@@ -303,7 +271,6 @@ export class PropertyPane extends PaneBase {
     this.leftInput.setAttribute('data-prev-value', this.leftInput.value);
     this.widthInput.setAttribute('data-prev-value', this.widthInput.value);
     this.heightInput.setAttribute('data-prev-value', this.heightInput.value);
-    this.iAmRedrawing = false;
   }
 
   /**

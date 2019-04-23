@@ -21,10 +21,11 @@ import { Constants } from '../../../Constants';
 import { Controller, Model } from '../../types';
 import { Dom } from '../../utils/dom';
 import { PaneBase } from './pane-base';
+import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
 
 /**
  * on of Silex Editors class
- * let user edit style of components
+ * const user edit style of components
  * @param element   container to render the UI
  * @param model  model class which holds
   * the model instances - views use it for read
@@ -60,15 +61,6 @@ export class PagePane extends PaneBase {
    */
   pageCheckboxes: {checkbox: HTMLInputElement, pageName: string}[] = null;
 
-
-  // store the pages
-  pages: Array<string>;
-  iAmSettingValue: boolean;
-  iAmRedrawing: boolean;
-
-  // remember selection
-  selectedElements: HTMLElement[] = null;
-
   constructor(element: HTMLElement, model: Model, controller: Controller) {
 
     super(element, model, controller);
@@ -94,9 +86,9 @@ export class PagePane extends PaneBase {
     this.viewOnDeviceEl.onclick = (e) => {
       const selected: HTMLInputElement = this.element.querySelector('.view-on-mobile input:checked');
       const value = selected.value;
-      this.selectedElements.forEach((element) => {
-        this.model.element.setHideOnMobile(element, value === 'desktop');
-        this.model.element.setHideOnDesktop(element, value === 'mobile');
+      this.states.forEach(state => {
+        this.model.element.setHideOnMobile(state.el, value === 'desktop');
+        this.model.element.setHideOnDesktop(state.el, value === 'mobile');
       });
     };
     this.viewOnAllPagesCheckbox = this.element.querySelector('.view-on-allpages-check');
@@ -113,10 +105,10 @@ export class PagePane extends PaneBase {
    * @param pages   the new list of pages
    */
   setPages(pages: Array<string>) {
-    this.pages = pages;
+    this.pageNames = pages;
 
     // build an array of obects with name and displayName properties
-    let pageData = pages.map((pageName) => {
+    const pageData = pages.map((pageName) => {
       const pageElement =
           this.model.file.getContentDocument().getElementById(pageName);
       if (!pageElement) {
@@ -131,17 +123,17 @@ export class PagePane extends PaneBase {
     });
 
     // link selector
-    let pageDataWithDefaultOptions = [
+    const pageDataWithDefaultOptions = [
       {'name': 'none', 'displayName': '-', 'linkName': 'none'},
       {'name': 'custom', 'displayName': 'External link', 'linkName': 'custom'}
     ].concat(pageData);
-    let linkContainer = this.element.querySelector('.link-combo-box');
+    const linkContainer = this.element.querySelector('.link-combo-box');
     let templateHtml = this.element.querySelector('.link-template').innerHTML;
     linkContainer.innerHTML = Dom.renderList(templateHtml, pageDataWithDefaultOptions);
 
     // render page/visibility template
     // init page template
-    let pagesContainer = this.element.querySelector('.pages-container');
+    const pagesContainer = this.element.querySelector('.pages-container');
     templateHtml = this.element.querySelector('.pages-selector-template').innerHTML;
     pagesContainer.innerHTML = Dom.renderList(templateHtml, pageData);
 
@@ -160,7 +152,7 @@ export class PagePane extends PaneBase {
     const items = (Array.from(mainContainer.querySelectorAll('.page-container')) as HTMLElement[]);
     this.pageCheckboxes = items.map((item, idx) => {
       const checkbox: HTMLInputElement = item.querySelector('.page-check');
-      const name = this.pages[idx++];
+      const name = this.pageNames[idx++];
       checkbox.onchange = () => {
         this.checkPage(name, checkbox);
       };
@@ -173,15 +165,14 @@ export class PagePane extends PaneBase {
    */
   onLinkChanged() {
     if (this.linkDropdown.value === 'none') {
-      this.controller.propertyToolController.removeLink(this.selectedElements);
+      this.controller.propertyToolController.removeLink(this.states.map(state => state.el));
       this.linkInputTextField.style.display = 'none';
     } else {
       if (this.linkDropdown.value === 'custom') {
         this.linkInputTextField.value = '';
         this.linkInputTextField.style.display = 'inherit';
       } else {
-        this.controller.propertyToolController.addLink(
-            this.selectedElements, this.linkDropdown.value);
+        this.controller.propertyToolController.addLink(this.states.map(state => state.el), this.linkDropdown.value);
       }
     }
   }
@@ -190,30 +181,17 @@ export class PagePane extends PaneBase {
    * the user changed the link text field
    */
   onLinkTextChanged() {
-    this.iAmSettingValue = true;
-    this.controller.propertyToolController.addLink(
-        this.selectedElements, this.linkInputTextField.value);
-    this.iAmSettingValue = false;
+    this.controller.propertyToolController.addLink(this.states.map(state => state.el), this.linkInputTextField.value);
   }
 
   /**
    * redraw the properties
-   * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param states the elements currently selected
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
-    if (this.iAmSettingValue) {
-      return;
-    }
-    this.iAmRedrawing = true;
-
-
-    super.redraw( selectedElements, pageNames, currentPageName);
-    this.selectedElements = selectedElements;
+  redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
+    super.redraw( states, pageNames, currentPageName);
 
     // update page list
     this.setPages(pageNames);
@@ -223,47 +201,31 @@ export class PagePane extends PaneBase {
         .forEach((el: HTMLInputElement) => el.disabled = !this.model.head.getEnableMobile());
 
     // not available for stage element
-    let elementsNoStage = [];
-    selectedElements.forEach((element) => {
-      if (this.model.body.getBodyElement() !== element) {
-        elementsNoStage.push(element);
-      } else {
-        Array
-            .from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
-            .forEach((el: HTMLInputElement) => el.disabled = true);
-      }
-    });
-
-    // update the "view on mobile" checkbox
-    let visibility = this.getCommonProperty(selectedElements, (element) => {
-      if (this.model.element.getHideOnMobile(element)) {
-        return 'desktop';
-      } else {
-        if (this.model.element.getHideOnDesktop(element)) {
-          return 'mobile';
+    const statesNoBody = states.filter(data => data.el !== this.model.body.getBodyElement());
+    if(statesNoBody.length > 0) {
+      // update the "view on mobile" checkbox
+      const visibility = this.getCommonProperty(states, state => {
+        if (this.model.element.getHideOnMobile(state.el)) {
+          return 'desktop';
         } else {
-          return 'both';
+          if (this.model.element.getHideOnDesktop(state.el)) {
+            return 'mobile';
+          } else {
+            return 'both';
+          }
         }
+      });
+      if (!!visibility) {
+        Array.from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
+        .forEach((el: HTMLInputElement) => {
+          el.checked = visibility === el.value;
+          el.indeterminate = false;
+        });
+      } else {
+        Array.from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
+        .forEach((el: HTMLInputElement) => el.indeterminate = true);
       }
-    });
-    if (visibility !== null) {
-      Array.from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
-          .forEach((el: HTMLInputElement) => {
-            el.checked = visibility === el.value;
-            el.indeterminate = false;
-          });
-    } else {
-      Array.from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
-          .forEach((el: HTMLInputElement) => el.indeterminate = true);
-    }
 
-    // special case of the background / main container only selected element
-    let bgOnly = false;
-    if (selectedElements.length === 1 &&
-        selectedElements[0].classList.contains('background')) {
-      bgOnly = true;
-    }
-    if (elementsNoStage.length > 0 && bgOnly === false) {
       // not stage element only
       this.linkDropdown.disabled = false;
 
@@ -274,9 +236,7 @@ export class PagePane extends PaneBase {
         item.checkbox.disabled = false;
 
         // compute common pages
-        let isInPage = this.getCommonProperty(selectedElements, (element) => {
-          return this.model.page.isInPage(element, item.pageName);
-        });
+        const isInPage = this.getCommonProperty(states, state => this.model.page.isInPage(state.el, item.pageName));
 
         // set visibility
         isInNoPage = isInNoPage && isInPage === false;
@@ -299,10 +259,7 @@ export class PagePane extends PaneBase {
 
       // refresh the link inputs
       // get the link of the element
-      let elementLink =
-          (this.getCommonProperty(selectedElements, function(element) {
-            return element.getAttribute(Constants.LINK_ATTR);
-          }) as string);
+      const elementLink = this.getCommonProperty(states, state => state.el.getAttribute(Constants.LINK_ATTR));
 
       // default selection
       if (!elementLink || elementLink === '') {
@@ -324,8 +281,9 @@ export class PagePane extends PaneBase {
       } else {
         this.linkInputTextField.style.display = 'none';
       }
-    } else {
-      // stage element only
+    }
+    else {
+      // body element only
       this.pageCheckboxes.forEach((item) => {
         item.checkbox.disabled = true;
         item.checkbox.indeterminate = true;
@@ -335,8 +293,11 @@ export class PagePane extends PaneBase {
       this.linkInputTextField.style.display = 'none';
       this.viewOnAllPagesCheckbox.disabled = true;
       this.viewOnAllPagesCheckbox.checked = true;
+
+      Array
+      .from(this.viewOnDeviceEl.querySelectorAll('.view-on-mobile input'))
+      .forEach((el: HTMLInputElement) => el.disabled = true);
     }
-    this.iAmRedrawing = false;
   }
 
   /**
@@ -348,11 +309,9 @@ export class PagePane extends PaneBase {
   checkPage(pageName: string, checkbox: HTMLInputElement) {
     // notify the toolbox
     if (checkbox.checked) {
-      this.controller.propertyToolController.addToPage(
-          this.selectedElements, pageName);
+      this.controller.propertyToolController.addToPage(this.states.map(state => state.el), pageName);
     } else {
-      this.controller.propertyToolController.removeFromPage(
-          this.selectedElements, pageName);
+      this.controller.propertyToolController.removeFromPage(this.states.map(state => state.el), pageName);
     }
   }
 
@@ -365,8 +324,7 @@ export class PagePane extends PaneBase {
 
   removeFromAllPages() {
     this.pageCheckboxes.forEach((item) => {
-      this.controller.propertyToolController.removeFromPage(
-          this.selectedElements, item.pageName);
+      this.controller.propertyToolController.removeFromPage(this.states.map(state => state.el), item.pageName);
     });
   }
 }

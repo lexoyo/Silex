@@ -19,6 +19,7 @@ import {PaneBase} from './pane-base';
 import {Dom} from '../../utils/dom';
 import {Tracker} from '../../service/tracker';
 import {SilexNotification} from '../../utils/notification';
+import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
 
 /**
  * @fileoverview The style editor pane is displayed in the property panel on the
@@ -29,7 +30,6 @@ export class StyleEditorPane extends PaneBase {
   // tracker for analytics
   tracker: any;
 
-  selectedElements: HTMLElement[] = null;
   styleComboPrevValue: StyleName = '';
 
   // Build the UI
@@ -74,7 +74,7 @@ export class StyleEditorPane extends PaneBase {
     };
     this.styleCombo.onchange = (e) => {
       this.tracker.trackAction('style-editor-events', 'apply-style');
-      this.applyStyle(this.selectedElements, this.styleCombo.value);
+      this.applyStyle(this.states.map(state => state.el), this.styleCombo.value);
 
       // refresh the view
       this.controller.propertyToolController.refreshView();
@@ -93,10 +93,10 @@ export class StyleEditorPane extends PaneBase {
     // un-apply style
     (this.element.querySelector('.unapply-style') as HTMLElement).onclick = (e) => {
       this.tracker.trackAction('style-editor-events', 'unapply-style');
-      this.selectedElements.filter((el) => this.isTextBox(el))
-          .forEach((element) => {
-            element.classList.remove(this.styleCombo.value);
-          });
+      this.states.filter(state => this.isTextBox(state.el))
+      .forEach(state => {
+        state.el.classList.remove(this.styleCombo.value);
+      });
 
       // refresh the view
       this.controller.propertyToolController.refreshView();
@@ -251,28 +251,22 @@ export class StyleEditorPane extends PaneBase {
 
   /**
    * redraw the properties
-   * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param states the elements currently selected
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
-    super.redraw(selectedElements, pageNames, currentPageName);
+  redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
+    super.redraw(states, pageNames, currentPageName);
 
     // mobile mode
     this.mobileOnlyCheckbox.checked = this.isMobile();
 
-    // reuse selectedElements in combo box on change
-    this.selectedElements = selectedElements;
-
     // edit the style of the selection
-    if (selectedElements.length > 0) {
+    if (states.length > 0) {
       // get the selected elements style, i.e. which style applies to them
       const selectionStyle = (() => {
         // get the class names common to the selection
-        let classNames = this.getStyles(selectedElements);
+        let classNames = this.getStyles(states.map(state => state.el));
 
         // choose the style to edit
         if (classNames.length >= 1) {
@@ -322,25 +316,22 @@ export class StyleEditorPane extends PaneBase {
 
       // edit style only if there are only text boxes or elements with a style
       // (the body)
-      const onlyTextBoxes = this.selectedElements.length > 0 &&
-          this.selectedElements.reduce((prev, element) => {
-            const styles = this.getStyles([element]);
+      const onlyTextBoxes = this.states.length > 0 &&
+          this.states.reduce((prev, state) => {
+            const styles = this.getStyles([state.el]);
             if (styleNameNotNull === Constants.EMPTY_STYLE_CLASS_NAME) {
               // edit style only if there are only text boxes without styles
-              return prev && this.isTextBox(element) && styles.length === 0;
+              return prev && this.isTextBox(state.el) && styles.length === 0;
             } else {
               // edit style only if all the elements have the same style
-              return prev &&
-                  !!styles.find((style) => style === styleNameNotNull);
+              return prev && !!styles.find((style) => style === styleNameNotNull);
             }
           }, true);
       if (onlyTextBoxes) {
         this.element.classList.remove('no-style');
 
         // populate combos
-        const styleData =
-            (this.model.property.getStyleData(styleNameNotNull) ||
-             {} as StyleData);
+        const styleData = (this.model.property.getStyleData(styleNameNotNull) || {} as StyleData);
         this.populatePseudoClassCombo(styleData);
         this.pseudoClassCombo.disabled = false;
 
@@ -378,14 +369,12 @@ export class StyleEditorPane extends PaneBase {
    * mark tags push buttons to show which tags have styles
    */
   updateTagButtonBar(styleData: StyleData) {
-    const visibilityData =
-        (styleData['styles'] || {})[this.getVisibility()] || {};
+    const visibilityData = (styleData['styles'] || {})[this.getVisibility()] || {};
     const tagData = visibilityData[this.getPseudoClass()] || {};
     Array.from(this.element.querySelectorAll('[data-prodotype-name]'))
     .forEach((el: HTMLElement) => {
       const tagName = el.getAttribute('data-prodotype-name');
-      const label = el.getAttribute('data-initial-value') +
-          (tagData[tagName] ? ' *' : '');
+      const label = el.getAttribute('data-initial-value') + (tagData[tagName] ? ' *' : '');
       if (el.innerHTML != label) {
         el.innerHTML = label;
       }
@@ -461,7 +450,7 @@ export class StyleEditorPane extends PaneBase {
    */
   createStyle(
       opt_data?: StyleData, opt_cbk?: ((p1?: string) => any)) {
-    const textBoxes = this.selectedElements.filter((el) => this.isTextBox(el));
+    const textBoxes = this.states.filter(state => this.isTextBox(state.el));
     if (textBoxes.length <= 0) {
       SilexNotification.alert(
           'Error: you need to select a TextBox for this action.', () => {});
@@ -471,7 +460,7 @@ export class StyleEditorPane extends PaneBase {
           this.controller.propertyToolController.undoCheckPoint();
           const className = name.replace(/ /g, '-').toLowerCase();
           this.model.component.initStyle(name, className, opt_data);
-          this.applyStyle(textBoxes, className);
+          this.applyStyle(textBoxes.map(state => state.el), className);
 
           // FIXME: needed to select className but
           // model.Component::initStyle calls refreshView which calls

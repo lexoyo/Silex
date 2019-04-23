@@ -17,6 +17,7 @@
 
 import { Controller, Model } from '../../types';
 import { PaneBase } from './pane-base';
+import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
 
 
 /**
@@ -30,7 +31,6 @@ import { PaneBase } from './pane-base';
  * the controller instances
  */
 export class GeneralStylePane extends PaneBase {
-  iAmRedrawing: boolean;
   /**
    * opacity input
    */
@@ -55,36 +55,22 @@ export class GeneralStylePane extends PaneBase {
   /**
    * redraw the properties
    * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
-    if (this.iAmSettingValue) {
-      return;
-    }
-    this.iAmRedrawing = true;
-
-
-    super.redraw( selectedElements, pageNames, currentPageName);
+  redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
+    super.redraw(states, pageNames, currentPageName);
 
     // not available for stage element
-    let elementsNoStage = [];
-    selectedElements.forEach((element) => {
-      if (this.model.body.getBodyElement() !== element) {
-        elementsNoStage.push(element);
-      }
-    });
-    if (elementsNoStage.length > 0) {
+    const statesNoBody = states.filter(data => data.el !== this.model.body.getBodyElement());
+
+    if (statesNoBody.length > 0) {
       // not stage element only
       this.opacityInput.removeAttribute('disabled');
 
       // get the opacity
-      let opacity = this.getCommonProperty(selectedElements, (element) => {
-        return this.model.element.getStyle(element, 'opacity');
-      });
+      let opacity = this.getCommonProperty(states, (state) => this.model.element.getStyle(state.el, 'opacity'));
+
       if (opacity === null) {
         this.opacityInput.value = '';
       } else {
@@ -99,7 +85,6 @@ export class GeneralStylePane extends PaneBase {
       this.opacityInput.value = '';
       this.opacityInput.setAttribute('disabled', 'true');
     }
-    this.iAmRedrawing = false;
   }
 
   /**

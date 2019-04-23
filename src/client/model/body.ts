@@ -100,7 +100,7 @@ export class Body {
       let pages = this.model.page.getPages();
       let page = this.model.page.getCurrentPage();
       this.view.pageTool.redraw(selectedElements, pages, page);
-      this.view.propertyTool.redraw(selectedElements, pages, page);
+      this.view.propertyTool.redraw(this.view.stageWrapper.getSelection(), pages, page);
       this.view.textFormatBar.redraw(selectedElements, pages, page);
       // this.view.stageWrapper.redraw(selectedElements, pages, page);
       this.view.contextMenu.redraw(selectedElements, pages, page);

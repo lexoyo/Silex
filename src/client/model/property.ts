@@ -466,11 +466,8 @@ export class Property {
    */
   getStyle(element: HTMLElement, opt_isMobile?: boolean): CssRule {
     let elementId = (this.getSilexId(element) as SilexId);
-    const isMobile = opt_isMobile != null ?
-        opt_isMobile :
-        this.view.workspace.getMobileEditor();
-    const targetObj =
-        (isMobile ? this.mobileStylesObj : this.stylesObj as SilexData);
+    const isMobile = opt_isMobile != null ? opt_isMobile :  this.view.workspace.getMobileEditor();
+    const targetObj = (isMobile ? this.mobileStylesObj : this.stylesObj as SilexData);
     const style = (targetObj[elementId] as CssRule);
     if (!!style) {
       const clone = (JSON.parse(JSON.stringify(style)) as CssRule);

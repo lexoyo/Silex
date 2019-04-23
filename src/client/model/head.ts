@@ -264,7 +264,8 @@ export class Head {
     let pages = this.model.page.getPages();
     let page = this.model.page.getCurrentPage();
     const selectedElements = this.model.body.getSelection();
-    this.view.propertyTool.redraw(selectedElements, pages, page);
+    const states = this.view.stageWrapper.getSelection();
+    this.view.propertyTool.redraw(states, pages, page);
     this.view.textFormatBar.redraw(selectedElements, pages, page);
   }
 

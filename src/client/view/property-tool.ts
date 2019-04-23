@@ -26,6 +26,7 @@ import { PagePane } from './pane/page-pane';
 import { PropertyPane } from './pane/property-pane';
 import { StylePane } from './pane/style-pane';
 import { StyleEditorPane } from './pane/StyleEditorPane';
+import { SelectableState } from '../../../node_modules/stage/src/ts/Types';
 
 
 //////////////////////////////////////////////////////////////////
@@ -59,43 +60,43 @@ export class PropertyTool {
    * bg editor
    * @see     silex.view.pane.BgPane
    */
-  bgPane = null;
+  bgPane: BgPane = null;
 
   /**
    * property editor
    * @see     silex.view.pane.PropertyPane
    */
-  propertyPane = null;
+  propertyPane: PropertyPane = null;
 
   /**
    * editor
    * @see     silex.view.pane.BorderPane
    */
-  borderPane = null;
+  borderPane: BorderPane = null;
 
   /**
    * property editor
    * @see     silex.view.pane.PagePane
    */
-  pagePane = null;
+  pagePane: PagePane = null;
 
   /**
    * property editor
    * @see     silex.view.pane.GeneralStylePane
    */
-  generalStylePane = null;
+  generalStylePane: GeneralStylePane = null;
 
   /**
    * property editor
    * @see     silex.view.pane.StylePane
    */
-  stylePane = null;
+  stylePane: StylePane = null;
 
   /**
    * style editor
    * @see     silex.view.pane.StyleEditorPane
    */
-  styleEditorPane = null;
+  styleEditorPane: StyleEditorPane = null;
 
 
   constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
@@ -118,10 +119,8 @@ export class PropertyTool {
     this.styleEditorPane = new StyleEditorPane(styleEditorMenu, this.model, this.controller);
 
     // init component editor and style editor
-    const styleEditorElement = this.element.querySelector(
-        '.prodotype-style-editor .prodotype-container');
-    this.componentEditorElement =
-        this.element.querySelector('.prodotype-component-editor');
+    const styleEditorElement = this.element.querySelector('.prodotype-style-editor .prodotype-container');
+    this.componentEditorElement = this.element.querySelector('.prodotype-component-editor');
     this.model.component.init(this.componentEditorElement, styleEditorElement);
 
     // expandables
@@ -135,8 +134,7 @@ export class PropertyTool {
       }
       el.onclick = (e) => {
         this.togglePanel(el);
-        window.localStorage.setItem(
-            lsKey, (el.parentElement as HTMLElement).classList.contains('expanded').toString());
+        window.localStorage.setItem(lsKey, (el.parentElement as HTMLElement).classList.contains('expanded').toString());
       };
     }
 
@@ -204,26 +202,22 @@ export class PropertyTool {
 
   /**
    * redraw all panes
-   * @param selectedElements the elements currently selected
-   * @param pageNames   the names of the pages which appear in the current HTML
-   *     file
+   * @param states the elements currently selected
+   * @param pageNames   the names of the pages which appear in the current HTML file
    * @param  currentPageName   the name of the current page
    */
-  redraw(
-      selectedElements: HTMLElement[], pageNames: string[],
-      currentPageName: string) {
+  redraw(states: SelectableState[], pageNames: string[],currentPageName: string) {
     this.invalidationManager.callWhenReady(() => {
       // refresh panes
-      this.borderPane.redraw(selectedElements, pageNames, currentPageName);
-      this.propertyPane.redraw(selectedElements, pageNames, currentPageName);
-      this.pagePane.redraw(selectedElements, pageNames, currentPageName);
-      this.generalStylePane.redraw(
-          selectedElements, pageNames, currentPageName);
-      this.stylePane.redraw(selectedElements, pageNames, currentPageName);
-      this.bgPane.redraw(selectedElements, pageNames, currentPageName);
-      this.styleEditorPane.redraw(selectedElements, pageNames, currentPageName);
-      if (selectedElements.length === 1) {
-        this.controller.editMenuController.editComponent(selectedElements[0]);
+      this.borderPane.redraw(states, pageNames, currentPageName);
+      this.propertyPane.redraw(states, pageNames, currentPageName);
+      this.pagePane.redraw(states, pageNames, currentPageName);
+      this.generalStylePane.redraw(states, pageNames, currentPageName);
+      this.stylePane.redraw(states, pageNames, currentPageName);
+      this.bgPane.redraw(states, pageNames, currentPageName);
+      this.styleEditorPane.redraw(states, pageNames, currentPageName);
+      if (states.length === 1) {
+        this.controller.editMenuController.editComponent(states[0].el);
       } else {
         this.model.component.resetSelection(Constants.COMPONENT_TYPE);
       }

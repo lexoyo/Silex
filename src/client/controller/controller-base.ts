@@ -307,31 +307,24 @@ export class ControllerBase {
     // apply the change to all elements
     opt_elements.forEach((element) => {
       // update the model
-      switch(name) {
-        case 'top':
-        case 'left':
-        case 'width':
-        case 'height':
-        case 'min-height':
-          if(name === 'min-height') name = 'height';
-          const state = this.view.stageWrapper.getState(element);
-          this.view.stageWrapper.setState(element, {
-            ...state,
-            metrics: {
-              ...state.metrics,
-              computedStyleRect: {
-                ...state.metrics.computedStyleRect,
-                top: name === 'top' ? parseInt(value) : state.metrics.computedStyleRect.top,
-                left: name === 'left' ? parseInt(value) : state.metrics.computedStyleRect.left,
-                width: name === 'width' ? parseInt(value) : state.metrics.computedStyleRect.width,
-                height: name === 'height' ? parseInt(value) : state.metrics.computedStyleRect.height,
-              }
-            },
-          });
-        break;
-        default:
-          this.model.element.setStyle(element, name, value);
+      if(['top', 'left', 'width', 'height', 'min-height'].indexOf(name) >= 0) {
+        const state = this.view.stageWrapper.getState(element);
+        this.view.stageWrapper.setState(element, {
+          ...state,
+          metrics: {
+            ...state.metrics,
+            computedStyleRect: {
+              ...state.metrics.computedStyleRect,
+              top: name === 'top' ? parseInt(value) : state.metrics.computedStyleRect.top,
+              left: name === 'left' ? parseInt(value) : state.metrics.computedStyleRect.left,
+              width: name === 'width' ? parseInt(value) : state.metrics.computedStyleRect.width,
+              height: name === 'height' || name === 'min-height' ? parseInt(value) : state.metrics.computedStyleRect.height,
+            }
+          },
+        });
       }
+      // update the values in the model too
+      this.model.element.setStyle(element, name, value);
     });
 
     // refresh the view
@@ -560,7 +553,7 @@ export class ControllerBase {
   refreshView() {
     let pages = this.model.page.getPages();
     let currentPage = this.model.page.getCurrentPage();
-    this.view.propertyTool.redraw(this.model.body.getSelection(), pages, currentPage);
+    this.view.propertyTool.redraw(this.view.stageWrapper.getSelection(), pages, currentPage);
     this.view.textFormatBar.redraw(this.model.body.getSelection(), pages, currentPage);
     this.view.stageWrapper.redraw();
   }
