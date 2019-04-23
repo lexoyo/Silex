@@ -74,7 +74,7 @@ export class PagePane extends PaneBase {
    */
   buildUi() {
     this.linkDropdown = this.element.querySelector('.link-combo-box');
-    this.linkDropdown.onchange = () => this.onLinkChanged;
+    this.linkDropdown.onchange = () => this.onLinkChanged();
     this.linkInputTextField = this.element.querySelector('.link-input-text');
 
     // hide by default
