@@ -9,7 +9,7 @@
 // http://www.silexlabs.org/silex/silex-licensing/
 //////////////////////////////////////////////////
 
-const Constants = require('../../Constants.js');
+import {Constants} from '../../Constants.js';
 
 export default class DomTools {
   /**
@@ -150,7 +150,8 @@ export default class DomTools {
     if (styleTag != null) {
       return JSON.parse(styleTag.innerHTML)[0];
     }
-    console.info('Warning: no JSON styles array found in the dom (ok when publishing)');
+    // no JSON styles array found in the dom
+    // this is ok when publishing
     return null;
   }
 

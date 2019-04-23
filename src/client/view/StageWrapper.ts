@@ -76,11 +76,16 @@ export class StageWrapper {
     }
   }
 
-  initStage(iframe: HTMLIFrameElement) {
+  cleanup() {
     // cleanup
     if(!!this.stage) {
       this.stage.cleanup();
+      this.stage = null;
     }
+  }
+
+  init(iframe: HTMLIFrameElement) {
+    this.cleanup();
     this.stage = new Stage(iframe, iframe.contentWindow.document.querySelectorAll(`[${Constants.ELEMENT_ID_ATTR_NAME}]`), {
       isSelectable: (el => !el.classList.contains(Constants.PREVENT_SELECTABLE_CLASS_NAME)),
       isDraggable: (el => !el.classList.contains(Constants.PREVENT_DRAGGABLE_CLASS_NAME)),

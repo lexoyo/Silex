@@ -50,18 +50,13 @@
 body.silex-runtime .silex-element-content {
   pointer-events: auto;
 }
-/*  needed to have the content 100% height but mess up with UI
-.html-element .silex-element-content{
-  position: absolute;
-}
-*/
 .editable-style.section-element {
   position: relative;
   left: 0;
   top: 0;
   right: 0;
-  padding: 15px 100px;
-  margin: 5px 5px;
+  padding: 0 100px;
+  margin: 0;
 }
 .silex-runtime .editable-style.section-element {
   padding: 0;
@@ -80,6 +75,13 @@ body.silex-runtime .silex-element-content {
   margin-right: auto;
   overflow: initial;
 }
+.silex-editor .section-element .silex-container-content {
+  border-left: 1px dashed;
+  border-right: 1px dashed;
+}
+.silex-editor .section-element:last-of-type .silex-container-content {
+  border-bottom: 1px dashed;
+}
 /* background */
 .background{
   position: relative !important;
@@ -90,7 +92,7 @@ body.silex-runtime .silex-element-content {
   z-index: 1;
 }
 /* resize */
-.editable-style.image-element .silex-element-content{
+.editable-style.image-element .silex-element-content {
   position: absolute;
   border-radius: inherit; /* this is to follow the element's radius */
   height: 100%;
@@ -136,7 +138,7 @@ body.enable-mobile .background {
   /* mobile mode */
   body.enable-mobile .editable-style:not(.prevent-mobile-style),
   body.enable-mobile .background.background-initial {
-    position: relative;
+    position: static;
     top: auto;
     left: auto;
     max-width: 95%; /* less than 100% in the editor to be able to resize container */

@@ -116,7 +116,6 @@ export default class BackwardCompat {
       const newUrl = this.getStaticResourceUrl(element[propName]);
       const oldUrl = element.getAttribute(propName);
       if(oldUrl != newUrl) {
-        console.info('BC rewrite URL', element, oldUrl, newUrl)
         element.setAttribute(propName, newUrl);
       }
     }

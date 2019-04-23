@@ -117,6 +117,7 @@ export class File {
       opt_showLoader?: boolean) {
 
     // reset iframe content
+    this.view.stageWrapper.cleanup();
     this.contentDocument_.open();
     this.getContentDocument().write('');
     this.contentDocument_.close();
@@ -164,9 +165,6 @@ export class File {
     // update the settings
     this.model.head.updateFromDom();
 
-    // restore the stage
-    this.view.stageWrapper.initStage(this.iFrameElement_);
-
     // notify the caller
     if (opt_cbk) {
       opt_cbk();
@@ -184,6 +182,11 @@ export class File {
     if (this.isTemplate) {
       this.model.head.setPublicationPath(null);
     }
+
+    setTimeout(() => {
+      // restore the stage
+      this.view.stageWrapper.init(this.iFrameElement_);
+    }, 1000);
   }
 
   /**
