@@ -125,6 +125,7 @@ export class TextFormatBar {
 
       // reset focus
       Body.resetFocus();
+      this.controller.stageController.refreshView();
 
       // use array acces for getSelection as a workaround for google closure
       // warning 'Property getSelection never defined on Document' cleanup
