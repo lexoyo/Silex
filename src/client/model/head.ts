@@ -135,6 +135,8 @@ export class Head {
       this.getHeadElement().appendChild(silexStyle);
     }
     silexStyle.innerHTML = cssString;
+    // update metrics
+    this.view.stageWrapper.redraw();
   }
 
   /**

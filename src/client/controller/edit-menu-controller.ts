@@ -158,9 +158,7 @@ super(model, view);
       // undo checkpoint
       this.undoCheckPoint();
 
-      // take the scroll into account (drop at (100, 100) from top left corner
-      // of the window, not the stage)
-      const doc = this.model.file.getContentDocument();
+      // take the scroll into account (drop at (100, 100) from top left corner of the window, not the stage)
       let offset = 0;
 
       // add to the container
@@ -181,8 +179,7 @@ super(model, view);
       // select the new elements
       this.model.body.setSelection(selection);
 
-      // copy again so that we can paste several times (elements will be
-      // duplicated again)
+      // copy again so that we can paste several times (elements will be duplicated again)
       this.copySelection();
     }
   }

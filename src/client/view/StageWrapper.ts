@@ -25,6 +25,10 @@ export class StageWrapper {
     if(!this.stage) return;
     this.stage.addElement(element);
   }
+  removeElement(element: HTMLElement) {
+    if(!this.stage) return;
+    this.stage.removeElement(element);
+  }
   center(elements: HTMLElement[]) {
     if(!this.stage) return;
     this.stage.center(elements);

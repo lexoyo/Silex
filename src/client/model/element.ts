@@ -508,10 +508,14 @@ export class SilexElement {
 
       // remove the element
       element.parentElement.removeChild(element);
+
+      // update stage store
+      this.view.stageWrapper.removeElement(element);
+
+      // update all metrics in case this new element has moved other elements
+      this.view.stageWrapper.redraw();
     } else {
-      console.error(
-          'could not delete', element,
-          'because it is not in the stage element');
+      console.error('could not delete', element, 'because it is not in the stage element');
     }
   }
 
@@ -531,6 +535,12 @@ export class SilexElement {
     // this will resize the body according to its content
     // it will also trigger a "silex.resize" event
     this.model.file.getContentWindow()['silex']['resizeBody']();
+
+    // update stage store
+    this.view.stageWrapper.addElement(element);
+
+    // update all metrics in case this new element has moved other elements
+    this.view.stageWrapper.redraw();
   }
 
   /**
@@ -620,9 +630,6 @@ export class SilexElement {
         this.addElementDefaultPosition(element);
       }
     }
-
-    // update stage store
-    this.view.stageWrapper.addElement(element);
   }
 
   /**
