@@ -436,12 +436,8 @@ export class SilexElement {
         SilexElement.loadImage(url, {
           success: loadedImg => {
             // update element size
-            this.setStyle(
-                element, 'width',
-                Math.max(SilexElement.MIN_WIDTH, loadedImg.naturalWidth) + 'px', true);
-            this.setStyle(
-                element, this.getHeightStyleName(element),
-                Math.max(SilexElement.MIN_HEIGHT, loadedImg.naturalHeight) + 'px', true);
+            this.setStyle(element, 'width', Math.max(SilexElement.MIN_WIDTH, loadedImg.naturalWidth) + 'px', true);
+            this.setStyle(element, this.getHeightStyleName(element), Math.max(SilexElement.MIN_HEIGHT, loadedImg.naturalHeight) + 'px', true);
 
             // callback
             if (opt_callback) {
@@ -464,6 +460,7 @@ export class SilexElement {
 
             // redraw tools
             this.model.body.setSelection(this.model.body.getSelection());
+            this.view.stageWrapper.redraw();
           },
           error: e => {
             console.error('An error occured while loading the image.', element, e);
