@@ -162,11 +162,6 @@ export default function({ port, rootUrl }, unifile) {
     tag.href = rootUrl + '/css/editable.css';
     tag.classList.add(Constants.SILEX_TEMP_TAGS_CSS_CLASS);
     dom.window.document.head.appendChild(tag);
-    // add UI markup
-    const editableElements = dom.window.document.getElementsByClassName(Constants.EDITABLE_CLASS_NAME);
-    for(let idx=0; idx<editableElements.length; idx++) {
-      const el = editableElements[idx];
-    }
   }
   /**
    * prepare website for being saved

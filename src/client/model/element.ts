@@ -662,11 +662,9 @@ export class SilexElement {
         element = this.createImageElement();
         break;
     }
-
     // init the element
     element.classList.add(Constants.EDITABLE_CLASS_NAME);
-    this.model.property.initSilexId(
-        element, this.model.file.getContentDocument());
+    this.model.property.initSilexId(element, this.model.file.getContentDocument());
 
     // add css class for Silex styles
     element.classList.add(type);

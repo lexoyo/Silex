@@ -73,7 +73,7 @@ SilexServer.prototype.start = function(cbk) {
 
   // server 'loop'
   this.app.listen(this.config.serverOptions.port, () => {
-    console.log('Listening on ' + this.config.serverOptions.port);
+    console.info(`\nI'm ready, listening to port ${this.config.serverOptions.port}\n`);
     if(cbk) cbk();
   });
 };

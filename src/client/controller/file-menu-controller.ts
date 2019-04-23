@@ -60,7 +60,6 @@ export class FileMenuController extends ControllerBase {
                   fileInfo.service} again.`,
               (ok) => {
                 const ce = CloudStorage.getInstance().ce;
-                console.log('before auth', ce);
                 SilexNotification.alert(
                     `I am trying to connect you to ${
                         fileInfo

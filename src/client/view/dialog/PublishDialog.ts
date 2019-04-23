@@ -89,7 +89,6 @@ export class PublishDialog {
       } else {
         if (hosting['skipHostingSelection'] === true) {
           const provider = hosting['providers'][0];
-          console.log('Skip provider selection for hosting:', hosting);
 
           // continue to next step
           resolve(this.selectProviderFolder(provider));
@@ -120,8 +119,8 @@ export class PublishDialog {
             resolve(null);
           }
         }, 'next', 'cancel');
-      const body = document.createDocumentFragment();
-      body.append(`
+      const body = document.createElement('div');
+      body.insertAdjacentHTML('afterbegin', `
         <select class="providers">
           ${
               providers.map(
@@ -195,8 +194,6 @@ export class PublishDialog {
               'Check again');
         } else {
           if (provider['skipVhostSelection'] === true) {
-            console.log(
-                'Skip vhost selection for provider:', provider, vhosts[0]);
             resolve(this.selectDomain(provider, vhosts[0]));
           } else {
             SilexNotification.prompt(
@@ -207,8 +204,8 @@ export class PublishDialog {
                     resolve(this.selectDomain(provider, vhost));
                   }
                 }, 'next', 'cancel');
-            const body = document.createDocumentFragment();
-            body.append(`
+            const body = document.createElement('div');
+            body.insertAdjacentHTML('afterbegin', `
               <select class="vhosts">
                 ${
                 vhosts.map(
@@ -232,7 +229,6 @@ export class PublishDialog {
     this.model.head.setWebsiteUrl(vhost['url']);
     return new Promise((resolve, reject) => {
       if (vhost['skipDomainSelection'] === true) {
-        console.log('Skip domain selection for vhost: ', vhost);
         resolve({
           'publicationPath': vhost['publicationPath'],
           'provider': provider,
@@ -300,13 +296,14 @@ export class PublishDialog {
       const provider = options['provider'];
       let timer = -1;
       SilexNotification.alert(
-          '<strong>I am about to publish your site. This may take several minutes.</strong>',
-          () => {},
-          // if(timer > 0) {
-          //   clearInterval(timer);
-          // }
-          // timer = -1;
-          'Close');
+        '<strong>I am about to publish your site. This may take several minutes.</strong>',
+        () => {
+          if(timer > 0) {
+            clearInterval(timer);
+          }
+        },
+        'Close');
+      timer = -1;
       this.loading(true);
       console.info('Publish', options);
       this.service.publish(options, () => {
@@ -314,31 +311,32 @@ export class PublishDialog {
         setTimeout(() => {
           // tip of the day
           const tipOfTheDayElement = (document.createElement('div') as HTMLElement);
-          const tipOfTheDay = new TipOfTheDay(tipOfTheDayElement);
+          new TipOfTheDay(tipOfTheDayElement);
           SilexNotification.setInfoPanel(tipOfTheDayElement);
         }, 2000);
         timer = window.setInterval(() => {
           this.service.publishState(
-              (json) => {
-                let msg = `<strong>${json['message']}</strong>`;
-                if (json['stop'] === true) {
-                  clearInterval(timer);
-                  const websiteUrl = this.model.head.getWebsiteUrl() ||
-                      publicationPath.url + '/index.html';
-                  msg += `<p>Please visit <a target="_blanck" href="${
-                      websiteUrl}">your published website here</a>. ${
-                      provider && provider['afterPublishMessage'] ?
-                          provider['afterPublishMessage'] :
-                          ''}</p>`;
-                  resolve(msg);
-                } else {
-                  SilexNotification.setText(msg);
-                }
-              },
-              (msg) => {
+            (json) => {
+              let msg = `<strong>${json['message']}</strong>`;
+              if (json['stop'] === true) {
                 clearInterval(timer);
-                reject(msg);
-              });
+                const websiteUrl = this.model.head.getWebsiteUrl() ||
+                    publicationPath.url + '/index.html';
+                msg += `<p>Please visit <a target="_blanck" href="${
+                    websiteUrl}">your published website here</a>. ${
+                    provider && provider['afterPublishMessage'] ?
+                        provider['afterPublishMessage'] :
+                        ''}</p>`;
+                resolve(msg);
+              } else {
+                SilexNotification.setText(msg);
+              }
+            },
+            (msg) => {
+              clearInterval(timer);
+              reject(msg);
+            }
+          );
         }, 1000);
       }, (msg) => reject(msg));
     });

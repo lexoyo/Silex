@@ -135,7 +135,6 @@ export default class PublishJob {
     return this.state;
   }
   setStatus(status) {
-    // console.log(`Status changed for PublishJob ${this.id}: ${status}`);
     this.state = status;
   }
   cleanup() {
@@ -143,7 +142,6 @@ export default class PublishJob {
     if(this.pleaseDeleteMe) console.error('PublishJob was already marked for deletion', this.id);
     else {
       setTimeout(() => {
-        // console.log('PublishJob cleanup, now asking to be deleted', this.id);
         this.pleaseDeleteMe = true;
       }, 60*1000);
     }
@@ -183,7 +181,6 @@ export default class PublishJob {
     else return defaultFolder;
   }
   getDestFolder(ext, tagName) {
-    console.log('getDestFolder', ext, tagName);
     // tags
     if(tagName) {
       switch(tagName.toLowerCase()) {

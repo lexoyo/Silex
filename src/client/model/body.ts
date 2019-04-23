@@ -45,8 +45,13 @@ export class Body {
    * @static
    */
   static resetFocus() {
-    Body.focusInput.focus();
-    Body.focusInput.blur();
+    // setTimeout because we might need to wait for a click to finish bubbling
+    // e.g. when edit text, the UI layer is hidden, click on the stage => focus on the stage iframe
+    setTimeout(() => {
+      Body.focusInput.focus();
+      Body.focusInput.blur();
+      document.getSelection().removeAllRanges();
+    }, 0);
   }
 
   /**
@@ -88,7 +93,6 @@ export class Body {
     // only if selection changed
     if(selection.filter(el => !selectedElements.find(s => s === el)).length !== 0
       || selectedElements.filter(el => !selection.find(s => s === el)).length !== 0) {
-
       this.view.stageWrapper.setSelection(selectedElements);
     }
 
@@ -102,6 +106,8 @@ export class Body {
       this.view.contextMenu.redraw(selectedElements, pages, page);
       this.view.breadCrumbs.redraw(selectedElements, pages, page);
       this.view.htmlEditor.setSelection(selectedElements);
+
+      Body.resetFocus();
   }
 
   removeWysihtmlMarkup(root: HTMLElement|Document) {

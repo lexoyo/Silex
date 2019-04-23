@@ -96,7 +96,7 @@ export class ModalDialog {
     }
 
     // handle escape key
-    document.addEventListener('keyup', e => {
+    document.addEventListener('keydown', e => {
       if (this.isOpen && e.key === 'Escape') {
         this.close();
         e.preventDefault();

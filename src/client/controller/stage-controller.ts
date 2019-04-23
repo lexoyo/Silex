@@ -100,13 +100,9 @@ export class StageController extends ControllerBase {
   // }
 
   stopEdit() {
-    if(this.view.stageWrapper.getEditMode()) {
-      this.view.stageWrapper.setEditMode(false);
-    }
+    this.view.stageWrapper.setEditMode(false);
   }
   startEdit() {
-    if(!this.view.stageWrapper.getEditMode()) {
-      this.view.stageWrapper.setEditMode(true);
-    }
+    this.view.stageWrapper.setEditMode(true);
   }
 }

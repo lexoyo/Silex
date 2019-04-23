@@ -23,7 +23,8 @@ import { Constants } from '../../Constants';
 const PACKAGE_JSON_DATA = require(Path.resolve(__dirname, '../../../../package.json'));
 const FRONT_END_VERSION = PACKAGE_JSON_DATA['version:frontend'].split('.').map(s => parseInt(s));
 const LATEST_VERSION = PACKAGE_JSON_DATA['version:backwardcompat'].split('.').map(s => parseInt(s));
-console.log('Silex starts with backward compat version', LATEST_VERSION, 'and front end version', FRONT_END_VERSION);
+
+console.log(`\nSilex starts with backward compat version ${LATEST_VERSION} and front end version ${FRONT_END_VERSION}\n`);
 
 /**
  * @fileoverview Handle backward compatibility when a user opens a site for edition
@@ -55,7 +56,6 @@ export default class BackwardCompat {
       .map(str => parseInt(str, 10) || 0);
 
     var hasToUpdate = this.hasToUpdate(version, LATEST_VERSION);
-    console.log('BC', version, LATEST_VERSION, hasToUpdate);
 
     // warn the user
     if (this.amIObsolete(version, LATEST_VERSION)) {
@@ -81,14 +81,15 @@ export default class BackwardCompat {
         metaNode.setAttribute('content', 'Silex v' + LATEST_VERSION.join('.'));
         // build the report for the user
         const report = Object.keys(allActions).map(version => {
-          return `<p>Update to version ${ version }:
+          return `<small>Update to version ${ version }:
               <ul>${ allActions[version].map(action => `<li class="no-list">${ action }</li>`).join('') }</ul>
-          </p>`
+          </small>`
         }).join('');
         // needs to reload if silex scripts and stylesheets have been updated
-        return `<h3>This website has been updated with the latest version of Silex.</h3>
-        <p>Before you save it, please check that everything is fine. Saving it with another name could be a good idea too (menu file > save as).</p>
-        <p>Bellow you will find details of what I did.</p><hr/>
+        return `<h2>Website updated</h2>
+          <p>This website has been updated to Silex latest version.</p>
+          <p>Before you save it, please check that everything is fine. Saving it with another name could be a good idea too (menu file > save as).</p>
+          <small>Bellow you will find details of what I did.</small>
           ${ report }
         `;
       })
@@ -182,7 +183,6 @@ export default class BackwardCompat {
       return new Promise((resolve, reject) => {
         const actions = [];
         if (this.hasToUpdate(version, [2, 2, 8])) {
-          console.log('updating', version, [2, 2, 8]);
           // cleanup the hamburger menu icon
           const menuButton = doc.querySelector('.menu-button')
           if(menuButton) {
@@ -195,7 +195,6 @@ export default class BackwardCompat {
           Array.from(doc.querySelectorAll('.page-element'))
           .forEach((el: HTMLLinkElement) => {
             el.setAttribute('href', '#!' + el.getAttribute('id'));
-            console.log('set href of hamburger menu page', el.href);
           });
           actions.push(`
             <p>I fixed the mobile menu so that it is compatible with the new publication (now multiple pages are generated instead of 1 single page for the whole website).</p>
@@ -215,7 +214,6 @@ export default class BackwardCompat {
       return new Promise((resolve, reject) => {
         let actions = [];
         if (this.hasToUpdate(version, [2, 2, 9])) {
-          console.log('updating', version, [2, 2, 9]);
           // remove the hamburger menu icon
           const menuButton = doc.querySelector('.menu-button')
           if(menuButton) {
@@ -238,8 +236,6 @@ export default class BackwardCompat {
       return new Promise((resolve, reject) => {
         let actions = [];
         if (this.hasToUpdate(version, [2, 2, 10])) {
-          console.log('updating', version, [2, 2, 10]);
-
           // the body is a drop zone, not selectable, not draggable, resizeable
           doc.body.classList.add(
             Constants.PREVENT_DRAGGABLE_CLASS_NAME,
@@ -247,11 +243,10 @@ export default class BackwardCompat {
             Constants.PREVENT_SELECTABLE_CLASS_NAME);
 
           // each section background and foreground is a drop zone, not selectable, not draggable, resizeable
-          const changedSections = Array.from(doc.querySelectorAll(`.${Constants.TYPE_SECTION}`));
+          const changedSections = Array.from(doc.querySelectorAll(`.${Constants.TYPE_SECTION}`)) as HTMLElement[];
           changedSections.forEach((el: HTMLElement) => el.classList.add(
             Constants.PREVENT_DRAGGABLE_CLASS_NAME,
             Constants.PREVENT_RESIZABLE_CLASS_NAME,
-            Constants.PREVENT_SELECTABLE_CLASS_NAME
           ));
 
           // we add classes to the elements so that we can tell the stage component if an element is draggable, resizeable, selectable...
@@ -267,7 +262,7 @@ export default class BackwardCompat {
           const changedElements = Array.from(doc.querySelectorAll(`[${Constants.TYPE_ATTR}]`));
           changedElements.forEach((el: HTMLElement) => el.setAttribute(Constants.TYPE_ATTR, el.getAttribute(Constants.TYPE_ATTR) + '-element'));
 
-          actions.push(`Also changed the ${ changedElements.length } elements type to match the new version of Silex.`);
+          actions.push(`Updated ${ changedElements.length } elements, changed their types to match the new version of Silex.`);
         }
         resolve(actions);
       });

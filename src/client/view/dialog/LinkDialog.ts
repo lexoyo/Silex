@@ -36,7 +36,6 @@ export class LinkDialog {
   open(
       linkDataArg: LinkData, pageNames: string[],
       cbk: (p1: LinkData) => any) {
-    console.log('edit link', linkDataArg, pageNames);
 
     // default values for new link
     const linkData = Object.assign({}, DEFAULT_LINK_DATA, linkDataArg);
@@ -93,8 +92,8 @@ export class LinkDialog {
     SilexNotification.addButton(fragmentButtons);
 
     // add info about the link
-    const dialogBody = document.createDocumentFragment();
-    dialogBody.append(this.getDialogHtml({isExternal: isExternal, linkData: linkData, pageNames: pageNames}));
+    const dialogBody = document.createElement('div');
+    dialogBody.insertAdjacentHTML('afterbegin', this.getDialogHtml({isExternal: isExternal, linkData: linkData, pageNames: pageNames}));
     Array.from(dialogBody.querySelectorAll('.link-editor-tab-label'))
     .forEach((el: HTMLElement) => {
       el.onclick = (_) => {

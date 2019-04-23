@@ -315,7 +315,6 @@ export class ControllerBase {
         case 'min-height':
           if(name === 'min-height') name = 'height';
           const state = this.view.stageWrapper.getState(element);
-          console.log('Set state');
           this.view.stageWrapper.setState(element, {
             ...state,
             metrics: {
@@ -606,7 +605,7 @@ export class ControllerBase {
             if (fileInfo != null) {
               this.doSave((fileInfo as FileInfo), opt_cbk, opt_errorCbk);
             } else {
-              console.log('user aborted save as');
+              // user aborted save as
             }
           })
           .catch((error) => {

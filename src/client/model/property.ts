@@ -83,7 +83,6 @@ export class Property {
   constructor(public model: Model, public view: View) {}
 
   setFonts(fonts: Font[]) {
-    console.log('setFonts aaa', fonts);
     this.fonts = fonts;
   }
 
@@ -396,7 +395,6 @@ export class Property {
    * INLINE_STYLE_TAG_CLASS_NAME if style is null this will remove the rule
    */
   setStyle(element: HTMLElement, styleObj: Object, opt_isMobile?: boolean) {
-    console.log('setStyle', element, styleObj, opt_isMobile)
     const deleteStyle = !styleObj;
     const style = styleObj || {};
     const elementId = (this.getSilexId(element) as SilexId);

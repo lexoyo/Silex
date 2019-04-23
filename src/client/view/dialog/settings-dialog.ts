@@ -181,7 +181,6 @@ export class SettingsDialog {
         if (el.classList.contains('edit-btn')) {
           const idx = parseInt(el.getAttribute('data-idx'), 10);
           const fonts = this.model.head.getFonts();
-          console.log('edit', fonts[idx]);
           this.editFont(fonts[idx], (font) => {
             const newFonts = fonts.slice();
             newFonts[idx] = font;

@@ -16,11 +16,6 @@
 
 export class Constants {
   /**
-   * constant for the class name of the pages
-   */
-  static PAGE_CLASS_NAME: string = 'page-element';
-
-  /**
    * constant for the class name of elements visible only on some pages
    */
   static PAGED_CLASS_NAME: string = 'paged-element';
@@ -57,6 +52,11 @@ export class Constants {
    * constant for loader on elements
    */
   static LOADING_ELEMENT_CSS_CLASS: string = 'loading-image';
+
+  /**
+   * constant for silex element type
+   */
+  static TYPE_PAGE: string = 'page-element';
 
   /**
    * constant for silex element type
@@ -253,7 +253,6 @@ export class Constants {
     Constants.COMPONENT_CLASS_NAME,
   ];
   static SILEX_TEMP_CLASS_NAMES = [
-    Constants.EDITABLE_CLASS_NAME,
     Constants.PAGE_LINK_ACTIVE_CLASS_NAME,
     Constants.PAGEABLE_PLUGIN_READY_CLASS_NAME,
     Constants.PAGED_HIDDEN_CLASS_NAME,

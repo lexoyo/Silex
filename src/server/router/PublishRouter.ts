@@ -139,14 +139,14 @@ export default function PublishRouter({ port, rootUrl, enableHostingGhPages, ena
 };
 
 function addHostingProvider(hostingProvider) {
-  console.log('adding hosting provider', hostingProvider.getOptions({}).displayName);
+  console.log('> Adding hosting provider', hostingProvider.getOptions({}).displayName);
   hostingProviders.push(hostingProvider);
 };
 
 function getHostingProviderFromReq(req) {
   const hostingProviderName = req.params.hostingProviderName;
   const hostingProvider = getHostingProvider(req.session.unifile, hostingProviderName);
-  if(!hostingProvider) throw('could not find the hosting provider ' + hostingProviderName);
+  if(!hostingProvider) throw('Could not find the hosting provider ' + hostingProviderName);
   return hostingProvider;
 };
 

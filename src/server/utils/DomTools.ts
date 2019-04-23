@@ -9,7 +9,7 @@
 // http://www.silexlabs.org/silex/silex-licensing/
 //////////////////////////////////////////////////
 
-const constants = require('../../Constants.js');
+const Constants = require('../../Constants.js');
 
 export default class DomTools {
   /**
@@ -41,7 +41,6 @@ export default class DomTools {
         const newVal = fn(val, el, el.parentElement === dom.window.document.head);
         if(newVal) {
           el.setAttribute(attr, newVal);
-          if(val != newVal) console.log('URL transformed:', attr, val, '=>', newVal, '(image)');
         }
       }
     });
@@ -83,7 +82,6 @@ export default class DomTools {
       if(newUrl) {
         valueArr[1] = newUrl;
       }
-      console.log('URL transformed:', url, '=>', newUrl, '(image in CSS)');
       return valueArr.join('\'');
     }
     return null;
@@ -133,7 +131,6 @@ export default class DomTools {
             else {
               if(['src', 'href'].indexOf(propName) >= 0) {
                 elementData[propName] = fn(propValue) || propValue;
-                console.log('URL transformed:', propName, propValue, '=>', elementData[propName], '(URL in Silex JSON data)');
               }
             }
           }
@@ -149,7 +146,7 @@ export default class DomTools {
    * This code comes from the client side class property.js
    */
   static getProperties(doc) {
-    var styleTag = doc.querySelector('.' + constants.JSON_STYLE_TAG_CLASS_NAME);
+    var styleTag = doc.querySelector('.' + Constants.JSON_STYLE_TAG_CLASS_NAME);
     if (styleTag != null) {
       return JSON.parse(styleTag.innerHTML)[0];
     }
@@ -163,7 +160,7 @@ export default class DomTools {
    * This code comes from the client side class property.js
    */
   static setProperties(doc, value) {
-    var styleTag = doc.querySelector('.' + constants.JSON_STYLE_TAG_CLASS_NAME);
+    var styleTag = doc.querySelector('.' + Constants.JSON_STYLE_TAG_CLASS_NAME);
     if (styleTag != null) {
       styleTag.innerHTML = JSON.stringify([value]);
     }
@@ -182,10 +179,9 @@ export default class DomTools {
    * @return {{html: string, userHead: string}} split initial head tag and user editable head tag
    */
   static extractUserHeadTag(headString) {
-    const regExp = new RegExp(constants.HEAD_TAG_START + '([\\\s\\\S.]*)' + constants.HEAD_TAG_STOP);
+    const regExp = new RegExp(Constants.HEAD_TAG_START + '([\\\s\\\S.]*)' + Constants.HEAD_TAG_STOP);
     const found = headString.match(regExp);
     if (found) {
-      console.log('extractUserHeadTag found', !!found[1]);
       return {
         userHead: found[1],
         html: headString.replace(regExp, ''),
@@ -208,8 +204,12 @@ export default class DomTools {
    * @return {string} the provided string with the user's head tags
    */
   static insertUserHeadTag(htmlString, userHead) {
-    console.log('insertUserHeadTag', !!htmlString, !!userHead);
-    return htmlString.replace(/<\/head>/i, constants.HEAD_TAG_START + userHead + constants.HEAD_TAG_STOP + '</head>');
+    if(userHead) {
+      return htmlString.replace(/<\/head>/i, Constants.HEAD_TAG_START + userHead + Constants.HEAD_TAG_STOP + '</head>');
+    }
+    else {
+      return htmlString;
+    }
   };
 
 

@@ -66,7 +66,7 @@ export class Page {
       console.warn('Can not get pages, the body element is null');
       return [];
     }
-    const elements = bodyElement.querySelectorAll('a[data-silex-type="page"]');
+    const elements = bodyElement.querySelectorAll(`a[data-silex-type="${Constants.TYPE_PAGE}"]`);
     elements.forEach((element) => {
       pages.push(element.getAttribute('id'));
     });
@@ -85,9 +85,7 @@ export class Page {
     let pageName = null;
     try {
       if (this.model.file.getContentWindow()['jQuery'](bodyElement).pageable) {
-        pageName = this.model.file.getContentWindow()
-                       ['jQuery'](bodyElement)
-                       .pageable('option', 'currentPage');
+        pageName = this.model.file.getContentWindow()['jQuery'](bodyElement).pageable('option', 'currentPage');
       }
     } catch (e) {
       // there was a problem in the pageable plugin, return the first page
@@ -154,7 +152,7 @@ export class Page {
           'I could not delete this page because <strong>it is the only page!</strong>');
     } else {
       // remove the DOM element
-      const pageElements = Array.from(this.model.body.getBodyElement().querySelectorAll('a[data-silex-type="page"]'));
+      const pageElements = Array.from(this.model.body.getBodyElement().querySelectorAll(`a[data-silex-type="${Constants.TYPE_PAGE}"]`));
       pageElements.forEach((element) => {
         if (element.getAttribute('id') === pageName) {
           element.parentElement.removeChild(element);
@@ -215,8 +213,7 @@ export class Page {
     if (direction !== 'up' && direction !== 'down') {
       throw 'wrong direction ' + direction + ', can not move page';
     }
-    const elements = this.model.body.getBodyElement().querySelectorAll(
-        'a[data-silex-type="page"]');
+    const elements = this.model.body.getBodyElement().querySelectorAll(`a[data-silex-type="${Constants.TYPE_PAGE}"]`);
     let prevEl = null;
     for (let idx = 0; idx < elements.length; idx++) {
       const el = elements[idx];
@@ -246,12 +243,12 @@ export class Page {
     let aTag = this.model.file.getContentDocument().createElement('a');
     aTag.setAttribute('id', name);
     aTag.setAttribute('href', '#!' + name);
-    aTag.setAttribute('data-silex-type', 'page');
+    aTag.setAttribute('data-silex-type', Constants.TYPE_PAGE);
     aTag.innerHTML = displayName;
     container.appendChild(aTag);
 
     // for coherence with other silex elements
-    aTag.classList.add(Constants.PAGE_CLASS_NAME);
+    aTag.classList.add(Constants.TYPE_PAGE);
 
     // select this page
     this.setCurrentPage(name);
@@ -264,7 +261,7 @@ export class Page {
     const bodyElement = this.model.body.getBodyElement();
 
     // update the DOM element
-    const pageElements = Array.from(bodyElement.querySelectorAll('a[data-silex-type="page"]'));
+    const pageElements = Array.from(bodyElement.querySelectorAll(`a[data-silex-type="${Constants.TYPE_PAGE}"]`));
     pageElements.forEach((element) => {
       if (element.getAttribute('id') === oldName) {
         element.setAttribute('id', newName);
@@ -274,7 +271,7 @@ export class Page {
     });
 
     // update the links to this page
-    const linkElements = Array.from(bodyElement.querySelectorAll('*[data-silex-href="#!' + oldName + '"]'));
+    const linkElements = Array.from(bodyElement.querySelectorAll(`*[data-silex-href="#!${oldName}"]`));
     linkElements.forEach((element) => {
       element.setAttribute('data-silex-href', '#!' + newName);
     });

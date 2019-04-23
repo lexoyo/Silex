@@ -42,8 +42,6 @@ export default class DomPublisher {
         element.parentElement.removeChild(element);
       }
     });
-    console.log('todo: addMandatoryTags ??')
-    // silex.utils.Dom.addMandatoryTags(this.doc);
   };
 
 

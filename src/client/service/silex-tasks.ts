@@ -34,12 +34,8 @@ export class SilexTasks {
    * @param cbk called when success
    * @param opt_errCbk to receive the json response
    */
-  publish(
-      options: PublicationOptions, cbk: (p1: string) => any,
-      opt_errCbk?: (p1: string) => any) {
-    this.callServer(
-        '/tasks/publish', JSON.stringify(options), 'POST', (json) => cbk(json),
-        opt_errCbk);
+  publish(options: PublicationOptions, cbk: (p1: string) => any, opt_errCbk?: (p1: string) => any) {
+    this.callServer('/tasks/publish', JSON.stringify(options), 'POST', (json) => cbk(json), opt_errCbk);
   }
 
   /**
@@ -47,9 +43,7 @@ export class SilexTasks {
    * @param cbk to receive the json response
    * @param opt_errCbk to receive the json response
    */
-  publishState(
-      cbk: (p1: {message: string, stop: boolean}) => any,
-      opt_errCbk?: (p1: string) => any) {
+  publishState(cbk: (p1: {message: string, stop: boolean}) => any, opt_errCbk?: (p1: string) => any) {
     this.callServer('/tasks/publishState', '', 'GET', cbk, opt_errCbk);
   }
 
@@ -66,9 +60,7 @@ export class SilexTasks {
    * get the login URL
    * @param cbk to receive the json response
    */
-  authorize(
-      provider: Provider, cbk: (p1: string) => any,
-      opt_errCbk?: (p1: string) => any) {
+  authorize(provider: Provider, cbk: (p1: string) => any, opt_errCbk?: (p1: string) => any) {
     this.callServer(provider['authorizeUrl'], '', 'POST', cbk, opt_errCbk);
   }
 
@@ -76,9 +68,7 @@ export class SilexTasks {
    * get the vhosts for a provider to which we are connected
    * @param cbk to receive the json response
    */
-  vhosts(
-      provider: Provider, cbk: (p1: VHost[]) => any,
-      opt_errCbk?: (p1: string) => any) {
+  vhosts(provider: Provider, cbk: (p1: VHost[]) => any, opt_errCbk?: (p1: string) => any) {
     this.callServer(provider['vhostsUrl'], '', 'GET', cbk, opt_errCbk);
   }
 
@@ -86,9 +76,7 @@ export class SilexTasks {
    * get the domain name for a vhost
    * @param cbk to receive the json response
    */
-  domain(
-      vhost: VHost, cbk: (p1?: {domain: string}) => any,
-      opt_errCbk?: (p1: string) => any) {
+  domain(vhost: VHost, cbk: (p1?: {domain: string}) => any, opt_errCbk?: (p1: string) => any) {
     this.callServer(vhost['domainUrl'], '', 'GET', cbk, opt_errCbk);
   }
 
@@ -96,35 +84,23 @@ export class SilexTasks {
    * update the domain name for a vhost
    * @param cbk to receive the json response
    */
-  updateDomain(
-      vhost: VHost, newDomain: string,
-      cbk: (p1: {domain: string, https: boolean}) => any,
-      opt_errCbk?: (p1: string) => any) {
-    this.callServer(
-        vhost['domainUrl'], JSON.stringify({'domain': newDomain}), 'POST', cbk,
-        opt_errCbk);
+  updateDomain(vhost: VHost, newDomain: string, cbk: (p1: {domain: string, https: boolean}) => any, opt_errCbk?: (p1: string) => any) {
+    this.callServer(vhost['domainUrl'], JSON.stringify({'domain': newDomain}), 'POST', cbk,   opt_errCbk);
   }
 
   /**
    * remove the domain name for a vhost
    * @param cbk to receive the json response
    */
-  removeDomain(
-      vhost: VHost, newDomain: string,
-      cbk: (p1: {domain: string, https: boolean}) => any,
-      opt_errCbk?: (p1: string) => any) {
-    this.callServer(
-        vhost['domainUrl'], JSON.stringify({'domain': newDomain}), 'DELETE',
-        cbk, opt_errCbk);
+  removeDomain(vhost: VHost, newDomain: string, cbk: (p1: {domain: string, https: boolean}) => any, opt_errCbk?: (p1: string) => any) {
+    this.callServer(vhost['domainUrl'], JSON.stringify({'domain': newDomain}), 'DELETE',   cbk, opt_errCbk);
   }
 
   /**
    * @param cbk to receive the json response
    * @param opt_errCbk to receive the json response
    */
-  callServer(
-      url: string, data: string, method: string, cbk,
-      opt_errCbk?: (p1: string) => any) {
+  callServer(url: string, data: string, method: string, cbk, opt_errCbk?: (p1: string) => any) {
     const oReq = new XMLHttpRequest();
     oReq.addEventListener('load', (e) => {
       let message: string = oReq.responseText;

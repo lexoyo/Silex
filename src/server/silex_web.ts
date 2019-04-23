@@ -25,5 +25,5 @@ const silex = new SilexServer(config);
 // @see https://github.com/silexlabs/Silex/wiki/Silex-Developer-Guide#add-unifile-services-eg-for-hosting-companies
 
 silex.start(function() {
-  // console.log('server started');
+  // server started
 });

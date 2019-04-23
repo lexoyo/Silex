@@ -59,11 +59,13 @@ export class StageWrapper {
   }
   getEditMode(): boolean {
     if(!this.stage) return false;
-    return this.stage.editMode;
+    return this.stage.catchingEvents;
   }
   setEditMode(mode: boolean) {
     if(!this.stage) return;
-    this.stage.editMode = mode;
+    if(this.stage.catchingEvents === mode) {
+      this.stage.catchingEvents = !mode;
+    }
   }
 
   initStage(iframe: HTMLIFrameElement) {
@@ -123,33 +125,8 @@ export class StageWrapper {
         });
         this.updateView();
       },
-      onEdit: selectables => {
-        // TextEditorController
-        if(selectables.length > 1) {
-          // open properties
-        }
-        else if(selectables.length === 1) {
-          const element = selectables[0].el;
-          switch(this.model.element.getType(element)) {
-            case Constants.TYPE_TEXT:
-              this.controller.editMenuController.editElement();
-              this.stage.catchingEvents = false;
-              break;
-            case Constants.TYPE_CONTAINER:
-            case Constants.TYPE_SECTION:
-            case Constants.TYPE_CONTAINER_CONTENT:
-            case Constants.TYPE_IMAGE:
-            case Constants.TYPE_TEXT:
-            case Constants.TYPE_HTML:
-            case Constants.TYPE_ATTR:
-              console.error('edition of type', this.model.element.getType(element), 'todo')
-              break;
-          }
-        }
-      },
-      onEditEnd: () => {
-        this.stage.catchingEvents = true;
-        this.stage.redraw();
+      onEdit: () => {
+        this.controller.editMenuController.editElement();
       },
       onSelect: change => this.updateView(),
       onResize: change => this.updateView(),

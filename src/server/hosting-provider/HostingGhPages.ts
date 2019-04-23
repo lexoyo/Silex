@@ -39,7 +39,6 @@ function callServer(path, method, token): Promise<{status: string, html_url: str
           reject(err);
         }
         else {
-          console.log('Github pages result', body);
           const result = JSON.parse(body);
           resolve(result);
         }

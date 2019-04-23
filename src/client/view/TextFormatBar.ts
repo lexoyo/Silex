@@ -40,7 +40,7 @@ export class TextFormatBar {
   toolbar: any;
 
   // for event add / remove
-  onKeyPressedBinded: any;
+  onKeyDownBinded: any;
   onScrollBinded: any;
 
   /**
@@ -56,7 +56,7 @@ export class TextFormatBar {
     this.tracker = Tracker.getInstance();
     this.linkDialog = new LinkDialog(this.model);
     this.toolbar = this.element.querySelector('#wysihtml5-toolbar');
-    this.onKeyPressedBinded = this.onKeyPressed.bind(this);
+    this.onKeyDownBinded = this.onKeyDown.bind(this);
     this.onScrollBinded = this.onScroll.bind(this);
   }
 
@@ -81,12 +81,12 @@ export class TextFormatBar {
   /**
    * Intercept keys before it is forwarded from iframe to Silex
    */
-  onKeyPressed(e) {
-    e = e || window.event;
+  onKeyDown(e) {
     if (e.key === 'Escape') {
       // stop editing but keep selection
       this.stopEditing();
       e.preventDefault();
+      e.stopPropagation();
     }
   }
 
@@ -106,7 +106,7 @@ export class TextFormatBar {
       const win = this.model.file.getContentWindow();
 
       // remove event listener
-      doc.removeEventListener('keydown', this.onKeyPressedBinded);
+      doc.removeEventListener('keydown', this.onKeyDownBinded);
       win.removeEventListener('scroll', this.onScrollBinded);
 
       // remove and put back the whole UI
@@ -125,7 +125,6 @@ export class TextFormatBar {
 
       // reset focus
       Body.resetFocus();
-      doc['getSelection']().removeAllRanges();
 
       // use array acces for getSelection as a workaround for google closure
       // warning 'Property getSelection never defined on Document' cleanup
@@ -141,6 +140,8 @@ export class TextFormatBar {
   }
 
   startEditing(fileExplorer: FileExplorer) {
+    this.controller.stageController.startEdit();
+
     const doc = this.model.file.getContentDocument();
     const win = this.model.file.getContentWindow();
 
@@ -213,7 +214,7 @@ export class TextFormatBar {
         this.element.classList.add('text-editor-editing');
 
         // handle the focus
-        doc.addEventListener('keydown', this.onKeyPressedBinded);
+        doc.addEventListener('keydown', this.onKeyDownBinded);
         win.addEventListener('scroll', this.onScrollBinded);
         this.wysihtmlEditor.on('blur', (e) => {
           this.stopEditing();
@@ -267,8 +268,7 @@ export class TextFormatBar {
             // open link editor
             this.linkDialog.open(this.getLink(), this.pageNames, (options) => {
               if (options) {
-                this.wysihtmlEditor.composer.commands.exec(
-                    'createLink', options);
+                this.wysihtmlEditor.composer.commands.exec('createLink', options);
               } else {
                 this.wysihtmlEditor.composer.commands.exec('removeLink');
               }
@@ -283,9 +283,7 @@ export class TextFormatBar {
         window['wysihtmlEditor'] = this.wysihtmlEditor;
       }
     } else {
-      console.error(
-          'Error, can not edit selection with format pane',
-          this.selectedElements);
+      console.error('Error, can not edit selection with format pane', this.selectedElements);
     }
   }
 
@@ -303,8 +301,5 @@ export class TextFormatBar {
     // reuse pageNames in combo box on change
     this.pageNames = pageNames;
     this.currentPageName = currentPageName;
-
-    // stop editing, even if we may not be editing right now
-    this.stopEditing();
   }
 }

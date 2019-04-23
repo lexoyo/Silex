@@ -32,7 +32,7 @@ export class SilexNotification {
   /**
    * constant for the duration of the notifications, in ms
    */
-  static NOTIFICATION_DURATION_MS: number = 4000;
+  static NOTIFICATION_DURATION_MS: number = 5;
 
   /**
    * constant for the url of the icon
@@ -229,8 +229,8 @@ export class SilexNotification {
    */
   static setText(text: string) {
     if(SilexNotification.currentDialog) {
-      const el = document.createDocumentFragment();
-      el.append(`<p>${text}</p>`);
+      const el = document.createElement('div');
+      el.insertAdjacentHTML('afterbegin', `<p>${text}</p>`);
       SilexNotification.currentDialog.setContent(el);
     }
   }

@@ -90,15 +90,8 @@ export class TipOfTheDay {
         if (firstLink != null) {
           el.href = firstLink.href;
         }
-
-        // if(firstImage != null) el.style.backgroundImage =
-        // `url(${firstImage.src})`;
-        (this.element.querySelector('.container') || this.element)
-            .appendChild(el);
+        (this.element.querySelector('.container') || this.element).appendChild(el);
       }
-
-      // else { console.log('It looks like you are offline. I could not load
-      // data from github issues'); } show the tooltip
       this.element.classList.remove('loading');
     });
 

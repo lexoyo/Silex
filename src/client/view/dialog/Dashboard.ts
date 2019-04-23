@@ -134,8 +134,6 @@ export class Dashboard {
     }
   }
 
-  // else { console.log('It looks like you are offline. I could not load data
-  // from github issues'); }
   /**
    * init the menu and UIs
    */
@@ -144,8 +142,7 @@ export class Dashboard {
       const repoUrl = `/get/${repo}`;
       const oReq = new XMLHttpRequest();
       oReq.addEventListener('error', (e) => {
-        ul.innerHTML =
-            'It looks like you are offline. I could not load data from github issues';
+        ul.innerHTML = 'It looks like you are offline. I could not load data from github issues';
         success();
       });
       oReq.addEventListener('load', (e) => {
