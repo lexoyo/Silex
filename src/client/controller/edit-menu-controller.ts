@@ -222,8 +222,7 @@ super(model, view);
     let elements = this.model.body.getSelection();
 
     // confirm and delete
-    SilexNotification.confirm(
-        'I am about to <strong>delete the selected element(s)</strong>, are you sure?',
+    SilexNotification.confirm('I am about to <strong>delete the selected element(s)</strong>, are you sure?',
         accept => {
           if (accept) {
             // undo checkpoint

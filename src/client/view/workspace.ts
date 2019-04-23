@@ -172,6 +172,7 @@ export class Workspace {
     } else {
       document.body.classList.remove('mobile-mode');
     }
+    this.controller.stageController.resizeWindow();
   }
 
   /**

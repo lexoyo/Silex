@@ -21,6 +21,10 @@ export class StageWrapper {
     if(!this.stage) return;
     this.stage.redraw();
   }
+  resizeWindow() {
+    if(!this.stage) return;
+    this.stage.resizeWindow();
+  }
   addElement(element: HTMLElement) {
     if(!this.stage) return;
     this.stage.addElement(element);

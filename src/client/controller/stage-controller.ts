@@ -105,4 +105,7 @@ export class StageController extends ControllerBase {
   startEdit() {
     this.view.stageWrapper.setEditMode(true);
   }
+  resizeWindow() {
+    this.view.stageWrapper.resizeWindow();
+  }
 }

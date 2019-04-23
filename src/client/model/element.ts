@@ -491,32 +491,36 @@ export class SilexElement {
   }
 
   /**
-   * remove a DOM element
+   * remove a DOM element and its styles as well as its children's
    * @param element   the element to remove
    */
-  removeElement(element: HTMLElement) {
+  removeElement(rootElement: HTMLElement) {
     // never delete sections container content, but the section itself
-    element = this.noSectionContent(element);
+    rootElement = this.noSectionContent(rootElement);
 
-    // check this is allowed, i.e. an element inside the stage container
-    if (this.model.body.getBodyElement() !== element &&
-        this.model.body.getBodyElement().contains(element)) {
-      // remove style and component data
-      this.model.property.setElementComponentData(element);
-      this.model.property.setStyle(element, null, true);
-      this.model.property.setStyle(element, null, false);
+    const children = Array.from(rootElement.querySelectorAll(`.${Constants.EDITABLE_CLASS_NAME}`));
 
-      // remove the element
-      element.parentElement.removeChild(element);
+    children.concat([rootElement])
+    .forEach((element: HTMLElement) => {
+      // check this is allowed, i.e. an element inside the stage container
+      if (this.model.body.getBodyElement() !== element && !!element.parentElement) {
+        // remove style and component data
+        this.model.property.setElementComponentData(element);
+        this.model.property.setStyle(element, null, true);
+        this.model.property.setStyle(element, null, false);
 
-      // update stage store
-      this.view.stageWrapper.removeElement(element);
+        // remove the element
+        element.parentElement.removeChild(element);
 
-      // update all metrics in case this new element has moved other elements
-      this.view.stageWrapper.redraw();
-    } else {
-      console.error('could not delete', element, 'because it is not in the stage element');
-    }
+        // update stage store
+        this.view.stageWrapper.removeElement(element);
+      } else {
+        // could not delete element because it is not in the stage element
+        // this happens when you select an element and its children and delete them all
+      }
+    });
+    // update all metrics in case this new element has moved other elements
+    this.view.stageWrapper.redraw();
   }
 
   /**

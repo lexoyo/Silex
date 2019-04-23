@@ -140,5 +140,6 @@ export class Splitter {
     }
     this.element.style.right = (right - e.movementX) + 'px';
     this.redraw();
+    this.controller.stageController.resizeWindow();
   }
 }
