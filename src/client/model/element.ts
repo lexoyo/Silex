@@ -560,7 +560,7 @@ export class SilexElement {
     const posY = Math.round(stageSize.height / 2 - bb.height / 2);
     const container = this.view.stageWrapper.getDropZone(posX, posY, element) || this.model.body.getBodyElement();
     // take the scroll into account (drop at (100, 100) from top left corner of the window, not the stage)
-    const bbContainer = container.getBoundingClientRect();
+    const bbContainer = element.getBoundingClientRect();
     const offsetX = posX + scrollData.x - bbContainer.left;
     const offsetY = posY + scrollData.y - bbContainer.top;
 

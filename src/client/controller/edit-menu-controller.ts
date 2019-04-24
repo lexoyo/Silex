@@ -181,6 +181,9 @@ super(model, view);
 
       // copy again so that we can paste several times (elements will be duplicated again)
       this.copySelection();
+
+      // refresh elements positions
+      this.view.stageWrapper.redraw();
     }
   }
 
