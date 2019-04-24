@@ -91,8 +91,7 @@ export class TextFormatBar {
   }
 
   onScroll(e) {
-    this.controller.textEditorController.attachToTextBox(
-        this.currentTextBox, this.element);
+    this.controller.textEditorController.attachToTextBox(this.currentTextBox, this.element);
   }
 
   /**

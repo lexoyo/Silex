@@ -71,8 +71,8 @@ export class StageWrapper {
   }
   setEditMode(mode: boolean) {
     if(!this.stage) return;
-    if(this.stage.catchingEvents === mode) {
-      this.stage.catchingEvents = !mode;
+    if(this.stage.visible === mode) {
+      this.stage.visible = !mode;
     }
   }
 
