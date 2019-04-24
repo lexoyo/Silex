@@ -104,49 +104,47 @@ export class StageWrapper {
         return !el.classList.contains(Constants.TYPE_SECTION)
           || dropZone.tagName.toLowerCase() === 'body';
       }),
-      onDrop: selectables => {
-        selectables.forEach(s => {
-          if(!s.el.classList.contains(Constants.TYPE_SECTION)) {
-            this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
-            this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
-          }
-          s.el.style.top = '';
-          s.el.style.left = '';
-          s.el.style.right = '';
-          s.el.style.bottom = '';
-          s.el.style.width = '';
-          s.el.style.height = '';
-          s.el.style.minHeight = '';
-          s.el.style.position = '';
-        });
-        this.updateView();
-      },
-      onResizeEnd: selectables => {
-        selectables.forEach(s => {
-          this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
-          this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
-          this.model.element.setStyle(s.el, 'width', s.metrics.computedStyleRect.width + 'px');
-          this.model.element.setStyle(s.el, s.useMinHeight ? 'min-height' : 'height', s.metrics.computedStyleRect.height + 'px');
-          s.el.style.top = '';
-          s.el.style.left = '';
-          s.el.style.right = '';
-          s.el.style.bottom = '';
-          s.el.style.width = '';
-          s.el.style.height = '';
-          s.el.style.minHeight = '';
-          s.el.style.position = '';
-        });
-        this.updateView();
-      },
       onEdit: () => {
         this.controller.editMenuController.editElement();
       },
-      onSelect: change => this.updateView(),
-      onResize: change => this.updateView(),
-      onDrag: change => this.updateView(),
+      onDrop: change => this.updateView(change),
+      onResizeEnd: change => this.updateView(change),
+      onSelect: change => this.updateView(change, false),
+      onResize: change => this.updateView(change),
+      onDrag: change => this.updateView(change, false),
     });
   }
-  updateView() {
+  updateView(change, applyStyles = true) {
+    change.forEach(s => {
+      // apply changes
+      if(applyStyles) {
+        if(!this.model.element.isSection(s.el)) {
+          // sections have no top, left, width
+          if(!this.model.element.isSectionContent(s.el)) {
+            // section contents have no top, left
+            this.model.element.setStyle(s.el, 'top', s.metrics.computedStyleRect.top + 'px');
+            this.model.element.setStyle(s.el, 'left', s.metrics.computedStyleRect.left + 'px');
+          }
+          this.model.element.setStyle(s.el, 'width', s.metrics.computedStyleRect.width + 'px');
+        }
+        this.model.element.setStyle(s.el, s.useMinHeight ? 'min-height' : 'height', s.metrics.computedStyleRect.height + 'px');
+      }
+
+      // cleanup element
+      // these are all the properties that can be set by the stage component
+      s.el.style.top = '';
+      s.el.style.left = '';
+      s.el.style.right = '';
+      s.el.style.bottom = '';
+      s.el.style.width = '';
+      s.el.style.height = '';
+      s.el.style.margin = '';
+      s.el.style.padding = '';
+      s.el.style.border = '';
+      s.el.style.minHeight = '';
+      s.el.style.position = '';
+    });
+
     const selection = this.stage.getSelection();
     this.model.body.setSelection(selection.map(s => s.el));
   }

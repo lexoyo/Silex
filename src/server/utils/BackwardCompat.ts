@@ -252,8 +252,8 @@ export default class BackwardCompat {
           const changedSectionsContent = Array.from(doc.querySelectorAll(`.${Constants.TYPE_SECTION}, .${Constants.TYPE_SECTION} .${Constants.TYPE_CONTAINER_CONTENT}`));
           changedSectionsContent.forEach((el: HTMLElement) => el.classList.add(
             Constants.PREVENT_DRAGGABLE_CLASS_NAME,
-            Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME,
-            Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME
+            // Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME,
+            // Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME
           ));
           actions.push(`Changed the body and ${changedSections.length} sections with new CSS classes to <a href="https://github.com/silexlabs/stage/" target="_blank">the new stage component.</a>`);
 

@@ -137,7 +137,7 @@ export class SettingsDialogController extends ControllerBase {
   /**
    * set website width
    */
-  setWebsiteWidth(opt_data?: string) {
+  setWebsiteWidth(opt_data?: number) {
     // undo checkpoint
     this.undoCheckPoint();
     this.model.head.setWebsiteWidth(opt_data);

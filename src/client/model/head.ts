@@ -286,11 +286,14 @@ export class Head {
   /**
    * get/set the website width
    */
-  setWebsiteWidth(opt_value?: string) {
-    this.setMeta('website-width', opt_value);
+  setWebsiteWidth(opt_value?: number) {
     this.view.settingsDialog.setWebsiteWidth(opt_value);
+
+    const width: string = opt_value ? opt_value.toString() : null;
+    this.setMeta('website-width', width);
+
     let silexStyle = this.getHeadElement().querySelector('.silex-style-settings') as HTMLStyleElement;
-    if (opt_value && opt_value !== '') {
+    if (width && width !== '') {
       if (!silexStyle) {
         const doc = this.model.file.getContentDocument();
         silexStyle = doc.createElement('style');
@@ -300,7 +303,7 @@ export class Head {
       }
       silexStyle.innerHTML = `
       .${Constants.WEBSITE_WIDTH_CLASS_NAME} {
-        width: ${opt_value}px;
+        width: ${width}px;
       }
     `;
     } else {
@@ -313,8 +316,9 @@ export class Head {
   /**
    * get/set the website width
    */
-  getWebsiteWidth(): string {
-    return this.getMeta('website-width');
+  getWebsiteWidth(): number {
+    const width = this.getMeta('website-width');
+    return !!width ? parseInt(width) : null;
   }
 
   /**

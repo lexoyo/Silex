@@ -89,7 +89,7 @@ export class SettingsDialog {
         (v) => this.controller.settingsDialogController.setLang(v));
     this.bindTextField(
         '.general-pane .input-site-width',
-        (v) => this.controller.settingsDialogController.setWebsiteWidth(v));
+        (v) => this.controller.settingsDialogController.setWebsiteWidth(!!v ? parseInt(v) : null));
     this.bindTextField(
         '.social-pane .input-title',
         (v) => this.controller.settingsDialogController.setTitleSocial(v));
@@ -164,10 +164,7 @@ export class SettingsDialog {
     });
 
     // font button
-    (this.element.querySelector('.pane.fonts-pane .add-font-btn') as HTMLElement).onclick =
-        (e) => {
-          this.addFont();
-        };
+    (this.element.querySelector('.pane.fonts-pane .add-font-btn') as HTMLElement).onclick = e => this.addFont();
     this.list = this.element.querySelector('.fonts-list');
     this.list.onclick = (e) => {
       const el = (e.target as HTMLElement);
@@ -329,8 +326,8 @@ export class SettingsDialog {
    * set the website width
    * @see silex.model.Head
    */
-  setWebsiteWidth(opt_value?: string) {
-    this.setInputValue('.general-pane .input-site-width', opt_value);
+  setWebsiteWidth(opt_value?: number) {
+    this.setInputValue('.general-pane .input-site-width', opt_value ? opt_value.toString() : null);
   }
 
   /**

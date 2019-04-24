@@ -417,16 +417,16 @@ export class Property {
         // do not apply min-height to the section itself
         delete style['min-height'];
       }
-      if (this.model.element.isSectionContent(element) &&
-          !this.view.workspace.getMobileEditor()) {
-        // set a min-width style to sections so that they are always larger than
-        // their content container
-        const parentElement = (element.parentElement as HTMLElement);
-        const parentStyle = this.getStyle(parentElement, isMobile) || {};
-        if (style['width'] && style['width'] !== parentStyle['min-width']) {
-          parentStyle['min-width'] = style['width'];
-          this.setStyle(parentElement, parentStyle, isMobile);
+      else if (style['width']
+        && this.model.element.isSectionContent(element)
+        && !this.view.workspace.getMobileEditor()) {
+
+        // set website width
+        const width = parseInt(style['width']);
+        if(!!width && this.model.head.getWebsiteWidth() !== width) {
+          this.model.head.setWebsiteWidth(width);
         }
+        delete style['width'];
       }
     }
 
