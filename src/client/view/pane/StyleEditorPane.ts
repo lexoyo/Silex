@@ -131,11 +131,10 @@ export class StyleEditorPane extends PaneBase {
       this.tracker.trackAction('style-editor-events', 'edit-style');
       const oldClassName = this.styleCombo.value;
       if (oldClassName === Constants.BODY_STYLE_CSS_CLASS) {
-        SilexNotification.alert(
-            `The style '${
-                Constants
-                    .BODY_STYLE_NAME}' is a special style, you can not rename it.`,
-            () => {});
+        SilexNotification.alert('Rename a style', `
+          The style '${Constants.BODY_STYLE_NAME}' is a special style, you can not rename it.
+        `,
+        () => {});
       } else {
         const data = this.model.property.getStyleData(oldClassName);
         this.createStyle(data, (name) => {
@@ -199,11 +198,10 @@ export class StyleEditorPane extends PaneBase {
    */
   applyStyle(elements: HTMLElement[], newStyle: StyleName) {
     if (newStyle === Constants.BODY_STYLE_CSS_CLASS) {
-      SilexNotification.alert(
-          `The style '${
-              Constants
-                  .BODY_STYLE_NAME}' is a special style, it is already applyed to all text elements.`,
-          () => {});
+      SilexNotification.alert('Apply a style', `
+        The style '${Constants.BODY_STYLE_NAME}' is a special style, it is already applyed to all text elements.
+      `,
+      () => {});
     } else {
       this.controller.propertyToolController.undoCheckPoint();
       elements.filter((el) => this.isTextBox(el)).forEach((el) => {
@@ -452,10 +450,9 @@ export class StyleEditorPane extends PaneBase {
       opt_data?: StyleData, opt_cbk?: ((p1?: string) => any)) {
     const textBoxes = this.states.filter(state => this.isTextBox(state.el));
     if (textBoxes.length <= 0) {
-      SilexNotification.alert(
-          'Error: you need to select a TextBox for this action.', () => {});
+      SilexNotification.alert('Create a style', 'Error: you need to select a TextBox for this action.', () => {});
     } else {
-      SilexNotification.prompt('Enter a name for your style!', opt_data ? opt_data['displayName'] : 'My Style', (accept, name) => {
+      SilexNotification.prompt('Create a style', 'Enter a name for your style!', opt_data ? opt_data['displayName'] : 'My Style', (accept, name) => {
         if (accept && name && name !== '') {
           this.controller.propertyToolController.undoCheckPoint();
           const className = name.replace(/ /g, '-').toLowerCase();
@@ -485,20 +482,17 @@ export class StyleEditorPane extends PaneBase {
       this.doDeleteStyle(name);
     } else {
       if (name === Constants.BODY_STYLE_CSS_CLASS) {
-        SilexNotification.alert(
-            `The style '${
-                Constants
-                    .BODY_STYLE_NAME}' is a special style, you can not delete it.`,
-            () => {});
+        SilexNotification.alert('Delete a style',`
+          The style '${Constants.BODY_STYLE_NAME}' is a special style, you can not delete it.
+        `, () => {});
       } else {
-        SilexNotification.confirm(
-            `I am about to delete the style <b>${
-                name}</b>!<br><br>Are you sure?`,
-            (accept) => {
-              if (accept) {
-                this.doDeleteStyle(name);
-              }
-            });
+        SilexNotification.confirm('Delete a style',`
+          I am about to delete the style <b>${name}</b>!<br><br>Are you sure?
+        `, (accept) => {
+          if (accept) {
+            this.doDeleteStyle(name);
+          }
+        });
       }
     }
   }

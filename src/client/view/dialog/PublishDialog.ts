@@ -61,14 +61,12 @@ export class PublishDialog {
           const providerDisplayName = provider ?
               provider['displayName'] || provider['name'] :
               publicationPath.service;
-          SilexNotification.confirm(
-              `I am about to publish your webiste to <strong>${
-                  providerDisplayName}</strong>, in the folder ${
-                  publicationPath.path}.`,
-              (ok) => {
-                resolve(this.doOpen(ok, hosting, providerName));
-              },
-              'Continue', 'Edit publish settings');
+          SilexNotification.confirm('Publication', `
+            I am about to publish your webiste to <strong>${providerDisplayName}</strong>, in the folder ${publicationPath.path}.
+          `, (ok) => {
+            resolve(this.doOpen(ok, hosting, providerName));
+          },
+          'Continue', 'Edit publish settings');
         } else {
           // no publish settings
           resolve(this.doOpen(false, hosting, providerName));
@@ -101,30 +99,24 @@ export class PublishDialog {
 
   selectProvider(providers: Provider[], providerName: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const helpBtnStr = `
-        <a href="https://github.com/silexlabs/Silex/wiki/Publishing-and-Releasing-Your-Website#hosting-providers" target="_blank"
-        title="About hosting providers" class="help-btn">
-          <span class="icon fa fa-inverse fa-info-circle"></span>
-          <span class="label">Help</span>
-        </a>
-      `;
-      SilexNotification.prompt(
-        'Choose the hosting provider you love! &nbsp; ' + helpBtnStr,
-        'unused', (ok) => {
-          if (ok) {
-            const idx = selectEl.selectedIndex;
-            const provider = providers[idx];
-            resolve(this.selectProviderFolder(provider));
-          } else {
-            resolve(null);
-          }
-        }, 'next', 'cancel');
+      SilexNotification.prompt('Publication', 'unused', 'unused', (ok) => {
+        if (ok) {
+          const idx = selectEl.selectedIndex;
+          const provider = providers[idx];
+          resolve(this.selectProviderFolder(provider));
+        } else {
+          resolve(null);
+        }
+      }, 'next', 'cancel');
       const body = document.createElement('div');
       body.insertAdjacentHTML('afterbegin', `
+        <p>Choose the hosting provider you love!
+        (<a href="https://github.com/silexlabs/Silex/wiki/Publishing-and-Releasing-Your-Website#hosting-providers" target="_blank" title="About hosting providers" class="help-btn">
+            <span class="label">more info here</span>
+        </a>)</p>
+        <br />
         <select class="providers">
-          ${
-              providers.map(
-                  (p) => `<option value="${p.name}">${p.displayName}</option>`)}
+          ${providers.map((p) => `<option value="${p.name}">${p.displayName}</option>`)}
         </select>
         <br />
       `);
@@ -161,16 +153,12 @@ export class PublishDialog {
         this.loading(true);
         this.service.authorize(provider, (loginUrl) => {
           this.loading(false);
-          SilexNotification.confirm(
-              `Please&nbsp;
-          <a href="${loginUrl}" target="_blank">
-            click here and login to ${provider['displayName']}.
-          </a>, then click "next".
-          `,
-              () => {
-                resolve(this.selectVhost(provider));
-              },
-              'next', 'cancel');
+          SilexNotification.confirm('Publication', `
+            Please&nbsp;<a href="${loginUrl}" target="_blank">click here and login to ${provider['displayName']}.</a>, then click "next".
+          `, () => {
+            resolve(this.selectVhost(provider));
+          },
+          'next', 'cancel');
         }, (msg) => reject(msg));
       }
     });
@@ -182,30 +170,28 @@ export class PublishDialog {
       this.service.vhosts(provider, (vhosts) => {
         this.loading(false);
         if (vhosts.length === 0) {
-          SilexNotification.alert(
-              `Please click here to
+          SilexNotification.alert('Publication', `Please click here to
             <a href="${provider['dashboardUrl']}" target="_blank">
               ${provider['pleaseCreateAVhost']}
             </a>
-          `,
-              () => {
-                resolve(this.selectVhost(provider));
-              },
-              'Check again');
+          `, () => {
+            resolve(this.selectVhost(provider));
+          },
+          'Check again');
         } else {
           if (provider['skipVhostSelection'] === true) {
             resolve(this.selectDomain(provider, vhosts[0]));
           } else {
-            SilexNotification.prompt(
-                'Choose the website you are working on', 'unused', (ok) => {
-                  if (ok) {
-                    const idx = selectEl.selectedIndex;
-                    const vhost = vhosts[idx];
-                    resolve(this.selectDomain(provider, vhost));
-                  }
-                }, 'next', 'cancel');
+            SilexNotification.prompt('Publication', 'unused', 'unused', (ok) => {
+              if (ok) {
+                const idx = selectEl.selectedIndex;
+                const vhost = vhosts[idx];
+                resolve(this.selectDomain(provider, vhost));
+              }
+            }, 'next', 'cancel');
             const body = document.createElement('div');
             body.insertAdjacentHTML('afterbegin', `
+              <p>Choose the website you are working on</p>
               <select class="vhosts">
                 ${
                 vhosts.map(
@@ -243,47 +229,48 @@ export class PublishDialog {
           }
           this.loading(false);
           const initialDomain = domain || '';
-          SilexNotification.prompt(
-              `Choose the domain you want associated with this website<br>(or leave blanck to have a generic domain)<br>You can <a target="_blank" href="${
-                  provider['buyDomainUrl']}">buy a domain name here.</a>`,
-              initialDomain, (ok, newDomain) => {
-                const updateOrRemoveSuccess = (res) => {
-                  // update website url
-                  if (res['url']) {
-                    this.model.head.setWebsiteUrl(res['url']);
-                  }
-                  this.loading(false);
-                  SilexNotification.notifyInfo('Domain updated');
-                  resolve({
-                    'publicationPath': vhost['publicationPath'],
-                    'provider': provider,
-                    'vhost': vhost
-                  });
-                };
-                if (ok) {
-                  if (newDomain != initialDomain) {
-                    this.loading(true);
-                    if (newDomain != '') {
-                      this.service.updateDomain(
-                          vhost, (newDomain as string),
-                          (res) => updateOrRemoveSuccess(res),
-                          (msg) => reject(msg));
-                    } else {
-                      this.service.removeDomain(
-                          vhost, newDomain, (res) => updateOrRemoveSuccess(res),
-                          (msg) => reject(msg));
-                    }
-                  } else {
-                    resolve({
-                      'publicationPath': vhost['publicationPath'],
-                      'provider': provider,
-                      'vhost': vhost
-                    });
-                  }
+          SilexNotification.prompt('Publication', `
+            <p>Choose the domain you want associated with this website</p>
+            <br>(or leave blanck to have a generic domain)<br>You can <a target="_blank" href="${provider['buyDomainUrl']}">buy a domain name here.</a>
+          `,
+          initialDomain, (ok, newDomain) => {
+            const updateOrRemoveSuccess = (res) => {
+              // update website url
+              if (res['url']) {
+                this.model.head.setWebsiteUrl(res['url']);
+              }
+              this.loading(false);
+              SilexNotification.notifyInfo('Domain updated');
+              resolve({
+                'publicationPath': vhost['publicationPath'],
+                'provider': provider,
+                'vhost': vhost
+              });
+            };
+            if (ok) {
+              if (newDomain != initialDomain) {
+                this.loading(true);
+                if (newDomain != '') {
+                  this.service.updateDomain(
+                      vhost, (newDomain as string),
+                      (res) => updateOrRemoveSuccess(res),
+                      (msg) => reject(msg));
                 } else {
-                  resolve(null);
+                  this.service.removeDomain(
+                      vhost, newDomain, (res) => updateOrRemoveSuccess(res),
+                      (msg) => reject(msg));
                 }
-              }, 'next', 'cancel');
+              } else {
+                resolve({
+                  'publicationPath': vhost['publicationPath'],
+                  'provider': provider,
+                  'vhost': vhost
+                });
+              }
+            } else {
+              resolve(null);
+            }
+          }, 'next', 'cancel');
         }, (msg) => reject(msg));
       }
     });
@@ -295,8 +282,7 @@ export class PublishDialog {
       const publicationPath = options['publicationPath'];
       const provider = options['provider'];
       let timer = -1;
-      SilexNotification.alert(
-        '<strong>I am about to publish your site. This may take several minutes.</strong>',
+      SilexNotification.alert('Publication', '<strong>I am about to publish your site. This may take several minutes.</strong>',
         () => {
           if(timer > 0) {
             clearInterval(timer);
@@ -320,13 +306,11 @@ export class PublishDialog {
               let msg = `<strong>${json['message']}</strong>`;
               if (json['stop'] === true) {
                 clearInterval(timer);
-                const websiteUrl = this.model.head.getWebsiteUrl() ||
-                    publicationPath.url + '/index.html';
-                msg += `<p>Please visit <a target="_blanck" href="${
-                    websiteUrl}">your published website here</a>. ${
-                    provider && provider['afterPublishMessage'] ?
-                        provider['afterPublishMessage'] :
-                        ''}</p>`;
+                const websiteUrl = this.model.head.getWebsiteUrl() || publicationPath.url + '/index.html';
+                msg += `
+                  <p>Please visit <a target="_blanck" href="${websiteUrl}">your published website here</a>.
+                  ${provider && provider['afterPublishMessage'] ? provider['afterPublishMessage'] : ''}</p>
+                `;
                 resolve(msg);
               } else {
                 SilexNotification.setText(msg);

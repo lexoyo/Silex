@@ -28,7 +28,6 @@ import { SilexTasks } from '../service/silex-tasks';
  */
 export class FileMenuController extends ControllerBase {
   constructor(model: Model, view: View) {
-
     super(model, view);
   }
 
@@ -55,23 +54,23 @@ export class FileMenuController extends ControllerBase {
     this.model.file.open(
         (fileInfo as FileInfo), (rawHtml) => this.onOpened(opt_cbk, rawHtml),
         (err) => {
-          SilexNotification.confirm(
-              `Could not open this recent file, you probably need to connect to ${
-                  fileInfo.service} again.`,
-              (ok) => {
-                const ce = CloudStorage.getInstance().ce;
-                SilexNotification.alert(
-                    `I am trying to connect you to ${
-                        fileInfo
-                            .service} again, please accept the connection in the popup I have just opened then <strong>please wait</strong>.`,
-                    () => {});
-                ce['auth'](fileInfo.service).then((res) => {
-                  SilexNotification.close();
-                  if (ok) {
-                    this.openRecent(fileInfo, opt_cbk);
-                  }
-                });
-              });
+          SilexNotification.confirm('Open recent file', `
+            Could not open this recent file, you probably need to connect to ${fileInfo.service} again.
+          `,
+          (ok) => {
+            const ce = CloudStorage.getInstance().ce;
+            SilexNotification.alert('Open recent file', `
+              I am trying to connect you to ${fileInfo.service} again,
+              please accept the connection in the popup I have just opened then <strong>please wait</strong>.
+            `,
+                () => {});
+            ce['auth'](fileInfo.service).then((res) => {
+              SilexNotification.close();
+              if (ok) {
+                this.openRecent(fileInfo, opt_cbk);
+              }
+            });
+          });
         });
   }
 
@@ -134,10 +133,9 @@ export class FileMenuController extends ControllerBase {
     }
   }
 
-  onOpenError(
-      err: Object, msg: string, opt_errorCbk?: ((p1: Object) => any)) {
+  onOpenError(err: Object, msg: string, opt_errorCbk?: ((p1: Object) => any)) {
     console.error('opening template error', err);
-    SilexNotification.alert('An error occured. ' + msg, () => {});
+    SilexNotification.alert('Open file', 'An error occured. ' + msg, () => {});
     if (opt_errorCbk) {
       opt_errorCbk(err);
     }
@@ -150,10 +148,7 @@ export class FileMenuController extends ControllerBase {
   /**
    * open a file
    */
-  openFile(
-      opt_cbk?: ((p1: FileInfo) => any),
-      opt_errorCbk?: ((p1: any) => any),
-      opt_cancelCbk?: (() => any)) {
+  openFile(opt_cbk?: ((p1: FileInfo) => any), opt_errorCbk?: ((p1: any) => any), opt_cancelCbk?: (() => any)) {
     // QOS, track success
     this.tracker.trackAction('controller-events', 'request', 'file.open', 0);
 
@@ -184,16 +179,13 @@ export class FileMenuController extends ControllerBase {
                 },
                 // with loader
                 (error: any, message) => {
-                  SilexNotification.alert(
-                      'Error: I did not manage to open this file. \n' +
-                          (message || error.message || ''),
-                      () => {
-                        if (opt_errorCbk) {
-                          opt_errorCbk(error);
-                        }
-                      });
-                  this.tracker.trackAction(
-                      'controller-events', 'error', 'file.open', -1);
+                  SilexNotification.alert('Open file', 'Error: I did not manage to open this file. \n' + (message || error.message || ''),
+                  () => {
+                    if (opt_errorCbk) {
+                      opt_errorCbk(error);
+                    }
+                  });
+                  this.tracker.trackAction('controller-events', 'error', 'file.open', -1);
                 });
           } else {
             if (opt_cancelCbk) {
@@ -213,7 +205,7 @@ export class FileMenuController extends ControllerBase {
   publishError(message) {
     this.tracker.trackAction('controller-events', 'error', 'file.publish', -1);
     console.error('Error: I did not manage to publish the file.', message);
-    SilexNotification.alert(
+    SilexNotification.alert('Publication',
         `<strong>An error occured.</strong><p>I did not manage to publish the website. ${
             message}</p><p><a href="${ Config.ISSUES_SILEX }" target="_blank">Get help in Silex forums.</a></p>`,
         () => {});
@@ -234,36 +226,31 @@ export class FileMenuController extends ControllerBase {
     dialog.open()
         .then((publishOptions) => {
           if (publishOptions) {
-            this.doPublish(
-                publishOptions,
-                (errMsg, warningMsg, finalPublicationOptions) => {
-                  if (errMsg) {
+            this.doPublish(publishOptions, (errMsg, warningMsg, finalPublicationOptions) => {
+              if (errMsg) {
+                dialog.close();
+                this.publishError(errMsg);
+              } else {
+                if (warningMsg) {
+                  dialog.close();
+                  SilexNotification.alert('Publication', warningMsg, () => {});
+                  this.tracker.trackAction(
+                      'controller-events', 'cancel', 'file.publish', 0);
+                } else {
+                  dialog
+                  .publish((finalPublicationOptions as PublicationOptions))
+                  .then((msg: string) => {
+                    this.tracker.trackAction('controller-events', 'success', 'file.publish', 1);
                     dialog.close();
-                    this.publishError(errMsg);
-                  } else {
-                    if (warningMsg) {
-                      dialog.close();
-                      SilexNotification.alert(warningMsg, () => {});
-                      this.tracker.trackAction(
-                          'controller-events', 'cancel', 'file.publish', 0);
-                    } else {
-                      dialog
-                          .publish(
-                              (finalPublicationOptions as PublicationOptions))
-                          .then((msg: string) => {
-                            this.tracker.trackAction(
-                                'controller-events', 'success', 'file.publish',
-                                1);
-                            dialog.close();
-                            SilexNotification.alert(msg, () => {});
-                          })
-                          .catch((msg) => {
-                            dialog.close();
-                            this.publishError(msg);
-                          });
-                    }
-                  }
-                });
+                    SilexNotification.alert('Publication', msg, () => {});
+                  })
+                  .catch((msg) => {
+                    dialog.close();
+                    this.publishError(msg);
+                  });
+                }
+               }
+            });
           } else {
             this.tracker.trackAction(
                 'controller-events', 'cancel', 'file.publish', 0);
@@ -317,16 +304,17 @@ export class FileMenuController extends ControllerBase {
               const storedProvider: Provider =
                   hosting['providers'].find((p) => p['name'] === providerName);
               if (!storedProvider) {
-                SilexNotification.alert(
-                    `Unknown provider ${
-                        providerName}. Is it configured on this servier? Here are the hosting providers I know: ${
-                        hosting['providers'].map((p) => p['name']).join(', ')}`,
-                    () => {});
-                throw new Error(`Unknown provider ${
-                    providerName}. Is it configured on this servier? Here are the hosting providers I know: <ul>${
-                    hosting['providers']
-                        .map((p) => '<li>' + p['name'] + '</li>')
-                        .join('')}</ul>`);
+                SilexNotification.alert('Publication', `
+                  <p>Unknown provider ${providerName}.</p>
+                  <p>Is it configured on this servier? Here are the hosting providers I know:
+                  ${hosting['providers'].map((p) => p['name']).join(', ')}</p>
+                `, () => {});
+                throw new Error(`
+                  Unknown provider ${providerName}.
+                  Is it configured on this servier? Here are the hosting providers I know: <ul>${hosting['providers']
+                  .map((p) => '<li>' + p['name'] + '</li>')
+                  .join('')}</ul>
+                `);
               }
               cbk(null, null, ({
                     'file': file,
@@ -337,10 +325,10 @@ export class FileMenuController extends ControllerBase {
           }
         } else {
           cbk(null, null, ({
-                'file': file,
-                'publicationPath': folder,
-                'provider': provider
-              } as PublicationOptions));
+            'file': file,
+            'publicationPath': folder,
+            'provider': provider
+          } as PublicationOptions));
         }
       }
     }

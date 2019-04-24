@@ -153,8 +153,10 @@ export default function({ port, rootUrl }, unifile) {
       return url.href;
     });
     // markup
-    dom.window.document.body.classList.remove('silex-runtime');
-    dom.window.document.body.classList.add('silex-editor');
+    dom.window.document.body.classList.remove(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
+    dom.window.document.documentElement.classList.remove(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
+    dom.window.document.body.classList.add(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
+    dom.window.document.documentElement.classList.add(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
     deactivateScripts(dom);
     // add /css/editable.css
     var tag = dom.window.document.createElement('link');
@@ -170,8 +172,10 @@ export default function({ port, rootUrl }, unifile) {
    */
   function unprepareWebsite(dom, baseUrl) {
     // markup
-    dom.window.document.body.classList.add('silex-runtime');
-    dom.window.document.body.classList.remove('silex-editor');
+    dom.window.document.body.classList.add(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
+    dom.window.document.documentElement.classList.add(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
+    dom.window.document.body.classList.remove(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
+    dom.window.document.documentElement.classList.remove(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
     reactivateScripts(dom);
     restoreIFrames(dom);
     cleanupNoscripts(dom);

@@ -161,7 +161,7 @@ export class App {
     const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     const isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
     if (!isFirefox && !isChrome) {
-      SilexNotification.alert(
+      SilexNotification.alert('Warning',
           'Your browser is not supported yet.<br><br>Considere using <a href="https://www.mozilla.org/firefox/" target="_blank">Firefox</a> or <a href="https://www.google.com/chrome/" target="_blank">chrome</a>.',
           () => {});
     }
@@ -176,7 +176,7 @@ export class App {
       const minWinSizeWidth = 950;
       const minWinSizeHeight = 630;
       if (winSizeHeight < minWinSizeHeight || winSizeWidth < minWinSizeWidth) {
-        SilexNotification.alert(
+        SilexNotification.alert('Warning',
             `Your window is very small (${winSizeWidth}x${
                 winSizeHeight}) and Silex may not display correctly.<br><br>Considere maximizing the window or use a bigger screen to use Silex at its best. A window size of ${
                 minWinSizeWidth}x${

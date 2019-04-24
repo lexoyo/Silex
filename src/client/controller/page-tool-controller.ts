@@ -24,8 +24,7 @@ import {SilexNotification} from '../utils/notification';
  */
 export class PageToolController extends ControllerBase {
   constructor(model: Model, view: View) {
-
-super(model, view);
+    super(model, view);
   }
 
   /**
@@ -66,18 +65,18 @@ super(model, view);
 
     // confirm and delete
     SilexNotification.confirm(
-        'I am about to <strong>delete the page "' +
-            this.model.page.getDisplayName(opt_pageName) +
-            '"</strong>, are you sure?',
+      'Delete page',
+      'I am about to <strong>delete the page "' + this.model.page.getDisplayName(opt_pageName) + '"</strong>, are you sure?',
         accept => {
-          if (accept) {
-            // undo checkpoint
-            this.undoCheckPoint();
+        if (accept) {
+          // undo checkpoint
+          this.undoCheckPoint();
 
-            // update model
-            this.model.page.removePage((opt_pageName as string));
-          }
-        }, 'delete', 'cancel');
+          // update model
+          this.model.page.removePage((opt_pageName as string));
+        }
+      }, 'delete', 'cancel'
+    );
   }
 
   /**

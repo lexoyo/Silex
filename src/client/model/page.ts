@@ -186,22 +186,25 @@ export class Page {
 
       // handle elements which should be deleted
       if (elementsOnlyOnThisPage.length > 0) {
-        SilexNotification.confirm(
-            elementsOnlyOnThisPage.length +
-                ' elements were only visible on this page (' + pageDisplayName +
-                '). <br /><ul><li>Do you want me to <strong>delete these elements?</strong><br /></li><li>or keep them and <strong>make them visible on all pages?</strong></li></ul>',
-            (accept) => {
-              elementsOnlyOnThisPage.forEach((element) => {
-                if (accept) {
-                  // remove these elements
-                  this.model.element.removeElement(element);
-                } else {
-                  // remove from this page
-                  this.model.page.removeFromAllPages(element);
-                }
-              });
-            },
-            'delete', 'keep');
+        SilexNotification.confirm('Delete elements' , `
+          ${elementsOnlyOnThisPage.length} elements were only visible on this page (${pageDisplayName}).
+          <br /><ul>
+            <li>Do you want me to <strong>delete these elements?</strong><br /></li>
+            <li>or keep them and <strong>make them visible on all pages?</strong></li>
+          </ul>
+        `,
+        (accept) => {
+          elementsOnlyOnThisPage.forEach((element) => {
+            if (accept) {
+              // remove these elements
+              this.model.element.removeElement(element);
+            } else {
+              // remove from this page
+              this.model.page.removeFromAllPages(element);
+            }
+          });
+        },
+        'delete', 'keep');
       }
     }
   }

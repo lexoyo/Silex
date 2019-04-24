@@ -328,9 +328,7 @@ export class SilexElement {
    * @return  the element which holds the content, i.e. a div, an image, ...
    */
   getContentNode(element: HTMLElement): HTMLElement {
-    return element.querySelector(
-               ':scope > .' + Constants.ELEMENT_CONTENT_CLASS_NAME) ||
-        element;
+    return element.querySelector(':scope > .' + Constants.ELEMENT_CONTENT_CLASS_NAME) || element;
   }
 
   /**
@@ -362,6 +360,7 @@ export class SilexElement {
             element, element.parentElement.childNodes[0]);
         break;
     }
+    this.view.stageWrapper.redraw();
   }
 
   /**
@@ -537,9 +536,6 @@ export class SilexElement {
     // it will also trigger a "silex.resize" event
     this.model.file.getContentWindow()['silex']['resizeBody']();
 
-    // update stage store
-    this.view.stageWrapper.addElement(element);
-
     // update all metrics in case this new element has moved other elements
     this.view.stageWrapper.redraw();
   }
@@ -581,8 +577,7 @@ export class SilexElement {
     // default style
     let defaultStyle = {};
     defaultStyle['width'] = SilexElement.INITIAL_ELEMENT_SIZE + 'px';
-    defaultStyle[this.getHeightStyleName(element)] =
-        SilexElement.INITIAL_ELEMENT_SIZE + 'px';
+    defaultStyle[this.getHeightStyleName(element)] = SilexElement.INITIAL_ELEMENT_SIZE + 'px';
 
     // init the element depending on its type
     switch (this.getType(element)) {
@@ -629,6 +624,9 @@ export class SilexElement {
         this.addElementDefaultPosition(element);
       }
     }
+
+    // update stage store
+    this.view.stageWrapper.addElement(element);
   }
 
   /**
@@ -717,6 +715,7 @@ export class SilexElement {
     let element = this.model.file.getContentDocument().createElement('div');
     element.setAttribute(Constants.TYPE_ATTR, Constants.TYPE_CONTAINER);
     element.classList.add(Constants.PREVENT_DRAGGABLE_CLASS_NAME);
+    element.classList.add(Constants.PREVENT_RESIZABLE_CLASS_NAME);
     element.classList.add(Constants.TYPE_CONTAINER);
 
     // content element is both a container and a content element

@@ -16,6 +16,21 @@
 
 export class Constants {
   /**
+   * constant for the class name set on the body depending on the context in which is the website
+   */
+  static WEBSITE_CONTEXT_RUNTIME_CLASS_NAME = 'silex-runtime';
+
+  /**
+   * constant for the class name set on the body depending on the context in which is the website
+   */
+  static WEBSITE_CONTEXT_EDITOR_CLASS_NAME = 'silex-editor';
+
+  /**
+   * constant for the class name set on the body depending on the context in which is the website
+   */
+  static WEBSITE_CONTEXT_PUBLISHED_CLASS_NAME = 'silex-published';
+
+  /**
    * constant for the class name of elements visible only on some pages
    */
   static PAGED_CLASS_NAME: string = 'paged-element';
@@ -98,6 +113,12 @@ export class Constants {
    * elements
    */
   static ELEMENT_ID_ATTR_NAME = 'data-silex-id';
+
+  /**
+   * constant for the attribute name holding the IDs given to Silex editable
+   * elements
+   */
+  static STATIC_ASSET_ATTR = 'data-silex-static';
 
   /**
    * constant for the class name of the element content

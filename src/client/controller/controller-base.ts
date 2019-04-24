@@ -399,38 +399,39 @@ export class ControllerBase {
    * promp user for page name
    * used in insert page, rename page...
    */
-  getUserInputPageName(
-      defaultName: string, cbk: (p1?: string, p2?: string) => any) {
+  getUserInputPageName(defaultName: string, cbk: (p1?: string, p2?: string) => any) {
     SilexNotification.prompt(
-        'Enter a name for your page!', defaultName, (accept, name) => {
-          if (accept && name && name.length > 0) {
-            // keep the full name
-            let displayName = name;
+      'Page name',
+      'Enter a name for your page!', defaultName, (accept, name) => {
+        if (accept && name && name.length > 0) {
+          // keep the full name
+          let displayName = name;
 
-            // cleanup the page name
-            name = name.replace(/\W+/g, '-').toLowerCase();
+          // cleanup the page name
+          name = name.replace(/\W+/g, '-').toLowerCase();
 
-            // do not allow to start with an dash or number (see css
-            // specifications)
-            name = 'page-' + name;
+          // do not allow to start with an dash or number (see css
+          // specifications)
+          name = 'page-' + name;
 
-            // check if a page with this name exists
-            let pages = this.model.page.getPages();
-            let exists = false;
-            pages.forEach((pageName) => {
-              if (pageName === name) {
-                exists = true;
-              }
-            });
-            if (exists) {
-              // just open the new page
-              this.openPage(name);
-            } else {
-              cbk(name, displayName);
+          // check if a page with this name exists
+          let pages = this.model.page.getPages();
+          let exists = false;
+          pages.forEach((pageName) => {
+            if (pageName === name) {
+              exists = true;
             }
+          });
+          if (exists) {
+            // just open the new page
+            this.openPage(name);
+          } else {
+            cbk(name, displayName);
           }
-          cbk();
-        });
+        }
+        cbk();
+      }
+    );
   }
 
   /**
@@ -641,38 +642,36 @@ export class ControllerBase {
     }
 
     // save to file
-    this.model.file.saveAs(
-        fileInfo, rawHtml,
+    this.model.file.saveAs(fileInfo, rawHtml, () => {
+      this.tracker.trackAction(
+          'controller-events', 'success', 'file.save', 1);
+      ControllerBase.lastSaveUndoIdx =
+          ControllerBase.undoHistory.length - 1;
+      this.fileOperationSuccess('File is saved.', false);
+      this.view.workspace.setPreviewWindowLocation();
+      if (opt_cbk) {
+        opt_cbk();
+      }
+    },
+    (error, msg) => {
+      SilexNotification.alert(
+        'Save website',
+        'Error: I did not manage to save the file. \n' +
+            (msg || error['message'] || ''),
         () => {
-          this.tracker.trackAction(
-              'controller-events', 'success', 'file.save', 1);
-          ControllerBase.lastSaveUndoIdx =
-              ControllerBase.undoHistory.length - 1;
-          this.fileOperationSuccess('File is saved.', false);
-          this.view.workspace.setPreviewWindowLocation();
-          if (opt_cbk) {
-            opt_cbk();
+          if (opt_errorCbk) {
+            opt_errorCbk(error);
           }
-        },
-        (error, msg) => {
-          SilexNotification.alert(
-              'Error: I did not manage to save the file. \n' +
-                  (msg || error['message'] || ''),
-              () => {
-                if (opt_errorCbk) {
-                  opt_errorCbk(error);
-                }
-              });
-          this.tracker.trackAction(
-              'controller-events', 'error', 'file.save', -1);
         });
+      this.tracker.trackAction(
+          'controller-events', 'error', 'file.save', -1);
+    });
   }
 
   /**
    * success of an operation involving changing the file model
    */
-  fileOperationSuccess(
-      opt_message?: string, opt_updateTools?: boolean) {
+  fileOperationSuccess(opt_message?: string, opt_updateTools?: boolean) {
     // update tools
     if (opt_updateTools) {
       // update dialogs

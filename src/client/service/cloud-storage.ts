@@ -148,7 +148,7 @@ export class CloudStorage {
 
         // warn the user
         if (data['message']) {
-          SilexNotification.alert(data['message'], function() {});
+          SilexNotification.alert('Open a website', data['message'], function() {});
         }
         cbk(data['html'], data['userHead']);
       } else {
@@ -173,16 +173,16 @@ export class CloudStorage {
       cbk: (p1: any[]) => any,
       opt_errCbk?: ((p1: any, p2: string) => any)) {
     this.ce.getServices()
-        .then((services) => {
-          cbk(services);
-        })
-        .catch((e) => {
-          console.error('Error: could not get the list of services', e);
-          if (opt_errCbk) {
-            opt_errCbk(e, 'Error: could not get the list of services');
-          } else {
-            cbk([]);
-          }
-        });
+    .then((services) => {
+      cbk(services);
+    })
+    .catch((e) => {
+      console.error('Error: could not get the list of services', e);
+      if (opt_errCbk) {
+        opt_errCbk(e, 'Error: could not get the list of services');
+      } else {
+        cbk([]);
+      }
+    });
   }
 }

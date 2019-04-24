@@ -35,8 +35,7 @@ export class EditMenuController extends ControllerBase {
   undoredoInvalidationManager: InvalidationManager;
 
   constructor(model: Model, view: View) {
-
-super(model, view);
+    super(model, view);
     this.undoredoInvalidationManager = new InvalidationManager(1000);
   }
 
@@ -225,18 +224,19 @@ super(model, view);
     let elements = this.model.body.getSelection();
 
     // confirm and delete
-    SilexNotification.confirm('I am about to <strong>delete the selected element(s)</strong>, are you sure?',
-        accept => {
-          if (accept) {
-            // undo checkpoint
-            this.undoCheckPoint();
+    SilexNotification.confirm('Delete elements', 'I am about to <strong>delete the selected element(s)</strong>, are you sure?',
+      accept => {
+        if (accept) {
+          // undo checkpoint
+          this.undoCheckPoint();
 
-            // do remove selected elements
-            elements.forEach(element => {
-              this.model.element.removeElement(element);
-            });
-          }
-        }, 'delete', 'cancel');
+          // do remove selected elements
+          elements.forEach(element => {
+            this.model.element.removeElement(element);
+          });
+        }
+      }, 'delete', 'cancel'
+    );
   }
 
   /**

@@ -12,6 +12,7 @@
 const { URL } = require('url');
 const Path = require('path');
 import DomTools from '../utils/DomTools';
+import { Constants } from '../../Constants';
 const constants = require('../../Constants.js');
 
 /**
@@ -69,10 +70,10 @@ export default class DomPublisher {
     // remove data-silex-static (will then be downloaded like any other script, not striped by DomTools.transformPath)
     // remove data-dependency
     // do NOT remove data-silex-type because it is used by front-end.js at runtime
-    const tagsToClean = this.doc.querySelectorAll('[data-silex-type], [data-silex-id], [data-silex-static]');
+    const tagsToClean = this.doc.querySelectorAll(`[${Constants.TYPE_ATTR}], [${Constants.ELEMENT_ID_ATTR_NAME}], [${Constants.STATIC_ASSET_ATTR}]`);
     for(let idx=0; idx<tagsToClean.length; idx++) {
-      tagsToClean[idx].removeAttribute('data-silex-id');
-      tagsToClean[idx].removeAttribute('data-silex-static');
+      tagsToClean[idx].removeAttribute(Constants.ELEMENT_ID_ATTR_NAME);
+      tagsToClean[idx].removeAttribute(Constants.STATIC_ASSET_ATTR);
       tagsToClean[idx].removeAttribute('data-dependency');
     }
   }
@@ -84,7 +85,7 @@ export default class DomPublisher {
     .filter(el => !!el) // when not updated yet to the latest version, the URLs are not relative
     .forEach(el => el.parentElement.removeChild(el))
     // split in multiple pages
-    const pages = Array.from(this.doc.querySelectorAll('a[data-silex-type="page"]'));
+    const pages = Array.from(this.doc.querySelectorAll(`a[${Constants.TYPE_ATTR}="${Constants.TYPE_PAGE}"]`));
     const initialFirstPageName = pages[0].getAttribute('id');
     return pages
     .map((el, idx) => {
@@ -244,7 +245,8 @@ export default class DomPublisher {
       element.parentElement.replaceChild(replacement, element);
     };
 
-    this.doc.body.classList.add('silex-published');
+    this.doc.body.classList.add(Constants.WEBSITE_CONTEXT_PUBLISHED_CLASS_NAME);
+    this.doc.documentElement.classList.add(Constants.WEBSITE_CONTEXT_PUBLISHED_CLASS_NAME);
 
     return {
       scriptTags: scriptTags,

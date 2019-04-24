@@ -121,6 +121,7 @@ export class SilexNotification {
    */
   static close() {
     if(SilexNotification.currentDialog) SilexNotification.currentDialog.close();
+    SilexNotification.currentDialog = null;
   }
 
   static setup(dialog: Dialog) {
@@ -136,8 +137,7 @@ export class SilexNotification {
   /**
    * display a message
    */
-  static alert(message: string, cbk: () => any, label: string = 'ok') {
-    const title = ''; // todo: provide a title
+  static alert(title: string, message: string, cbk: () => any, label: string = 'ok') {
     SilexNotification.setup(alertify.alert(title, message, () => {
       SilexNotification.isActive = false;
       SilexNotification.currentDialog = null;
@@ -150,8 +150,7 @@ export class SilexNotification {
   /**
    * ask for a text
    */
-  static prompt(message: string, text: string, cbk: (p1: boolean, p2: string) => any, ok: string = 'ok', cancel: string = 'cancel') {
-    const title = ''; // todo: provide a title
+  static prompt(title: string, message: string, text: string, cbk: (p1: boolean, p2: string) => any, ok: string = 'ok', cancel: string = 'cancel') {
     SilexNotification.setup(alertify.prompt(title, message, text, (evt, value) => {
       SilexNotification.isActive = false;
       SilexNotification.currentDialog = null;
@@ -171,8 +170,7 @@ export class SilexNotification {
   /**
    * ask for confirmation
    */
-  static confirm(message: string, cbk: (p1: boolean) => any, ok: string = 'ok', cancel: string = 'cancel') {
-    const title = ''; // todo: provide a title
+  static confirm(title: string, message: string, cbk: (p1: boolean) => any, ok: string = 'ok', cancel: string = 'cancel') {
     SilexNotification.setup(alertify.confirm(title, message, () => {
       SilexNotification.isActive = false;
       SilexNotification.currentDialog = null;

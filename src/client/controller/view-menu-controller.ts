@@ -25,8 +25,7 @@ import {ControllerBase} from './controller-base';
  */
 export class ViewMenuController extends ControllerBase {
   constructor(model: Model, view: View) {
-
-super(model, view);
+    super(model, view);
   }
 
   /**
@@ -134,10 +133,12 @@ super(model, view);
       }
     } else {
       SilexNotification.alert(
-          'You need to save the website before I can show a preview',
-          () => {
-            doSaveTheFile();
-          });
+        'Preview website',
+        'You need to save the website before I can show a preview',
+        () => {
+          doSaveTheFile();
+        }
+      );
     }
   }
 }
