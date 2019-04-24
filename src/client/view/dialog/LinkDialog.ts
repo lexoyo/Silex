@@ -119,7 +119,7 @@ export class LinkDialog {
           <div class="link-editor-tab-container">
             <label for="link-editor-href">External link</label>
             <div class="flex">
-              <input autocomplete="nope" id="link-editor-href" class="big alertify-text href tabbed" type="url" value="${isExternal ? linkData['href'] : ''}">
+              <input autocomplete="nope" spellcheck="false" id="link-editor-href" class="big alertify-text href tabbed" type="url" value="${isExternal ? linkData['href'] : ''}">
               <select autocomplete="nope" id="link-editor-target" class="alertify-text target">
                 <option${linkData['target'] === '' ? ' selected ' : ''} value=""></option>
                 <option${linkData['target'] === '_self' ? ' selected ' : ''} value="_self">_self</option>

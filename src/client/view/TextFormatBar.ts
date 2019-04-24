@@ -217,7 +217,9 @@ export class TextFormatBar {
         doc.addEventListener('keydown', this.onKeyDownBinded);
         win.addEventListener('scroll', this.onScrollBinded);
         this.wysihtmlEditor.on('blur', (e) => {
-          this.stopEditing();
+          if(!SilexNotification.isActive) {
+            this.stopEditing();
+          }
         });
         this.wysihtmlEditor.on('load', () => {
           this.wysihtmlEditor.focus(false);

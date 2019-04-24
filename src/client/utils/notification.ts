@@ -128,6 +128,7 @@ export class SilexNotification {
     SilexNotification.close();
     SilexNotification.isActive = true;
     SilexNotification.currentDialog = dialog;
+    document.querySelector('.alertify').setAttribute('spellcheck', 'false');
     return dialog.set({
       movable: false,
       transition: 'fade',
