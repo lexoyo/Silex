@@ -245,12 +245,18 @@ export class Constants {
   static STYLE_VISIBILITY = ['desktop', 'mobile'];
 
   /**
-   * constant for the class names which are of internal use in Silex
-   * they do not appear in the "css classes" text field of the style-pane
+   * Class names which are of internal use in Silex
+   * Remove them from breadcrumb component and "css classes" text field of the style-pane
    */
   static SILEX_CLASS_NAMES: string[] = [
     Constants.PREVENT_DROPPABLE_CLASS_NAME,
+    Constants.SILEX_USE_HEIGHT_NOT_MINHEIGHT,
     Constants.PREVENT_RESIZABLE_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_TOP_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_BOTTOM_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME,
+    Constants.PREVENT_SELECTABLE_CLASS_NAME,
     Constants.PREVENT_DRAGGABLE_CLASS_NAME,
     Constants.EDITABLE_CLASS_NAME,
     Constants.ENABLE_MOBILE_CSS_CLASS,
@@ -273,11 +279,35 @@ export class Constants {
     Constants.HIDE_ON_MOBILE,
     Constants.COMPONENT_CLASS_NAME,
   ];
+  /**
+   * Classes to remove when saving
+   */
   static SILEX_TEMP_CLASS_NAMES = [
     Constants.PAGE_LINK_ACTIVE_CLASS_NAME,
     Constants.PAGEABLE_PLUGIN_READY_CLASS_NAME,
     Constants.PAGED_HIDDEN_CLASS_NAME,
     Constants.PAGED_VISIBLE_CLASS_NAME,
+    Constants.SELECTED_CLASS_NAME,
+  ];
+  /**
+   * Classes to remove when publishing
+   * FIXME: ?this array should not contain the elements already in SILEX_TEMP_CLASS_NAMES as they are removed at save?
+   */
+  static SILEX_CLASS_NAMES_TO_REMOVE_AT_PUBLISH = [
+    Constants.PREVENT_DROPPABLE_CLASS_NAME,
+    Constants.SILEX_USE_HEIGHT_NOT_MINHEIGHT,
+    Constants.PREVENT_RESIZABLE_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_TOP_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_LEFT_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_BOTTOM_CLASS_NAME,
+    Constants.PREVENT_RESIZABLE_RIGHT_CLASS_NAME,
+    Constants.PREVENT_SELECTABLE_CLASS_NAME,
+    Constants.PREVENT_DRAGGABLE_CLASS_NAME,
+    Constants.PAGED_CLASS_NAME,
+    Constants.PAGED_HIDDEN_CLASS_NAME,
+    Constants.PAGED_VISIBLE_CLASS_NAME,
+    Constants.PAGEABLE_PLUGIN_READY_CLASS_NAME,
+    Constants.PAGE_LINK_ACTIVE_CLASS_NAME,
     Constants.SELECTED_CLASS_NAME,
   ];
 }

@@ -246,7 +246,12 @@ export default class DomPublisher {
     };
 
     this.doc.body.classList.add(Constants.WEBSITE_CONTEXT_PUBLISHED_CLASS_NAME);
-    this.doc.documentElement.classList.add(Constants.WEBSITE_CONTEXT_PUBLISHED_CLASS_NAME);
+
+    // remove useless css classes
+    Constants.SILEX_CLASS_NAMES_TO_REMOVE_AT_PUBLISH.forEach(className => {
+      Array.from(this.doc.getElementsByClassName(className))
+      .forEach((el: HTMLElement) => el.classList.remove(className));
+    });
 
     return {
       scriptTags: scriptTags,

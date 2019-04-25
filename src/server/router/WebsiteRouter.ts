@@ -16,12 +16,11 @@ const { JSDOM } = require('jsdom');
 const { URL } = require('url');
 const CloudExplorer = require('cloud-explorer');
 
+import { Constants } from '../../Constants';
 import BackwardCompat from '../utils/BackwardCompat';
 import DomTools from '../utils/DomTools';
-import { Constants } from '../../Constants';
 
-const clientRoot = Path.resolve(__dirname, '..');
-const nodeModules = require('node_modules-path');
+import * as nodeModules from 'node_modules-path';
 
 export default function({ port, rootUrl }, unifile) {
 
@@ -143,8 +142,7 @@ export default function({ port, rootUrl }, unifile) {
   }
   /**
    * prepare website for edit mode
-   * * make all URLs absolute (so that images are still found when I "save as" my website to another folder)
-   * * adds markup and css classes needed by Silex front end
+   * make all URLs absolute (so that images are still found when I "save as" my website to another folder)
    */
   function prepareWebsite(dom, baseUrl) {
     // URLs
@@ -152,11 +150,9 @@ export default function({ port, rootUrl }, unifile) {
       const url = new URL(path, baseUrl);
       return url.href;
     });
-    // markup
+    // update context classes
     dom.window.document.body.classList.remove(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
-    dom.window.document.documentElement.classList.remove(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
     dom.window.document.body.classList.add(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
-    dom.window.document.documentElement.classList.add(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
     deactivateScripts(dom);
     // add /css/editable.css
     var tag = dom.window.document.createElement('link');
@@ -173,9 +169,7 @@ export default function({ port, rootUrl }, unifile) {
   function unprepareWebsite(dom, baseUrl) {
     // markup
     dom.window.document.body.classList.add(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
-    dom.window.document.documentElement.classList.add(Constants.WEBSITE_CONTEXT_RUNTIME_CLASS_NAME);
     dom.window.document.body.classList.remove(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
-    dom.window.document.documentElement.classList.remove(Constants.WEBSITE_CONTEXT_EDITOR_CLASS_NAME);
     reactivateScripts(dom);
     restoreIFrames(dom);
     cleanupNoscripts(dom);
@@ -200,8 +194,9 @@ export default function({ port, rootUrl }, unifile) {
       .forEach((el: HTMLElement) => el.classList.remove(className));
     });
     // cleanup inline styles
-    dom.window.document.body.minWidth = '';
-    dom.window.document.body.minHeight = '';
+    dom.window.document.body.style.minWidth = ''; // not needed?
+    dom.window.document.body.style.minHeight = ''; // not needed?
+    dom.window.document.body.style.overflow = ''; // set by stage
   }
 
   function deactivateScripts(dom) {
