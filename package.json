@@ -67,8 +67,8 @@
     "pug-cli": "^1.0.0-alpha6",
     "request": "2.85.0",
     "serve-static": "1.13.2",
-    "silex-blank-templates": "github:silexlabs/silex-blank-templates#67a90220873251c96b8f3608615ea58075422505",
-    "silex-templates": "github:silexlabs/silex-templates#6566dde0f6b3f00dcefc84379a8f90710def57ed",
+    "silex-blank-templates": "github:silexlabs/silex-blank-templates#59b55d32a7829e004de6a9dd96c1af2d30ee4b6a",
+    "silex-templates": "github:silexlabs/silex-templates#85d84f533bbd8d3234c314284bc64c7a114de606",
     "typescript": "^3.3.3333",
     "wysihtml": "^0.6.0-beta1"
   },
