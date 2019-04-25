@@ -17,7 +17,7 @@
  */
 
 import { Controller, Model } from '../../types';
-import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
+import { SelectableState } from 'stage/src/ts/Types';
 
 
 /**

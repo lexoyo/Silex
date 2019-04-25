@@ -1,8 +1,8 @@
 import { Constants } from '../../Constants';
 import { Controller, Model } from '../types';
 // import { Stage } from 'stage'; // this is not recognized by my IDE
-import { Stage } from '../../../node_modules/stage/src/ts/index';
-import { ScrollData, SelectableState } from '../../../node_modules/stage/src/ts/Types';
+import { Stage } from 'stage/src/ts/index';
+import { ScrollData, SelectableState } from 'stage/src/ts/Types';
 
 export class StageWrapper {
   private stage: Stage;

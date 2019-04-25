@@ -19,7 +19,7 @@ import {PaneBase} from './pane-base';
 import {Dom} from '../../utils/dom';
 import {Tracker} from '../../service/tracker';
 import {SilexNotification} from '../../utils/notification';
-import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
+import { SelectableState } from 'stage/src/ts/Types';
 
 /**
  * @fileoverview The style editor pane is displayed in the property panel on the

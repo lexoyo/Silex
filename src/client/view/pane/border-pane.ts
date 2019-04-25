@@ -18,7 +18,7 @@
 import { Controller, Model } from '../../types';
 import { ColorPicker } from '../ColorPicker';
 import { PaneBase } from './pane-base';
-import { SelectableState } from '../../../../node_modules/stage/src/ts/Types';
+import { SelectableState } from 'stage/src/ts/Types';
 
 /**
  * on of Silex Editors class

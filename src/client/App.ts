@@ -59,7 +59,7 @@ import { TextFormatBar } from './view/TextFormatBar';
 import { Workspace } from './view/workspace';
 
 // import { Stage } from 'stage'; // this is not recognized by my IDE
-import { Stage } from '../../node_modules/stage/src/ts/index';
+import { Stage } from 'stage/src/ts/index';
 
 import { getUiElements } from './view/UiElements';
 import { StageWrapper } from './view/StageWrapper';
