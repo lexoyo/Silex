@@ -54,19 +54,21 @@ export class SilexElement {
    */
   static MIN_WIDTH: number = 20;
 
-  static loadImage(url: string, {success, error}: {success: (img: HTMLImageElement) => void, error: (e: Event) => void}) {
-    var img = new Image();
-    img.onload = (e) => {
-      img.onload = null;
-      img.onerror = null;
-      success(img);
-    }
-    img.onerror = (e: Event) => {
-      img.onload = null;
-      img.onerror = null;
-      error(e);
-    }
-    img.src = url;
+  static async loadImage(url: string): Promise<HTMLImageElement> {
+    return new Promise<HTMLImageElement>((resolve, reject) => {
+      var img = new Image();
+      img.onload = (e) => {
+        img.onload = null;
+        img.onerror = null;
+        resolve(img);
+      }
+      img.onerror = (e: Event) => {
+        img.onload = null;
+        img.onerror = null;
+        reject(e);
+      }
+      img.src = url;
+    });
   }
 
   constructor(public model: Model, public view: View) {}
@@ -111,7 +113,7 @@ export class SilexElement {
    * @return true if `element` is a an element's content (the element in an
    *     image, html box, section...)
    */
-  isElementContent(element: HTMLElement): any {
+  isElementContent(element: HTMLElement): boolean {
     return element.classList.contains(Constants.ELEMENT_CONTENT_CLASS_NAME);
   }
 
@@ -283,10 +285,11 @@ export class SilexElement {
    * @param url    URL of the image chosen by the user
    */
   setBgImage(element: HTMLElement, url: string) {
+    console.log('setBgImage', element, url)
     if (url) {
-      this.setStyle(element, 'backgroundImage', Url.addUrlKeyword(url));
+      this.setStyle(element, 'background-image', Url.addUrlKeyword(url));
     } else {
-      this.setStyle(element, 'backgroundImage');
+      this.setStyle(element, 'background-image');
     }
 
     // redraw tools
@@ -414,10 +417,10 @@ export class SilexElement {
    * @param opt_callback the callback to be notified when the image is loaded
    * @param opt_errorCallback the callback to be notified of errors
    */
-  setImageUrl(
+  async setImageUrl(
       element: HTMLElement, url: string,
-      opt_callback?: ((p1: HTMLElement, p2: HTMLElement) => any),
-      opt_errorCallback?: ((p1: HTMLElement, p2: string) => any)) {
+      opt_callback?: ((p1: HTMLElement, p2: HTMLElement) => void),
+      opt_errorCallback?: ((p1: HTMLElement, p2: string) => void)) {
     if (element.getAttribute(Constants.TYPE_ATTR) === Constants.TYPE_IMAGE) {
       // get the image tag
       const img = this.getContentNode(element) as HTMLImageElement;
@@ -431,45 +434,41 @@ export class SilexElement {
           imgTags[0].parentElement.removeChild(imgTags[0]);
         }
 
-        // load the new image
-        SilexElement.loadImage(url, {
-          success: loadedImg => {
-            // update element size
-            this.setStyle(element, 'width', Math.max(SilexElement.MIN_WIDTH, loadedImg.naturalWidth) + 'px', true);
-            this.setStyle(element, this.getHeightStyleName(element), Math.max(SilexElement.MIN_HEIGHT, loadedImg.naturalHeight) + 'px', true);
+        try {
+          // load the new image
+          const loadedImg: HTMLImageElement = await SilexElement.loadImage(url);
 
-            // callback
-            if (opt_callback) {
-              opt_callback(element, loadedImg);
-            }
+          // update element size
+          this.setStyle(element, 'width', Math.max(SilexElement.MIN_WIDTH, loadedImg.naturalWidth) + 'px', true);
+          this.setStyle(element, this.getHeightStyleName(element), Math.max(SilexElement.MIN_HEIGHT, loadedImg.naturalHeight) + 'px', true);
 
-            // add the image to the element
-            element.appendChild(loadedImg);
+          // callback
+          if (opt_callback) {
+            opt_callback(element, loadedImg);
+          }
 
-            // add a marker to find the inner content afterwards, with
-            // getContent
-            loadedImg.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
+          // add the image to the element
+          element.appendChild(loadedImg);
 
-            // remove the id set by the loader (it needs it to know what has
-            // already been loaded?)
-            loadedImg.removeAttribute('id');
+          // add a marker to find the inner content afterwards, with
+          // getContent
+          loadedImg.classList.add(Constants.ELEMENT_CONTENT_CLASS_NAME);
 
-            // remove loading asset
-            element.classList.remove(Constants.LOADING_ELEMENT_CSS_CLASS);
+          // remove loading asset
+          element.classList.remove(Constants.LOADING_ELEMENT_CSS_CLASS);
 
-            // redraw tools
-            this.model.body.setSelection(this.model.body.getSelection());
-            this.view.stageWrapper.redraw();
-          },
-          error: e => {
-            console.error('An error occured while loading the image.', element, e);
+          // redraw tools
+          this.model.body.setSelection(this.model.body.getSelection());
+          this.view.stageWrapper.redraw();
+        }
+        catch(e) {
+          console.error('An error occured while loading the image.', element, e);
 
-            // callback
-            if (opt_errorCallback) {
-              opt_errorCallback(element, 'An error occured while loading the image.');
-            }
-          },
-        });
+          // callback
+          if (opt_errorCallback) {
+            opt_errorCallback(element, 'An error occured while loading the image.');
+          }
+        }
       } else {
         console.error(
             'The image could not be retrieved from the element.', element);

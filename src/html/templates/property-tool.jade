@@ -111,23 +111,28 @@
               input.button.clear-bg-image-button(type='button', value='Clear image')
             div
               select.bg-position-h-combo-box.combobox
+                  option(value='')
                   option(value='left') left
                   option(value='center') center
                   option(value='right') right
               select.bg-position-v-combo-box.combobox
+                  option(value='')
                   option(value='top') top
                   option(value='center') center
                   option(value='bottom') bottom
             .background-image
               select.bg-attachment-combo-box.combobox
+                  option(value='', title='Not set')
                   option(value='scroll', title='The background scrolls along with the element') scroll
                   option(value='fixed', title='The background is fixed with regard to the viewport') fixed
               select.bg-repeat-combo-box.combobox
+                  option(value='', title='Not set')
                   option(value='repeat', title='The background image is repeated both vertically and horizontally') repeat
                   option(value='repeat-x', title='The background image is only repeated horizontally') repeat-x
                   option(value='repeat-y', title='The background image is only repeated vertically') repeat-y
                   option(value='no-repeat', title='The background-image is not repeated') no-repeat
               select.bg-size-combo-box.combobox
+                  option(value='', title='Not set')
                   option(value='auto', title='The background image is not resized') auto
                   option(value='contain', title='The background image is scaled so that the whole image is visible') contain
                   option(value='cover', title='The background image is scaled so that it completely covers the element') cover

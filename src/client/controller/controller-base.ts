@@ -219,35 +219,30 @@ export class ControllerBase {
    * open file explorer, choose an image and set it as the background image of
    * the current selection
    */
-  browseBgImage() {
-    this.tracker.trackAction(
-        'controller-events', 'request', 'selectBgImage', 0);
+  async browseBgImage() {
+    this.tracker.trackAction('controller-events', 'request', 'selectBgImage', 0);
 
-    // open the file browser
-    this.view.fileExplorer.openFile(FileExplorer.IMAGE_EXTENSIONS)
-        .then((fileInfo) => {
-          if (fileInfo) {
-            // update the model
-            let element = this.model.body.getSelection()[0];
+    try {
+      // open the file browser
+      const fileInfo = await this.view.fileExplorer.openFile(FileExplorer.IMAGE_EXTENSIONS)
+      if (fileInfo) {
+        // update the model
+        let element = this.model.body.getSelection()[0];
 
-            // undo checkpoint
-            this.undoCheckPoint();
+        // undo checkpoint
+        this.undoCheckPoint();
 
-            // load the image
-            this.model.element.setBgImage(element, fileInfo.absPath);
+        // load the image
+        this.model.element.setBgImage(element, fileInfo.absPath);
 
-            // tracking
-            this.tracker.trackAction(
-                'controller-events', 'success', 'selectBgImage', 1);
-          }
-        })
-        .catch((error) => {
-          SilexNotification.notifyError(
-              'Error: I could not load the image. \n' +
-              (error['message'] || ''));
-          this.tracker.trackAction(
-              'controller-events', 'error', 'selectBgImage', -1);
-        });
+        // tracking
+        this.tracker.trackAction('controller-events', 'success', 'selectBgImage', 1);
+      }
+    }
+    catch(error) {
+      SilexNotification.notifyError(`Error: I could not load the image. \n${error['message'] || ''}`);
+      this.tracker.trackAction('controller-events', 'error', 'selectBgImage', -1);
+    }
   }
 
   /**
@@ -256,38 +251,36 @@ export class ControllerBase {
   browseAndAddImage() {
     this.tracker.trackAction('controller-events', 'request', 'insert.image', 0);
     this.view.fileExplorer.openFile(FileExplorer.IMAGE_EXTENSIONS)
-        .then((fileInfo) => {
-          if (fileInfo) {
-            // undo checkpoint
-            this.undoCheckPoint();
+    .then((fileInfo) => {
+      if (fileInfo) {
+        // undo checkpoint
+        this.undoCheckPoint();
 
-            // create the element
-            let img = this.addElement(Constants.TYPE_IMAGE);
+        // create the element
+        let img = this.addElement(Constants.TYPE_IMAGE);
 
-            // load the image
-            this.model.element.setImageUrl(
-                img, fileInfo.absPath,
-                (element, imgElement) => {
-                  this.tracker.trackAction(
-                      'controller-events', 'success', 'insert.image', 1);
-                },
-                (element, message) => {
-                  SilexNotification.notifyError(
-                      'Error: I did not manage to load the image. \n' +
-                      message);
-                  this.model.element.removeElement(element);
-                  this.tracker.trackAction(
-                      'controller-events', 'error', 'insert.image', -1);
-                });
+        // load the image
+        this.model.element.setImageUrl(
+          img, fileInfo.absPath,
+          (element, imgElement) => {
+            this.tracker.trackAction(
+                'controller-events', 'success', 'insert.image', 1);
+          },
+          (element, message) => {
+            SilexNotification.notifyError(
+                'Error: I did not manage to load the image. \n' +
+                message);
+            this.model.element.removeElement(element);
+            this.tracker.trackAction(
+                'controller-events', 'error', 'insert.image', -1);
           }
-        })
-        .catch((error) => {
-          SilexNotification.notifyError(
-              'Error: I did not manage to load the image. \n' +
-              (error['message'] || ''));
-          this.tracker.trackAction(
-              'controller-events', 'error', 'insert.image', -1);
-        });
+        );
+      }
+    })
+    .catch((error) => {
+      SilexNotification.notifyError('Error: I did not manage to load the image. \n' + (error['message'] || ''));
+      this.tracker.trackAction('controller-events', 'error', 'insert.image', -1);
+    });
     this.view.workspace.redraw(this.view);
   }
 
@@ -334,8 +327,7 @@ export class ControllerBase {
   /**
    * set a set of styles to the current selection
    */
-  multipleStylesChanged(
-      style: Object, opt_elements?: HTMLElement[]) {
+  multipleStylesChanged(style: Object, opt_elements?: HTMLElement[]) {
     if (!opt_elements) {
       opt_elements = this.model.body.getSelection();
     }
@@ -399,7 +391,7 @@ export class ControllerBase {
    * promp user for page name
    * used in insert page, rename page...
    */
-  getUserInputPageName(defaultName: string, cbk: (p1?: string, p2?: string) => any) {
+  getUserInputPageName(defaultName: string, cbk: (p1?: string, p2?: string) => void) {
     SilexNotification.prompt(
       'Page name',
       'Enter a name for your page!', defaultName, (accept, name) => {
@@ -452,8 +444,7 @@ export class ControllerBase {
    * @return the new element
    */
   addElement(type: string, opt_componentName?: string): HTMLElement {
-    this.tracker.trackAction(
-        'controller-events', 'request', 'insert.' + type, 0);
+    this.tracker.trackAction('controller-events', 'request', 'insert.' + type, 0);
 
     // undo checkpoint
     this.undoCheckPoint();
@@ -473,8 +464,7 @@ export class ControllerBase {
     this.doAddElement(element);
 
     // tracking
-    this.tracker.trackAction(
-        'controller-events', 'success', 'insert.' + type, 1);
+    this.tracker.trackAction('controller-events', 'success', 'insert.' + type, 1);
     return element;
   }
 
@@ -604,8 +594,7 @@ export class ControllerBase {
             }
           })
           .catch((error) => {
-            this.tracker.trackAction(
-                'controller-events', 'error', 'file.save', -1);
+            this.tracker.trackAction('controller-events', 'error', 'file.save', -1);
             if (opt_errorCbk) {
               opt_errorCbk(error);
             }
@@ -616,9 +605,7 @@ export class ControllerBase {
   /**
    * save or save-as
    */
-  doSave(
-      fileInfo: FileInfo, opt_cbk?: (() => any),
-      opt_errorCbk?: ((p1: Object) => any)) {
+  doSave(fileInfo: FileInfo, opt_cbk?: (() => any), opt_errorCbk?: ((p1: Object) => any)) {
     // urls will be relative to the html file url
     this.model.file.fileInfo = fileInfo;
 
@@ -631,8 +618,7 @@ export class ControllerBase {
           'I have found HTML entities in some urls, there us probably an error in the save process.');
 
       // log this (QA)
-      this.tracker.trackAction(
-          'controller-events', 'warning', 'file.save.corrupted', -1);
+      this.tracker.trackAction('controller-events', 'warning', 'file.save.corrupted', -1);
 
       // try to cleanup the mess
       rawHtml = rawHtml.replace(
@@ -643,8 +629,7 @@ export class ControllerBase {
 
     // save to file
     this.model.file.saveAs(fileInfo, rawHtml, () => {
-      this.tracker.trackAction(
-          'controller-events', 'success', 'file.save', 1);
+      this.tracker.trackAction('controller-events', 'success', 'file.save', 1);
       ControllerBase.lastSaveUndoIdx =
           ControllerBase.undoHistory.length - 1;
       this.fileOperationSuccess('File is saved.', false);
@@ -654,17 +639,13 @@ export class ControllerBase {
       }
     },
     (error, msg) => {
-      SilexNotification.alert(
-        'Save website',
-        'Error: I did not manage to save the file. \n' +
-            (msg || error['message'] || ''),
-        () => {
-          if (opt_errorCbk) {
-            opt_errorCbk(error);
-          }
-        });
-      this.tracker.trackAction(
-          'controller-events', 'error', 'file.save', -1);
+      SilexNotification.alert('Save website', 'Error: I did not manage to save the file. \n' + (msg || error['message'] || ''),
+      () => {
+        if (opt_errorCbk) {
+          opt_errorCbk(error);
+        }
+      });
+      this.tracker.trackAction('controller-events', 'error', 'file.save', -1);
     });
   }
 

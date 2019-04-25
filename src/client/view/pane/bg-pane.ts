@@ -31,20 +31,18 @@ import { PaneBase } from './pane-base';
  * the controller instances
  */
 export class BgPane extends PaneBase {
-  colorPicker: any;
+  colorPicker: ColorPicker;
 
-  // add bg image button
-  bgSelectBgImage: any;
-
-  // remove bg image button
-  bgClearBgImage: any;
+  // bg image buttons
+  bgSelectBgImage: HTMLElement;
+  bgClearBgImage: HTMLElement;
 
   // bg image properties
-  attachmentComboBox: any;
-  vPositionComboBox: any;
-  hPositionComboBox: any;
-  repeatComboBox: any;
-  sizeComboBox: any;
+  attachmentComboBox: HTMLSelectElement;
+  vPositionComboBox: HTMLSelectElement;
+  hPositionComboBox: HTMLSelectElement;
+  repeatComboBox: HTMLSelectElement;
+  sizeComboBox: HTMLSelectElement;
 
   constructor(element: HTMLElement, model: Model, controller: Controller) {
     super(element, model, controller);
@@ -94,30 +92,25 @@ export class BgPane extends PaneBase {
    * build the UI
    */
   buildBgImageProperties() {
-    this.attachmentComboBox = this.initComboBox(
-        '.bg-attachment-combo-box', (event) => {
-          this.styleChanged('background-attachment', event.target.value);
-        });
-    this.vPositionComboBox = this.initComboBox(
-        '.bg-position-v-combo-box', (event) => {
-          const hPosition = this.hPositionComboBox.value;
-          const vPosition = this.vPositionComboBox.value;
-          this.styleChanged('background-position', vPosition + ' ' + hPosition);
-        });
-    this.hPositionComboBox = this.initComboBox(
-        '.bg-position-h-combo-box', (event) => {
-          const hPosition = this.hPositionComboBox.value;
-          const vPosition = this.vPositionComboBox.value;
-          this.styleChanged('background-position', vPosition + ' ' + hPosition);
-        });
-    this.repeatComboBox =
-        this.initComboBox('.bg-repeat-combo-box', (event) => {
-          this.styleChanged('background-repeat', event.target.value);
-        });
-    this.sizeComboBox =
-        this.initComboBox('.bg-size-combo-box', (event) => {
-          this.styleChanged('background-size', event.target.value);
-        });
+    this.attachmentComboBox = this.initComboBox('.bg-attachment-combo-box', (event: Event) => {
+      this.styleChanged('background-attachment', (event.target as HTMLInputElement).value);
+    });
+    this.vPositionComboBox = this.initComboBox('.bg-position-v-combo-box', (event: Event) => {
+      const hPosition = this.hPositionComboBox.value;
+      const vPosition = this.vPositionComboBox.value;
+      this.styleChanged('background-position', vPosition + ' ' + hPosition);
+    });
+    this.hPositionComboBox = this.initComboBox('.bg-position-h-combo-box', (event: Event) => {
+      const hPosition = this.hPositionComboBox.value;
+      const vPosition = this.vPositionComboBox.value;
+      this.styleChanged('background-position', vPosition + ' ' + hPosition);
+    });
+    this.repeatComboBox = this.initComboBox('.bg-repeat-combo-box', (event: Event) => {
+      this.styleChanged('background-repeat', (event.target as HTMLInputElement).value);
+    });
+    this.sizeComboBox = this.initComboBox('.bg-size-combo-box', (event: Event) => {
+      this.styleChanged('background-size', (event.target as HTMLInputElement).value);
+    });
   }
 
   /**
@@ -128,6 +121,7 @@ export class BgPane extends PaneBase {
    */
   redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
     super.redraw(states, pageNames, currentPageName);
+    console.log('bg pane redraw')
 
     // BG color
     if (states.length > 0) {
@@ -175,8 +169,8 @@ export class BgPane extends PaneBase {
     }
 
     // bg image position
-    const bgImagePosition =
-        this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-position'));
+    const bgImagePosition = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-position'));
+    console.log('bg pane bgImagePosition', bgImagePosition)
     if (bgImagePosition) {
       // convert 50% in center
       const posArr = bgImagePosition.split(' ');
@@ -227,15 +221,16 @@ export class BgPane extends PaneBase {
   /**
    * Create a combo box
    */
-  initComboBox(selector, onChange) {
+  initComboBox(selector: string, onChange: (e: Event) => void): HTMLSelectElement {
     // create the combo box
-    const comboBox = this.element.querySelector(selector);
+    const comboBox = this.element.querySelector(selector) as HTMLSelectElement;
 
     // attach event
-    comboBox.addEventListener('change', () => {
-      if (onChange) {
-        onChange();
-      }
+    comboBox.addEventListener('change', (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('combo', e.target, (e.target as any).value)
+      onChange(e);
     });
 
     return comboBox;
