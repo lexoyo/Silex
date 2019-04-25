@@ -100,6 +100,7 @@ export class PropertyTool {
 
 
   constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
+    console.log('construcct property tool', !!element)
     this.invalidationManager = new InvalidationManager(500);
   }
 
@@ -109,7 +110,7 @@ export class PropertyTool {
   buildUi() {
     this.bgPane = new BgPane(this.element.querySelector('.background-editor'), this.model, this.controller);
     this.borderPane = new BorderPane(this.element.querySelector('.border-editor'), this.model, this.controller);
-    this.propertyPane = new PropertyPane(this.element.querySelector('.property-editor'), this.model, this.controller);
+    this.propertyPane = new PropertyPane(this.element, this.model, this.controller);
     this.pagePane = new PagePane(this.element.querySelector('.page-editor'), this.model, this.controller);
     this.generalStylePane = new GeneralStylePane(this.element.querySelector('.general-editor'), this.model, this.controller);
     this.stylePane = new StylePane(this.element.querySelector('.style-editor'), this.model, this.controller);
@@ -120,6 +121,7 @@ export class PropertyTool {
 
     // init component editor and style editor
     const styleEditorElement = this.element.querySelector('.prodotype-style-editor .prodotype-container');
+    console.log('style elemebt', !!styleEditorElement)
     this.componentEditorElement = this.element.querySelector('.prodotype-component-editor');
     this.model.component.init(this.componentEditorElement, styleEditorElement);
 

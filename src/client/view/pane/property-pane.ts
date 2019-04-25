@@ -74,31 +74,25 @@ export class PropertyPane extends PaneBase {
    * build the UI
    */
   buildUi() {
-    this.leftInput = document.querySelector('.left-input');
+    this.leftInput = this.initInput('.left-input', e => this.onPositionChanged(e));
     this.leftInput.setAttribute('data-style-name', 'left');
-    this.leftInput.addEventListener('input', e => this.onPositionChanged(e), false);
-    this.widthInput = document.querySelector('.width-input');
+    this.widthInput = this.initInput('.width-input', e => this.onPositionChanged(e));
     this.widthInput.setAttribute('data-style-name', 'width');
-    this.widthInput.addEventListener('input', e => this.onPositionChanged(e), false);
-    this.topInput = document.querySelector('.top-input');
+    this.topInput = this.initInput('.top-input', e => this.onPositionChanged(e));
     this.topInput.setAttribute('data-style-name', 'top');
-    this.topInput.addEventListener('input', e => this.onPositionChanged(e), false);
-    this.heightInput = document.querySelector('.height-input');
+    this.heightInput = this.initInput('.height-input', e => this.onPositionChanged(e));
     this.heightInput.setAttribute('data-style-name', 'min-height');
-    this.heightInput.addEventListener('input', e => this.onPositionChanged(e), false);
-    this.altInput = document.querySelector('.alt-input');
-    this.altInput.addEventListener('input', e => this.onAltChanged(e), false);
-    this.titleInput = document.querySelector('.title-input');
-    this.titleInput.addEventListener('input', e => this.onTitleChanged(e), false);
+    this.altInput = this.initInput('.alt-input', e => this.onAltChanged(e));
+    this.titleInput = this.initInput('.title-input', e => this.onTitleChanged(e));
   }
 
   /**
    * position or size changed
    * callback for number inputs
    */
-  onPositionChanged(e) {
+  onPositionChanged(e: Event) {
     // get the selected element
-    const input: HTMLInputElement = e.target;
+    const input = e.target as HTMLInputElement;
 
     // the name of the property to change
     const name: string = input.getAttribute('data-style-name');
@@ -153,9 +147,9 @@ export class PropertyPane extends PaneBase {
    * alt changed
    * callback for inputs
    */
-  onAltChanged(e) {
+  onAltChanged(e: Event) {
     // get the selected element
-    const input: HTMLInputElement = e.target;
+    const input = e.target as HTMLInputElement;
 
     // apply the change to all elements
     if (input.value !== '') {
@@ -169,9 +163,9 @@ export class PropertyPane extends PaneBase {
    * title changed
    * callback for inputs
    */
-  onTitleChanged(e) {
+  onTitleChanged(e: Event) {
     // get the selected element
-    const input: HTMLInputElement = e.target;
+    const input = e.target as HTMLInputElement;
 
     // apply the change to all elements
     if (input.value !== '') {
@@ -223,11 +217,10 @@ export class PropertyPane extends PaneBase {
 
       // alt, only for images
       const elementsType = this.getCommonProperty(states, state => this.model.element.getType(state.el));
-
       if (elementsType === Constants.TYPE_IMAGE) {
         this.altInput.disabled = false;
         const alt = this.getCommonProperty(states, state => {
-          const content = state.el.querySelector(Constants.ELEMENT_CONTENT_CLASS_NAME);
+          const content = this.model.element.getContentNode(state.el);
           if (content) {
             return content.getAttribute('alt');
           }

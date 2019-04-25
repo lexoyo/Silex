@@ -69,9 +69,7 @@ export class BgPane extends PaneBase {
    * build the UI
    */
   buildBgColor() {
-    this.colorPicker = new ColorPicker(
-        this.element.querySelector('.color-edit-container'),
-        (value) => this.onColorChanged());
+    this.colorPicker = new ColorPicker(this.element.querySelector('.color-edit-container'), () => this.onColorChanged());
   }
 
   /**
@@ -169,19 +167,10 @@ export class BgPane extends PaneBase {
     }
 
     // bg image position
-    const bgImagePosition = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-position'));
-    console.log('bg pane bgImagePosition', bgImagePosition)
-    if (bgImagePosition) {
-      // convert 50% in center
-      const posArr = bgImagePosition.split(' ');
-      let hPosition = posArr[0] || 'left';
-      let vPosition = posArr[1] || 'top';
-
-      // convert 0% by left, 50% by center, 100% by right
-      hPosition = hPosition.replace('100%', 'right').replace('50%', 'center').replace('0%', 'left');
-
-      // convert 0% by top, 50% by center, 100% by bottom
-      vPosition = vPosition.replace('100%', 'bottom').replace('50%', 'center').replace('0%', 'top');
+    const bgImagePosition: string = this.getCommonProperty(states, state => this.model.element.getStyle(state.el, 'background-position'));
+    if (bgImagePosition && bgImagePosition !== '') {
+      const hPosition = bgImagePosition.includes('left') ? 'left' : bgImagePosition.includes('right') ? 'right' : bgImagePosition.includes('center') ? 'center' : '';
+      const vPosition = bgImagePosition.includes('top') ? 'top' : bgImagePosition.includes('bottom') ? 'bottom' : bgImagePosition.includes('center') ? 'center' : '';
 
       // update the drop down lists to display the bg image position
       this.vPositionComboBox.value = vPosition;
@@ -216,24 +205,6 @@ export class BgPane extends PaneBase {
   onColorChanged() {
     // notify the toolbox
     this.styleChanged('background-color', this.colorPicker.getColor());
-  }
-
-  /**
-   * Create a combo box
-   */
-  initComboBox(selector: string, onChange: (e: Event) => void): HTMLSelectElement {
-    // create the combo box
-    const comboBox = this.element.querySelector(selector) as HTMLSelectElement;
-
-    // attach event
-    comboBox.addEventListener('change', (e: Event) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('combo', e.target, (e.target as any).value)
-      onChange(e);
-    });
-
-    return comboBox;
   }
 
   /**

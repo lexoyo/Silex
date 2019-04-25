@@ -48,8 +48,7 @@ export class GeneralStylePane extends PaneBase {
    * build the UI
    */
   buildUi() {
-    this.opacityInput = document.querySelector('.opacity-input');
-    this.opacityInput.addEventListener('input', (e) => this.onInputChanged(e), false);
+    this.opacityInput = this.initInput('.opacity-input', (e) => this.onInputChanged(e));
   }
 
   /**

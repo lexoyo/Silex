@@ -43,7 +43,47 @@ export class PaneBase {
    */
   protected baseUrl = null;
 
-  constructor(public element: HTMLElement, public model: Model, public controller: Controller) {}
+  constructor(protected element: HTMLElement, protected model: Model, protected controller: Controller) {}
+
+  /**
+   * Init a combo box or
+   */
+  private initEventTarget(selector: string, eventName: string, onChange: (e: Event) => void): HTMLInputElement {
+    // get a reference to the element
+    const eventTarget = this.element.querySelector(selector) as HTMLInputElement;
+
+    // attach event
+    eventTarget.addEventListener(eventName, (e: Event) => {
+      // let redraw update the value
+      e.preventDefault();
+      e.stopPropagation();
+      // call the provided callback
+      onChange(e);
+    });
+
+    return eventTarget;
+  }
+
+  /**
+   * Init a combo box or
+   */
+  protected initInput(selector: string, onChange: (e: Event) => void): HTMLInputElement {
+    return this.initEventTarget(selector, 'input', onChange);
+  }
+
+  /**
+   * Init a combo box or a checbox
+   */
+  protected initComboBox(selector: string, onChange: (e: Event) => void): HTMLSelectElement {
+    return this.initEventTarget(selector, 'change', onChange) as any as HTMLSelectElement;
+  }
+
+  /**
+   * Init a combo box or a checbox
+   */
+  protected initCheckBox(selector: string, onChange: (e: Event) => void): HTMLInputElement {
+    return this.initEventTarget(selector, 'change', onChange);
+  }
 
   /**
    * notify the controller that the style changed

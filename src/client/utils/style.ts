@@ -176,7 +176,7 @@ export class Style {
     let r = parseInt(rgbaArr[0], 10);
     let g = parseInt(rgbaArr[1], 10);
     let b = parseInt(rgbaArr[2], 10);
-    let a = parseInt(rgbaArr[3], 10) * 255;
+    let a = parseFloat(rgbaArr[3]) * 255;
     let result = [r, g, b, a];
     return result;
   }

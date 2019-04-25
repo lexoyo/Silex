@@ -52,8 +52,7 @@ export class StylePane extends PaneBase {
    * build the UI
    */
   buildUi() {
-    this.cssClassesInput = this.element.querySelector('.style-css-classes-input');
-    this.cssClassesInput.addEventListener('input', () => this.onInputChanged(), false);
+    this.cssClassesInput = this.initInput('.style-css-classes-input', () => this.onInputChanged());
     this.ace = ace.edit(this.element.querySelector('.element-style-editor') as HTMLElement);
     this.ace.setTheme('ace/theme/idle_fingers');
     this.ace.renderer.setShowGutter(false);

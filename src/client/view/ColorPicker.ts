@@ -20,20 +20,20 @@ import {Style} from '../utils/style';
 
 export class ColorPicker {
   // store for later use
-  element: any;
-  cbk: any;
-  color: any = '';
-  isDisabled: any = true;
-  isIndeterminate: any = true;
+  element: HTMLElement;
+  cbk: () => void;
+  color = '';
+  isDisabled = true;
+  isIndeterminate = true;
 
   // init button which shows/hides the palete
-  colorInput: any;
+  colorInput: HTMLInputElement;
 
   // alpha
-  opacityInput: any;
+  opacityInput: HTMLInputElement;
 
   // transparency
-  transparentCheckbox: any;
+  transparentCheckbox: HTMLInputElement;
 
   /**
    * @param element the container of the component, it is supposed to have this
@@ -44,26 +44,25 @@ export class ColorPicker {
    *      input.color-edit-transparent-check(type='checkbox',
    * indeterminate='true')
    */
-  constructor(element: HTMLElement, cbk) {
+  constructor(element: HTMLElement, cbk: () => void) {
     this.element = element;
     this.cbk = cbk;
     this.colorInput = this.element.querySelector('.color-button');
-    this.colorInput.onchange = (e) => this.onChange();
-    this.colorInput.oninput = (e) => this.onChange();
+    this.colorInput.onchange = (e) => this.onChange(e);
+    this.colorInput.oninput = (e) => this.onChange(e);
     this.opacityInput = this.element.querySelector('.color-opacity-input');
-    this.opacityInput.onchange = (e) => this.onChange();
-    this.opacityInput.oninput = (e) => this.onChange();
-    this.transparentCheckbox =
-        this.element.querySelector('.color-edit-transparent-check');
-    this.transparentCheckbox.onchange = (e) => this.onChange();
+    this.opacityInput.onchange = (e) => this.onChange(e);
+    this.opacityInput.oninput = (e) => this.onChange(e);
+    this.transparentCheckbox = this.element.querySelector('.color-edit-transparent-check');
+    this.transparentCheckbox.onchange = (e) => this.onChange(e);
   }
 
-  setDisabled(isDisabled) {
+  setDisabled(isDisabled: boolean) {
     this.isDisabled = isDisabled;
     this.redraw();
   }
 
-  setIndeterminate(isIndeterminate) {
+  setIndeterminate(isIndeterminate: boolean) {
     this.isIndeterminate = isIndeterminate;
     this.redraw();
   }
@@ -78,17 +77,20 @@ export class ColorPicker {
     this.redraw();
   }
 
-  getColor() {
+  getColor(): string {
     return this.color;
   }
 
-  onChange() {
+  onChange(e: Event) {
+    // let redraw update the value
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!this.transparentCheckbox.checked) {
       const opacityPercent = parseInt(this.opacityInput.value, 10);
       const opacity = isNaN(opacityPercent) ? 1 : opacityPercent / 100;
       const hex = Math.round(opacity * 255).toString(16);
-      this.color = Style.hexToRgba(
-          this.colorInput.value + (hex.length === 2 ? '' : '0') + hex);
+      this.color = Style.hexToRgba(this.colorInput.value + (hex.length === 2 ? '' : '0') + hex);
     } else {
       this.color = 'transparent';
     }
@@ -97,7 +99,7 @@ export class ColorPicker {
     this.cbk();
 
     // update the disabled states of the inputs
-    this.redraw();
+    // this.redraw();
   }
 
   redraw() {
@@ -106,35 +108,35 @@ export class ColorPicker {
       this.opacityInput.value = '';
     } else {
       this.transparentCheckbox.indeterminate = false;
-      if (this.color === 'transparent' || this.color == null ||
-          this.color === '') {
+      if (this.color === 'transparent' || this.color == null || this.color === '') {
         this.transparentCheckbox.checked = true;
         this.colorInput.disabled = true;
-        this.colorInput.style.opacity = .3;
+        this.colorInput.style.opacity = '.3';
         this.opacityInput.disabled = true;
         this.opacityInput.value = '';
       } else {
         this.transparentCheckbox.checked = false;
         this.colorInput.disabled = false;
-        this.colorInput.style.opacity = 1;
+        this.colorInput.style.opacity = '1';
 
         // this will not accept rgba, only rgb:
-        let hex = Style.rgbaToHex(this.color);
+        const hex = Style.rgbaToHex(this.color);
         this.colorInput.value = hex.substring(0, hex.length - 2);
         this.opacityInput.disabled = false;
         try {
-          let arr = Style.rgbaToArray(this.color);
-          this.opacityInput.value = Math.round(arr[3] * 100 / 255);
+          const arr = Style.rgbaToArray(this.color);
+          this.opacityInput.value = (Math.round(arr[3] * 100 / 255)).toString();
         } catch (e) {
           // probably not an rgba color
-          this.opacityInput.value = 100;
+          console.warn('error, this color is probably not an rgba color', this.color, e);
+          this.opacityInput.value = '100';
         }
       }
     }
     if (this.isDisabled) {
       this.transparentCheckbox.disabled = true;
       this.colorInput.disabled = true;
-      this.colorInput.style.opacity = .3;
+      this.colorInput.style.opacity = '.3';
       this.opacityInput.disabled = true;
     } else {
       this.transparentCheckbox.disabled = false;
