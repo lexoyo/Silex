@@ -197,7 +197,7 @@ export class PropertyPane extends PaneBase {
       this.altInput.disabled = false;
       this.titleInput.disabled = false;
 
-      console.warn('Use stage metrics here');
+      // TODO: Use stage metrics here
       const bb = this.model.property.getBoundingBox(states.map(state => state.el));
 
       // display position and size

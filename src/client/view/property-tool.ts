@@ -100,7 +100,6 @@ export class PropertyTool {
 
 
   constructor(public element: HTMLElement, public model: Model, public controller: Controller) {
-    console.log('construcct property tool', !!element)
     this.invalidationManager = new InvalidationManager(500);
   }
 
@@ -121,7 +120,6 @@ export class PropertyTool {
 
     // init component editor and style editor
     const styleEditorElement = this.element.querySelector('.prodotype-style-editor .prodotype-container');
-    console.log('style elemebt', !!styleEditorElement)
     this.componentEditorElement = this.element.querySelector('.prodotype-component-editor');
     this.model.component.init(this.componentEditorElement, styleEditorElement);
 

@@ -129,7 +129,7 @@ export class ContextMenu {
       } else {
         this.element.querySelector('.paste').classList.add('off');
       }
-      console.warn('todo: sticky elements UI (remove or implement')
+      // todo: sticky elements UI (remove or implement )
       // if (this.model.dragSystem.getStickyElements()) {
       //   this.element.querySelector('.sticky-elements').classList.remove('off');
       // } else {

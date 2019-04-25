@@ -119,7 +119,6 @@ export class BgPane extends PaneBase {
    */
   redraw(states: SelectableState[], pageNames: string[], currentPageName: string) {
     super.redraw(states, pageNames, currentPageName);
-    console.log('bg pane redraw')
 
     // BG color
     if (states.length > 0) {

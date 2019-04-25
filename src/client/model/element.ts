@@ -285,7 +285,6 @@ export class SilexElement {
    * @param url    URL of the image chosen by the user
    */
   setBgImage(element: HTMLElement, url: string) {
-    console.log('setBgImage', element, url)
     if (url) {
       this.setStyle(element, 'background-image', Url.addUrlKeyword(url));
     } else {

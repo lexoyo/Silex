@@ -298,7 +298,6 @@ export class BorderPane extends PaneBase {
       this.colorPicker.setIndeterminate(false);
 
       // border width
-      console.log('xxxxx', this.borderWidthInput.value, borderWidthStr)
       this.styleChanged('border-width', borderWidthStr);
 
       // border style
