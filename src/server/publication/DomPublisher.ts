@@ -13,7 +13,6 @@ const { URL } = require('url');
 const Path = require('path');
 import DomTools from '../utils/DomTools';
 import { Constants } from '../../Constants';
-const constants = require('../../Constants.js');
 
 /**
  * @fileoverview Helper class used to cleanup the DOM when publishing a website
@@ -62,7 +61,7 @@ export default class DomPublisher {
 
     // remove publication path
     // remove JSON styles
-    const tagsToRemove = this.doc.head.querySelectorAll(`meta[name="publicationPath"], .${constants.JSON_STYLE_TAG_CLASS_NAME}`);
+    const tagsToRemove = this.doc.head.querySelectorAll(`meta[name="publicationPath"], .${Constants.JSON_STYLE_TAG_CLASS_NAME}`);
     for(let idx=0; idx<tagsToRemove.length; idx++) {
       tagsToRemove[idx].parentElement.removeChild(tagsToRemove[idx]);
     }
@@ -225,11 +224,10 @@ export default class DomPublisher {
 
     // replace internal links <div data-silex-href="..." by <a href="..."
     // do a first pass, in order to avoid replacing the elements in the <a> containers
-    const links = this.doc.body.querySelectorAll(`.${constants.EDITABLE_CLASS_NAME}[${constants.LINK_ATTR}]`);
-    for(let idx=0; idx<links.length; idx++) {
-      const element = links[idx];
-      const href = element.getAttribute(constants.LINK_ATTR);
-      element.removeAttribute(constants.LINK_ATTR);
+    const links = Array.from(this.doc.body.querySelectorAll(`.${Constants.EDITABLE_CLASS_NAME}[${Constants.LINK_ATTR}]`))
+    .forEach((element: HTMLElement) => {
+      const href = element.getAttribute(Constants.LINK_ATTR);
+      element.removeAttribute(Constants.LINK_ATTR);
 
       const replacement = this.doc.createElement('a');
       replacement.setAttribute('href', href);
@@ -243,7 +241,7 @@ export default class DomPublisher {
       // FIXME: bug when there is a link in the content of an element with an external link set
       // see issue https://github.com/silexlabs/Silex/issues/56
       element.parentElement.replaceChild(replacement, element);
-    };
+    });
 
     this.doc.body.classList.add(Constants.WEBSITE_CONTEXT_PUBLISHED_CLASS_NAME);
 
