@@ -146,6 +146,9 @@ body.enable-mobile .background {
     margin-left: auto;
     margin-right: auto;
   }
+  body.enable-mobile .image-element.editable-style:not(.prevent-mobile-style) {
+    position: relative;
+  }
   body.enable-mobile .editable-style.section-element {
     max-width: 100%; /* section bg should be 100% width because user do not need to grab the side and resize */
     padding: 0;
