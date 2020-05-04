@@ -1,4 +1,4 @@
-import { ElementState, ElementId, ElementType } from '../element-store/types';
+import { ElementState, ElementId, ElementType } from '../element-store/types'
 import {
   getBody,
   getElementById,
@@ -6,13 +6,14 @@ import {
   getParent,
   getSelectedElements,
   noSectionContent
-} from '../element-store/filters';
-import { getCreationDropZone, getNewId } from '../element-store/utils';
+} from '../element-store/filters'
+import { getCreationDropZone, getNewId } from '../element-store/utils'
 import { getDomElement } from '../element-store/dom'
 import { getElements, createElements, updateElements } from '../element-store/index'
 import { getSiteDocument, getSiteIFrame } from '../components/SiteFrame'
 import { getStage } from '../components/StageWrapper'
 import { getUi, updateUi } from '../ui-store/index'
+import { flat } from '../utils/array'
 
 /**
  * copy the selection for later paste
@@ -20,7 +21,7 @@ import { getUi, updateUi } from '../ui-store/index'
 export function copySelection() {
   const clipboard = cloneElements(
     getElements()
-    .filter((el) => el.selected)
+      .filter((el) => el.selected)
   )
   updateUi({
     ...getUi(),
@@ -48,14 +49,10 @@ export function duplicateSelection() {
     const parent = getParent(selection[0])
 
     // paste
-    pasteElements({parent, rootElements, allElements })
+    pasteElements({ parent, rootElements, allElements })
   }
 }
 
-
-// FIXME: flat seems to be missing on array in UT
-// exported only for unit tests
-export const flat = (arr) => arr.reduce((acc, val) => acc.concat(val), []);
 
 /**
  * duplicate elements for later paste or for duplicate
@@ -85,18 +82,18 @@ export function cloneElements(selection: ElementState[]): [ElementState[], Eleme
  * the elements need to be in the store already (and dom)
  */
 export function cloneElement(element: ElementState, parentId: ElementId = null): ElementState[] {
-  if(element) {
-  const newId = getNewId()
-  const res: ElementState[] = [{
-    ...JSON.parse(JSON.stringify(element)),
-    id: newId,
-    parent: parentId,
-    selected: parentId === null,
-  }]
-  res[0].children
-    .forEach((id) => res.push(...cloneElement(getElementById(id), newId)))
+  if (element) {
+    const newId = getNewId()
+    const res: ElementState[] = [{
+      ...JSON.parse(JSON.stringify(element)),
+      id: newId,
+      parent: parentId,
+      selected: parentId === null,
+    }]
+    res[0].children
+      .forEach((id) => res.push(...cloneElement(getElementById(id), newId)))
 
-  return res
+    return res
   } else {
     // happens if getElementById returns undefined for whatever reason
     throw new Error('Element could not be cloned because it could not be found')
@@ -129,7 +126,7 @@ export function pasteClipBoard() {
   })
 }
 
-export function pasteElements({parent, rootElements, allElements}: {parent: ElementState, rootElements: ElementState[], allElements: ElementState[]}) {
+export function pasteElements({ parent, rootElements, allElements }: { parent: ElementState, rootElements: ElementState[], allElements: ElementState[] }) {
   // this.tracker.trackAction('controller-events', 'info', 'paste', 0)
 
   if (allElements.length > 0) {
@@ -187,24 +184,25 @@ export function pasteElements({parent, rootElements, allElements}: {parent: Elem
         .filter((el) => el.type !== ElementType.SECTION) // sections are added to the body
         .map((el) => el.id)),
     }]
-    .concat({
-      ...body,
-      children: body.children.concat(rootElements
-        .filter((el) => el.type === ElementType.SECTION)
-        .map((el) => el.id)
-      )})
-    // reset selection
-    .concat(resetSelection),
-    // // make pasted elements selected
-    // .concat(rootElements
-    //   .map((el) => getElement(el.id))
-    //   .map((el) => ({
-    //     from: el,
-    //     to: {
-    //       ...el,
-    //       selected: true,
-    //     },
-    //   })))
+      .concat({
+        ...body,
+        children: body.children.concat(rootElements
+          .filter((el) => el.type === ElementType.SECTION)
+          .map((el) => el.id)
+        )
+      })
+      // reset selection
+      .concat(resetSelection),
+      // // make pasted elements selected
+      // .concat(rootElements
+      //   .map((el) => getElement(el.id))
+      //   .map((el) => ({
+      //     from: el,
+      //     to: {
+      //       ...el,
+      //       selected: true,
+      //     },
+      //   })))
     )
 
     console.info('could be dragged')

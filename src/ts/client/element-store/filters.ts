@@ -29,19 +29,10 @@ export const getChildrenRecursive = (element: ElementState, elements = getElemen
   .concat(element.children.reduce((prev, id) => getChildrenRecursive(getElementById(id, elements), elements), []))
 }
 
-export const getParent = (element: ElementState, elements = getElements()): ElementState => elements.find((parent) => {
-  return parent.children.includes(element.id)
-})
-
 export const getAllParents = (element: ElementState, elements = getElements()): ElementState[] => {
   const parent = getParent(element, elements)
   return !!parent ? [parent, ...getAllParents(parent, elements)] : []
 }
-
-// FIXME: find a more relyable way to find the body, i.e. isBody or a type of element
-export const isBody = (el: ElementState, elements = getElements()): boolean => !getParent(el, elements)
-
-export const getBody = (elements = getElements()): ElementState => elements.find((el) => isBody(el, elements))
 
 export const noSectionContent = (element: ElementState, elements = getElements()): ElementState => element.isSectionContent ? getParent(element, elements) : element
 

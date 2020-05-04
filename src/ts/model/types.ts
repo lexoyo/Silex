@@ -9,8 +9,8 @@
  * http://www.silexlabs.org/silex/silex-licensing/
  */
 
-import { CrudState } from '../store/crud-store'
-import { CssRule } from '../site-store/types'
+import { CrudState } from '../client/store/crud-store'
+import { CssRule } from '../client/site-store/types'
 
 /**
  * @fileoverview Type definitions. Cross platform, it needs to run client and server side

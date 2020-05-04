@@ -12,14 +12,6 @@ test('find parent', () => {
   expect(getParent(ELEM_CONTAINER)).toBeUndefined()
 })
 
-test('body', () => {
-  expect(isBody(ELEM_TEXT)).toBe(false)
-  expect(isBody(ELEM_IMAGE)).toBe(false)
-  expect(isBody(ELEM_CONTAINER)).toBe(true)
-  expect(getBody().id).toBe(ELEM_CONTAINER.id)
-  expect(ELEM_CONTAINER.selected).toBe(false)
-})
-
 test('find children', () => {
   const elem3Children = getChildren(ELEM_CONTAINER)
   expect(elem3Children).toHaveLength(3)
